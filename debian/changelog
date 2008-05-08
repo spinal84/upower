@@ -1,0 +1,5 @@
+devicekit-power (006-1) UNRELEASED; urgency=low
+
+  * Initial release. (Closes: #521363)
+
+ -- Michael Biebl <biebl@debian.org>  Thu, 08 May 2008 14:25:03 +0200
