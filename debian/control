@@ -17,8 +17,8 @@ Build-Depends: debhelper (>= 7),
  libpolkit-dbus-dev (>= 0.7),
  libusb-dev
 Standards-Version: 3.8.0
-Vcs-Svn: svn://svn.debian.org/svn/pkg-utopia/packages/experimental/devicekit-power
-Vcs-Browser: http://svn.debian.org/wsvn/pkg-utopia/packages/experimental/devicekit-power
+Vcs-Git: git://git.debian.org/git/pkg-utopia/devicekit-power.git
+Vcs-Browser: http://git.debian.org/?p=pkg-utopia/devicekit-power.git;a=summary
 Homepage: http://hal.freedesktop.org/docs/DeviceKit-power
 
 Package: devicekit-power
