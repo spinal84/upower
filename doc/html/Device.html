@@ -1,0 +1,823 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>org.freedesktop.DeviceKit.Power.Device</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="home" href="index.html" title="DeviceKit-power Reference Manual">
+<link rel="up" href="ref-dbus.html" title="D-Bus API Reference">
+<link rel="prev" href="Power.html" title="org.freedesktop.DeviceKit.Power">
+<link rel="next" href="QoS.html" title="org.freedesktop.DeviceKit.Power.QoS">
+<meta name="generator" content="GTK-Doc V1.11 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="reference" href="ref-dbus.html" title="D-Bus API Reference">
+<link rel="reference" href="tools-fileformats.html" title="Manual Pages">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="appendix" href="license.html" title="Appendix A. License">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="Power.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ref-dbus.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">DeviceKit-power Reference Manual</th>
+<td><a accesskey="n" href="QoS.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#Device.synopsis" class="shortcut">Top</a>
+                 | 
+                <a href="#Device.description" class="shortcut">Description</a>
+                 | 
+                <a href="#Device.implemented-interfaces" class="shortcut">Implemented Interfaces</a>
+                 | 
+                <a href="#Device.properties" class="shortcut">Properties</a>
+                 | 
+                <a href="#Device.signals" class="shortcut">Signals</a>
+</td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="Device"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle">org.freedesktop.DeviceKit.Power.Device</span></h2>
+<p>org.freedesktop.DeviceKit.Power.Device — Device interface</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Methods</h2>
+<pre class="synopsis"><a class="link" href="Device.html#Device.Refresh">Refresh</a>       ()
+<a class="link" href="Device.html#Device.GetHistory">GetHistory</a>    (in  's'      type,
+               in  'u'      timespan,
+               in  'u'      resolution,
+               out 'a(uds)' data)
+<a class="link" href="Device.html#Device.GetStatistics">GetStatistics</a> (in  's'      type,
+               out 'a(dd)'  data)
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2826146"></a><h2>Signals</h2>
+<pre class="synopsis"><a class="link" href="Device.html#Device::Changed">Changed</a> ()
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2825038"></a><h2>Implemented Interfaces</h2>
+<p>
+    Objects implementing org.freedesktop.DeviceKit.Power.Device also implements
+    org.freedesktop.DBus.Introspectable,
+    org.freedesktop.DBus.Properties
+    </p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2825883"></a><h2>Properties</h2>
+<pre class="synopsis"><a class="link" href="Device.html#Device:native-path">'native-path'</a>        read      's'
+<a class="link" href="Device.html#Device:vendor">'vendor'</a>             read      's'
+<a class="link" href="Device.html#Device:model">'model'</a>              read      's'
+<a class="link" href="Device.html#Device:serial">'serial'</a>             read      's'
+<a class="link" href="Device.html#Device:update-time">'update-time'</a>        read      't'
+<a class="link" href="Device.html#Device:type">'type'</a>               read      's'
+<a class="link" href="Device.html#Device:power-supply">'power-supply'</a>       read      'b'
+<a class="link" href="Device.html#Device:has-history">'has-history'</a>        read      'b'
+<a class="link" href="Device.html#Device:has-statistics">'has-statistics'</a>     read      'b'
+<a class="link" href="Device.html#Device:online">'online'</a>             read      'b'
+<a class="link" href="Device.html#Device:energy">'energy'</a>             read      'd'
+<a class="link" href="Device.html#Device:energy-empty">'energy-empty'</a>       read      'd'
+<a class="link" href="Device.html#Device:energy-full">'energy-full'</a>        read      'd'
+<a class="link" href="Device.html#Device:energy-full-design">'energy-full-design'</a> read      'd'
+<a class="link" href="Device.html#Device:energy-rate">'energy-rate'</a>        read      'd'
+<a class="link" href="Device.html#Device:voltage">'voltage'</a>            read      'd'
+<a class="link" href="Device.html#Device:time-to-empty">'time-to-empty'</a>      read      'x'
+<a class="link" href="Device.html#Device:time-to-full">'time-to-full'</a>       read      'x'
+<a class="link" href="Device.html#Device:percentage">'percentage'</a>         read      'd'
+<a class="link" href="Device.html#Device:is-present">'is-present'</a>         read      'b'
+<a class="link" href="Device.html#Device:state">'state'</a>              read      's'
+<a class="link" href="Device.html#Device:is-rechargeable">'is-rechargeable'</a>    read      'b'
+<a class="link" href="Device.html#Device:capacity">'capacity'</a>           read      'd'
+<a class="link" href="Device.html#Device:technology">'technology'</a>         read      's'
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2829507"></a><h2>Description</h2>
+<p>
+      
+        </p>
+<p>
+          Objects implementing this interface are usually discovered through
+          the <code class="literal">org.freedesktop.DeviceKit.Power</code> interface on
+          the <code class="literal">/org/freedesktop/DeviceKit/Power</code> object on
+          the D-Bus system bus service with the well-known
+          name <code class="literal">org.freedesktop.DeviceKit.Power</code> using
+          the
+          <a class="link" href="Power.html#Power.EnumerateDevices"><code class="function">EnumerateDevices</code></a>
+          method.
+        </p>
+<p>
+        </p>
+<p>
+          </p>
+<div class="informalexample"><pre class="programlisting">
+$ dbus-send --print-reply \
+            --system \
+            --dest=org.freedesktop.DeviceKit.Power \
+            /org/freedesktop/DeviceKit/Power/devices/battery_BAT0 \
+            org.freedesktop.DBus.Properties.GetAll \
+            string:org.freedesktop.DeviceKit.Power.Device
+
+method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
+   array [
+      dict entry(
+         string "native-path"
+         variant             string "/sys/devices/LNXSYSTM:00/device:00/PNP0A08:00/device:01/PNP0C09:00/PNP0C0A:00/power_supply/BAT0"
+      )
+      dict entry(
+         string "vendor"
+         variant             string "SONY"
+      )
+      dict entry(
+         string "model"
+         variant             string "42T4568"
+      )
+      dict entry(
+         string "serial"
+         variant             string "4179"
+      )
+      dict entry(
+         string "update-time"
+         variant             uint64 1226417875
+      )
+      dict entry(
+         string "type"
+         variant             string "battery"
+      )
+      dict entry(
+         string "power-supply"
+         variant             boolean true
+      )
+      dict entry(
+         string "has-history"
+         variant             boolean true
+      )
+      dict entry(
+         string "has-statistics"
+         variant             boolean true
+      )
+      dict entry(
+         string "online"
+         variant             boolean false
+      )
+      dict entry(
+         string "energy"
+         variant             double 72.85
+      )
+      dict entry(
+         string "energy-empty"
+         variant             double 0
+      )
+      dict entry(
+         string "energy-full"
+         variant             double 74.55
+      )
+      dict entry(
+         string "energy-full-design"
+         variant             double 74.88
+      )
+      dict entry(
+         string "energy-rate"
+         variant             double 0
+      )
+      dict entry(
+         string "voltage"
+         variant             double 16.415
+      )
+      dict entry(
+         string "time-to-empty"
+         variant             int64 0
+      )
+      dict entry(
+         string "time-to-full"
+         variant             int64 0
+      )
+      dict entry(
+         string "percentage"
+         variant             double 97.7197
+      )
+      dict entry(
+         string "is-present"
+         variant             boolean true
+      )
+      dict entry(
+         string "state"
+         variant             string "fully-charged"
+      )
+      dict entry(
+         string "is-rechargeable"
+         variant             boolean true
+      )
+      dict entry(
+         string "capacity"
+         variant             double 100
+      )
+      dict entry(
+         string "technology"
+         variant             string "lithium-ion"
+      )
+   ]
+            </pre></div>
+<p>
+        </p>
+<p>
+        </p>
+<p>
+          Unless otherwise noted, an empty string or the value 0 in a
+          property on this interface means not set.
+        </p>
+<p>
+      
+    </p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2747078"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="id2747086"></a><h3>
+<a name="Device.Refresh"></a>Refresh ()</h3>
+<pre class="programlisting">Refresh ()</pre>
+</div>
+<p>
+            Refreshes the data collected from the power source.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<div class="refsect3" lang="en">
+<a name="id2747118"></a><h4>Errors</h4>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>org.freedesktop.DeviceKit.Power.Device.GeneralError</code></em>:</span></p></td>
+<td>if an error occured while refreshing</td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3" lang="en">
+<a name="id2812233"></a><h4>Permissions</h4>
+<p class="permission">Callers need the org.freedesktop.devicekit.power.refresh-power-source authorization</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2812242"></a><h3>
+<a name="Device.GetHistory"></a>GetHistory ()</h3>
+<pre class="programlisting">GetHistory (in  's'      type,
+            in  'u'      timespan,
+            in  'u'      resolution,
+            out 'a(uds)' data)</pre>
+</div>
+<p>
+            Gets history for the power device that is persistent across reboots.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>type</code></em>:</span></p></td>
+<td>The type of history.
+        Valid types are <code class="literal">rate</code> or <code class="literal">charge</code>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>timespan</code></em>:</span></p></td>
+<td>The amount of data to return in seconds, or 0 for all.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>resolution</code></em>:</span></p></td>
+<td>
+            The approximate number of points to return.
+            A higher resolution is more accurate, at the expense of plotting speed.
+          </td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>data</code></em>:</span></p></td>
+<td>
+            The history data for the power device, if the device supports history.
+            Data is ordered from the earliest in time, to the newest data point.
+            Each element contains the following members:
+            <div class="itemizedlist"><ul type="disc">
+<li>
+<span class="bold"><strong>time: </strong></span>
+                  The time value in seconds from the <code class="literal">gettimeofday()</code> method.
+                </li>
+<li>
+<span class="bold"><strong>value: </strong></span>
+                  The data value, for instance the rate in W or the charge in %.
+                </li>
+<li>
+<span class="bold"><strong>state: </strong></span>
+                  The state of the device, for instance <code class="literal">charging</code> or
+                  <code class="literal">discharging</code>.
+                </li>
+</ul></div>
+        </td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2812388"></a><h3>
+<a name="Device.GetStatistics"></a>GetStatistics ()</h3>
+<pre class="programlisting">GetStatistics (in  's'     type,
+               out 'a(dd)' data)</pre>
+</div>
+<p>
+            Gets statistics for the power device that may be interesting
+            to show on a graph in the session.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>type</code></em>:</span></p></td>
+<td>The mode for the statistics.
+        Valid types are <code class="literal">charging</code> or <code class="literal">discharging</code>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>data</code></em>:</span></p></td>
+<td>
+            The statistics data for the power device.
+            Each element contains the following members:
+            <div class="itemizedlist"><ul type="disc">
+<li>
+<span class="bold"><strong>value: </strong></span>
+                  The value of the percentage point, usually in seconds
+                </li>
+<li>
+<span class="bold"><strong>accuracy: </strong></span>
+                  The accuracy of the prediction in percent.
+                </li>
+</ul></div>
+        </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2812481"></a><h2>Signal Details</h2>
+<div class="refsect2" lang="en">
+<a name="id2812489"></a><h3>
+<a name="Device::Changed"></a>The Changed signal</h3>
+<pre class="programlisting">Changed ()</pre>
+</div>
+<p>
+            Some value on the power source changed.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2812545"></a><h2>Property Details</h2>
+<div class="refsect2" lang="en">
+<a name="id2812556"></a><h3>
+<a name="Device:native-path"></a>The "native-path" property</h3>
+<pre class="programlisting">'native-path'  read      's'
+</pre>
+</div>
+<p>
+            OS specific native path of the power source. On Linux this
+            is the sysfs path, for
+            example <code class="literal">/sys/devices/LNXSYSTM:00/device:00/PNP0C0A:00/power_supply/BAT0</code>. Is
+            blank if the device is being driven by a user space
+            driver.
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2812608"></a><h3>
+<a name="Device:vendor"></a>The "vendor" property</h3>
+<pre class="programlisting">'vendor'  read      's'
+</pre>
+</div>
+<p>
+            Name of the vendor of the battery.
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2812650"></a><h3>
+<a name="Device:model"></a>The "model" property</h3>
+<pre class="programlisting">'model'  read      's'
+</pre>
+</div>
+<p>
+            Name of the model of this battery.
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2812692"></a><h3>
+<a name="Device:serial"></a>The "serial" property</h3>
+<pre class="programlisting">'serial'  read      's'
+</pre>
+</div>
+<p>
+            Unique serial number of the battery.
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2812734"></a><h3>
+<a name="Device:update-time"></a>The "update-time" property</h3>
+<pre class="programlisting">'update-time'  read      't'
+</pre>
+</div>
+<p>
+            The point in time (seconds since the Epoch Jan 1, 1970
+            0:00 UTC) that data was read from the power source.
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2812778"></a><h3>
+<a name="Device:type"></a>The "type" property</h3>
+<pre class="programlisting">'type'  read      's'
+</pre>
+</div>
+<p>
+            Type of power source. Known values are "battery" and "line-power".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2812820"></a><h3>
+<a name="Device:power-supply"></a>The "power-supply" property</h3>
+<pre class="programlisting">'power-supply'  read      'b'
+</pre>
+</div>
+<p>
+            If the power device is used to supply the system.
+            This would be set TRUE for laptop batteries and UPS devices,
+            but set FALSE for wireless mice or PDAs.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2812865"></a><h3>
+<a name="Device:has-history"></a>The "has-history" property</h3>
+<pre class="programlisting">'has-history'  read      'b'
+</pre>
+</div>
+<p>
+            If the power device has history.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2812908"></a><h3>
+<a name="Device:has-statistics"></a>The "has-statistics" property</h3>
+<pre class="programlisting">'has-statistics'  read      'b'
+</pre>
+</div>
+<p>
+            If the power device has statistics.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2812950"></a><h3>
+<a name="Device:online"></a>The "online" property</h3>
+<pre class="programlisting">'online'  read      'b'
+</pre>
+</div>
+<p>
+            Whether power is currently being provided through line power.
+            This property is only valid if the property
+            <code class="literal">type</code>
+            has the value "line-power".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2813004"></a><h3>
+<a name="Device:energy"></a>The "energy" property</h3>
+<pre class="programlisting">'energy'  read      'd'
+</pre>
+</div>
+<p>
+            Amount of energy (measured in Wh) currently available in
+            the power source.
+          </p>
+<p>
+            This property is only valid if the property
+            <code class="literal">type</code>
+            has the value "battery".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2813061"></a><h3>
+<a name="Device:energy-empty"></a>The "energy-empty" property</h3>
+<pre class="programlisting">'energy-empty'  read      'd'
+</pre>
+</div>
+<p>
+            Amount of energy (measured in Wh) in the power source when
+            it's considered to be empty.
+          </p>
+<p>
+            This property is only valid if the property
+            <code class="literal">type</code>
+            has the value "battery".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2813120"></a><h3>
+<a name="Device:energy-full"></a>The "energy-full" property</h3>
+<pre class="programlisting">'energy-full'  read      'd'
+</pre>
+</div>
+<p>
+            Amount of energy (measured in Wh) in the power source when
+            it's considered full.
+          </p>
+<p>
+            This property is only valid if the property
+            <code class="literal">type</code>
+            has the value "battery".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2813178"></a><h3>
+<a name="Device:energy-full-design"></a>The "energy-full-design" property</h3>
+<pre class="programlisting">'energy-full-design'  read      'd'
+</pre>
+</div>
+<p>
+            Amount of energy (measured in Wh) the power source is
+            designed to hold when it's considered full.
+          </p>
+<p>
+            This property is only valid if the property
+            <code class="literal">type</code>
+            has the value "battery".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2813236"></a><h3>
+<a name="Device:energy-rate"></a>The "energy-rate" property</h3>
+<pre class="programlisting">'energy-rate'  read      'd'
+</pre>
+</div>
+<p>
+            Amount of energy being drained from the source, measured
+            in W. If positive, the source is being discharged, if
+            negative it's being charged.
+          </p>
+<p>
+            This property is only valid if the property
+            <code class="literal">type</code>
+            has the value "battery".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2813296"></a><h3>
+<a name="Device:voltage"></a>The "voltage" property</h3>
+<pre class="programlisting">'voltage'  read      'd'
+</pre>
+</div>
+<p>
+            Voltage in the Cell or being recorded by the meter.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2813338"></a><h3>
+<a name="Device:time-to-empty"></a>The "time-to-empty" property</h3>
+<pre class="programlisting">'time-to-empty'  read      'x'
+</pre>
+</div>
+<p>
+            Number of seconds until the power source is considered empty.
+            Is set to 0 if unknown.
+          </p>
+<p>
+            This property is only valid if the property
+            <code class="literal">type</code>
+            has the value "battery".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2813396"></a><h3>
+<a name="Device:time-to-full"></a>The "time-to-full" property</h3>
+<pre class="programlisting">'time-to-full'  read      'x'
+</pre>
+</div>
+<p>
+            Number of seconds until the power source is considered full.
+            Is set to 0 if unknown.
+          </p>
+<p>
+            This property is only valid if the property
+            <code class="literal">type</code>
+            has the value "battery".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2813455"></a><h3>
+<a name="Device:percentage"></a>The "percentage" property</h3>
+<pre class="programlisting">'percentage'  read      'd'
+</pre>
+</div>
+<p>
+            The amount of energy left in the power source expressed as
+            a percentage between 0 and 100. Typically this is the same as
+            (<code class="literal">energy</code> -
+            <code class="literal">energy-empty</code>) /
+            (<code class="literal">energy-full</code> -
+            <code class="literal">energy-empty</code>).
+            However, some primitive power sources are capable of only
+            reporting percentages and in this case the energy-*
+            properties will be unset while this property is set.
+          </p>
+<p>
+            This property is only valid if the property
+            <code class="literal">type</code>
+            has the value "battery".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2813556"></a><h3>
+<a name="Device:is-present"></a>The "is-present" property</h3>
+<pre class="programlisting">'is-present'  read      'b'
+</pre>
+</div>
+<p>
+            If the power source is present in the bay.
+            This field is required as some batteries are hot-removable, for example
+            expensive UPS and most laptop batteries.
+          </p>
+<p>
+            This property is only valid if the property
+            <code class="literal">type</code>
+            has the value "battery".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2813615"></a><h3>
+<a name="Device:state"></a>The "state" property</h3>
+<pre class="programlisting">'state'  read      's'
+</pre>
+</div>
+<p>
+            The battery power state.
+            Known values are "fully-charged", "empty", "charging",
+            "discharging" or "unknown".
+          </p>
+<p>
+            This property is only valid if the property
+            <code class="literal">type</code>
+            has the value "battery".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2813674"></a><h3>
+<a name="Device:is-rechargeable"></a>The "is-rechargeable" property</h3>
+<pre class="programlisting">'is-rechargeable'  read      'b'
+</pre>
+</div>
+<p>
+            If the power source is rechargeable.
+          </p>
+<p>
+            This property is only valid if the property
+            <code class="literal">type</code>
+            has the value "battery".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2813731"></a><h3>
+<a name="Device:capacity"></a>The "capacity" property</h3>
+<pre class="programlisting">'capacity'  read      'd'
+</pre>
+</div>
+<p>
+            The capacity of the power source expressed as a percentage between 0 and 100.
+            The capacity of the battery will reduce with age.
+            A capacity value less than 75% is usually a sign that you should renew your battery.
+            Typically this value is the same as
+            (<code class="literal">full-design</code> /
+            <code class="literal">full</code>) * 100.
+            However, some primitive power sources are not capable reporting capacity
+            and in this case the capacity property will be unset.
+          </p>
+<p>
+            This property is only valid if the property
+            <code class="literal">type</code>
+            has the value "battery".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2813814"></a><h3>
+<a name="Device:technology"></a>The "technology" property</h3>
+<pre class="programlisting">'technology'  read      's'
+</pre>
+</div>
+<p>
+            Technology used in the battery; known values are "lithium-ion", "lead-acid",
+            "lithium-polymer", "nickel-metal-hydride", "lithium-iron-phosphate" or "unknown".
+          </p>
+<p>
+            This property is only valid if the property
+            <code class="literal">type</code>
+            has the value "battery".
+      </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.11</div>
+</body>
+</html>

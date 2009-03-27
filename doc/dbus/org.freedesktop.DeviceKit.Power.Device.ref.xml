@@ -1,0 +1,661 @@
+<?xml version="1.0"?><!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="Device">
+  <refmeta>
+    <refentrytitle role="top_of_page">org.freedesktop.DeviceKit.Power.Device</refentrytitle>
+  </refmeta>
+  <refnamediv>
+    <refname>org.freedesktop.DeviceKit.Power.Device</refname>
+    <refpurpose>Device interface</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv role="synopsis">
+    <title role="synopsis.title">Methods</title>
+    <synopsis><link linkend="Device.Refresh">Refresh</link>       ()
+<link linkend="Device.GetHistory">GetHistory</link>    (in  's'      type,
+               in  'u'      timespan,
+               in  'u'      resolution,
+               out 'a(uds)' data)
+<link linkend="Device.GetStatistics">GetStatistics</link> (in  's'      type,
+               out 'a(dd)'  data)
+</synopsis>
+  </refsynopsisdiv>
+  <refsect1 role="signal_proto">
+    <title role="signal_proto.title">Signals</title>
+    <synopsis><link linkend="Device::Changed">Changed</link> ()
+</synopsis>
+  </refsect1>
+  <refsect1 role="impl_interfaces">
+    <title role="impl_interfaces.title">Implemented Interfaces</title>
+    <para>
+    Objects implementing org.freedesktop.DeviceKit.Power.Device also implements
+    org.freedesktop.DBus.Introspectable,
+    org.freedesktop.DBus.Properties
+    </para>
+  </refsect1>
+  <refsect1 role="properties">
+    <title role="properties.title">Properties</title>
+    <synopsis><link linkend="Device:native-path">'native-path'</link>        read      's'
+<link linkend="Device:vendor">'vendor'</link>             read      's'
+<link linkend="Device:model">'model'</link>              read      's'
+<link linkend="Device:serial">'serial'</link>             read      's'
+<link linkend="Device:update-time">'update-time'</link>        read      't'
+<link linkend="Device:type">'type'</link>               read      's'
+<link linkend="Device:power-supply">'power-supply'</link>       read      'b'
+<link linkend="Device:has-history">'has-history'</link>        read      'b'
+<link linkend="Device:has-statistics">'has-statistics'</link>     read      'b'
+<link linkend="Device:online">'online'</link>             read      'b'
+<link linkend="Device:energy">'energy'</link>             read      'd'
+<link linkend="Device:energy-empty">'energy-empty'</link>       read      'd'
+<link linkend="Device:energy-full">'energy-full'</link>        read      'd'
+<link linkend="Device:energy-full-design">'energy-full-design'</link> read      'd'
+<link linkend="Device:energy-rate">'energy-rate'</link>        read      'd'
+<link linkend="Device:voltage">'voltage'</link>            read      'd'
+<link linkend="Device:time-to-empty">'time-to-empty'</link>      read      'x'
+<link linkend="Device:time-to-full">'time-to-full'</link>       read      'x'
+<link linkend="Device:percentage">'percentage'</link>         read      'd'
+<link linkend="Device:is-present">'is-present'</link>         read      'b'
+<link linkend="Device:state">'state'</link>              read      's'
+<link linkend="Device:is-rechargeable">'is-rechargeable'</link>    read      'b'
+<link linkend="Device:capacity">'capacity'</link>           read      'd'
+<link linkend="Device:technology">'technology'</link>         read      's'
+</synopsis>
+  </refsect1>
+  <refsect1 role="desc">
+    <title role="desc.title">Description</title>
+    <para>
+      
+        <para>
+          Objects implementing this interface are usually discovered through
+          the <literal>org.freedesktop.DeviceKit.Power</literal> interface on
+          the <literal>/org/freedesktop/DeviceKit/Power</literal> object on
+          the D-Bus system bus service with the well-known
+          name <literal>org.freedesktop.DeviceKit.Power</literal> using
+          the
+          <link linkend="Power.EnumerateDevices"><function>EnumerateDevices</function></link>
+          method.
+        </para>
+        <para>
+          <informalexample>
+            <programlisting>
+$ dbus-send --print-reply \
+            --system \
+            --dest=org.freedesktop.DeviceKit.Power \
+            /org/freedesktop/DeviceKit/Power/devices/battery_BAT0 \
+            org.freedesktop.DBus.Properties.GetAll \
+            string:org.freedesktop.DeviceKit.Power.Device
+
+method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
+   array [
+      dict entry(
+         string "native-path"
+         variant             string "/sys/devices/LNXSYSTM:00/device:00/PNP0A08:00/device:01/PNP0C09:00/PNP0C0A:00/power_supply/BAT0"
+      )
+      dict entry(
+         string "vendor"
+         variant             string "SONY"
+      )
+      dict entry(
+         string "model"
+         variant             string "42T4568"
+      )
+      dict entry(
+         string "serial"
+         variant             string "4179"
+      )
+      dict entry(
+         string "update-time"
+         variant             uint64 1226417875
+      )
+      dict entry(
+         string "type"
+         variant             string "battery"
+      )
+      dict entry(
+         string "power-supply"
+         variant             boolean true
+      )
+      dict entry(
+         string "has-history"
+         variant             boolean true
+      )
+      dict entry(
+         string "has-statistics"
+         variant             boolean true
+      )
+      dict entry(
+         string "online"
+         variant             boolean false
+      )
+      dict entry(
+         string "energy"
+         variant             double 72.85
+      )
+      dict entry(
+         string "energy-empty"
+         variant             double 0
+      )
+      dict entry(
+         string "energy-full"
+         variant             double 74.55
+      )
+      dict entry(
+         string "energy-full-design"
+         variant             double 74.88
+      )
+      dict entry(
+         string "energy-rate"
+         variant             double 0
+      )
+      dict entry(
+         string "voltage"
+         variant             double 16.415
+      )
+      dict entry(
+         string "time-to-empty"
+         variant             int64 0
+      )
+      dict entry(
+         string "time-to-full"
+         variant             int64 0
+      )
+      dict entry(
+         string "percentage"
+         variant             double 97.7197
+      )
+      dict entry(
+         string "is-present"
+         variant             boolean true
+      )
+      dict entry(
+         string "state"
+         variant             string "fully-charged"
+      )
+      dict entry(
+         string "is-rechargeable"
+         variant             boolean true
+      )
+      dict entry(
+         string "capacity"
+         variant             double 100
+      )
+      dict entry(
+         string "technology"
+         variant             string "lithium-ion"
+      )
+   ]
+            </programlisting>
+          </informalexample>
+        </para>
+        <para>
+          Unless otherwise noted, an empty string or the value 0 in a
+          property on this interface means not set.
+        </para>
+      
+    </para>
+  </refsect1>
+  <refsect1 role="details"><title role="details.title">Details</title><refsect2><title><anchor role="function" id="Device.Refresh"/>Refresh ()</title><indexterm><primary>Refresh</primary><secondary>Device</secondary></indexterm><programlisting>Refresh ()</programlisting></refsect2>
+          <para>
+            Refreshes the data collected from the power source.
+          </para>
+        <variablelist role="params"/><refsect3><title>Errors</title><variablelist role="errors"><varlistentry><term><parameter>org.freedesktop.DeviceKit.Power.Device.GeneralError</parameter>:</term><listitem><simpara>if an error occured while refreshing</simpara></listitem></varlistentry></variablelist></refsect3><refsect3><title>Permissions</title><para role="permission">Callers need the org.freedesktop.devicekit.power.refresh-power-source authorization</para></refsect3><refsect2><title><anchor role="function" id="Device.GetHistory"/>GetHistory ()</title><indexterm><primary>GetHistory</primary><secondary>Device</secondary></indexterm><programlisting>GetHistory (in  's'      type,
+            in  'u'      timespan,
+            in  'u'      resolution,
+            out 'a(uds)' data)</programlisting></refsect2>
+          <para>
+            Gets history for the power device that is persistent across reboots.
+          </para>
+        <variablelist role="params"><varlistentry><term><parameter>type</parameter>:</term><listitem><simpara>The type of history.
+        Valid types are <literal>rate</literal> or <literal>charge</literal>.</simpara></listitem></varlistentry><varlistentry><term><parameter>timespan</parameter>:</term><listitem><simpara>The amount of data to return in seconds, or 0 for all.</simpara></listitem></varlistentry><varlistentry><term><parameter>resolution</parameter>:</term><listitem><simpara>
+            The approximate number of points to return.
+            A higher resolution is more accurate, at the expense of plotting speed.
+          </simpara></listitem></varlistentry><varlistentry><term><parameter>data</parameter>:</term><listitem><simpara>
+            The history data for the power device, if the device supports history.
+            Data is ordered from the earliest in time, to the newest data point.
+            Each element contains the following members:
+            <para><itemizedlist><listitem><emphasis role="bold">time: </emphasis>
+                  The time value in seconds from the <literal>gettimeofday()</literal> method.
+                </listitem><listitem><emphasis role="bold">value: </emphasis>
+                  The data value, for instance the rate in W or the charge in %.
+                </listitem><listitem><emphasis role="bold">state: </emphasis>
+                  The state of the device, for instance <literal>charging</literal> or
+                  <literal>discharging</literal>.
+                </listitem></itemizedlist></para>
+        </simpara></listitem></varlistentry></variablelist><refsect2><title><anchor role="function" id="Device.GetStatistics"/>GetStatistics ()</title><indexterm><primary>GetStatistics</primary><secondary>Device</secondary></indexterm><programlisting>GetStatistics (in  's'     type,
+               out 'a(dd)' data)</programlisting></refsect2>
+          <para>
+            Gets statistics for the power device that may be interesting
+            to show on a graph in the session.
+          </para>
+        <variablelist role="params"><varlistentry><term><parameter>type</parameter>:</term><listitem><simpara>The mode for the statistics.
+        Valid types are <literal>charging</literal> or <literal>discharging</literal>.</simpara></listitem></varlistentry><varlistentry><term><parameter>data</parameter>:</term><listitem><simpara>
+            The statistics data for the power device.
+            Each element contains the following members:
+            <para><itemizedlist><listitem><emphasis role="bold">value: </emphasis>
+                  The value of the percentage point, usually in seconds
+                </listitem><listitem><emphasis role="bold">accuracy: </emphasis>
+                  The accuracy of the prediction in percent.
+                </listitem></itemizedlist></para>
+        </simpara></listitem></varlistentry></variablelist></refsect1>
+  <refsect1 role="signals"><title role="signals.title">Signal Details</title><refsect2><title><anchor role="function" id="Device::Changed"/>The Changed signal</title><indexterm><primary>Changed</primary><secondary>Device</secondary></indexterm><programlisting>Changed ()</programlisting></refsect2>
+          <para>
+            Some value on the power source changed.
+          </para>
+        <variablelist role="params"/></refsect1>
+  <refsect1 role="property_details">
+    <title role="property_details.title">Property Details</title>
+    <refsect2>
+      <title><anchor role="function" id="Device:native-path"/>The "native-path" property</title>
+      <indexterm>
+        <primary>native-path</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'native-path'  read      's'
+</programlisting>
+    </refsect2>
+    <para>
+            OS specific native path of the power source. On Linux this
+            is the sysfs path, for
+            example <literal>/sys/devices/LNXSYSTM:00/device:00/PNP0C0A:00/power_supply/BAT0</literal>. Is
+            blank if the device is being driven by a user space
+            driver.
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:vendor"/>The "vendor" property</title>
+      <indexterm>
+        <primary>vendor</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'vendor'  read      's'
+</programlisting>
+    </refsect2>
+    <para>
+            Name of the vendor of the battery.
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:model"/>The "model" property</title>
+      <indexterm>
+        <primary>model</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'model'  read      's'
+</programlisting>
+    </refsect2>
+    <para>
+            Name of the model of this battery.
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:serial"/>The "serial" property</title>
+      <indexterm>
+        <primary>serial</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'serial'  read      's'
+</programlisting>
+    </refsect2>
+    <para>
+            Unique serial number of the battery.
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:update-time"/>The "update-time" property</title>
+      <indexterm>
+        <primary>update-time</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'update-time'  read      't'
+</programlisting>
+    </refsect2>
+    <para>
+            The point in time (seconds since the Epoch Jan 1, 1970
+            0:00 UTC) that data was read from the power source.
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:type"/>The "type" property</title>
+      <indexterm>
+        <primary>type</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'type'  read      's'
+</programlisting>
+    </refsect2>
+    <para>
+            Type of power source. Known values are "battery" and "line-power".
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:power-supply"/>The "power-supply" property</title>
+      <indexterm>
+        <primary>power-supply</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'power-supply'  read      'b'
+</programlisting>
+    </refsect2>
+    <para>
+            If the power device is used to supply the system.
+            This would be set TRUE for laptop batteries and UPS devices,
+            but set FALSE for wireless mice or PDAs.
+          </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:has-history"/>The "has-history" property</title>
+      <indexterm>
+        <primary>has-history</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'has-history'  read      'b'
+</programlisting>
+    </refsect2>
+    <para>
+            If the power device has history.
+          </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:has-statistics"/>The "has-statistics" property</title>
+      <indexterm>
+        <primary>has-statistics</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'has-statistics'  read      'b'
+</programlisting>
+    </refsect2>
+    <para>
+            If the power device has statistics.
+          </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:online"/>The "online" property</title>
+      <indexterm>
+        <primary>online</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'online'  read      'b'
+</programlisting>
+    </refsect2>
+    <para>
+            Whether power is currently being provided through line power.
+            This property is only valid if the property
+            <link linkend="Source:type"><literal>type</literal></link>
+            has the value "line-power".
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:energy"/>The "energy" property</title>
+      <indexterm>
+        <primary>energy</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'energy'  read      'd'
+</programlisting>
+    </refsect2>
+    <para>
+            Amount of energy (measured in Wh) currently available in
+            the power source.
+          </para>
+    <para>
+            This property is only valid if the property
+            <link linkend="Source:type"><literal>type</literal></link>
+            has the value "battery".
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:energy-empty"/>The "energy-empty" property</title>
+      <indexterm>
+        <primary>energy-empty</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'energy-empty'  read      'd'
+</programlisting>
+    </refsect2>
+    <para>
+            Amount of energy (measured in Wh) in the power source when
+            it's considered to be empty.
+          </para>
+    <para>
+            This property is only valid if the property
+            <link linkend="Source:type"><literal>type</literal></link>
+            has the value "battery".
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:energy-full"/>The "energy-full" property</title>
+      <indexterm>
+        <primary>energy-full</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'energy-full'  read      'd'
+</programlisting>
+    </refsect2>
+    <para>
+            Amount of energy (measured in Wh) in the power source when
+            it's considered full.
+          </para>
+    <para>
+            This property is only valid if the property
+            <link linkend="Source:type"><literal>type</literal></link>
+            has the value "battery".
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:energy-full-design"/>The "energy-full-design" property</title>
+      <indexterm>
+        <primary>energy-full-design</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'energy-full-design'  read      'd'
+</programlisting>
+    </refsect2>
+    <para>
+            Amount of energy (measured in Wh) the power source is
+            designed to hold when it's considered full.
+          </para>
+    <para>
+            This property is only valid if the property
+            <link linkend="Source:type"><literal>type</literal></link>
+            has the value "battery".
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:energy-rate"/>The "energy-rate" property</title>
+      <indexterm>
+        <primary>energy-rate</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'energy-rate'  read      'd'
+</programlisting>
+    </refsect2>
+    <para>
+            Amount of energy being drained from the source, measured
+            in W. If positive, the source is being discharged, if
+            negative it's being charged.
+          </para>
+    <para>
+            This property is only valid if the property
+            <link linkend="Source:type"><literal>type</literal></link>
+            has the value "battery".
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:voltage"/>The "voltage" property</title>
+      <indexterm>
+        <primary>voltage</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'voltage'  read      'd'
+</programlisting>
+    </refsect2>
+    <para>
+            Voltage in the Cell or being recorded by the meter.
+          </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:time-to-empty"/>The "time-to-empty" property</title>
+      <indexterm>
+        <primary>time-to-empty</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'time-to-empty'  read      'x'
+</programlisting>
+    </refsect2>
+    <para>
+            Number of seconds until the power source is considered empty.
+            Is set to 0 if unknown.
+          </para>
+    <para>
+            This property is only valid if the property
+            <link linkend="Source:type"><literal>type</literal></link>
+            has the value "battery".
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:time-to-full"/>The "time-to-full" property</title>
+      <indexterm>
+        <primary>time-to-full</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'time-to-full'  read      'x'
+</programlisting>
+    </refsect2>
+    <para>
+            Number of seconds until the power source is considered full.
+            Is set to 0 if unknown.
+          </para>
+    <para>
+            This property is only valid if the property
+            <link linkend="Source:type"><literal>type</literal></link>
+            has the value "battery".
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:percentage"/>The "percentage" property</title>
+      <indexterm>
+        <primary>percentage</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'percentage'  read      'd'
+</programlisting>
+    </refsect2>
+    <para>
+            The amount of energy left in the power source expressed as
+            a percentage between 0 and 100. Typically this is the same as
+            (<link linkend="Source:energy"><literal>energy</literal></link> -
+            <link linkend="Source:energy-empty"><literal>energy-empty</literal></link>) /
+            (<link linkend="Source:energy-full"><literal>energy-full</literal></link> -
+            <link linkend="Source:energy-empty"><literal>energy-empty</literal></link>).
+            However, some primitive power sources are capable of only
+            reporting percentages and in this case the energy-*
+            properties will be unset while this property is set.
+          </para>
+    <para>
+            This property is only valid if the property
+            <link linkend="Source:type"><literal>type</literal></link>
+            has the value "battery".
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:is-present"/>The "is-present" property</title>
+      <indexterm>
+        <primary>is-present</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'is-present'  read      'b'
+</programlisting>
+    </refsect2>
+    <para>
+            If the power source is present in the bay.
+            This field is required as some batteries are hot-removable, for example
+            expensive UPS and most laptop batteries.
+          </para>
+    <para>
+            This property is only valid if the property
+            <link linkend="Source:type"><literal>type</literal></link>
+            has the value "battery".
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:state"/>The "state" property</title>
+      <indexterm>
+        <primary>state</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'state'  read      's'
+</programlisting>
+    </refsect2>
+    <para>
+            The battery power state.
+            Known values are "fully-charged", "empty", "charging",
+            "discharging" or "unknown".
+          </para>
+    <para>
+            This property is only valid if the property
+            <link linkend="Source:type"><literal>type</literal></link>
+            has the value "battery".
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:is-rechargeable"/>The "is-rechargeable" property</title>
+      <indexterm>
+        <primary>is-rechargeable</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'is-rechargeable'  read      'b'
+</programlisting>
+    </refsect2>
+    <para>
+            If the power source is rechargeable.
+          </para>
+    <para>
+            This property is only valid if the property
+            <link linkend="Source:type"><literal>type</literal></link>
+            has the value "battery".
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:capacity"/>The "capacity" property</title>
+      <indexterm>
+        <primary>capacity</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'capacity'  read      'd'
+</programlisting>
+    </refsect2>
+    <para>
+            The capacity of the power source expressed as a percentage between 0 and 100.
+            The capacity of the battery will reduce with age.
+            A capacity value less than 75% is usually a sign that you should renew your battery.
+            Typically this value is the same as
+            (<link linkend="Source:full-design"><literal>full-design</literal></link> /
+            <link linkend="Source:full"><literal>full</literal></link>) * 100.
+            However, some primitive power sources are not capable reporting capacity
+            and in this case the capacity property will be unset.
+          </para>
+    <para>
+            This property is only valid if the property
+            <link linkend="Source:type"><literal>type</literal></link>
+            has the value "battery".
+      </para>
+    <variablelist role="params"/>
+    <refsect2>
+      <title><anchor role="function" id="Device:technology"/>The "technology" property</title>
+      <indexterm>
+        <primary>technology</primary>
+        <secondary>Device</secondary>
+      </indexterm>
+      <programlisting>'technology'  read      's'
+</programlisting>
+    </refsect2>
+    <para>
+            Technology used in the battery; known values are "lithium-ion", "lead-acid",
+            "lithium-polymer", "nickel-metal-hydride", "lithium-iron-phosphate" or "unknown".
+          </para>
+    <para>
+            This property is only valid if the property
+            <link linkend="Source:type"><literal>type</literal></link>
+            has the value "battery".
+      </para>
+    <variablelist role="params"/>
+  </refsect1>
+</refentry>

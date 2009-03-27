@@ -1,0 +1,86 @@
+Version 006
+~~~~~~~~~~~
+Released: 2009-02-10
+
+Bugfixes:
+ - Fix compile failure with gcc-4.4.0 and old versions of glib2 (Richard Hughes)
+ - Only enable the wakeups polling if a client requires the data (Richard Hughes)
+ - Correctly set the power-supply property (David Zeuthen)
+ - Don't crash when we limit the resolution of a small dataset (Richard Hughes)
+ - Don't sync to disk every 5 seconds, do it every 10 minutes (Richard Hughes)
+ - Fix the QoS interface with the proper signature (Richard Hughes)
+
+Version 005
+~~~~~~~~~~~
+Released: 2009-02-02
+
+New Features:
+ - Add a wakeups interface so we can get data from the system over DBus (Richard Hughes)
+ - Allow showing the wakeup data in the devkit-power command line tool (Richard Hughes)
+
+Version 004
+~~~~~~~~~~~
+Released: 2009-01-23
+
+Bugfixes:
+ - Fix the battery capacity calculation. Fixes fd#19165 (Richard Hughes)
+ - Special case machines where the kernel does not convert charge to power (Richard Hughes)
+ - Check all the power supply fields for valid data (Richard Hughes)
+
+Version 003
+~~~~~~~~~~~
+Released: 2008-12-09
+
+New Features:
+ - Implement the .QoS interface -- still proof of concept (Richard Hughes)
+
+Bugfixes:
+ - Enable the low power saving code in DkpHistory (Richard Hughes)
+ - Don't keep putting off the profile saving in DkpHistory (Richard Hughes)
+ - Allow DeviceKit-power to run with the 'fixed' DBus (Richard Hughes)
+
+Version 002
+~~~~~~~~~~~
+Released: 2008-11-13
+
+New Features:
+ - add in CanSuspend and CanHibernate into API (Richard Hughes)
+ - add two new properties, has-history and has-statistics (Richard Hughes)
+ - add voltage property of a power device (Richard Hughes)
+ - all logging for all the other device types too (Richard Hughes)
+ - Move object paths so things are rooted under /org/freedesktop/DeviceKit/Power (David Zeuthen)
+ - Add functionality to monitor a Watts Up Pro device (Richard Hughes)
+ - Turn some methods into properties (David Zeuthen)
+
+Bugfixes:
+ - Also rename configure.in to configure.ac in autogen.sh (David Zeuthen)
+ - Fix up deps and build system (David Zeuthen)
+ - We're a fd.o project (David Zeuthen)
+ - Update my email address (David Zeuthen)
+ - Update mailing list reference in man pages (David Zeuthen)
+ - Update bug report URL to point to our mailing list (David Zeuthen)
+ - Nuke devkit-power-on-battery for now (David Zeuthen)
+ - Don't report negative rate when charging (Richard Hughes)
+ - Remove the battery- and line-power- prefix from the device properties (Richard Hughes)
+ - Add DkpStatsObj convenience helpers (Richard Hughes)
+ - Save the time to full and time to empty too (Richard Hughes)
+ - Don't clear the list when we print it (Richard Hughes)
+ - Support getting stats from DkpSupply devices (Richard Hughes)
+ - Poll every 10 seconds to get better stats results (Richard Hughes)
+ - Work out the statistics by binning them into percentage sized holes (Richard Hughes)
+ - Add two remove functions to the generic object list (Richard Hughes)
+ - Don't unconditionally set the energy_full to energy_full_design if larger (Richard Hughes)
+ - Add a first approximation of a time resolution limiter (Richard Hughes)
+ - Expand the client helper library to cover all the base API for gnome-power-manager (Richard Hughes)
+ - Use 0 for unknown, not -1 as some values like rate and voltage are valid when negative (Richard Hughes)
+ - Use a better resolution limiting function for getting the history to reduce CPU load (Richard Hughes)
+ - Match the WUP device on the tty device, not the USB device (Richard Hughes)
+ - Fix the include headers for DeviceKit 002 (Richard Hughes)
+ - Document how to access the D-Bus service with examples (David Zeuthen)
+
+Version 001
+~~~~~~~~~~~
+Released: 2008-09-02
+
+- Initial proof of concept version
+

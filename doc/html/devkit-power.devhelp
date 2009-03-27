@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE book PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "">
+<book xmlns="http://www.devhelp.net/book" title="DeviceKit-power Reference Manual" link="index.html" author="David Zeuthen" name="devkit-power">
+  <chapters>
+    <sub name="D-Bus API Reference" link="ref-dbus.html">
+      <sub name="org.freedesktop.DeviceKit.Power" link="Power.html"/>
+      <sub name="org.freedesktop.DeviceKit.Power.Device" link="Device.html"/>
+      <sub name="org.freedesktop.DeviceKit.Power.QoS" link="QoS.html"/>
+    </sub>
+    <sub name="Manual Pages" link="tools-fileformats.html">
+      <sub name="DeviceKit-power" link="DeviceKit-power.7.html"/>
+      <sub name="devkit-power-daemon" link="devkit-power-daemon.8.html"/>
+      <sub name="devkit-power" link="devkit-power.1.html"/>
+    </sub>
+    <sub name="Index" link="ix01.html"/>
+    <sub name="License" link="license.html"/>
+  </chapters>
+  <functions>
+    <function name="EnumerateDevices ()" link="Power.html#Power.EnumerateDevices"/>
+    <function name="Suspend ()" link="Power.html#Power.Suspend"/>
+    <function name="Hibernate ()" link="Power.html#Power.Hibernate"/>
+    <function name="The DeviceAdded signal" link="Power.html#Power::DeviceAdded"/>
+    <function name="The DeviceRemoved signal" link="Power.html#Power::DeviceRemoved"/>
+    <function name="The DeviceChanged signal" link="Power.html#Power::DeviceChanged"/>
+    <function name="The Changed signal" link="Power.html#Power::Changed"/>
+    <function name="The &quot;daemon-version&quot; property" link="Power.html#Power:daemon-version"/>
+    <function name="The &quot;can-suspend&quot; property" link="Power.html#Power:can-suspend"/>
+    <function name="The &quot;can-hibernate&quot; property" link="Power.html#Power:can-hibernate"/>
+    <function name="The &quot;on-battery&quot; property" link="Power.html#Power:on-battery"/>
+    <function name="The &quot;on-low-battery&quot; property" link="Power.html#Power:on-low-battery"/>
+    <function name="Refresh ()" link="Device.html#Device.Refresh"/>
+    <function name="GetHistory ()" link="Device.html#Device.GetHistory"/>
+    <function name="GetStatistics ()" link="Device.html#Device.GetStatistics"/>
+    <function name="The Changed signal" link="Device.html#Device::Changed"/>
+    <function name="The &quot;native-path&quot; property" link="Device.html#Device:native-path"/>
+    <function name="The &quot;vendor&quot; property" link="Device.html#Device:vendor"/>
+    <function name="The &quot;model&quot; property" link="Device.html#Device:model"/>
+    <function name="The &quot;serial&quot; property" link="Device.html#Device:serial"/>
+    <function name="The &quot;update-time&quot; property" link="Device.html#Device:update-time"/>
+    <function name="The &quot;type&quot; property" link="Device.html#Device:type"/>
+    <function name="The &quot;power-supply&quot; property" link="Device.html#Device:power-supply"/>
+    <function name="The &quot;has-history&quot; property" link="Device.html#Device:has-history"/>
+    <function name="The &quot;has-statistics&quot; property" link="Device.html#Device:has-statistics"/>
+    <function name="The &quot;online&quot; property" link="Device.html#Device:online"/>
+    <function name="The &quot;energy&quot; property" link="Device.html#Device:energy"/>
+    <function name="The &quot;energy-empty&quot; property" link="Device.html#Device:energy-empty"/>
+    <function name="The &quot;energy-full&quot; property" link="Device.html#Device:energy-full"/>
+    <function name="The &quot;energy-full-design&quot; property" link="Device.html#Device:energy-full-design"/>
+    <function name="The &quot;energy-rate&quot; property" link="Device.html#Device:energy-rate"/>
+    <function name="The &quot;voltage&quot; property" link="Device.html#Device:voltage"/>
+    <function name="The &quot;time-to-empty&quot; property" link="Device.html#Device:time-to-empty"/>
+    <function name="The &quot;time-to-full&quot; property" link="Device.html#Device:time-to-full"/>
+    <function name="The &quot;percentage&quot; property" link="Device.html#Device:percentage"/>
+    <function name="The &quot;is-present&quot; property" link="Device.html#Device:is-present"/>
+    <function name="The &quot;state&quot; property" link="Device.html#Device:state"/>
+    <function name="The &quot;is-rechargeable&quot; property" link="Device.html#Device:is-rechargeable"/>
+    <function name="The &quot;capacity&quot; property" link="Device.html#Device:capacity"/>
+    <function name="The &quot;technology&quot; property" link="Device.html#Device:technology"/>
+    <function name="SetMinimumLatency ()" link="QoS.html#QoS.SetMinimumLatency"/>
+    <function name="RequestLatency ()" link="QoS.html#QoS.RequestLatency"/>
+    <function name="CancelRequest ()" link="QoS.html#QoS.CancelRequest"/>
+    <function name="GetLatency ()" link="QoS.html#QoS.GetLatency"/>
+    <function name="GetLatencyRequests ()" link="QoS.html#QoS.GetLatencyRequests"/>
+    <function name="The LatencyChanged signal" link="QoS.html#QoS::LatencyChanged"/>
+    <function name="The RequestsChanged signal" link="QoS.html#QoS::RequestsChanged"/>
+  </functions>
+</book>
