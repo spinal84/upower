@@ -4,3 +4,4 @@ debian/tmp/usr/share/dbus-1/
 debian/tmp/usr/share/PolicyKit/
 debian/tmp/etc/dbus-1/system.d/org.freedesktop.DeviceKit.Power.conf
 debian/tmp/etc/udev/rules.d/* lib/udev/rules.d/
+debian/tmp/var/lib/DeviceKit-power/
