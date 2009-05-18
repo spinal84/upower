@@ -1,10 +1,26 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59c)
-AC_INIT(DeviceKit-power, 003, http://lists.freedesktop.org/mailman/listinfo/devkit-devel)
-AM_INIT_AUTOMAKE(DeviceKit-power, 006)
+AC_INIT(DeviceKit-power, 007, http://lists.freedesktop.org/mailman/listinfo/devkit-devel)
+AM_INIT_AUTOMAKE(DeviceKit-power, 007)
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
+
+# libtool versioning - this applies to devkit-power-gobject
+#
+# See http://sources.redhat.com/autobook/autobook/autobook_91.html#SEC91 for details
+#
+# increment;
+# CURRENT	If the API or ABI interface has changed (reset REVISION to 0)
+# REVISION	If the API and ABI remains the same, but bugs are fixed.
+# AGE		If libpackagekit can be linked into executables which can be
+# 		built with previous versions of this library. Don't use.
+LT_CURRENT=1
+LT_REVISION=0
+LT_AGE=0
+AC_SUBST(LT_CURRENT)
+AC_SUBST(LT_REVISION)
+AC_SUBST(LT_AGE)
 
 AC_ISC_POSIX
 AC_PROG_CC
@@ -151,6 +167,7 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[gettext domain])
 
 AC_OUTPUT([
 Makefile
+devkit-power-gobject.pc
 src/Makefile
 tools/Makefile
 doc/Makefile
@@ -158,7 +175,7 @@ doc/version.xml
 doc/man/Makefile
 doc/dbus/Makefile
 policy/Makefile
-libdevkit-power/Makefile
+devkit-power-gobject/Makefile
 po/Makefile.in
 ])
 

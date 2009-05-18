@@ -18,29 +18,38 @@
  *
  */
 
-#ifndef __DKP_STATS_OBJ_H__
-#define __DKP_STATS_OBJ_H__
+#if !defined (__DEVICEKIT_POWER_H_INSIDE__) && !defined (DKP_COMPILATION)
+#error "Only <devicekit-power.h> can be included directly."
+#endif
+
+#ifndef __DKP_HISTORY_OBJ_H__
+#define __DKP_HISTORY_OBJ_H__
 
 #include <glib.h>
-#include "dkp-enum.h"
+#include <devkit-power-gobject/dkp-enum.h>
 
 G_BEGIN_DECLS
 
 typedef struct
 {
+	guint			 time;
 	gdouble			 value;
-	gdouble			 accuracy;
-} DkpStatsObj;
+	DkpDeviceState		 state;
+} DkpHistoryObj;
 
-DkpStatsObj	*dkp_stats_obj_new		(void);
-gboolean	 dkp_stats_obj_free		(DkpStatsObj		*obj);
-DkpStatsObj	*dkp_stats_obj_copy		(const DkpStatsObj	*cobj);
-DkpStatsObj	*dkp_stats_obj_create		(gdouble		 value,
-						 gdouble		 accuracy);
-DkpStatsObj	*dkp_stats_obj_from_string	(const gchar		*text);
-gchar		*dkp_stats_obj_to_string	(const DkpStatsObj	*obj);
+DkpHistoryObj	*dkp_history_obj_new		(void);
+gboolean	 dkp_history_obj_clear		(DkpHistoryObj		*obj);
+gboolean	 dkp_history_obj_free		(DkpHistoryObj		*obj);
+DkpHistoryObj	*dkp_history_obj_copy		(const DkpHistoryObj	*cobj);
+gboolean	 dkp_history_obj_print		(const DkpHistoryObj	*obj);
+DkpHistoryObj	*dkp_history_obj_create		(gdouble		 value,
+						 DkpDeviceState		 state);
+gboolean	 dkp_history_obj_equal		(const DkpHistoryObj	*obj1,
+						 const DkpHistoryObj	*obj2);
+DkpHistoryObj	*dkp_history_obj_from_string	(const gchar		*text);
+gchar		*dkp_history_obj_to_string	(const DkpHistoryObj	*obj);
 
 G_END_DECLS
 
-#endif /* __DKP_STATS_OBJ_H__ */
+#endif /* __DKP_HISTORY_OBJ_H__ */
 

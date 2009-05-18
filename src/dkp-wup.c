@@ -42,10 +42,8 @@
 
 #include "sysfs-utils.h"
 #include "egg-debug.h"
-#include "egg-string.h"
 
 #include "dkp-enum.h"
-#include "dkp-object.h"
 #include "dkp-wup.h"
 
 #define DKP_WUP_REFRESH_TIMEOUT			10 /* seconds */
@@ -90,9 +88,8 @@ dkp_wup_poll_cb (DkpWup *wup)
 {
 	gboolean ret;
 	DkpDevice *device = DKP_DEVICE (wup);
-	DkpObject *obj = dkp_device_get_obj (device);
 
-	egg_debug ("Polling: %s", obj->native_path);
+	egg_debug ("Polling: %s", dkp_device_get_object_path (device));
 	ret = dkp_wup_refresh (device);
 	if (ret)
 		dkp_device_emit_changed (device);
@@ -188,7 +185,6 @@ dkp_wup_parse_command (DkpWup *wup, const gchar *data)
 	guint length;
 	guint number_tokens;
 	DkpDevice *device = DKP_DEVICE (wup);
-	DkpObject *obj = dkp_device_get_obj (device);
 	const guint offset = 3;
 
 	/* invalid */
@@ -277,8 +273,10 @@ dkp_wup_parse_command (DkpWup *wup, const gchar *data)
 
 	/* update the command fields */
 	if (command == 'd' && subcommand == '-' && number_tokens - offset == 18) {
-		obj->energy_rate = strtod (tokens[offset+DKP_WUP_RESPONSE_OFFSET_WATTS], NULL) / 10.0f;
-		obj->voltage = strtod (tokens[offset+DKP_WUP_RESPONSE_OFFSET_VOLTS], NULL) / 10.0f;
+		g_object_set (device,
+			      "energy-rate", strtod (tokens[offset+DKP_WUP_RESPONSE_OFFSET_WATTS], NULL) / 10.0f,
+			      "voltage", strtod (tokens[offset+DKP_WUP_RESPONSE_OFFSET_VOLTS], NULL) / 10.0f,
+			      NULL);
 		ret = TRUE;
 	} else {
 		egg_debug ("ignoring command '%c'", command);
@@ -301,8 +299,8 @@ dkp_wup_coldplug (DkpDevice *device)
 	gboolean ret = FALSE;
 	const gchar *device_file;
 	const gchar *type;
+	const gchar *native_path;
 	gchar *data;
-	DkpObject *obj = dkp_device_get_obj (device);
 
 	/* detect what kind of device we are */
 	d = dkp_device_get_d (device);
@@ -311,7 +309,7 @@ dkp_wup_coldplug (DkpDevice *device)
 
 	/* get the type */
 	type = devkit_device_get_property (d, "DKP_MONITOR_TYPE");
-	if (type == NULL || !egg_strequal (type, "wup"))
+	if (type == NULL || g_strcmp0 (type, "wup") != 0)
 		goto out;
 
 	/* get the device file */
@@ -353,15 +351,18 @@ dkp_wup_coldplug (DkpDevice *device)
 	g_free (data);
 
 	/* hardcode some values */
-	obj->type = DKP_DEVICE_TYPE_MONITOR;
-	obj->is_rechargeable = FALSE;
-	obj->power_supply = FALSE;
-	obj->is_present = FALSE;
-	obj->vendor = g_strdup (devkit_device_get_property (d, "ID_VENDOR"));
-	obj->model = g_strdup (devkit_device_get_property (d, "ID_PRODUCT"));
-	obj->serial = g_strstrip (sysfs_get_string (obj->native_path, "serial"));
-	obj->has_history = TRUE;
-	obj->state = DKP_DEVICE_STATE_DISCHARGING;
+	native_path = devkit_device_get_native_path (d);
+	g_object_set (device,
+		      "type", DKP_DEVICE_TYPE_MONITOR,
+		      "is-rechargeable", FALSE,
+		      "power-supply", FALSE,
+		      "is-present", FALSE,
+		      "vendor", devkit_device_get_property (d, "ID_VENDOR"),
+		      "model", devkit_device_get_property (d, "ID_PRODUCT"),
+		      "serial", g_strstrip (sysfs_get_string (native_path, "serial")),
+		      "has-history", TRUE,
+		      "state", DKP_DEVICE_STATE_DISCHARGING,
+		      NULL);
 
 	/* coldplug */
 	egg_debug ("coldplug");
@@ -382,11 +383,10 @@ dkp_wup_refresh (DkpDevice *device)
 	GTimeVal time;
 	gchar *data = NULL;
 	DkpWup *wup = DKP_WUP (device);
-	DkpObject *obj = dkp_device_get_obj (device);
 
 	/* reset time */
 	g_get_current_time (&time);
-	obj->update_time = time.tv_sec;
+	g_object_set (device, "update-time", (guint64) time.tv_sec, NULL);
 
 	/* get data */
 	data = dkp_wup_read_command (wup);

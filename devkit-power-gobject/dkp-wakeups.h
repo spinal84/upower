@@ -19,13 +19,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#if !defined (__DEVICEKIT_POWER_H_INSIDE__) && !defined (DKP_COMPILATION)
+#error "Only <devicekit-power.h> can be included directly."
+#endif
+
 #ifndef __DKP_WAKEUPS_H
 #define __DKP_WAKEUPS_H
 
 #include <glib-object.h>
-#include <dkp-enum.h>
-#include "dkp-device.h"
-#include "dkp-wakeups-obj.h"
+#include <devkit-power-gobject/dkp-enum.h>
+#include <devkit-power-gobject/dkp-device.h>
+#include <devkit-power-gobject/dkp-wakeups-obj.h>
 
 G_BEGIN_DECLS
 

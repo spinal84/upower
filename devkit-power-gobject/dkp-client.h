@@ -19,12 +19,16 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#if !defined (__DEVICEKIT_POWER_H_INSIDE__) && !defined (DKP_COMPILATION)
+#error "Only <devicekit-power.h> can be included directly."
+#endif
+
 #ifndef __DKP_CLIENT_H
 #define __DKP_CLIENT_H
 
 #include <glib-object.h>
-#include <dkp-enum.h>
-#include "dkp-device.h"
+#include <devkit-power-gobject/dkp-enum.h>
+#include <devkit-power-gobject/dkp-device.h>
 
 G_BEGIN_DECLS
 
@@ -55,11 +59,22 @@ typedef struct
 	void			(*device_removed)      	(DkpClient		*client,
 							 const DkpDevice	*device);
 	void			(*changed)              (DkpClient		*client);
+	/*< private >*/
+	/* Padding for future expansion */
+	void (*_dkp_client_reserved1) (void);
+	void (*_dkp_client_reserved2) (void);
+	void (*_dkp_client_reserved3) (void);
+	void (*_dkp_client_reserved4) (void);
+	void (*_dkp_client_reserved5) (void);
+	void (*_dkp_client_reserved6) (void);
+	void (*_dkp_client_reserved7) (void);
+	void (*_dkp_client_reserved8) (void);
 } DkpClientClass;
 
 GType		 dkp_client_get_type			(void);
 DkpClient	*dkp_client_new				(void);
-GPtrArray	*dkp_client_enumerate_devices		(DkpClient		*client);
+GPtrArray	*dkp_client_enumerate_devices		(DkpClient		*client,
+							 GError			**error);
 gboolean	 dkp_client_suspend			(DkpClient		*client,
 							 GError			**error);
 gboolean	 dkp_client_hibernate			(DkpClient		*client,
