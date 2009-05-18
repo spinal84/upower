@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = libdevkit-power src doc tools policy po
+SUBDIRS = devkit-power-gobject src doc tools policy po
 
 # Creating ChangeLog from git log (taken from cairo/Makefile.am):
 ChangeLog: $(srcdir)/ChangeLog
@@ -22,6 +22,9 @@ $(srcdir)/ChangeLog:
 EXTRA_DIST = 			\
 	HACKING 		\
 	ChangeLog
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = devkit-power-gobject.pc
 
 # xsltproc barfs on 'make distcheck'; disable for now
 DISTCHECK_CONFIGURE_FLAGS=--disable-man-pages --disable-gtk-doc

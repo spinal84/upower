@@ -59,7 +59,7 @@ Date:   Tue Aug 5 12:25:27 2008 +0100
 
     don't segfault when a history file is present but empty
 
- libdevkit-power/dkp-history-obj.c |    2 +-
+ devkit-power-gobject/dkp-history-obj.c |    2 +-
  src/dkp-history.c                 |   10 ++++++++--
  2 files changed, 9 insertions(+), 3 deletions(-)
 
@@ -158,10 +158,10 @@ Date:   Mon Aug 4 16:25:25 2008 +0100
 
     use DkpHistoryObj in devkit-power
 
- libdevkit-power/Makefile.am       |    2 +
- libdevkit-power/dkp-history-obj.c |  173
+ devkit-power-gobject/Makefile.am       |    2 +
+ devkit-power-gobject/dkp-history-obj.c |  173
  +++++++++++++++++++++++++++++++++++++
- libdevkit-power/dkp-history-obj.h |   51 +++++++++++
+ devkit-power-gobject/dkp-history-obj.h |   51 +++++++++++
  src/Makefile.am                   |    1 -
  src/dkp-history-obj.c             |  173
  -------------------------------------
@@ -242,9 +242,9 @@ Date:   Mon Aug 4 14:30:34 2008 +0100
     add a function dkp_object_diff() to pretty print the differences
     between two DkpObject's
 
- libdevkit-power/dkp-object.c |  162
+ devkit-power-gobject/dkp-object.c |  162
  ++++++++++++++++++++++++++++++++++++-----
- libdevkit-power/dkp-object.h |    2 +
+ devkit-power-gobject/dkp-object.h |    2 +
  2 files changed, 144 insertions(+), 20 deletions(-)
 
 commit 66b6a807227036a256634cfc42f0ecc4ce51d83d
@@ -253,7 +253,7 @@ Date:   Mon Aug 4 13:49:41 2008 +0100
 
     print a better seconds/minutes/hours text -- needs localising properly
 
- libdevkit-power/dkp-object.c |   36 ++++++++++++++++++++++++++++++------
+ devkit-power-gobject/dkp-object.c |   36 ++++++++++++++++++++++++++++++------
  1 files changed, 30 insertions(+), 6 deletions(-)
 
 commit b5b5b6824bece0dd9a49f9e219dcf743e0b22a81
@@ -327,15 +327,15 @@ Date:   Fri Aug 1 17:27:12 2008 +0100
 
  Makefile.am                  |    2 +-
  configure.in                 |    1 +
- libdevkit-power/.gitignore   |   11 ++
- libdevkit-power/Makefile.am  |   25 +++
- libdevkit-power/egg-debug.c  |  240 ++++++++++++++++++++++++++++
- libdevkit-power/egg-debug.h  |   80 +++++++++
- libdevkit-power/dkp-enum.c   |  229 ++++++++++++++++++++++++++
- libdevkit-power/dkp-enum.h   |   69 ++++++++
- libdevkit-power/dkp-object.c |  361
+ devkit-power-gobject/.gitignore   |   11 ++
+ devkit-power-gobject/Makefile.am  |   25 +++
+ devkit-power-gobject/egg-debug.c  |  240 ++++++++++++++++++++++++++++
+ devkit-power-gobject/egg-debug.h  |   80 +++++++++
+ devkit-power-gobject/dkp-enum.c   |  229 ++++++++++++++++++++++++++
+ devkit-power-gobject/dkp-enum.h   |   69 ++++++++
+ devkit-power-gobject/dkp-object.c |  361
  ++++++++++++++++++++++++++++++++++++++++++
- libdevkit-power/dkp-object.h |   67 ++++++++
+ devkit-power-gobject/dkp-object.h |   67 ++++++++
  src/Makefile.am              |    7 +-
  src/egg-debug.c              |  240 ----------------------------
  src/egg-debug.h              |   80 ---------
