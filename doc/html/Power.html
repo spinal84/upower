@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>org.freedesktop.DeviceKit.Power</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.3">
 <link rel="home" href="index.html" title="DeviceKit-power Reference Manual">
 <link rel="up" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="prev" href="ref-dbus.html" title="D-Bus API Reference">
@@ -53,7 +53,7 @@
 </pre>
 </div>
 <div class="refsect1" lang="en">
-<a name="id2828293"></a><h2>Signals</h2>
+<a name="id2865040"></a><h2>Signals</h2>
 <pre class="synopsis"><a class="link" href="Power.html#Power::DeviceAdded">DeviceAdded</a>   ('o' device)
 <a class="link" href="Power.html#Power::DeviceRemoved">DeviceRemoved</a> ('o' device)
 <a class="link" href="Power.html#Power::DeviceChanged">DeviceChanged</a> ('o' device)
@@ -61,7 +61,7 @@
 </pre>
 </div>
 <div class="refsect1" lang="en">
-<a name="id2814073"></a><h2>Implemented Interfaces</h2>
+<a name="id2850681"></a><h2>Implemented Interfaces</h2>
 <p>
     Objects implementing org.freedesktop.DeviceKit.Power also implements
     org.freedesktop.DBus.Introspectable,
@@ -69,16 +69,17 @@
     </p>
 </div>
 <div class="refsect1" lang="en">
-<a name="id2751511"></a><h2>Properties</h2>
+<a name="id2787834"></a><h2>Properties</h2>
 <pre class="synopsis"><a class="link" href="Power.html#Power:daemon-version">'daemon-version'</a> read      's'
 <a class="link" href="Power.html#Power:can-suspend">'can-suspend'</a>    read      'b'
 <a class="link" href="Power.html#Power:can-hibernate">'can-hibernate'</a>  read      'b'
 <a class="link" href="Power.html#Power:on-battery">'on-battery'</a>     read      'b'
 <a class="link" href="Power.html#Power:on-low-battery">'on-low-battery'</a> read      'b'
+<a class="link" href="Power.html#Power:lid-is-closed">'lid-is-closed'</a>  read      'b'
 </pre>
 </div>
 <div class="refsect1" lang="en">
-<a name="id2753256"></a><h2>Description</h2>
+<a name="id2789868"></a><h2>Description</h2>
 <p>
       
         </p>
@@ -114,9 +115,9 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
     </p>
 </div>
 <div class="refsect1" lang="en">
-<a name="id2753320"></a><h2>Details</h2>
+<a name="id2789931"></a><h2>Details</h2>
 <div class="refsect2" lang="en">
-<a name="id2753328"></a><h3>
+<a name="id2789939"></a><h3>
 <a name="Power.EnumerateDevices"></a>EnumerateDevices ()</h3>
 <pre class="programlisting">EnumerateDevices (out 'ao' devices)</pre>
 </div>
@@ -132,7 +133,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="id2752853"></a><h3>
+<a name="id2789464"></a><h3>
 <a name="Power.Suspend"></a>Suspend ()</h3>
 <pre class="programlisting">Suspend ()</pre>
 </div>
@@ -146,7 +147,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="id2752886"></a><h3>
+<a name="id2789498"></a><h3>
 <a name="Power.Hibernate"></a>Hibernate ()</h3>
 <pre class="programlisting">Hibernate ()</pre>
 </div>
@@ -160,9 +161,9 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 </div>
 <div class="refsect1" lang="en">
-<a name="id2752920"></a><h2>Signal Details</h2>
+<a name="id2789532"></a><h2>Signal Details</h2>
 <div class="refsect2" lang="en">
-<a name="id2752929"></a><h3>
+<a name="id2789540"></a><h3>
 <a name="Power::DeviceAdded"></a>The DeviceAdded signal</h3>
 <pre class="programlisting">DeviceAdded ('o' device)</pre>
 </div>
@@ -178,7 +179,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="id2752971"></a><h3>
+<a name="id2789583"></a><h3>
 <a name="Power::DeviceRemoved"></a>The DeviceRemoved signal</h3>
 <pre class="programlisting">DeviceRemoved ('o' device)</pre>
 </div>
@@ -194,7 +195,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="id2752042"></a><h3>
+<a name="id2788635"></a><h3>
 <a name="Power::DeviceChanged"></a>The DeviceChanged signal</h3>
 <pre class="programlisting">DeviceChanged ('o' device)</pre>
 </div>
@@ -210,7 +211,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="id2752084"></a><h3>
+<a name="id2788677"></a><h3>
 <a name="Power::Changed"></a>The Changed signal</h3>
 <pre class="programlisting">Changed ()</pre>
 </div>
@@ -223,9 +224,9 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 </div>
 <div class="refsect1" lang="en">
-<a name="id2752118"></a><h2>Property Details</h2>
+<a name="id2788710"></a><h2>Property Details</h2>
 <div class="refsect2" lang="en">
-<a name="id2752128"></a><h3>
+<a name="id2788718"></a><h3>
 <a name="Power:daemon-version"></a>The "daemon-version" property</h3>
 <pre class="programlisting">'daemon-version'  read      's'
 </pre>
@@ -239,7 +240,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="id2752176"></a><h3>
+<a name="id2788753"></a><h3>
 <a name="Power:can-suspend"></a>The "can-suspend" property</h3>
 <pre class="programlisting">'can-suspend'  read      'b'
 </pre>
@@ -253,7 +254,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="id2757503"></a><h3>
+<a name="id2788782"></a><h3>
 <a name="Power:can-hibernate"></a>The "can-hibernate" property</h3>
 <pre class="programlisting">'can-hibernate'  read      'b'
 </pre>
@@ -267,7 +268,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="id2757547"></a><h3>
+<a name="id2794098"></a><h3>
 <a name="Power:on-battery"></a>The "on-battery" property</h3>
 <pre class="programlisting">'on-battery'  read      'b'
 </pre>
@@ -282,7 +283,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="id2757591"></a><h3>
+<a name="id2794129"></a><h3>
 <a name="Power:on-low-battery"></a>The "on-low-battery" property</h3>
 <pre class="programlisting">'on-low-battery'  read      'b'
 </pre>
@@ -291,6 +292,20 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
             Indicates whether the system is running on battery power and if the battery is critically low.
             This property is provided for convenience.
       </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2794160"></a><h3>
+<a name="Power:lid-is-closed"></a>The "lid-is-closed" property</h3>
+<pre class="programlisting">'lid-is-closed'  read      'b'
+</pre>
+</div>
+<p>
+            Indicates if the laptop lid is closed where the display cannot be seen.
+          </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody></tbody>

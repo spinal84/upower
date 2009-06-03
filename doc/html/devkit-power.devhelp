@@ -28,6 +28,7 @@
     <function name="The &quot;can-hibernate&quot; property" link="Power.html#Power:can-hibernate"/>
     <function name="The &quot;on-battery&quot; property" link="Power.html#Power:on-battery"/>
     <function name="The &quot;on-low-battery&quot; property" link="Power.html#Power:on-low-battery"/>
+    <function name="The &quot;lid-is-closed&quot; property" link="Power.html#Power:lid-is-closed"/>
     <function name="Refresh ()" link="Device.html#Device.Refresh"/>
     <function name="GetHistory ()" link="Device.html#Device.GetHistory"/>
     <function name="GetStatistics ()" link="Device.html#Device.GetStatistics"/>

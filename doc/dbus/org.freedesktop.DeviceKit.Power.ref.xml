@@ -37,6 +37,7 @@
 <link linkend="Power:can-hibernate">'can-hibernate'</link>  read      'b'
 <link linkend="Power:on-battery">'on-battery'</link>     read      'b'
 <link linkend="Power:on-low-battery">'on-low-battery'</link> read      'b'
+<link linkend="Power:lid-is-closed">'lid-is-closed'</link>  read      'b'
 </synopsis>
   </refsect1>
   <refsect1 role="desc">
@@ -103,74 +104,27 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
             Emitted when one or more properties on the object changes.
           </para>
         <variablelist role="params"/></refsect1>
-  <refsect1 role="property_details">
-    <title role="property_details.title">Property Details</title>
-    <refsect2>
-      <title><anchor role="function" id="Power:daemon-version"/>The "daemon-version" property</title>
-      <indexterm>
-        <primary>daemon-version</primary>
-        <secondary>Power</secondary>
-      </indexterm>
-      <programlisting>'daemon-version'  read      's'
-</programlisting>
-    </refsect2>
-    <para>
+  <refsect1 role="property_details"><title role="property_details.title">Property Details</title><refsect2><title><anchor role="function" id="Power:daemon-version"/>The "daemon-version" property</title><indexterm><primary>daemon-version</primary><secondary>Power</secondary></indexterm><programlisting>'daemon-version'  read      's'
+</programlisting></refsect2><para>
             Version of the running daemon, e.g. <literal>002</literal>.
-      </para>
-    <variablelist role="params"/>
-    <refsect2>
-      <title><anchor role="function" id="Power:can-suspend"/>The "can-suspend" property</title>
-      <indexterm>
-        <primary>can-suspend</primary>
-        <secondary>Power</secondary>
-      </indexterm>
-      <programlisting>'can-suspend'  read      'b'
-</programlisting>
-    </refsect2>
-    <para>
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:can-suspend"/>The "can-suspend" property</title><indexterm><primary>can-suspend</primary><secondary>Power</secondary></indexterm><programlisting>'can-suspend'  read      'b'
+</programlisting></refsect2><para>
             Whether the system is able to suspend.
-      </para>
-    <variablelist role="params"/>
-    <refsect2>
-      <title><anchor role="function" id="Power:can-hibernate"/>The "can-hibernate" property</title>
-      <indexterm>
-        <primary>can-hibernate</primary>
-        <secondary>Power</secondary>
-      </indexterm>
-      <programlisting>'can-hibernate'  read      'b'
-</programlisting>
-    </refsect2>
-    <para>
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:can-hibernate"/>The "can-hibernate" property</title><indexterm><primary>can-hibernate</primary><secondary>Power</secondary></indexterm><programlisting>'can-hibernate'  read      'b'
+</programlisting></refsect2><para>
             Whether the system is able to hibernate.
-      </para>
-    <variablelist role="params"/>
-    <refsect2>
-      <title><anchor role="function" id="Power:on-battery"/>The "on-battery" property</title>
-      <indexterm>
-        <primary>on-battery</primary>
-        <secondary>Power</secondary>
-      </indexterm>
-      <programlisting>'on-battery'  read      'b'
-</programlisting>
-    </refsect2>
-    <para>
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:on-battery"/>The "on-battery" property</title><indexterm><primary>on-battery</primary><secondary>Power</secondary></indexterm><programlisting>'on-battery'  read      'b'
+</programlisting></refsect2><para>
             Indicates whether the system is running on battery power.
             This property is provided for convenience.
-      </para>
-    <variablelist role="params"/>
-    <refsect2>
-      <title><anchor role="function" id="Power:on-low-battery"/>The "on-low-battery" property</title>
-      <indexterm>
-        <primary>on-low-battery</primary>
-        <secondary>Power</secondary>
-      </indexterm>
-      <programlisting>'on-low-battery'  read      'b'
-</programlisting>
-    </refsect2>
-    <para>
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:on-low-battery"/>The "on-low-battery" property</title><indexterm><primary>on-low-battery</primary><secondary>Power</secondary></indexterm><programlisting>'on-low-battery'  read      'b'
+</programlisting></refsect2><para>
             Indicates whether the system is running on battery power and if the battery is critically low.
             This property is provided for convenience.
-      </para>
-    <variablelist role="params"/>
-  </refsect1>
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:lid-is-closed"/>The "lid-is-closed" property</title><indexterm><primary>lid-is-closed</primary><secondary>Power</secondary></indexterm><programlisting>'lid-is-closed'  read      'b'
+</programlisting></refsect2>
+          <para>
+            Indicates if the laptop lid is closed where the display cannot be seen.
+          </para>
+        <variablelist role="params"/></refsect1>
 </refentry>

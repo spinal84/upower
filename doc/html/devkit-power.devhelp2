@@ -28,6 +28,7 @@
     <keyword type="" name="The &quot;can-hibernate&quot; property" link="Power.html#Power:can-hibernate"/>
     <keyword type="" name="The &quot;on-battery&quot; property" link="Power.html#Power:on-battery"/>
     <keyword type="" name="The &quot;on-low-battery&quot; property" link="Power.html#Power:on-low-battery"/>
+    <keyword type="" name="The &quot;lid-is-closed&quot; property" link="Power.html#Power:lid-is-closed"/>
     <keyword type="" name="Refresh ()" link="Device.html#Device.Refresh"/>
     <keyword type="" name="GetHistory ()" link="Device.html#Device.GetHistory"/>
     <keyword type="" name="GetStatistics ()" link="Device.html#Device.GetStatistics"/>

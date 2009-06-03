@@ -126,6 +126,8 @@ out:
 
 /**
  * dkp_csr_coldplug:
+ *
+ * Return %TRUE on success, %FALSE if we failed to get data and should be removed
  **/
 static gboolean
 dkp_csr_coldplug (DkpDevice *device)
@@ -135,6 +137,8 @@ dkp_csr_coldplug (DkpDevice *device)
 	gboolean ret = FALSE;
 	const gchar *type;
 	const gchar *native_path;
+	const gchar *vendor;
+	const gchar *product;
 
 	/* detect what kind of device we are */
 	d = dkp_device_get_d (device);
@@ -180,9 +184,18 @@ dkp_csr_coldplug (DkpDevice *device)
 		csr->priv->is_dual = devkit_device_get_property_as_boolean (d, "DKP_CSR_DUAL");
 	egg_debug ("is_dual=%i", csr->priv->is_dual);
 
+	/* prefer DKP names */
+	vendor = devkit_device_get_property (d, "DKP_VENDOR");
+	if (vendor == NULL)
+		vendor = devkit_device_get_property (d, "ID_VENDOR");
+	product = devkit_device_get_property (d, "DKP_PRODUCT");
+	if (product == NULL)
+		product = devkit_device_get_property (d, "ID_PRODUCT");
+
+	/* hardcode some values */
 	g_object_set (device,
-		      "vendor", devkit_device_get_property (d, "ID_VENDOR"),
-		      "model", devkit_device_get_property (d, "ID_PRODUCT"),
+		      "vendor", vendor,
+		      "model", product,
 		      "power-supply", FALSE,
 		      "is-present", TRUE,
 		      "is-rechargeable", TRUE,
@@ -205,14 +218,16 @@ out:
 
 /**
  * dkp_csr_refresh:
+ *
+ * Return %TRUE on success, %FALSE if we failed to refresh or no data
  **/
 static gboolean
 dkp_csr_refresh (DkpDevice *device)
 {
-	gboolean ret = TRUE;
+	gboolean ret = FALSE;
 	GTimeVal time;
 	DkpCsr *csr = DKP_CSR (device);
-	usb_dev_handle *handle;
+	usb_dev_handle *handle = NULL;
 	char buf[80];
 	unsigned int addr;
 	gdouble percentage;
@@ -228,14 +243,14 @@ dkp_csr_refresh (DkpDevice *device)
 
 	if (csr->priv->device == NULL) {
 		egg_warning ("no device!");
-		return FALSE;
+		goto out;
 	}
 
 	/* open USB device */
 	handle = usb_open (csr->priv->device);
 	if (handle == NULL) {
 		egg_warning ("could not open device");
-		return FALSE;
+		goto out;
 	}
 
 	/* get the charge */
@@ -262,7 +277,8 @@ dkp_csr_refresh (DkpDevice *device)
 	}
 
 out:
-	usb_close (handle);
+	if (handle != NULL)
+		usb_close (handle);
 	return ret;
 }
 

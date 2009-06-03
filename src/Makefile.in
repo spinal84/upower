@@ -58,6 +58,7 @@ am_devkit_power_daemon_OBJECTS =  \
 	devkit_power_daemon-dkp-device-list.$(OBJEXT) \
 	devkit_power_daemon-dkp-supply.$(OBJEXT) \
 	devkit_power_daemon-dkp-csr.$(OBJEXT) \
+	devkit_power_daemon-dkp-input.$(OBJEXT) \
 	devkit_power_daemon-dkp-wup.$(OBJEXT) \
 	devkit_power_daemon-dkp-hid.$(OBJEXT) \
 	devkit_power_daemon-dkp-qos.$(OBJEXT) \
@@ -150,29 +151,10 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 INSTOBJEXT = @INSTOBJEXT@
 INTLLIBS = @INTLLIBS@
-INTLTOOL_CAVES_RULE = @INTLTOOL_CAVES_RULE@
-INTLTOOL_DESKTOP_RULE = @INTLTOOL_DESKTOP_RULE@
-INTLTOOL_DIRECTORY_RULE = @INTLTOOL_DIRECTORY_RULE@
 INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
-INTLTOOL_KBD_RULE = @INTLTOOL_KBD_RULE@
-INTLTOOL_KEYS_RULE = @INTLTOOL_KEYS_RULE@
 INTLTOOL_MERGE = @INTLTOOL_MERGE@
-INTLTOOL_OAF_RULE = @INTLTOOL_OAF_RULE@
 INTLTOOL_PERL = @INTLTOOL_PERL@
-INTLTOOL_POLICY_RULE = @INTLTOOL_POLICY_RULE@
-INTLTOOL_PONG_RULE = @INTLTOOL_PONG_RULE@
-INTLTOOL_PROP_RULE = @INTLTOOL_PROP_RULE@
-INTLTOOL_SCHEMAS_RULE = @INTLTOOL_SCHEMAS_RULE@
-INTLTOOL_SERVER_RULE = @INTLTOOL_SERVER_RULE@
-INTLTOOL_SERVICE_RULE = @INTLTOOL_SERVICE_RULE@
-INTLTOOL_SHEET_RULE = @INTLTOOL_SHEET_RULE@
-INTLTOOL_SOUNDLIST_RULE = @INTLTOOL_SOUNDLIST_RULE@
-INTLTOOL_THEME_RULE = @INTLTOOL_THEME_RULE@
-INTLTOOL_UI_RULE = @INTLTOOL_UI_RULE@
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
-INTLTOOL_XAM_RULE = @INTLTOOL_XAM_RULE@
-INTLTOOL_XML_NOMERGE_RULE = @INTLTOOL_XML_NOMERGE_RULE@
-INTLTOOL_XML_RULE = @INTLTOOL_XML_RULE@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -320,6 +302,7 @@ devkit_power_daemon_SOURCES = \
 	dkp-device-list.h		dkp-device-list.c	\
 	dkp-supply.h			dkp-supply.c		\
 	dkp-csr.h			dkp-csr.c		\
+	dkp-input.h			dkp-input.c		\
 	dkp-wup.h			dkp-wup.c		\
 	dkp-hid.h			dkp-hid.c		\
 	dkp-qos.h			dkp-qos.c		\
@@ -447,6 +430,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-device.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-hid.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-history.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-input.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-marshal.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-polkit.Po@am__quote@
@@ -575,6 +559,20 @@ devkit_power_daemon-dkp-csr.obj: dkp-csr.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-csr.c' object='devkit_power_daemon-dkp-csr.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-csr.obj `if test -f 'dkp-csr.c'; then $(CYGPATH_W) 'dkp-csr.c'; else $(CYGPATH_W) '$(srcdir)/dkp-csr.c'; fi`
+
+devkit_power_daemon-dkp-input.o: dkp-input.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-input.o -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-input.Tpo -c -o devkit_power_daemon-dkp-input.o `test -f 'dkp-input.c' || echo '$(srcdir)/'`dkp-input.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/devkit_power_daemon-dkp-input.Tpo $(DEPDIR)/devkit_power_daemon-dkp-input.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-input.c' object='devkit_power_daemon-dkp-input.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-input.o `test -f 'dkp-input.c' || echo '$(srcdir)/'`dkp-input.c
+
+devkit_power_daemon-dkp-input.obj: dkp-input.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-input.obj -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-input.Tpo -c -o devkit_power_daemon-dkp-input.obj `if test -f 'dkp-input.c'; then $(CYGPATH_W) 'dkp-input.c'; else $(CYGPATH_W) '$(srcdir)/dkp-input.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/devkit_power_daemon-dkp-input.Tpo $(DEPDIR)/devkit_power_daemon-dkp-input.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-input.c' object='devkit_power_daemon-dkp-input.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-input.obj `if test -f 'dkp-input.c'; then $(CYGPATH_W) 'dkp-input.c'; else $(CYGPATH_W) '$(srcdir)/dkp-input.c'; fi`
 
 devkit_power_daemon-dkp-wup.o: dkp-wup.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-wup.o -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-wup.Tpo -c -o devkit_power_daemon-dkp-wup.o `test -f 'dkp-wup.c' || echo '$(srcdir)/'`dkp-wup.c

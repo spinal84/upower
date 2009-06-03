@@ -281,6 +281,8 @@ dkp_hid_get_all_data (DkpHid *hid)
 
 /**
  * dkp_hid_coldplug:
+ *
+ * Return %TRUE on success, %FALSE if we failed to get data and should be removed
  **/
 static gboolean
 dkp_hid_coldplug (DkpDevice *device)
@@ -290,6 +292,7 @@ dkp_hid_coldplug (DkpDevice *device)
 	gboolean ret = FALSE;
 	const gchar *device_file;
 	const gchar *type;
+	const gchar *vendor;
 
 	/* detect what kind of device we are */
 	d = dkp_device_get_d (device);
@@ -322,13 +325,18 @@ dkp_hid_coldplug (DkpDevice *device)
 		goto out;
 	}
 
+	/* prefer DKP names */
+	vendor = devkit_device_get_property (d, "DKP_VENDOR");
+	if (vendor == NULL)
+		vendor = devkit_device_get_property (d, "ID_VENDOR");
+
 	/* hardcode some values */
 	g_object_set (device,
 		      "type", DKP_DEVICE_TYPE_UPS,
 		      "is-rechargeable", TRUE,
 		      "power-supply", TRUE,
 		      "is-present", TRUE,
-		      "vendor", devkit_device_get_property (d, "ID_VENDOR"),
+		      "vendor", vendor,
 		      "has-history", TRUE,
 		      "has-statistics", TRUE,
 		      NULL);
@@ -345,6 +353,8 @@ out:
 
 /**
  * dkp_hid_refresh:
+ *
+ * Return %TRUE on success, %FALSE if we failed to refresh or no data
  **/
 static gboolean
 dkp_hid_refresh (DkpDevice *device)
@@ -364,7 +374,7 @@ dkp_hid_refresh (DkpDevice *device)
 	/* read any data -- it's okay if there's nothing as we are non-blocking */
 	rd = read (hid->priv->fd, ev, sizeof (ev));
 	if (rd < (int) sizeof (ev[0])) {
-		ret = TRUE;
+		ret = FALSE;
 		goto out;
 	}
 
