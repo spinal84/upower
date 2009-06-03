@@ -39,6 +39,7 @@
 #include <termios.h>
 #include <ctype.h>
 #include <getopt.h>
+#include <errno.h>
 
 #include "sysfs-utils.h"
 #include "egg-debug.h"
@@ -161,7 +162,7 @@ dkp_wup_read_command (DkpWup *wup)
 	gchar buffer[DKP_WUP_COMMAND_LEN];
 	retval = read (wup->priv->fd, &buffer, DKP_WUP_COMMAND_LEN);
 	if (retval < 0) {
-		egg_debug ("failed to read from fd");
+		egg_debug ("failed to read from fd: %s", strerror (errno));
 		return NULL;
 	}
 	return g_strdup (buffer);
@@ -290,6 +291,8 @@ out:
 
 /**
  * dkp_wup_coldplug:
+ *
+ * Return %TRUE on success, %FALSE if we failed to get data and should be removed
  **/
 static gboolean
 dkp_wup_coldplug (DkpDevice *device)
@@ -301,6 +304,8 @@ dkp_wup_coldplug (DkpDevice *device)
 	const gchar *type;
 	const gchar *native_path;
 	gchar *data;
+	const gchar *vendor;
+	const gchar *product;
 
 	/* detect what kind of device we are */
 	d = dkp_device_get_d (device);
@@ -350,6 +355,14 @@ dkp_wup_coldplug (DkpDevice *device)
 	dkp_wup_parse_command (wup, data);
 	g_free (data);
 
+	/* prefer DKP names */
+	vendor = devkit_device_get_property (d, "DKP_VENDOR");
+	if (vendor == NULL)
+		vendor = devkit_device_get_property (d, "ID_VENDOR");
+	product = devkit_device_get_property (d, "DKP_PRODUCT");
+	if (product == NULL)
+		product = devkit_device_get_property (d, "ID_PRODUCT");
+
 	/* hardcode some values */
 	native_path = devkit_device_get_native_path (d);
 	g_object_set (device,
@@ -357,8 +370,8 @@ dkp_wup_coldplug (DkpDevice *device)
 		      "is-rechargeable", FALSE,
 		      "power-supply", FALSE,
 		      "is-present", FALSE,
-		      "vendor", devkit_device_get_property (d, "ID_VENDOR"),
-		      "model", devkit_device_get_property (d, "ID_PRODUCT"),
+		      "vendor", vendor,
+		      "model", product,
 		      "serial", g_strstrip (sysfs_get_string (native_path, "serial")),
 		      "has-history", TRUE,
 		      "state", DKP_DEVICE_STATE_DISCHARGING,
@@ -367,6 +380,8 @@ dkp_wup_coldplug (DkpDevice *device)
 	/* coldplug */
 	egg_debug ("coldplug");
 	ret = dkp_wup_refresh (device);
+
+	/* hardcode true, as we'll retry later if busy */
 	ret = TRUE;
 
 out:
@@ -375,6 +390,8 @@ out:
 
 /**
  * dkp_wup_refresh:
+ *
+ * Return %TRUE on success, %FALSE if we failed to refresh or no data
  **/
 static gboolean
 dkp_wup_refresh (DkpDevice *device)
@@ -383,10 +400,6 @@ dkp_wup_refresh (DkpDevice *device)
 	GTimeVal time;
 	gchar *data = NULL;
 	DkpWup *wup = DKP_WUP (device);
-
-	/* reset time */
-	g_get_current_time (&time);
-	g_object_set (device, "update-time", (guint64) time.tv_sec, NULL);
 
 	/* get data */
 	data = dkp_wup_read_command (wup);
@@ -402,8 +415,13 @@ dkp_wup_refresh (DkpDevice *device)
 		goto out;
 	}
 
+	/* reset time */
+	g_get_current_time (&time);
+	g_object_set (device, "update-time", (guint64) time.tv_sec, NULL);
+
 out:
 	g_free (data);
+	/* FIXME: always true? */
 	return TRUE;
 }
 

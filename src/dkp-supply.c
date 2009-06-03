@@ -38,7 +38,9 @@
 #include "dkp-enum.h"
 #include "dkp-supply.h"
 
-#define DKP_SUPPLY_REFRESH_TIMEOUT	10L
+#define DKP_SUPPLY_REFRESH_TIMEOUT	30	/* seconds */
+#define DKP_SUPPLY_UNKNOWN_TIMEOUT	2	/* seconds */
+#define DKP_SUPPLY_UNKNOWN_RETRIES	30
 
 struct DkpSupplyPrivate
 {
@@ -46,6 +48,7 @@ struct DkpSupplyPrivate
 	gboolean		 has_coldplug_values;
 	gdouble			 energy_old;
 	GTimeVal		 energy_old_timespec;
+	guint			 unknown_retries;
 };
 
 static void	dkp_supply_class_init	(DkpSupplyClass	*klass);
@@ -57,6 +60,8 @@ static gboolean		 dkp_supply_refresh	 	(DkpDevice *device);
 
 /**
  * dkp_supply_refresh_line_power:
+ *
+ * Return %TRUE on success, %FALSE if we failed to refresh or no data
  **/
 static gboolean
 dkp_supply_refresh_line_power (DkpSupply *supply)
@@ -178,6 +183,32 @@ dkp_supply_get_low_battery (DkpDevice *device, gboolean *low_battery)
 }
 
 /**
+ * dkp_supply_get_online:
+ **/
+static gboolean
+dkp_supply_get_online (DkpDevice *device, gboolean *online)
+{
+	DkpSupply *supply = DKP_SUPPLY (device);
+	DkpDeviceType type;
+	gboolean online_tmp;
+
+	g_return_val_if_fail (DKP_IS_SUPPLY (supply), FALSE);
+	g_return_val_if_fail (online != NULL, FALSE);
+
+	g_object_get (device,
+		      "type", &type,
+		      "online", &online_tmp,
+		      NULL);
+
+	if (type != DKP_DEVICE_TYPE_LINE_POWER)
+		return FALSE;
+
+	*online = online_tmp;
+
+	return TRUE;
+}
+
+/**
  * dkp_supply_calculate_rate:
  **/
 static void
@@ -245,7 +276,7 @@ dkp_supply_convert_device_technology (const gchar *type)
 /**
  * dkp_supply_refresh_battery:
  *
- * Return value: TRUE if we changed
+ * Return %TRUE on success, %FALSE if we failed to refresh or no data
  **/
 static gboolean
 dkp_supply_refresh_battery (DkpSupply *supply)
@@ -271,8 +302,11 @@ dkp_supply_refresh_battery (DkpSupply *supply)
 	guint64 time_to_full;
 
 	d = dkp_device_get_d (device);
-	if (d == NULL)
-		egg_error ("could not get device");
+	if (d == NULL) {
+		egg_warning ("could not get device");
+		ret = FALSE;
+		goto out;
+	}
 
 	native_path = devkit_device_get_native_path (d);
 
@@ -359,6 +393,7 @@ dkp_supply_refresh_battery (DkpSupply *supply)
 		/* get the old full */
 		g_object_get (device,
 			      "energy-full", &energy_full,
+			      "energy-full-design", &energy_full_design,
 			      NULL);
 	}
 
@@ -374,6 +409,12 @@ dkp_supply_refresh_battery (DkpSupply *supply)
 	else {
 		egg_warning ("unknown status string: %s", status);
 		state = DKP_DEVICE_STATE_UNKNOWN;
+	}
+
+	/* reset unknown counter */
+	if (state != DKP_DEVICE_STATE_UNKNOWN) {
+		egg_debug ("resetting unknown timeout after %i retries", supply->priv->unknown_retries);
+		supply->priv->unknown_retries = 0;
 	}
 
 	/* get rate; it seems odd as it's either in uVh or uWh */
@@ -473,7 +514,7 @@ dkp_supply_poll_battery (DkpSupply *supply)
 	gboolean ret;
 	DkpDevice *device = DKP_DEVICE (supply);
 
-	egg_debug ("No updates on supply %s for 30 seconds; forcing update", dkp_device_get_object_path (device));
+	egg_debug ("No updates on supply %s for %i seconds; forcing update", dkp_device_get_object_path (device), DKP_SUPPLY_REFRESH_TIMEOUT);
 	supply->priv->poll_timer_id = 0;
 	ret = dkp_supply_refresh (device);
 	if (ret)
@@ -483,11 +524,14 @@ dkp_supply_poll_battery (DkpSupply *supply)
 
 /**
  * dkp_supply_coldplug:
+ *
+ * Return %TRUE on success, %FALSE if we failed to get data and should be removed
  **/
 static gboolean
 dkp_supply_coldplug (DkpDevice *device)
 {
 	DkpSupply *supply = DKP_SUPPLY (device);
+	gboolean ret;
 	DevkitDevice *d;
 	const gchar *native_path;
 
@@ -510,13 +554,49 @@ dkp_supply_coldplug (DkpDevice *device)
 	}
 
 	/* coldplug values */
-	dkp_supply_refresh (device);
+	ret = dkp_supply_refresh (device);
 
-	return TRUE;
+	return ret;
+}
+
+/**
+ * dkp_supply_setup_poll:
+ **/
+static gboolean
+dkp_supply_setup_poll (DkpDevice *device)
+{
+	DkpDeviceState state;
+	DkpSupply *supply = DKP_SUPPLY (device);
+
+	g_object_get (device, "state", &state, NULL);
+
+	/* if it's fully charged, don't poll at all */
+	if (state == DKP_DEVICE_STATE_FULLY_CHARGED)
+		goto out;
+
+	/* if it's unknown, poll faster than we would normally */
+	if (state == DKP_DEVICE_STATE_UNKNOWN &&
+	    supply->priv->unknown_retries < DKP_SUPPLY_UNKNOWN_RETRIES) {
+		supply->priv->poll_timer_id =
+			g_timeout_add_seconds (DKP_SUPPLY_UNKNOWN_TIMEOUT,
+					       (GSourceFunc) dkp_supply_poll_battery, supply);
+		/* increase count, we don't want to poll at 0.5Hz forever */
+		supply->priv->unknown_retries++;
+		goto out;
+	}
+
+	/* any other state just fall back */
+	supply->priv->poll_timer_id =
+		g_timeout_add_seconds (DKP_SUPPLY_REFRESH_TIMEOUT,
+				       (GSourceFunc) dkp_supply_poll_battery, supply);
+out:
+	return (supply->priv->poll_timer_id != 0);
 }
 
 /**
  * dkp_supply_refresh:
+ *
+ * Return %TRUE on success, %FALSE if we failed to refresh or no data
  **/
 static gboolean
 dkp_supply_refresh (DkpDevice *device)
@@ -525,7 +605,6 @@ dkp_supply_refresh (DkpDevice *device)
 	GTimeVal time;
 	DkpSupply *supply = DKP_SUPPLY (device);
 	DkpDeviceType type;
-	DkpDeviceState state;
 
 	if (supply->priv->poll_timer_id > 0) {
 		g_source_remove (supply->priv->poll_timer_id);
@@ -534,24 +613,17 @@ dkp_supply_refresh (DkpDevice *device)
 
 	g_get_current_time (&time);
 	g_object_set (device, "update-time", (guint64) time.tv_sec, NULL);
-	g_object_get (device,
-		      "type", &type,
-		      "state", &state,
-		      NULL);
+	g_object_get (device, "type", &type, NULL);
 	switch (type) {
 	case DKP_DEVICE_TYPE_LINE_POWER:
 		ret = dkp_supply_refresh_line_power (supply);
 		break;
 	case DKP_DEVICE_TYPE_BATTERY:
 		ret = dkp_supply_refresh_battery (supply);
+
 		/* Seems that we don't get change uevents from the
-		 * kernel on some BIOS types; set up a timer to poll
-		 * if we are charging or discharging */
-		if (state == DKP_DEVICE_STATE_CHARGING ||
-		    state == DKP_DEVICE_STATE_DISCHARGING)
-			supply->priv->poll_timer_id =
-				g_timeout_add_seconds (DKP_SUPPLY_REFRESH_TIMEOUT,
-						       (GSourceFunc) dkp_supply_poll_battery, supply);
+		 * kernel on some BIOS types */
+		dkp_supply_setup_poll (device);
 		break;
 	default:
 		g_assert_not_reached ();
@@ -567,6 +639,8 @@ static void
 dkp_supply_init (DkpSupply *supply)
 {
 	supply->priv = DKP_SUPPLY_GET_PRIVATE (supply);
+	supply->priv->unknown_retries = 0;
+	supply->priv->poll_timer_id = 0;
 }
 
 /**
@@ -601,6 +675,7 @@ dkp_supply_class_init (DkpSupplyClass *klass)
 	object_class->finalize = dkp_supply_finalize;
 	device_class->get_on_battery = dkp_supply_get_on_battery;
 	device_class->get_low_battery = dkp_supply_get_low_battery;
+	device_class->get_online = dkp_supply_get_online;
 	device_class->coldplug = dkp_supply_coldplug;
 	device_class->refresh = dkp_supply_refresh;
 

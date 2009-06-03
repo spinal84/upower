@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>org.freedesktop.DeviceKit.Power.QoS</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.3">
 <link rel="home" href="index.html" title="DeviceKit-power Reference Manual">
 <link rel="up" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="prev" href="Device.html" title="org.freedesktop.DeviceKit.Power.Device">
@@ -59,14 +59,14 @@
 </pre>
 </div>
 <div class="refsect1" lang="en">
-<a name="id2842584"></a><h2>Signals</h2>
+<a name="id2864317"></a><h2>Signals</h2>
 <pre class="synopsis"><a class="link" href="QoS.html#QoS::LatencyChanged">LatencyChanged</a>  ('s' type,
                  'i' value)
 <a class="link" href="QoS.html#QoS::RequestsChanged">RequestsChanged</a> ()
 </pre>
 </div>
 <div class="refsect1" lang="en">
-<a name="id2817352"></a><h2>Implemented Interfaces</h2>
+<a name="id2847970"></a><h2>Implemented Interfaces</h2>
 <p>
     Objects implementing org.freedesktop.DeviceKit.Power.QoS also implements
     org.freedesktop.DBus.Introspectable,
@@ -74,7 +74,7 @@
     </p>
 </div>
 <div class="refsect1" lang="en">
-<a name="id2812246"></a><h2>Description</h2>
+<a name="id2870857"></a><h2>Description</h2>
 <p>
       
         </p>
@@ -161,9 +161,9 @@
     </p>
 </div>
 <div class="refsect1" lang="en">
-<a name="id2807422"></a><h2>Details</h2>
+<a name="id2849211"></a><h2>Details</h2>
 <div class="refsect2" lang="en">
-<a name="id2807430"></a><h3>
+<a name="id2849219"></a><h3>
 <a name="QoS.SetMinimumLatency"></a>SetMinimumLatency ()</h3>
 <pre class="programlisting">SetMinimumLatency (in  's' type,
                    in  'i' value)</pre>
@@ -197,7 +197,7 @@
 </tbody>
 </table></div>
 <div class="refsect3" lang="en">
-<a name="id2777486"></a><h4>Errors</h4>
+<a name="id2862278"></a><h4>Errors</h4>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
@@ -207,12 +207,12 @@
 </table></div>
 </div>
 <div class="refsect3" lang="en">
-<a name="id2777505"></a><h4>Permissions</h4>
+<a name="id2862297"></a><h4>Permissions</h4>
 <p class="permission">Callers need the <code class="literal">org.freedesktop.devicekit.power.qos.set-minimum-latency</code> authorization</p>
 </div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="id2777520"></a><h3>
+<a name="id2862313"></a><h3>
 <a name="QoS.RequestLatency"></a>RequestLatency ()</h3>
 <pre class="programlisting">RequestLatency (in  's' type,
                 in  'i' value,
@@ -260,7 +260,7 @@
 </tbody>
 </table></div>
 <div class="refsect3" lang="en">
-<a name="id2819748"></a><h4>Errors</h4>
+<a name="id2846974"></a><h4>Errors</h4>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
@@ -270,7 +270,7 @@
 </table></div>
 </div>
 <div class="refsect3" lang="en">
-<a name="id2819768"></a><h4>Permissions</h4>
+<a name="id2846994"></a><h4>Permissions</h4>
 <p class="permission">
           Callers need the
           <code class="literal">org.freedesktop.devicekit.power.qos.request-latency-persistent</code>
@@ -280,7 +280,7 @@
 </div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="id2819795"></a><h3>
+<a name="id2847021"></a><h3>
 <a name="QoS.CancelRequest"></a>CancelRequest ()</h3>
 <pre class="programlisting">CancelRequest (in  's' type,
                in  'u' cookie)</pre>
@@ -308,7 +308,7 @@
 </tbody>
 </table></div>
 <div class="refsect3" lang="en">
-<a name="id2819867"></a><h4>Errors</h4>
+<a name="id2847093"></a><h4>Errors</h4>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
@@ -318,7 +318,7 @@
 </table></div>
 </div>
 <div class="refsect3" lang="en">
-<a name="id2819887"></a><h4>Permissions</h4>
+<a name="id2847112"></a><h4>Permissions</h4>
 <p class="permission">
           Callers need the
           <code class="literal">org.freedesktop.devicekit.power.qos.cancel-request</code>
@@ -327,7 +327,7 @@
 </div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="id2819902"></a><h3>
+<a name="id2847128"></a><h3>
 <a name="QoS.GetLatency"></a>GetLatency ()</h3>
 <pre class="programlisting">GetLatency (in  's' type,
             out 'i' value)</pre>
@@ -355,7 +355,7 @@
 </tbody>
 </table></div>
 <div class="refsect3" lang="en">
-<a name="id2819979"></a><h4>Errors</h4>
+<a name="id2847205"></a><h4>Errors</h4>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
@@ -366,7 +366,7 @@
 </div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="id2842920"></a><h3>
+<a name="id2879503"></a><h3>
 <a name="QoS.GetLatencyRequests"></a>GetLatencyRequests ()</h3>
 <pre class="programlisting">GetLatencyRequests (out 'a(uuusxbssi)' requests)</pre>
 </div>
@@ -420,9 +420,9 @@
 </table></div>
 </div>
 <div class="refsect1" lang="en">
-<a name="id2843048"></a><h2>Signal Details</h2>
+<a name="id2879631"></a><h2>Signal Details</h2>
 <div class="refsect2" lang="en">
-<a name="id2843056"></a><h3>
+<a name="id2879639"></a><h3>
 <a name="QoS::LatencyChanged"></a>The LatencyChanged signal</h3>
 <pre class="programlisting">LatencyChanged ('s' type,
                 'i' value)</pre>
@@ -451,7 +451,7 @@
 </table></div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="id2843115"></a><h3>
+<a name="id2879698"></a><h3>
 <a name="QoS::RequestsChanged"></a>The RequestsChanged signal</h3>
 <pre class="programlisting">RequestsChanged ()</pre>
 </div>
