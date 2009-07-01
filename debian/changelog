@@ -4,6 +4,10 @@ devicekit-power (008-2) UNRELEASED; urgency=low
   * Add 01-pm_powersave.patch: Call pm-powersave, so that packages which ship
     /etc/pm/power.d/ scripts continue to work. Patch taken from upstream git
     head.
+  * Add 02-suppress-startup-lid-event.patch: Suppress lid change event on
+    startup. Otherwise, gnome-power-manager picks up a "lid is closed" change
+    event when dk-p gets D-BUS activated, and thus immediately suspends the
+    machine on startup. (FD #22574, LP: #385135)
 
  -- Michael Biebl <biebl@debian.org>  Wed, 01 Jul 2009 11:04:45 +0200
 
