@@ -2,6 +2,8 @@ devicekit-power (009-1) UNRELEASED; urgency=low
 
   * New upstream release.   
   * debian/control: Add myself to uploaders (discussed with Michael).
+  * debian/devicekit-power.install: Upstream installs udev rules into
+    /lib/udev/rules.d now, update accordingly.
 
  -- Martin Pitt <mpitt@debian.org>  Mon, 06 Jul 2009 17:27:09 +0200
 
