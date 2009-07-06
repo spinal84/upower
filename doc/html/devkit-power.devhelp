@@ -29,6 +29,7 @@
     <function name="The &quot;on-battery&quot; property" link="Power.html#Power:on-battery"/>
     <function name="The &quot;on-low-battery&quot; property" link="Power.html#Power:on-low-battery"/>
     <function name="The &quot;lid-is-closed&quot; property" link="Power.html#Power:lid-is-closed"/>
+    <function name="The &quot;lid-is-present&quot; property" link="Power.html#Power:lid-is-present"/>
     <function name="Refresh ()" link="Device.html#Device.Refresh"/>
     <function name="GetHistory ()" link="Device.html#Device.GetHistory"/>
     <function name="GetStatistics ()" link="Device.html#Device.GetStatistics"/>
@@ -57,6 +58,9 @@
     <function name="The &quot;is-rechargeable&quot; property" link="Device.html#Device:is-rechargeable"/>
     <function name="The &quot;capacity&quot; property" link="Device.html#Device:capacity"/>
     <function name="The &quot;technology&quot; property" link="Device.html#Device:technology"/>
+    <function name="The &quot;recall-notice&quot; property" link="Device.html#Device:recall-notice"/>
+    <function name="The &quot;recall-vendor&quot; property" link="Device.html#Device:recall-vendor"/>
+    <function name="The &quot;recall-url&quot; property" link="Device.html#Device:recall-url"/>
     <function name="SetMinimumLatency ()" link="QoS.html#QoS.SetMinimumLatency"/>
     <function name="RequestLatency ()" link="QoS.html#QoS.RequestLatency"/>
     <function name="CancelRequest ()" link="QoS.html#QoS.CancelRequest"/>

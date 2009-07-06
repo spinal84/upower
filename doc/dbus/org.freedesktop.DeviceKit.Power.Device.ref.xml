@@ -57,6 +57,9 @@
 <link linkend="Device:is-rechargeable">'is-rechargeable'</link>    read      'b'
 <link linkend="Device:capacity">'capacity'</link>           read      'd'
 <link linkend="Device:technology">'technology'</link>         read      'u'
+<link linkend="Device:recall-notice">'recall-notice'</link>      read      'b'
+<link linkend="Device:recall-vendor">'recall-vendor'</link>      read      's'
+<link linkend="Device:recall-url">'recall-url'</link>         read      's'
 </synopsis>
   </refsect1>
   <refsect1 role="desc">
@@ -410,7 +413,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
           <para>
             The battery power state.
           </para>
-          <para><itemizedlist><listitem><emphasis role="bold">0: </emphasis>Unknown</listitem><listitem><emphasis role="bold">1: </emphasis>Charging</listitem><listitem><emphasis role="bold">2: </emphasis>Discharging</listitem><listitem><emphasis role="bold">3: </emphasis>Empty</listitem><listitem><emphasis role="bold">4: </emphasis>Fully charged</listitem></itemizedlist></para>
+          <para><itemizedlist><listitem><emphasis role="bold">0: </emphasis>Unknown</listitem><listitem><emphasis role="bold">1: </emphasis>Charging</listitem><listitem><emphasis role="bold">2: </emphasis>Discharging</listitem><listitem><emphasis role="bold">3: </emphasis>Empty</listitem><listitem><emphasis role="bold">4: </emphasis>Fully charged</listitem><listitem><emphasis role="bold">5: </emphasis>Pending charge</listitem><listitem><emphasis role="bold">6: </emphasis>Pending discharge</listitem></itemizedlist></para>
           <para>
             This property is only valid if the property
             <link linkend="Source:type"><literal>type</literal></link>
@@ -451,6 +454,30 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
             This property is only valid if the property
             <link linkend="Source:type"><literal>type</literal></link>
             has the value "battery".
+          </para>
+        <variablelist role="params"/><refsect2><title><anchor role="function" id="Device:recall-notice"/>The "recall-notice" property</title><indexterm><primary>recall-notice</primary><secondary>Device</secondary></indexterm><programlisting>'recall-notice'  read      'b'
+</programlisting></refsect2>
+          <para>
+            If the device may have been recalled by the vendor due to a suspected
+            fault.
+            This key does not imply the device is faulty, only that it approximatly
+            matches the description from the vendor of units that were recalled.
+          </para>
+        <variablelist role="params"/><refsect2><title><anchor role="function" id="Device:recall-vendor"/>The "recall-vendor" property</title><indexterm><primary>recall-vendor</primary><secondary>Device</secondary></indexterm><programlisting>'recall-vendor'  read      's'
+</programlisting></refsect2>
+          <para>
+            The vendor that is handling the hardware recall.
+          </para>
+          <para>
+            This property is only valid if the property recall-notice is true.
+          </para>
+        <variablelist role="params"/><refsect2><title><anchor role="function" id="Device:recall-url"/>The "recall-url" property</title><indexterm><primary>recall-url</primary><secondary>Device</secondary></indexterm><programlisting>'recall-url'  read      's'
+</programlisting></refsect2>
+          <para>
+            The URL to visit about the hardware recall.
+          </para>
+          <para>
+            This property is only valid if the property recall-notice is true.
           </para>
         <variablelist role="params"/></refsect1>
 </refentry>

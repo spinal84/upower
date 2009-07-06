@@ -37,10 +37,10 @@
 #include "dkp-polkit.h"
 #include "dkp-daemon.h"
 #include "dkp-device.h"
-#include "dkp-supply.h"
-#include "dkp-csr.h"
-#include "dkp-wup.h"
-#include "dkp-hid.h"
+#include "dkp-device-supply.h"
+#include "dkp-device-csr.h"
+#include "dkp-device-wup.h"
+#include "dkp-device-hid.h"
 #include "dkp-input.h"
 #include "dkp-device-list.h"
 
@@ -56,6 +56,8 @@ enum
 	PROP_ON_BATTERY,
 	PROP_ON_LOW_BATTERY,
 	PROP_LID_IS_CLOSED,
+	PROP_LID_IS_PRESENT,
+	PROP_LAST
 };
 
 enum
@@ -76,12 +78,13 @@ struct DkpDaemonPrivate
 	DBusGConnection		*connection;
 	DBusGProxy		*proxy;
 	DkpPolkit		*polkit;
-	DkpDeviceList		*list;
-	GPtrArray		*inputs;
+	DkpDeviceList		*power_devices;
+	DkpDeviceList		*managed_devices;
 	gboolean		 on_battery;
 	gboolean		 low_battery;
 	DevkitClient		*devkit_client;
 	gboolean		 lid_is_closed;
+	gboolean		 lid_is_present;
 };
 
 static void	dkp_daemon_class_init		(DkpDaemonClass *klass);
@@ -102,6 +105,7 @@ gboolean
 dkp_daemon_set_lid_is_closed (DkpDaemon *daemon, gboolean lid_is_closed)
 {
 	gboolean ret = FALSE;
+	static gboolean initialized = FALSE;
 
 	g_return_val_if_fail (DKP_IS_DAEMON (daemon), FALSE);
 
@@ -112,7 +116,16 @@ dkp_daemon_set_lid_is_closed (DkpDaemon *daemon, gboolean lid_is_closed)
 	}
 
 	/* save */
-	g_signal_emit (daemon, signals[CHANGED_SIGNAL], 0);
+	if (!initialized) {
+		/* Do not emit an event on startup. Otherwise, e. g.
+		 * gnome-power-manager would pick up a "lid is closed" change
+		 * event when dk-p gets D-BUS activated, and thus would
+		 * immediately suspend the machine on startup. FD#22574 */
+		egg_debug ("not emitting lid change event for daemon startup");
+		initialized = TRUE;
+	} else {
+		g_signal_emit (daemon, signals[CHANGED_SIGNAL], 0);
+	}
 	daemon->priv->lid_is_closed = lid_is_closed;
 	ret = TRUE;
 out:
@@ -210,6 +223,10 @@ dkp_daemon_get_property (GObject         *object,
 		g_value_set_boolean (value, daemon->priv->lid_is_closed);
 		break;
 
+	case PROP_LID_IS_PRESENT:
+		g_value_set_boolean (value, daemon->priv->lid_is_present);
+		break;
+
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -272,6 +289,14 @@ dkp_daemon_class_init (DkpDaemonClass *klass)
 							      G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
+					 PROP_LID_IS_PRESENT,
+					 g_param_spec_boolean ("lid-is-present",
+							       "Is a laptop",
+							       "If this computer is probably a laptop",
+							       FALSE,
+							       G_PARAM_READABLE));
+
+	g_object_class_install_property (object_class,
 					 PROP_CAN_SUSPEND,
 					 g_param_spec_boolean ("can-suspend",
 							       "Can Suspend",
@@ -324,8 +349,8 @@ dkp_daemon_init (DkpDaemon *daemon)
 {
 	daemon->priv = DKP_DAEMON_GET_PRIVATE (daemon);
 	daemon->priv->polkit = dkp_polkit_new ();
+	daemon->priv->lid_is_present = FALSE;
 	daemon->priv->lid_is_closed = FALSE;
-	daemon->priv->inputs = g_ptr_array_new ();
 }
 
 /**
@@ -349,19 +374,17 @@ dkp_daemon_finalize (GObject *object)
 		dbus_g_connection_unref (daemon->priv->connection);
 	if (daemon->priv->devkit_client != NULL)
 		g_object_unref (daemon->priv->devkit_client);
-	if (daemon->priv->list != NULL)
-		g_object_unref (daemon->priv->list);
+	if (daemon->priv->power_devices != NULL)
+		g_object_unref (daemon->priv->power_devices);
+	if (daemon->priv->managed_devices != NULL)
+		g_object_unref (daemon->priv->managed_devices);
 	g_object_unref (daemon->priv->polkit);
-
-	/* unref inputs */
-	g_ptr_array_foreach (daemon->priv->inputs, (GFunc) g_object_unref, NULL);
-	g_ptr_array_free (daemon->priv->inputs, TRUE);
 
 	G_OBJECT_CLASS (dkp_daemon_parent_class)->finalize (object);
 }
 
-static gboolean gpk_daemon_device_add (DkpDaemon *daemon, DevkitDevice *d, gboolean emit_event);
-static void gpk_daemon_device_remove (DkpDaemon *daemon, DevkitDevice *d);
+static gboolean dkp_daemon_device_add (DkpDaemon *daemon, DevkitDevice *d, gboolean emit_event);
+static void dkp_daemon_device_remove (DkpDaemon *daemon, DevkitDevice *d);
 
 /**
  * dkp_daemon_get_on_battery_local:
@@ -379,7 +402,7 @@ dkp_daemon_get_on_battery_local (DkpDaemon *daemon)
 	const GPtrArray *array;
 
 	/* ask each device */
-	array = dkp_device_list_get_array (daemon->priv->list);
+	array = dkp_device_list_get_array (daemon->priv->power_devices);
 	for (i=0; i<array->len; i++) {
 		device = (DkpDevice *) g_ptr_array_index (array, i);
 		ret = dkp_device_get_on_battery (device, &on_battery);
@@ -407,7 +430,7 @@ dkp_daemon_get_low_battery_local (DkpDaemon *daemon)
 	const GPtrArray *array;
 
 	/* ask each device */
-	array = dkp_device_list_get_array (daemon->priv->list);
+	array = dkp_device_list_get_array (daemon->priv->power_devices);
 	for (i=0; i<array->len; i++) {
 		device = (DkpDevice *) g_ptr_array_index (array, i);
 		ret = dkp_device_get_low_battery (device, &low_battery);
@@ -435,7 +458,7 @@ dkp_daemon_get_on_ac_local (DkpDaemon *daemon)
 	const GPtrArray *array;
 
 	/* ask each device */
-	array = dkp_device_list_get_array (daemon->priv->list);
+	array = dkp_device_list_get_array (daemon->priv->power_devices);
 	for (i=0; i<array->len; i++) {
 		device = (DkpDevice *) g_ptr_array_index (array, i);
 		ret = dkp_device_get_online (device, &online);
@@ -448,22 +471,50 @@ dkp_daemon_get_on_ac_local (DkpDaemon *daemon)
 }
 
 /**
- * gpk_daemon_device_changed:
+ * dkp_daemon_set_pmutils_powersave:
+ *
+ * Uses pm-utils to run scripts in power.d
+ **/
+static gboolean
+dkp_daemon_set_pmutils_powersave (DkpDaemon *daemon, gboolean powersave)
+{
+	gboolean ret;
+	gchar *command;
+	GError *error = NULL;
+
+	/* run script from pm-utils */
+	command = g_strdup_printf ("/usr/sbin/pm-powersave %s", powersave ? "true" : "false");
+	egg_debug ("excuting command: %s", command);
+	ret = g_spawn_command_line_async (command, &error);
+	if (!ret) {
+		egg_warning ("failed to run script: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+out:
+	g_free (command);
+	return ret;
+}
+
+/**
+ * dkp_daemon_device_changed:
  **/
 static void
-gpk_daemon_device_changed (DkpDaemon *daemon, DevkitDevice *d, gboolean synthesized)
+dkp_daemon_device_changed (DkpDaemon *daemon, DevkitDevice *d, gboolean synthesized)
 {
+	GObject *object;
 	DkpDevice *device;
 	gboolean ret;
 
 	/* first, change the device and add it if it doesn't exist */
-	device = dkp_device_list_lookup (daemon->priv->list, d);
-	if (device != NULL) {
+	object = dkp_device_list_lookup (daemon->priv->power_devices, d);
+	if (object != NULL) {
+		device = DKP_DEVICE (object);
 		egg_debug ("changed %s", dkp_device_get_object_path (device));
 		dkp_device_changed (device, d, synthesized);
 	} else {
-		egg_debug ("treating change event as add on %s", dkp_device_get_object_path (device));
-		gpk_daemon_device_add (daemon, d, TRUE);
+		egg_debug ("treating change event as add on %s", devkit_device_get_native_path (d));
+		dkp_daemon_device_add (daemon, d, TRUE);
 	}
 
 	/* second, check if the on_battery and low_battery state has changed */
@@ -472,6 +523,9 @@ gpk_daemon_device_changed (DkpDaemon *daemon, DevkitDevice *d, gboolean synthesi
 		daemon->priv->on_battery = ret;
 		egg_debug ("now on_battery = %s", ret ? "yes" : "no");
 		g_signal_emit (daemon, signals[CHANGED_SIGNAL], 0);
+
+		/* set pm-utils power policy */
+		dkp_daemon_set_pmutils_powersave (daemon, daemon->priv->on_battery);
 	}
 	ret = dkp_daemon_get_low_battery_local (daemon);
 	if (ret != daemon->priv->low_battery) {
@@ -482,21 +536,20 @@ gpk_daemon_device_changed (DkpDaemon *daemon, DevkitDevice *d, gboolean synthesi
 }
 
 /**
- * gpk_daemon_device_went_away:
+ * dkp_daemon_device_went_away:
  **/
 static void
-gpk_daemon_device_went_away (gpointer user_data, GObject *_device)
+dkp_daemon_device_went_away (gpointer user_data, GObject *device)
 {
 	DkpDaemon *daemon = DKP_DAEMON (user_data);
-	DkpDevice *device = DKP_DEVICE (_device);
-	dkp_device_list_remove (daemon->priv->list, device);
+	dkp_device_list_remove (daemon->priv->power_devices, device);
 }
 
 /**
- * gpk_daemon_device_get:
+ * dkp_daemon_device_get:
  **/
 static DkpDevice *
-gpk_daemon_device_get (DkpDaemon *daemon, DevkitDevice *d)
+dkp_daemon_device_get (DkpDaemon *daemon, DevkitDevice *d)
 {
 	const gchar *subsys;
 	const gchar *native_path;
@@ -508,7 +561,7 @@ gpk_daemon_device_get (DkpDaemon *daemon, DevkitDevice *d)
 	if (g_strcmp0 (subsys, "power_supply") == 0) {
 
 		/* are we a valid power supply */
-		device = DKP_DEVICE (dkp_supply_new ());
+		device = DKP_DEVICE (dkp_device_supply_new ());
 		ret = dkp_device_coldplug (device, daemon, d);
 		if (ret)
 			goto out;
@@ -520,7 +573,7 @@ gpk_daemon_device_get (DkpDaemon *daemon, DevkitDevice *d)
 	} else if (g_strcmp0 (subsys, "tty") == 0) {
 
 		/* try to detect a Watts Up? Pro monitor */
-		device = DKP_DEVICE (dkp_wup_new ());
+		device = DKP_DEVICE (dkp_device_wup_new ());
 		ret = dkp_device_coldplug (device, daemon, d);
 		if (ret)
 			goto out;
@@ -532,14 +585,14 @@ gpk_daemon_device_get (DkpDaemon *daemon, DevkitDevice *d)
 	} else if (g_strcmp0 (subsys, "usb") == 0) {
 
 		/* see if this is a CSR mouse or keyboard */
-		device = DKP_DEVICE (dkp_csr_new ());
+		device = DKP_DEVICE (dkp_device_csr_new ());
 		ret = dkp_device_coldplug (device, daemon, d);
 		if (ret)
 			goto out;
 		g_object_unref (device);
 
 		/* try to detect a HID UPS */
-		device = DKP_DEVICE (dkp_hid_new ());
+		device = DKP_DEVICE (dkp_device_hid_new ());
 		ret = dkp_device_coldplug (device, daemon, d);
 		if (ret)
 			goto out;
@@ -558,8 +611,11 @@ gpk_daemon_device_get (DkpDaemon *daemon, DevkitDevice *d)
 			goto out;
 		}
 
-		/* we can't use the device list as it's not a DkpDevice */
-		g_ptr_array_add (daemon->priv->inputs, input);
+		/* we now have a lid */
+		daemon->priv->lid_is_present = TRUE;
+
+		/* not a power device */
+		dkp_device_list_insert (daemon->priv->managed_devices, d, G_OBJECT (input));
 
 		/* no valid input object */
 		device = NULL;
@@ -573,24 +629,26 @@ out:
 }
 
 /**
- * gpk_daemon_device_add:
+ * dkp_daemon_device_add:
  **/
 static gboolean
-gpk_daemon_device_add (DkpDaemon *daemon, DevkitDevice *d, gboolean emit_event)
+dkp_daemon_device_add (DkpDaemon *daemon, DevkitDevice *d, gboolean emit_event)
 {
+	GObject *object;
 	DkpDevice *device;
 	gboolean ret = TRUE;
 
 	/* does device exist in db? */
-	device = dkp_device_list_lookup (daemon->priv->list, d);
-	if (device != NULL) {
+	object = dkp_device_list_lookup (daemon->priv->power_devices, d);
+	if (object != NULL) {
+		device = DKP_DEVICE (object);
 		/* we already have the device; treat as change event */
 		egg_debug ("treating add event as change event on %s", dkp_device_get_object_path (device));
-		gpk_daemon_device_changed (daemon, d, FALSE);
+		dkp_daemon_device_changed (daemon, d, FALSE);
 	} else {
 
 		/* get the right sort of device */
-		device = gpk_daemon_device_get (daemon, d);
+		device = dkp_daemon_device_get (daemon, d);
 		if (device == NULL) {
 			egg_debug ("not adding device %s", devkit_device_get_native_path (d));
 			ret = FALSE;
@@ -599,8 +657,8 @@ gpk_daemon_device_add (DkpDaemon *daemon, DevkitDevice *d, gboolean emit_event)
 		/* only take a weak ref; the device will stay on the bus until
 		 * it's unreffed. So if we ref it, it'll never go away.
 		 */
-		g_object_weak_ref (G_OBJECT (device), gpk_daemon_device_went_away, daemon);
-		dkp_device_list_insert (daemon->priv->list, d, device);
+		g_object_weak_ref (G_OBJECT (device), dkp_daemon_device_went_away, daemon);
+		dkp_device_list_insert (daemon->priv->power_devices, d, G_OBJECT (device));
 		if (emit_event) {
 			g_signal_emit (daemon, signals[DEVICE_ADDED_SIGNAL], 0,
 				       dkp_device_get_object_path (device));
@@ -611,18 +669,20 @@ out:
 }
 
 /**
- * gpk_daemon_device_remove:
+ * dkp_daemon_device_remove:
  **/
 static void
-gpk_daemon_device_remove (DkpDaemon *daemon, DevkitDevice *d)
+dkp_daemon_device_remove (DkpDaemon *daemon, DevkitDevice *d)
 {
+	GObject *object;
 	DkpDevice *device;
 
 	/* does device exist in db? */
-	device = dkp_device_list_lookup (daemon->priv->list, d);
-	if (device == NULL) {
+	object = dkp_device_list_lookup (daemon->priv->power_devices, d);
+	if (object == NULL) {
 		egg_debug ("ignoring remove event on %s", devkit_device_get_native_path (d));
 	} else {
+		device = DKP_DEVICE (object);
 		dkp_device_removed (device);
 		g_signal_emit (daemon, signals[DEVICE_REMOVED_SIGNAL], 0,
 			       dkp_device_get_object_path (device));
@@ -631,52 +691,27 @@ gpk_daemon_device_remove (DkpDaemon *daemon, DevkitDevice *d)
 }
 
 /**
- * gpk_daemon_device_event_signal_handler:
+ * dkp_daemon_device_event_signal_handler:
  **/
 static void
-gpk_daemon_device_event_signal_handler (DevkitClient *client, const char *action,
+dkp_daemon_device_event_signal_handler (DevkitClient *client, const char *action,
 					DevkitDevice *device, gpointer user_data)
 {
 	DkpDaemon *daemon = DKP_DAEMON (user_data);
 
 	if (g_strcmp0 (action, "add") == 0) {
 		egg_debug ("add %s", devkit_device_get_native_path (device));
-		gpk_daemon_device_add (daemon, device, TRUE);
+		dkp_daemon_device_add (daemon, device, TRUE);
 	} else if (g_strcmp0 (action, "remove") == 0) {
 		egg_debug ("remove %s", devkit_device_get_native_path (device));
-		gpk_daemon_device_remove (daemon, device);
+		dkp_daemon_device_remove (daemon, device);
 	} else if (g_strcmp0 (action, "change") == 0) {
 		egg_debug ("change %s", devkit_device_get_native_path (device));
-		gpk_daemon_device_changed (daemon, device, FALSE);
+		dkp_daemon_device_changed (daemon, device, FALSE);
 	} else {
 		egg_warning ("unhandled action '%s' on %s", action, devkit_device_get_native_path (device));
 	}
 }
-
-#if 0
-/**
- * gpk_daemon_throw_error:
- **/
-static gboolean
-gpk_daemon_throw_error (DBusGMethodInvocation *context, int error_code, const char *format, ...)
-{
-	GError *error;
-	va_list args;
-	gchar *message;
-
-	va_start (args, format);
-	message = g_strdup_vprintf (format, args);
-	va_end (args);
-
-	error = g_error_new (DKP_DAEMON_ERROR, error_code, message);
-	dbus_g_method_return_error (context, error);
-	g_error_free (error);
-	g_free (message);
-	return TRUE;
-}
-#endif
-
-/* exported methods */
 
 /**
  * dkp_daemon_enumerate_devices:
@@ -691,7 +726,7 @@ dkp_daemon_enumerate_devices (DkpDaemon *daemon, DBusGMethodInvocation *context)
 
 	/* build a pointer array of the object paths */
 	object_paths = g_ptr_array_new ();
-	array = dkp_device_list_get_array (daemon->priv->list);
+	array = dkp_device_list_get_array (daemon->priv->power_devices);
 	for (i=0; i<array->len; i++) {
 		device = (DkpDevice *) g_ptr_array_index (array, i);
 		g_ptr_array_add (object_paths, g_strdup (dkp_device_get_object_path (device)));
@@ -783,10 +818,10 @@ out:
 }
 
 /**
- * gpk_daemon_register_power_daemon:
+ * dkp_daemon_register_power_daemon:
  **/
 static gboolean
-gpk_daemon_register_power_daemon (DkpDaemon *daemon)
+dkp_daemon_register_power_daemon (DkpDaemon *daemon)
 {
 	DBusConnection *connection;
 	DBusError dbus_error;
@@ -830,7 +865,7 @@ gpk_daemon_register_power_daemon (DkpDaemon *daemon)
 		goto error;
 	}
 	g_signal_connect (daemon->priv->devkit_client, "device-event",
-			  G_CALLBACK (gpk_daemon_device_event_signal_handler), daemon);
+			  G_CALLBACK (dkp_daemon_device_event_signal_handler), daemon);
 
 	return TRUE;
 error:
@@ -850,8 +885,10 @@ dkp_daemon_new (void)
 
 	daemon = DKP_DAEMON (g_object_new (DKP_TYPE_DAEMON, NULL));
 
-	daemon->priv->list = dkp_device_list_new ();
-	if (!gpk_daemon_register_power_daemon (DKP_DAEMON (daemon))) {
+	daemon->priv->power_devices = dkp_device_list_new ();
+	daemon->priv->managed_devices = dkp_device_list_new ();
+
+	if (!dkp_daemon_register_power_daemon (DKP_DAEMON (daemon))) {
 		g_object_unref (daemon);
 		return NULL;
 	}
@@ -866,7 +903,7 @@ dkp_daemon_new (void)
 
 	for (l = devices; l != NULL; l = l->next) {
 		DevkitDevice *device = l->data;
-		gpk_daemon_device_add (daemon, device, FALSE);
+		dkp_daemon_device_add (daemon, device, FALSE);
 	}
 	g_list_foreach (devices, (GFunc) g_object_unref, NULL);
 	g_list_free (devices);
@@ -874,6 +911,9 @@ dkp_daemon_new (void)
 	daemon->priv->on_battery = (dkp_daemon_get_on_battery_local (daemon) &&
 				    !dkp_daemon_get_on_ac_local (daemon));
 	daemon->priv->low_battery = dkp_daemon_get_low_battery_local (daemon);
+
+	/* set pm-utils power policy */
+	dkp_daemon_set_pmutils_powersave (daemon, daemon->priv->on_battery);
 
 	return daemon;
 }

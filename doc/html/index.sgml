@@ -12,6 +12,7 @@
 <ANCHOR id="Power:on-battery" href="devkit-power/Power.html#Power:on-battery">
 <ANCHOR id="Power:on-low-battery" href="devkit-power/Power.html#Power:on-low-battery">
 <ANCHOR id="Power:lid-is-closed" href="devkit-power/Power.html#Power:lid-is-closed">
+<ANCHOR id="Power:lid-is-present" href="devkit-power/Power.html#Power:lid-is-present">
 <ANCHOR id="Device" href="devkit-power/Device.html">
 <ANCHOR id="Device.Refresh" href="devkit-power/Device.html#Device.Refresh">
 <ANCHOR id="Device.GetHistory" href="devkit-power/Device.html#Device.GetHistory">
@@ -41,6 +42,9 @@
 <ANCHOR id="Device:is-rechargeable" href="devkit-power/Device.html#Device:is-rechargeable">
 <ANCHOR id="Device:capacity" href="devkit-power/Device.html#Device:capacity">
 <ANCHOR id="Device:technology" href="devkit-power/Device.html#Device:technology">
+<ANCHOR id="Device:recall-notice" href="devkit-power/Device.html#Device:recall-notice">
+<ANCHOR id="Device:recall-vendor" href="devkit-power/Device.html#Device:recall-vendor">
+<ANCHOR id="Device:recall-url" href="devkit-power/Device.html#Device:recall-url">
 <ANCHOR id="QoS" href="devkit-power/QoS.html">
 <ANCHOR id="QoS.SetMinimumLatency" href="devkit-power/QoS.html#QoS.SetMinimumLatency">
 <ANCHOR id="QoS.RequestLatency" href="devkit-power/QoS.html#QoS.RequestLatency">

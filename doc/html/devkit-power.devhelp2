@@ -29,6 +29,7 @@
     <keyword type="" name="The &quot;on-battery&quot; property" link="Power.html#Power:on-battery"/>
     <keyword type="" name="The &quot;on-low-battery&quot; property" link="Power.html#Power:on-low-battery"/>
     <keyword type="" name="The &quot;lid-is-closed&quot; property" link="Power.html#Power:lid-is-closed"/>
+    <keyword type="" name="The &quot;lid-is-present&quot; property" link="Power.html#Power:lid-is-present"/>
     <keyword type="" name="Refresh ()" link="Device.html#Device.Refresh"/>
     <keyword type="" name="GetHistory ()" link="Device.html#Device.GetHistory"/>
     <keyword type="" name="GetStatistics ()" link="Device.html#Device.GetStatistics"/>
@@ -57,6 +58,9 @@
     <keyword type="" name="The &quot;is-rechargeable&quot; property" link="Device.html#Device:is-rechargeable"/>
     <keyword type="" name="The &quot;capacity&quot; property" link="Device.html#Device:capacity"/>
     <keyword type="" name="The &quot;technology&quot; property" link="Device.html#Device:technology"/>
+    <keyword type="" name="The &quot;recall-notice&quot; property" link="Device.html#Device:recall-notice"/>
+    <keyword type="" name="The &quot;recall-vendor&quot; property" link="Device.html#Device:recall-vendor"/>
+    <keyword type="" name="The &quot;recall-url&quot; property" link="Device.html#Device:recall-url"/>
     <keyword type="" name="SetMinimumLatency ()" link="QoS.html#QoS.SetMinimumLatency"/>
     <keyword type="" name="RequestLatency ()" link="QoS.html#QoS.RequestLatency"/>
     <keyword type="" name="CancelRequest ()" link="QoS.html#QoS.CancelRequest"/>

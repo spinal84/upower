@@ -53,7 +53,7 @@ G_BEGIN_DECLS
 #endif /* !G_ENABLE_DEBUG */
 
 
-/* NONE:STRING,UINT,UINT,POINTER (/tmp/dbus-binding-tool-c-marshallers.SCCMUU:1) */
+/* NONE:STRING,UINT,UINT,POINTER (/tmp/dbus-binding-tool-c-marshallers.5JQOWU:1) */
 extern void dbus_glib_marshal_dkp_device_VOID__STRING_UINT_UINT_POINTER (GClosure     *closure,
                                                                          GValue       *return_value,
                                                                          guint         n_param_values,
@@ -101,7 +101,7 @@ dbus_glib_marshal_dkp_device_VOID__STRING_UINT_UINT_POINTER (GClosure     *closu
 }
 #define dbus_glib_marshal_dkp_device_NONE__STRING_UINT_UINT_POINTER	dbus_glib_marshal_dkp_device_VOID__STRING_UINT_UINT_POINTER
 
-/* NONE:STRING,POINTER (/tmp/dbus-binding-tool-c-marshallers.SCCMUU:2) */
+/* NONE:STRING,POINTER (/tmp/dbus-binding-tool-c-marshallers.5JQOWU:2) */
 extern void dbus_glib_marshal_dkp_device_VOID__STRING_POINTER (GClosure     *closure,
                                                                GValue       *return_value,
                                                                guint         n_param_values,
@@ -145,7 +145,7 @@ dbus_glib_marshal_dkp_device_VOID__STRING_POINTER (GClosure     *closure,
 }
 #define dbus_glib_marshal_dkp_device_NONE__STRING_POINTER	dbus_glib_marshal_dkp_device_VOID__STRING_POINTER
 
-/* NONE:POINTER (/tmp/dbus-binding-tool-c-marshallers.SCCMUU:3) */
+/* NONE:POINTER (/tmp/dbus-binding-tool-c-marshallers.5JQOWU:3) */
 #define dbus_glib_marshal_dkp_device_VOID__POINTER	g_cclosure_marshal_VOID__POINTER
 #define dbus_glib_marshal_dkp_device_NONE__POINTER	dbus_glib_marshal_dkp_device_VOID__POINTER
 
@@ -166,6 +166,6 @@ const DBusGObjectInfo dbus_glib_dkp_device_object_info = {
   3,
 "org.freedesktop.DeviceKit.Power.Device\0Refresh\0A\0\0org.freedesktop.DeviceKit.Power.Device\0GetHistory\0A\0type\0I\0s\0timespan\0I\0u\0resolution\0I\0u\0data\0O\0F\0N\0a(udu)\0\0org.freedesktop.DeviceKit.Power.Device\0GetStatistics\0A\0type\0I\0s\0data\0O\0F\0N\0a(dd)\0\0\0",
 "org.freedesktop.DeviceKit.Power.Device\0Changed\0\0",
-"org.freedesktop.DeviceKit.Power.Device\0native-path\0org.freedesktop.DeviceKit.Power.Device\0vendor\0org.freedesktop.DeviceKit.Power.Device\0model\0org.freedesktop.DeviceKit.Power.Device\0serial\0org.freedesktop.DeviceKit.Power.Device\0update-time\0org.freedesktop.DeviceKit.Power.Device\0type\0org.freedesktop.DeviceKit.Power.Device\0power-supply\0org.freedesktop.DeviceKit.Power.Device\0has-history\0org.freedesktop.DeviceKit.Power.Device\0has-statistics\0org.freedesktop.DeviceKit.Power.Device\0online\0org.freedesktop.DeviceKit.Power.Device\0energy\0org.freedesktop.DeviceKit.Power.Device\0energy-empty\0org.freedesktop.DeviceKit.Power.Device\0energy-full\0org.freedesktop.DeviceKit.Power.Device\0energy-full-design\0org.freedesktop.DeviceKit.Power.Device\0energy-rate\0org.freedesktop.DeviceKit.Power.Device\0voltage\0org.freedesktop.DeviceKit.Power.Device\0time-to-empty\0org.freedesktop.DeviceKit.Power.Device\0time-to-full\0org.freedesktop.DeviceKit.Power.Device\0percentage\0org.freedesktop.DeviceKit.Power.Device\0is-present\0org.freedesktop.DeviceKit.Power.Device\0state\0org.freedesktop.DeviceKit.Power.Device\0is-rechargeable\0org.freedesktop.DeviceKit.Power.Device\0capacity\0org.freedesktop.DeviceKit.Power.Device\0technology\0\0"
+"org.freedesktop.DeviceKit.Power.Device\0native-path\0org.freedesktop.DeviceKit.Power.Device\0vendor\0org.freedesktop.DeviceKit.Power.Device\0model\0org.freedesktop.DeviceKit.Power.Device\0serial\0org.freedesktop.DeviceKit.Power.Device\0update-time\0org.freedesktop.DeviceKit.Power.Device\0type\0org.freedesktop.DeviceKit.Power.Device\0power-supply\0org.freedesktop.DeviceKit.Power.Device\0has-history\0org.freedesktop.DeviceKit.Power.Device\0has-statistics\0org.freedesktop.DeviceKit.Power.Device\0online\0org.freedesktop.DeviceKit.Power.Device\0energy\0org.freedesktop.DeviceKit.Power.Device\0energy-empty\0org.freedesktop.DeviceKit.Power.Device\0energy-full\0org.freedesktop.DeviceKit.Power.Device\0energy-full-design\0org.freedesktop.DeviceKit.Power.Device\0energy-rate\0org.freedesktop.DeviceKit.Power.Device\0voltage\0org.freedesktop.DeviceKit.Power.Device\0time-to-empty\0org.freedesktop.DeviceKit.Power.Device\0time-to-full\0org.freedesktop.DeviceKit.Power.Device\0percentage\0org.freedesktop.DeviceKit.Power.Device\0is-present\0org.freedesktop.DeviceKit.Power.Device\0state\0org.freedesktop.DeviceKit.Power.Device\0is-rechargeable\0org.freedesktop.DeviceKit.Power.Device\0capacity\0org.freedesktop.DeviceKit.Power.Device\0technology\0org.freedesktop.DeviceKit.Power.Device\0recall-notice\0org.freedesktop.DeviceKit.Power.Device\0recall-vendor\0org.freedesktop.DeviceKit.Power.Device\0recall-url\0\0"
 };
 

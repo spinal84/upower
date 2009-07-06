@@ -69,6 +69,9 @@ struct DkpDevicePrivate
 	gint64			 time_to_empty;		/* seconds */
 	gint64			 time_to_full;		/* seconds */
 	gdouble			 percentage;		/* percent */
+	gboolean		 recall_notice;
+	gchar			*recall_vendor;
+	gchar			*recall_url;
 };
 
 enum {
@@ -96,7 +99,11 @@ enum {
 	PROP_VOLTAGE,
 	PROP_TIME_TO_EMPTY,
 	PROP_TIME_TO_FULL,
-	PROP_PERCENTAGE
+	PROP_PERCENTAGE,
+	PROP_RECALL_NOTICE,
+	PROP_RECALL_VENDOR,
+	PROP_RECALL_URL,
+	PROP_LAST
 };
 
 enum {
@@ -188,10 +195,14 @@ dkp_device_collect_props_cb (const char *key, const GValue *value, DkpDevice *de
 		device->priv->capacity = g_value_get_double (value);
 	else if (g_strcmp0 (key, "state") == 0)
 		device->priv->state = g_value_get_uint (value);
-	else {
+	else if (g_strcmp0 (key, "recall-notice") == 0)
+		device->priv->recall_notice = g_value_get_boolean (value);
+	else if (g_strcmp0 (key, "recall-vendor") == 0)
+		device->priv->recall_vendor = g_strdup (g_value_get_string (value));
+	else if (g_strcmp0 (key, "recall-url") == 0)
+		device->priv->recall_url = g_strdup (g_value_get_string (value));
+	else
 		g_warning ("unhandled property '%s'", key);
-		g_assert_not_reached ();
-	}
 }
 
 /**
@@ -382,11 +393,11 @@ dkp_device_print (const DkpDevice *device)
 	strftime (time_buf, sizeof time_buf, "%c", time_tm);
 
 	g_print ("  native-path:          %s\n", device->priv->native_path);
-	if (device->priv->vendor != NULL)
+	if (device->priv->vendor != NULL && device->priv->vendor[0] != '\0')
 		g_print ("  vendor:               %s\n", device->priv->vendor);
-	if (device->priv->model != NULL)
+	if (device->priv->model != NULL && device->priv->model[0] != '\0')
 		g_print ("  model:                %s\n", device->priv->model);
-	if (device->priv->serial != NULL)
+	if (device->priv->serial != NULL && device->priv->serial[0] != '\0')
 		g_print ("  serial:               %s\n", device->priv->serial);
 	g_print ("  power supply:         %s\n", dkp_device_print_bool_to_text (device->priv->power_supply));
 	g_print ("  updated:              %s (%d seconds ago)\n", time_buf, (int) (time (NULL) - device->priv->update_time));
@@ -405,7 +416,8 @@ dkp_device_print (const DkpDevice *device)
 		g_print ("    rechargeable:        %s\n", dkp_device_print_bool_to_text (device->priv->is_rechargeable));
 	if (device->priv->type == DKP_DEVICE_TYPE_BATTERY ||
 	    device->priv->type == DKP_DEVICE_TYPE_MOUSE ||
-	    device->priv->type == DKP_DEVICE_TYPE_KEYBOARD)
+	    device->priv->type == DKP_DEVICE_TYPE_KEYBOARD ||
+	    device->priv->type == DKP_DEVICE_TYPE_UPS)
 		g_print ("    state:               %s\n", dkp_device_state_to_text (device->priv->state));
 	if (device->priv->type == DKP_DEVICE_TYPE_BATTERY) {
 		g_print ("    energy:              %g Wh\n", device->priv->energy);
@@ -418,16 +430,18 @@ dkp_device_print (const DkpDevice *device)
 		g_print ("    energy-rate:         %g W\n", device->priv->energy_rate);
 	if (device->priv->type == DKP_DEVICE_TYPE_UPS ||
 	    device->priv->type == DKP_DEVICE_TYPE_BATTERY ||
-	    device->priv->type == DKP_DEVICE_TYPE_MONITOR)
-		g_print ("    voltage:             %g V\n", device->priv->voltage);
+	    device->priv->type == DKP_DEVICE_TYPE_MONITOR) {
+		if (device->priv->voltage > 0)
+			g_print ("    voltage:             %g V\n", device->priv->voltage);
+	}
 	if (device->priv->type == DKP_DEVICE_TYPE_BATTERY ||
 	    device->priv->type == DKP_DEVICE_TYPE_UPS) {
-		if (device->priv->time_to_full >= 0) {
+		if (device->priv->time_to_full > 0) {
 			time_str = dkp_device_print_time_to_text (device->priv->time_to_full);
 			g_print ("    time to full:        %s\n", time_str);
 			g_free (time_str);
 		}
-		if (device->priv->time_to_empty >= 0) {
+		if (device->priv->time_to_empty > 0) {
 			time_str = dkp_device_print_time_to_text (device->priv->time_to_empty);
 			g_print ("    time to empty:       %s\n", time_str);
 			g_free (time_str);
@@ -438,12 +452,22 @@ dkp_device_print (const DkpDevice *device)
 	    device->priv->type == DKP_DEVICE_TYPE_KEYBOARD ||
 	    device->priv->type == DKP_DEVICE_TYPE_UPS)
 		g_print ("    percentage:          %g%%\n", device->priv->percentage);
-	if (device->priv->type == DKP_DEVICE_TYPE_BATTERY)
-		g_print ("    capacity:            %g%%\n", device->priv->capacity);
-	if (device->priv->type == DKP_DEVICE_TYPE_BATTERY)
-		g_print ("    technology:          %s\n", dkp_device_technology_to_text (device->priv->technology));
+	if (device->priv->type == DKP_DEVICE_TYPE_BATTERY) {
+		if (device->priv->capacity > 0)
+			g_print ("    capacity:            %g%%\n", device->priv->capacity);
+	}
+	if (device->priv->type == DKP_DEVICE_TYPE_BATTERY) {
+		if (device->priv->technology != DKP_DEVICE_TECHNOLOGY_UNKNOWN)
+			g_print ("    technology:          %s\n", dkp_device_technology_to_text (device->priv->technology));
+	}
 	if (device->priv->type == DKP_DEVICE_TYPE_LINE_POWER)
 		g_print ("    online:             %s\n", dkp_device_print_bool_to_text (device->priv->online));
+	if (device->priv->type == DKP_DEVICE_TYPE_BATTERY) {
+		if (device->priv->recall_notice) {
+			g_print ("    recall vendor:       %s\n", device->priv->recall_vendor);
+			g_print ("    recall url:          %s\n", device->priv->recall_url);
+		}
+	}
 
 	/* if we can, get history */
 	if (device->priv->has_history) {
@@ -715,6 +739,17 @@ dkp_device_set_property (GObject *object, guint prop_id, const GValue *value, GP
 	case PROP_TECHNOLOGY:
 		device->priv->technology = g_value_get_uint (value);
 		break;
+	case PROP_RECALL_NOTICE:
+		device->priv->recall_notice = g_value_get_boolean (value);
+		break;
+	case PROP_RECALL_VENDOR:
+		g_free (device->priv->recall_vendor);
+		device->priv->recall_vendor = g_strdup (g_value_get_string (value));
+		break;
+	case PROP_RECALL_URL:
+		g_free (device->priv->recall_url);
+		device->priv->recall_url = g_strdup (g_value_get_string (value));
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -801,6 +836,15 @@ dkp_device_get_property (GObject *object, guint prop_id, GValue *value, GParamSp
 		break;
 	case PROP_PERCENTAGE:
 		g_value_set_double (value, device->priv->percentage);
+		break;
+	case PROP_RECALL_NOTICE:
+		g_value_set_boolean (value, device->priv->recall_notice);
+		break;
+	case PROP_RECALL_VENDOR:
+		g_value_set_string (value, device->priv->recall_vendor);
+		break;
+	case PROP_RECALL_URL:
+		g_value_set_string (value, device->priv->recall_url);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1047,6 +1091,33 @@ dkp_device_class_init (DkpDeviceClass *klass)
 					 g_param_spec_double ("percentage", NULL, NULL,
 							      0.0, 100.f, 100.0,
 							      G_PARAM_READWRITE));
+	/**
+	 * DkpDevice:recall-notice:
+	 */
+	g_object_class_install_property (object_class,
+					 PROP_RECALL_NOTICE,
+					 g_param_spec_boolean ("recall-notice",
+							       NULL, NULL,
+							       FALSE,
+							       G_PARAM_READWRITE));
+	/**
+	 * DkpDevice:recall-vendor:
+	 */
+	g_object_class_install_property (object_class,
+					 PROP_RECALL_VENDOR,
+					 g_param_spec_string ("recall-vendor",
+							      NULL, NULL,
+							      NULL,
+							      G_PARAM_READWRITE));
+	/**
+	 * DkpDevice:recall-url:
+	 */
+	g_object_class_install_property (object_class,
+					 PROP_RECALL_URL,
+					 g_param_spec_string ("recall-url",
+							      NULL, NULL,
+							      NULL,
+							      G_PARAM_READWRITE));
 
 	g_type_class_add_private (klass, sizeof (DkpDevicePrivate));
 }
@@ -1082,6 +1153,8 @@ dkp_device_finalize (GObject *object)
 	g_free (device->priv->model);
 	g_free (device->priv->serial);
 	g_free (device->priv->native_path);
+	g_free (device->priv->recall_vendor);
+	g_free (device->priv->recall_url);
 	if (device->priv->proxy_device != NULL)
 		g_object_unref (device->priv->proxy_device);
 	if (device->priv->proxy_props != NULL)

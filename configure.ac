@@ -1,10 +1,16 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59c)
-AC_INIT(DeviceKit-power, 008, http://lists.freedesktop.org/mailman/listinfo/devkit-devel)
-AM_INIT_AUTOMAKE(DeviceKit-power, 008)
+AC_INIT(DeviceKit-power, 009, http://lists.freedesktop.org/mailman/listinfo/devkit-devel)
+AM_INIT_AUTOMAKE(DeviceKit-power, 009)
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
+
+# enable nice build output on automake1.11
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
+
+# use this in dkp-version.h
+AC_SUBST(VERSION)
 
 # libtool versioning - this applies to devkit-power-gobject
 #
@@ -49,6 +55,14 @@ fi
 AM_CONDITIONAL(MAN_PAGES_ENABLED, test x$enable_man_pages = xyes)
 
 GTK_DOC_CHECK([1.3])
+
+# udev rules go in /lib, not /usr/lib
+if test "$prefix" = "/usr" -o "$prefix" = "/usr/local" ; then
+  slashlibdir=/lib
+else
+  slashlibdir=$prefix/lib
+fi
+AC_SUBST(slashlibdir)
 
 #### gcc warning flags
 
@@ -175,7 +189,9 @@ doc/version.xml
 doc/man/Makefile
 doc/dbus/Makefile
 policy/Makefile
+rules/Makefile
 devkit-power-gobject/Makefile
+devkit-power-gobject/dkp-version.h
 po/Makefile.in
 ])
 

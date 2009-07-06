@@ -56,11 +56,8 @@ dkp_device_type_to_text (DkpDeviceType type_enum)
 	case DKP_DEVICE_TYPE_PHONE:
 		type = "phone";
 		break;
-	case DKP_DEVICE_TYPE_UNKNOWN:
-		type = "unknown";
-		break;
 	default:
-		g_assert_not_reached ();
+		type = "unknown";
 		break;
 	}
 	return type;
@@ -113,11 +110,14 @@ dkp_device_state_to_text (DkpDeviceState state_enum)
 	case DKP_DEVICE_STATE_FULLY_CHARGED:
 		state = "fully-charged";
 		break;
-	case DKP_DEVICE_STATE_UNKNOWN:
-		state = "unknown";
+	case DKP_DEVICE_STATE_PENDING_CHARGE:
+		state = "pending-charged";
+		break;
+	case DKP_DEVICE_STATE_PENDING_DISCHARGE:
+		state = "pending-discharge";
 		break;
 	default:
-		g_assert_not_reached ();
+		state = "unknown";
 		break;
 	}
 	return state;
@@ -139,6 +139,10 @@ dkp_device_state_from_text (const gchar *state)
 		return DKP_DEVICE_STATE_EMPTY;
 	if (g_strcmp0 (state, "fully-charged") == 0)
 		return DKP_DEVICE_STATE_FULLY_CHARGED;
+	if (g_strcmp0 (state, "pending-charge") == 0)
+		return DKP_DEVICE_STATE_PENDING_CHARGE;
+	if (g_strcmp0 (state, "pending-discharge") == 0)
+		return DKP_DEVICE_STATE_PENDING_DISCHARGE;
 	return DKP_DEVICE_STATE_UNKNOWN;
 }
 
@@ -168,11 +172,8 @@ dkp_device_technology_to_text (DkpDeviceTechnology technology_enum)
 	case DKP_DEVICE_TECHNOLOGY_NICKEL_METAL_HYDRIDE:
 		technology = "nickel-metal-hydride";
 		break;
-	case DKP_DEVICE_TECHNOLOGY_UNKNOWN:
-		technology = "unknown";
-		break;
 	default:
-		g_assert_not_reached ();
+		technology = "unknown";
 		break;
 	}
 	return technology;
