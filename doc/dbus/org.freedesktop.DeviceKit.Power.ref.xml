@@ -38,6 +38,7 @@
 <link linkend="Power:on-battery">'on-battery'</link>     read      'b'
 <link linkend="Power:on-low-battery">'on-low-battery'</link> read      'b'
 <link linkend="Power:lid-is-closed">'lid-is-closed'</link>  read      'b'
+<link linkend="Power:lid-is-present">'lid-is-present'</link> read      'b'
 </synopsis>
   </refsect1>
   <refsect1 role="desc">
@@ -125,6 +126,11 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </programlisting></refsect2>
           <para>
             Indicates if the laptop lid is closed where the display cannot be seen.
+          </para>
+        <variablelist role="params"/><refsect2><title><anchor role="function" id="Power:lid-is-present"/>The "lid-is-present" property</title><indexterm><primary>lid-is-present</primary><secondary>Power</secondary></indexterm><programlisting>'lid-is-present'  read      'b'
+</programlisting></refsect2>
+          <para>
+            If the system has a lid device.
           </para>
         <variablelist role="params"/></refsect1>
 </refentry>

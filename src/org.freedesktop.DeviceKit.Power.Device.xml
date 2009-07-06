@@ -572,6 +572,12 @@ method return sender=:1.386 -> dest=:1.477 reply_serial=2
             <doc:item>
               <doc:term>4</doc:term><doc:definition>Fully charged</doc:definition>
             </doc:item>
+            <doc:item>
+              <doc:term>5</doc:term><doc:definition>Pending charge</doc:definition>
+            </doc:item>
+            <doc:item>
+              <doc:term>6</doc:term><doc:definition>Pending discharge</doc:definition>
+            </doc:item>
           </doc:list>
           <doc:para>
             This property is only valid if the property
@@ -650,6 +656,45 @@ method return sender=:1.386 -> dest=:1.477 reply_serial=2
             This property is only valid if the property
             <doc:ref type="property" to="Source:type">type</doc:ref>
             has the value "battery".
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <property name="recall-notice" type="b" access="read">
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            If the device may have been recalled by the vendor due to a suspected
+            fault.
+            This key does not imply the device is faulty, only that it approximatly
+            matches the description from the vendor of units that were recalled.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <property name="recall-vendor" type="s" access="read">
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The vendor that is handling the hardware recall.
+          </doc:para>
+          <doc:para>
+            This property is only valid if the property recall-notice is true.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <property name="recall-url" type="s" access="read">
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The URL to visit about the hardware recall.
+          </doc:para>
+          <doc:para>
+            This property is only valid if the property recall-notice is true.
           </doc:para>
         </doc:description>
       </doc:doc>
