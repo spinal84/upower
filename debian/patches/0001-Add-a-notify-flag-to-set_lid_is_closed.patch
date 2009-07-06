@@ -1,0 +1,86 @@
+From e63bf34e5b7d40a5a31381c2d1cec966bc99b32b Mon Sep 17 00:00:00 2001
+From: =?utf-8?q?Lo=C3=AFc=20Minier?= <lool@dooz.org>
+Date: Mon, 6 Jul 2009 16:22:22 +0100
+Subject: [PATCH] Add a notify flag to set_lid_is_closed
+
+Add a notify flag to set_lid_is_closed and use it only on input cold
+plug.
+
+http://bugs.freedesktop.org/show_bug.cgi?id=22574
+https://launchpad.net/bugs/385135
+---
+ src/dkp-daemon.c |    6 ++----
+ src/dkp-daemon.h |    3 ++-
+ src/dkp-input.c  |    4 ++--
+ 3 files changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/src/dkp-daemon.c b/src/dkp-daemon.c
+index a13b681..1439fac 100644
+--- a/src/dkp-daemon.c
++++ b/src/dkp-daemon.c
+@@ -102,10 +102,9 @@ G_DEFINE_TYPE (DkpDaemon, dkp_daemon, G_TYPE_OBJECT)
+  * dkp_daemon_set_lid_is_closed:
+  **/
+ gboolean
+-dkp_daemon_set_lid_is_closed (DkpDaemon *daemon, gboolean lid_is_closed)
++dkp_daemon_set_lid_is_closed (DkpDaemon *daemon, gboolean lid_is_closed, gboolean notify)
+ {
+ 	gboolean ret = FALSE;
+-	static gboolean initialized = FALSE;
+ 
+ 	g_return_val_if_fail (DKP_IS_DAEMON (daemon), FALSE);
+ 
+@@ -116,13 +115,12 @@ dkp_daemon_set_lid_is_closed (DkpDaemon *daemon, gboolean lid_is_closed)
+ 	}
+ 
+ 	/* save */
+-	if (!initialized) {
++	if (!notify) {
+ 		/* Do not emit an event on startup. Otherwise, e. g.
+ 		 * gnome-power-manager would pick up a "lid is closed" change
+ 		 * event when dk-p gets D-BUS activated, and thus would
+ 		 * immediately suspend the machine on startup. FD#22574 */
+ 		egg_debug ("not emitting lid change event for daemon startup");
+-		initialized = TRUE;
+ 	} else {
+ 		g_signal_emit (daemon, signals[CHANGED_SIGNAL], 0);
+ 	}
+diff --git a/src/dkp-daemon.h b/src/dkp-daemon.h
+index ce4725f..6807b52 100644
+--- a/src/dkp-daemon.h
++++ b/src/dkp-daemon.h
+@@ -80,7 +80,8 @@ gboolean	 dkp_daemon_can_hibernate	(DkpDaemon		*daemon,
+ 						 gboolean		 interactive,
+ 						 DBusGMethodInvocation	*context);
+ gboolean	 dkp_daemon_set_lid_is_closed	(DkpDaemon		*daemon,
+-						 gboolean		 lid_is_closed);
++						 gboolean		 lid_is_closed,
++						 gboolean		 notify);
+ 
+ G_END_DECLS
+ 
+diff --git a/src/dkp-input.c b/src/dkp-input.c
+index 87bd7db..e36f603 100644
+--- a/src/dkp-input.c
++++ b/src/dkp-input.c
+@@ -154,7 +154,7 @@ dkp_input_event_io (GIOChannel *channel, GIOCondition condition, gpointer data)
+ 
+ 		/* are we set */
+ 		ret = test_bit (input->priv->event.code, bitmask);
+-		dkp_daemon_set_lid_is_closed (input->priv->daemon, ret);
++		dkp_daemon_set_lid_is_closed (input->priv->daemon, ret, TRUE);
+ 	}
+ out:
+ 	return TRUE;
+@@ -253,7 +253,7 @@ dkp_input_coldplug (DkpInput *input, DkpDaemon *daemon, GUdevDevice *d)
+ 
+ 	/* set if we are closed */
+ 	egg_debug ("using %s for lid event", native_path);
+-	dkp_daemon_set_lid_is_closed (daemon, test_bit (SW_LID, bitmask));
++	dkp_daemon_set_lid_is_closed (daemon, test_bit (SW_LID, bitmask), FALSE);
+ 
+ out:
+ 	g_free (path);
+-- 
+1.6.3.3
+
