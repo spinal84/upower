@@ -12,6 +12,7 @@ devicekit-power (010-1) UNRELEASED; urgency=low
 
   [ Michael Biebl ]
   * Add debian/README.source which refers to the quilt documentation.
+  * Bump Standards-Version to 3.8.3.
 
  -- Michael Biebl <biebl@debian.org>  Mon, 28 Sep 2009 01:41:43 +0200
 
