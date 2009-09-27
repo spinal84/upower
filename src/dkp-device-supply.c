@@ -30,7 +30,7 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n-lib.h>
 #include <glib-object.h>
-#include <devkit-gobject/devkit-gobject.h>
+#include <gudev/gudev.h>
 
 #include "sysfs-utils.h"
 #include "egg-debug.h"
@@ -41,7 +41,7 @@
 #define DKP_DEVICE_SUPPLY_REFRESH_TIMEOUT	30	/* seconds */
 #define DKP_DEVICE_SUPPLY_UNKNOWN_TIMEOUT	2	/* seconds */
 #define DKP_DEVICE_SUPPLY_UNKNOWN_RETRIES	30
-#define DKP_DEVICE_SUPPLY_CHARGED_THRESHOLD	95.0f	/* % */
+#define DKP_DEVICE_SUPPLY_CHARGED_THRESHOLD	90.0f	/* % */
 
 struct DkpDeviceSupplyPrivate
 {
@@ -68,7 +68,7 @@ static gboolean
 dkp_device_supply_refresh_line_power (DkpDeviceSupply *supply)
 {
 	DkpDevice *device = DKP_DEVICE (supply);
-	DevkitDevice *d;
+	GUdevDevice *d;
 	const gchar *native_path;
 
 	d = dkp_device_get_d (device);
@@ -79,7 +79,7 @@ dkp_device_supply_refresh_line_power (DkpDeviceSupply *supply)
 	g_object_set (device, "power-supply", TRUE, NULL);
 
 	/* get new AC value */
-	native_path = devkit_device_get_native_path (d);
+	native_path = g_udev_device_get_sysfs_path (d);
 	g_object_set (device, "online", sysfs_get_int (native_path, "online"), NULL);
 
 	return TRUE;
@@ -316,7 +316,7 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 	DkpDeviceState state;
 	DkpDevice *device = DKP_DEVICE (supply);
 	const gchar *native_path;
-	DevkitDevice *d;
+	GUdevDevice *d;
 	gboolean is_present;
 	gdouble energy;
 	gdouble energy_full;
@@ -335,6 +335,7 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 	const gchar *recall_url = NULL;
 	DkpDaemon *daemon;
 	gboolean on_battery;
+	guint battery_count;
 
 	d = dkp_device_get_d (device);
 	if (d == NULL) {
@@ -343,7 +344,7 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 		goto out;
 	}
 
-	native_path = devkit_device_get_native_path (d);
+	native_path = g_udev_device_get_sysfs_path (d);
 
 	/* have we just been removed? */
 	is_present = sysfs_get_bool (native_path, "present");
@@ -385,10 +386,10 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 		serial_number = dkp_device_supply_get_string (native_path, "serial_number");
 
 		/* are we possibly recalled by the vendor? */
-		recall_notice = devkit_device_has_property (d, "DKP_RECALL_NOTICE");
+		recall_notice = g_udev_device_has_property (d, "DKP_RECALL_NOTICE");
 		if (recall_notice) {
-			recall_vendor = devkit_device_get_property (d, "DKP_RECALL_VENDOR");
-			recall_url = devkit_device_get_property (d, "DKP_RECALL_URL");
+			recall_vendor = g_udev_device_get_property (d, "DKP_RECALL_VENDOR");
+			recall_url = g_udev_device_get_property (d, "DKP_RECALL_URL");
 		}
 
 		g_object_set (device,
@@ -467,12 +468,6 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 		state = DKP_DEVICE_STATE_UNKNOWN;
 	}
 
-	/* if empty, and BIOS does not know what to do */
-	if (state == DKP_DEVICE_STATE_UNKNOWN && energy < 0.01) {
-		egg_warning ("Setting %s state empty as unknown and very low", native_path);
-		state = DKP_DEVICE_STATE_EMPTY;
-	}
-
 	/* reset unknown counter */
 	if (state != DKP_DEVICE_STATE_UNKNOWN) {
 		egg_debug ("resetting unknown timeout after %i retries", supply->priv->unknown_retries);
@@ -541,18 +536,31 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 		g_object_get (daemon,
 			      "on-battery", &on_battery,
 			      NULL);
-		g_object_unref (daemon);
+
+		/* only guess when we have more than one battery devices */
+		battery_count = dkp_daemon_get_number_devices_of_type (daemon, DKP_DEVICE_TYPE_BATTERY);
 
 		/* try to find a suitable icon depending on AC state */
-		if (on_battery) {
+		if (on_battery && battery_count > 1)
 			state = DKP_DEVICE_STATE_PENDING_DISCHARGE;
-		} else {
+		else if (battery_count > 1)
 			state = DKP_DEVICE_STATE_PENDING_CHARGE;
-		}
+		else if (on_battery)
+			state = DKP_DEVICE_STATE_DISCHARGING;
+		else
+			state = DKP_DEVICE_STATE_FULLY_CHARGED;
 
 		/* print what we did */
-		egg_warning ("guessing battery state '%s' using global on-battery:%i",
-			     dkp_device_state_to_text (state), on_battery);
+		egg_debug ("guessing battery state '%s' using global on-battery:%i",
+			   dkp_device_state_to_text (state), on_battery);
+
+		g_object_unref (daemon);
+	}
+
+	/* if empty, and BIOS does not know what to do */
+	if (state == DKP_DEVICE_STATE_UNKNOWN && energy < 0.01) {
+		egg_warning ("Setting %s state empty as unknown and very low", native_path);
+		state = DKP_DEVICE_STATE_EMPTY;
 	}
 
 	/* calculate a quick and dirty time remaining value */
@@ -626,7 +634,7 @@ dkp_device_supply_coldplug (DkpDevice *device)
 {
 	DkpDeviceSupply *supply = DKP_DEVICE_SUPPLY (device);
 	gboolean ret;
-	DevkitDevice *d;
+	GUdevDevice *d;
 	const gchar *native_path;
 
 	dkp_device_supply_reset_values (supply);
@@ -636,7 +644,7 @@ dkp_device_supply_coldplug (DkpDevice *device)
 	if (d == NULL)
 		egg_error ("could not get device");
 
-	native_path = devkit_device_get_native_path (d);
+	native_path = g_udev_device_get_sysfs_path (d);
 	if (native_path == NULL)
 		egg_error ("could not get native path");
 
