@@ -10,7 +10,10 @@ devicekit-power (010-1) UNRELEASED; urgency=low
     - libdevkit-gobject-dev → libgudev-1.0-dev build dependency.
     - Drop devicekit dependency.
 
- -- Michael Biebl <biebl@debian.org>  Mon, 28 Sep 2009 01:39:55 +0200
+  [ Michael Biebl ]
+  * Add debian/README.source which refers to the quilt documentation.
+
+ -- Michael Biebl <biebl@debian.org>  Mon, 28 Sep 2009 01:41:43 +0200
 
 devicekit-power (009-1) experimental; urgency=low
 
