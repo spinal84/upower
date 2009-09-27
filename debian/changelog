@@ -9,6 +9,7 @@ devicekit-power (010-1) UNRELEASED; urgency=low
     - libpolkit-dbus-dev → libpolkit-gobject-1-dev build dependency.
     - libdevkit-gobject-dev → libgudev-1.0-dev build dependency.
     - Drop devicekit dependency.
+  * Drop 0001-Add-a-notify-flag-to-set_lid_is_closed.patch, fixed upstream.
 
   [ Michael Biebl ]
   * Add debian/README.source which refers to the quilt documentation.
