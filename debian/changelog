@@ -1,6 +1,20 @@
+devicekit-power (010-1) UNRELEASED; urgency=low
+
+  [ Martin Pitt ]
+  * New upstream release:
+    - Port to PolicyKit 1 API.
+    - Port from DeviceKit to gudev.
+    - Bug fixes.
+  * debian/control:
+    - libpolkit-dbus-dev → libpolkit-gobject-1-dev build dependency.
+    - libdevkit-gobject-dev → libgudev-1.0-dev build dependency.
+    - Drop devicekit dependency.
+
+ -- Michael Biebl <biebl@debian.org>  Mon, 28 Sep 2009 01:39:55 +0200
+
 devicekit-power (009-1) experimental; urgency=low
 
-  * New upstream release.   
+  * New upstream release.
   * debian/control: Add myself to uploaders (discussed with Michael).
   * debian/devicekit-power.install: Upstream installs udev rules into
     /lib/udev/rules.d now, update accordingly.
