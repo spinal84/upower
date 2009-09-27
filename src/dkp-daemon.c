@@ -24,13 +24,14 @@
 #endif
 
 #include <string.h>
+#include <stdlib.h>
 
 #include <glib.h>
 #include <glib/gi18n-lib.h>
 #include <glib-object.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
-#include <devkit-gobject/devkit-gobject.h>
+#include <gudev/gudev.h>
 
 #include "egg-debug.h"
 
@@ -82,9 +83,11 @@ struct DkpDaemonPrivate
 	DkpDeviceList		*managed_devices;
 	gboolean		 on_battery;
 	gboolean		 low_battery;
-	DevkitClient		*devkit_client;
+	GUdevClient		*gudev_client;
 	gboolean		 lid_is_closed;
 	gboolean		 lid_is_present;
+	gboolean		 can_suspend;
+	gboolean		 can_hibernate;
 };
 
 static void	dkp_daemon_class_init		(DkpDaemonClass *klass);
@@ -98,14 +101,22 @@ G_DEFINE_TYPE (DkpDaemon, dkp_daemon, G_TYPE_OBJECT)
 
 #define DKP_DAEMON_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), DKP_TYPE_DAEMON, DkpDaemonPrivate))
 
+/* if using more memory compared to usable swap, disable hibernate */
+#define DKP_DAEMON_SWAP_WATERLINE 			80.0f /* % */
+
+/* refresh all the devices after this much time when on-battery has changed */
+#define DKP_DAEMON_ON_BATTERY_REFRESH_DEVICES_DELAY	3 /* seconds */
+
+static gboolean dkp_daemon_device_add (DkpDaemon *daemon, GUdevDevice *d, gboolean emit_event);
+static void dkp_daemon_device_remove (DkpDaemon *daemon, GUdevDevice *d);
+
 /**
  * dkp_daemon_set_lid_is_closed:
  **/
 gboolean
-dkp_daemon_set_lid_is_closed (DkpDaemon *daemon, gboolean lid_is_closed)
+dkp_daemon_set_lid_is_closed (DkpDaemon *daemon, gboolean lid_is_closed, gboolean notify)
 {
 	gboolean ret = FALSE;
-	static gboolean initialized = FALSE;
 
 	g_return_val_if_fail (DKP_IS_DAEMON (daemon), FALSE);
 
@@ -116,13 +127,12 @@ dkp_daemon_set_lid_is_closed (DkpDaemon *daemon, gboolean lid_is_closed)
 	}
 
 	/* save */
-	if (!initialized) {
+	if (!notify) {
 		/* Do not emit an event on startup. Otherwise, e. g.
 		 * gnome-power-manager would pick up a "lid is closed" change
 		 * event when dk-p gets D-BUS activated, and thus would
 		 * immediately suspend the machine on startup. FD#22574 */
 		egg_debug ("not emitting lid change event for daemon startup");
-		initialized = TRUE;
 	} else {
 		g_signal_emit (daemon, signals[CHANGED_SIGNAL], 0);
 	}
@@ -202,13 +212,11 @@ dkp_daemon_get_property (GObject         *object,
 		break;
 
 	case PROP_CAN_SUSPEND:
-		/* TODO: for now assume we can always suspend */
-		g_value_set_boolean (value, TRUE);
+		g_value_set_boolean (value, daemon->priv->can_suspend);
 		break;
 
 	case PROP_CAN_HIBERNATE:
-		/* TODO for now assume we can always hibernate */
-		g_value_set_boolean (value, TRUE);
+		g_value_set_boolean (value, daemon->priv->can_hibernate);
 		break;
 
 	case PROP_ON_BATTERY:
@@ -305,7 +313,7 @@ dkp_daemon_class_init (DkpDaemonClass *klass)
 							       G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
-					 PROP_CAN_SUSPEND,
+					 PROP_CAN_HIBERNATE,
 					 g_param_spec_boolean ("can-hibernate",
 							       "Can Hibernate",
 							       "Whether the system can hibernate",
@@ -342,15 +350,108 @@ dkp_daemon_class_init (DkpDaemonClass *klass)
 }
 
 /**
+ * dkp_daemon_check_state:
+ **/
+static gboolean
+dkp_daemon_check_state (DkpDaemon *daemon)
+{
+	gchar *contents = NULL;
+	GError *error = NULL;
+	gboolean ret;
+	const gchar *filename = "/sys/power/state";
+
+	/* see what kernel can do */
+	ret = g_file_get_contents (filename, &contents, NULL, &error);
+	if (!ret) {
+		egg_warning ("failed to open %s: %s", filename, error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* does the kernel advertise this */
+	daemon->priv->can_suspend = (g_strstr_len (contents, -1, "mem") != NULL);
+	daemon->priv->can_hibernate = (g_strstr_len (contents, -1, "disk") != NULL);
+out:
+	g_free (contents);
+	return ret;
+}
+
+/**
+ * dkp_daemon_check_swap:
+ **/
+static gfloat
+dkp_daemon_check_swap (DkpDaemon *daemon)
+{
+	gchar *contents = NULL;
+	gchar **lines = NULL;
+	GError *error = NULL;
+	gchar **tokens;
+	gboolean ret;
+	guint active = 0;
+	guint swap_free = 0;
+	guint len;
+	guint i;
+	gfloat percentage = 0.0f;
+	const gchar *filename = "/proc/meminfo";
+
+	/* get memory data */
+	ret = g_file_get_contents (filename, &contents, NULL, &error);
+	if (!ret) {
+		egg_warning ("failed to open %s: %s", filename, error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* process each line */
+	lines = g_strsplit (contents, "\n", -1);
+	for (i=1; lines[i] != NULL; i++) {
+		tokens = g_strsplit_set (lines[i], ": ", -1);
+		len = g_strv_length (tokens);
+		if (len > 3) {
+			if (g_strcmp0 (tokens[0], "SwapFree") == 0)
+				swap_free = atoi (tokens[len-2]);
+			else if (g_strcmp0 (tokens[0], "Active") == 0)
+				active = atoi (tokens[len-2]);
+		}
+		g_strfreev (tokens);
+	}
+
+	/* work out how close to the line we are */
+	if (swap_free > 0 && active > 0)
+		percentage = (active * 100) / swap_free;
+	egg_debug ("total swap available %i kb, active memory %i kb (%.1f%%)", swap_free, active, percentage);
+out:
+	g_free (contents);
+	g_strfreev (lines);
+	return percentage;
+}
+
+/**
  * dkp_daemon_init:
  **/
 static void
 dkp_daemon_init (DkpDaemon *daemon)
 {
+	gfloat waterline;
+
 	daemon->priv = DKP_DAEMON_GET_PRIVATE (daemon);
 	daemon->priv->polkit = dkp_polkit_new ();
 	daemon->priv->lid_is_present = FALSE;
 	daemon->priv->lid_is_closed = FALSE;
+	daemon->priv->can_suspend = FALSE;
+	daemon->priv->can_hibernate = FALSE;
+
+	/* check if we have support */
+	dkp_daemon_check_state (daemon);
+
+	/* do we have enough swap? */
+	if (daemon->priv->can_hibernate) {
+		waterline = dkp_daemon_check_swap (daemon);
+		if (waterline > DKP_DAEMON_SWAP_WATERLINE) {
+			egg_debug ("not enough swap to enable hibernate");
+			daemon->priv->can_hibernate = FALSE;
+		}
+	}
 }
 
 /**
@@ -372,8 +473,8 @@ dkp_daemon_finalize (GObject *object)
 		g_object_unref (daemon->priv->proxy);
 	if (daemon->priv->connection != NULL)
 		dbus_g_connection_unref (daemon->priv->connection);
-	if (daemon->priv->devkit_client != NULL)
-		g_object_unref (daemon->priv->devkit_client);
+	if (daemon->priv->gudev_client != NULL)
+		g_object_unref (daemon->priv->gudev_client);
 	if (daemon->priv->power_devices != NULL)
 		g_object_unref (daemon->priv->power_devices);
 	if (daemon->priv->managed_devices != NULL)
@@ -382,9 +483,6 @@ dkp_daemon_finalize (GObject *object)
 
 	G_OBJECT_CLASS (dkp_daemon_parent_class)->finalize (object);
 }
-
-static gboolean dkp_daemon_device_add (DkpDaemon *daemon, DevkitDevice *d, gboolean emit_event);
-static void dkp_daemon_device_remove (DkpDaemon *daemon, DevkitDevice *d);
 
 /**
  * dkp_daemon_get_on_battery_local:
@@ -412,6 +510,31 @@ dkp_daemon_get_on_battery_local (DkpDaemon *daemon)
 		}
 	}
 	return result;
+}
+
+/**
+ * dkp_daemon_get_number_devices_of_type:
+ **/
+guint
+dkp_daemon_get_number_devices_of_type (DkpDaemon *daemon, DkpDeviceType type)
+{
+	guint i;
+	DkpDevice *device;
+	const GPtrArray *array;
+	DkpDeviceType type_tmp;
+	guint count = 0;
+
+	/* ask each device */
+	array = dkp_device_list_get_array (daemon->priv->power_devices);
+	for (i=0; i<array->len; i++) {
+		device = (DkpDevice *) g_ptr_array_index (array, i);
+		g_object_get (device,
+			      "type", &type_tmp,
+			      NULL);
+		if (type == type_tmp)
+			count++;
+	}
+	return count;
 }
 
 /**
@@ -497,13 +620,51 @@ out:
 }
 
 /**
+ * dkp_daemon_refresh_battery_devices:
+ **/
+static gboolean
+dkp_daemon_refresh_battery_devices (DkpDaemon *daemon)
+{
+	guint i;
+	const GPtrArray *array;
+	DkpDevice *device;
+	DkpDeviceType type;
+
+	/* refresh all devices in array */
+	array = dkp_device_list_get_array (daemon->priv->power_devices);
+	for (i=0; i<array->len; i++) {
+		device = (DkpDevice *) g_ptr_array_index (array, i);
+		/* only refresh battery devices */
+		g_object_get (device,
+			      "type", &type,
+			      NULL);
+		if (type == DKP_DEVICE_TYPE_BATTERY)
+			dkp_device_refresh_internal (device);
+	}
+
+	return TRUE;
+}
+
+/**
+ * dkp_daemon_refresh_battery_devices_cb:
+ **/
+static gboolean
+dkp_daemon_refresh_battery_devices_cb (DkpDaemon *daemon)
+{
+	egg_debug ("doing the delayed refresh");
+	dkp_daemon_refresh_battery_devices (daemon);
+	return FALSE;
+}
+
+/**
  * dkp_daemon_device_changed:
  **/
 static void
-dkp_daemon_device_changed (DkpDaemon *daemon, DevkitDevice *d, gboolean synthesized)
+dkp_daemon_device_changed (DkpDaemon *daemon, GUdevDevice *d, gboolean synthesized)
 {
 	GObject *object;
 	DkpDevice *device;
+	DkpDeviceType type;
 	gboolean ret;
 
 	/* first, change the device and add it if it doesn't exist */
@@ -512,8 +673,20 @@ dkp_daemon_device_changed (DkpDaemon *daemon, DevkitDevice *d, gboolean synthesi
 		device = DKP_DEVICE (object);
 		egg_debug ("changed %s", dkp_device_get_object_path (device));
 		dkp_device_changed (device, d, synthesized);
+
+		/* refresh battery devices when AC state changes */
+		g_object_get (device,
+			      "type", &type,
+			      NULL);
+		if (type == DKP_DEVICE_TYPE_LINE_POWER) {
+			/* refresh now, and again in a little while */
+			dkp_daemon_refresh_battery_devices (daemon);
+			g_timeout_add_seconds (DKP_DAEMON_ON_BATTERY_REFRESH_DEVICES_DELAY,
+					       (GSourceFunc) dkp_daemon_refresh_battery_devices_cb, daemon);
+		}
+
 	} else {
-		egg_debug ("treating change event as add on %s", devkit_device_get_native_path (d));
+		egg_debug ("treating change event as add on %s", g_udev_device_get_sysfs_path (d));
 		dkp_daemon_device_add (daemon, d, TRUE);
 	}
 
@@ -549,7 +722,7 @@ dkp_daemon_device_went_away (gpointer user_data, GObject *device)
  * dkp_daemon_device_get:
  **/
 static DkpDevice *
-dkp_daemon_device_get (DkpDaemon *daemon, DevkitDevice *d)
+dkp_daemon_device_get (DkpDaemon *daemon, GUdevDevice *d)
 {
 	const gchar *subsys;
 	const gchar *native_path;
@@ -557,7 +730,7 @@ dkp_daemon_device_get (DkpDaemon *daemon, DevkitDevice *d)
 	DkpInput *input;
 	gboolean ret;
 
-	subsys = devkit_device_get_subsystem (d);
+	subsys = g_udev_device_get_subsystem (d);
 	if (g_strcmp0 (subsys, "power_supply") == 0) {
 
 		/* are we a valid power supply */
@@ -621,7 +794,7 @@ dkp_daemon_device_get (DkpDaemon *daemon, DevkitDevice *d)
 		device = NULL;
 
 	} else {
-		native_path = devkit_device_get_native_path (d);
+		native_path = g_udev_device_get_sysfs_path (d);
 		egg_warning ("native path %s (%s) ignoring", native_path, subsys);
 	}
 out:
@@ -632,7 +805,7 @@ out:
  * dkp_daemon_device_add:
  **/
 static gboolean
-dkp_daemon_device_add (DkpDaemon *daemon, DevkitDevice *d, gboolean emit_event)
+dkp_daemon_device_add (DkpDaemon *daemon, GUdevDevice *d, gboolean emit_event)
 {
 	GObject *object;
 	DkpDevice *device;
@@ -650,7 +823,7 @@ dkp_daemon_device_add (DkpDaemon *daemon, DevkitDevice *d, gboolean emit_event)
 		/* get the right sort of device */
 		device = dkp_daemon_device_get (daemon, d);
 		if (device == NULL) {
-			egg_debug ("not adding device %s", devkit_device_get_native_path (d));
+			egg_debug ("not adding device %s", g_udev_device_get_sysfs_path (d));
 			ret = FALSE;
 			goto out;
 		}
@@ -672,7 +845,7 @@ out:
  * dkp_daemon_device_remove:
  **/
 static void
-dkp_daemon_device_remove (DkpDaemon *daemon, DevkitDevice *d)
+dkp_daemon_device_remove (DkpDaemon *daemon, GUdevDevice *d)
 {
 	GObject *object;
 	DkpDevice *device;
@@ -680,7 +853,7 @@ dkp_daemon_device_remove (DkpDaemon *daemon, DevkitDevice *d)
 	/* does device exist in db? */
 	object = dkp_device_list_lookup (daemon->priv->power_devices, d);
 	if (object == NULL) {
-		egg_debug ("ignoring remove event on %s", devkit_device_get_native_path (d));
+		egg_debug ("ignoring remove event on %s", g_udev_device_get_sysfs_path (d));
 	} else {
 		device = DKP_DEVICE (object);
 		dkp_device_removed (device);
@@ -691,25 +864,25 @@ dkp_daemon_device_remove (DkpDaemon *daemon, DevkitDevice *d)
 }
 
 /**
- * dkp_daemon_device_event_signal_handler:
+ * dkp_daemon_uevent_signal_handler_cb:
  **/
 static void
-dkp_daemon_device_event_signal_handler (DevkitClient *client, const char *action,
-					DevkitDevice *device, gpointer user_data)
+dkp_daemon_uevent_signal_handler_cb (GUdevClient *client, const gchar *action,
+				     GUdevDevice *device, gpointer user_data)
 {
 	DkpDaemon *daemon = DKP_DAEMON (user_data);
 
 	if (g_strcmp0 (action, "add") == 0) {
-		egg_debug ("add %s", devkit_device_get_native_path (device));
+		egg_debug ("add %s", g_udev_device_get_sysfs_path (device));
 		dkp_daemon_device_add (daemon, device, TRUE);
 	} else if (g_strcmp0 (action, "remove") == 0) {
-		egg_debug ("remove %s", devkit_device_get_native_path (device));
+		egg_debug ("remove %s", g_udev_device_get_sysfs_path (device));
 		dkp_daemon_device_remove (daemon, device);
 	} else if (g_strcmp0 (action, "change") == 0) {
-		egg_debug ("change %s", devkit_device_get_native_path (device));
+		egg_debug ("change %s", g_udev_device_get_sysfs_path (device));
 		dkp_daemon_device_changed (daemon, device, FALSE);
 	} else {
-		egg_warning ("unhandled action '%s' on %s", action, devkit_device_get_native_path (device));
+		egg_warning ("unhandled action '%s' on %s", action, g_udev_device_get_sysfs_path (device));
 	}
 }
 
@@ -750,15 +923,15 @@ dkp_daemon_suspend (DkpDaemon *daemon, DBusGMethodInvocation *context)
 	gboolean ret;
 	GError *error;
 	GError *error_local = NULL;
-	PolKitCaller *caller;
+	PolkitSubject *subject;
 	gchar *stdout = NULL;
 	gchar *stderr = NULL;
 
-	caller = dkp_polkit_get_caller (daemon->priv->polkit, context);
-	if (caller == NULL)
+	subject = dkp_polkit_get_subject (daemon->priv->polkit, context);
+	if (subject == NULL)
 		goto out;
 
-	if (!dkp_polkit_check_auth (daemon->priv->polkit, caller, "org.freedesktop.devicekit.power.suspend", context))
+	if (!dkp_polkit_check_auth (daemon->priv->polkit, subject, "org.freedesktop.devicekit.power.suspend", context))
 		goto out;
 
 	ret = g_spawn_command_line_sync ("/usr/sbin/pm-suspend", &stdout, &stderr, NULL, &error_local);
@@ -774,8 +947,8 @@ dkp_daemon_suspend (DkpDaemon *daemon, DBusGMethodInvocation *context)
 out:
 	g_free (stdout);
 	g_free (stderr);
-	if (caller != NULL)
-		polkit_caller_unref (caller);
+	if (subject != NULL)
+		g_object_unref (subject);
 	return TRUE;
 }
 
@@ -788,15 +961,15 @@ dkp_daemon_hibernate (DkpDaemon *daemon, DBusGMethodInvocation *context)
 	gboolean ret;
 	GError *error;
 	GError *error_local = NULL;
-	PolKitCaller *caller;
+	PolkitSubject *subject;
 	gchar *stdout = NULL;
 	gchar *stderr = NULL;
 
-	caller = dkp_polkit_get_caller (daemon->priv->polkit, context);
-	if (caller == NULL)
+	subject = dkp_polkit_get_subject (daemon->priv->polkit, context);
+	if (subject == NULL)
 		goto out;
 
-	if (!dkp_polkit_check_auth (daemon->priv->polkit, caller, "org.freedesktop.devicekit.power.hibernate", context))
+	if (!dkp_polkit_check_auth (daemon->priv->polkit, subject, "org.freedesktop.devicekit.power.hibernate", context))
 		goto out;
 
 	ret = g_spawn_command_line_sync ("/usr/sbin/pm-hibernate", &stdout, &stderr, NULL, &error_local);
@@ -812,8 +985,8 @@ dkp_daemon_hibernate (DkpDaemon *daemon, DBusGMethodInvocation *context)
 out:
 	g_free (stdout);
 	g_free (stderr);
-	if (caller != NULL)
-		polkit_caller_unref (caller);
+	if (subject != NULL)
+		g_object_unref (subject);
 	return TRUE;
 }
 
@@ -858,14 +1031,9 @@ dkp_daemon_register_power_daemon (DkpDaemon *daemon)
 	for (i=0; subsystems[i] != NULL; i++)
 		egg_debug ("registering subsystem : %s", subsystems[i]);
 
-	daemon->priv->devkit_client = devkit_client_new (subsystems);
-	if (!devkit_client_connect (daemon->priv->devkit_client, &error)) {
-		egg_warning ("Couldn't open connection to DeviceKit daemon: %s", error->message);
-		g_error_free (error);
-		goto error;
-	}
-	g_signal_connect (daemon->priv->devkit_client, "device-event",
-			  G_CALLBACK (dkp_daemon_device_event_signal_handler), daemon);
+	daemon->priv->gudev_client = g_udev_client_new (subsystems);
+	g_signal_connect (daemon->priv->gudev_client, "uevent",
+			  G_CALLBACK (dkp_daemon_uevent_signal_handler_cb), daemon);
 
 	return TRUE;
 error:
@@ -879,9 +1047,10 @@ DkpDaemon *
 dkp_daemon_new (void)
 {
 	DkpDaemon *daemon;
-	GError *error = NULL;
+	GUdevDevice *device;
 	GList *devices;
 	GList *l;
+	guint i;
 
 	daemon = DKP_DAEMON (g_object_new (DKP_TYPE_DAEMON, NULL));
 
@@ -893,20 +1062,16 @@ dkp_daemon_new (void)
 		return NULL;
 	}
 
-	devices = devkit_client_enumerate_by_subsystem (daemon->priv->devkit_client, subsystems, &error);
-	if (error != NULL) {
-		egg_warning ("Cannot enumerate devices: %s", error->message);
-		g_error_free (error);
-		g_object_unref (daemon);
-		return NULL;
+	/* add all subsystems */
+	for (i=0; subsystems[i] != NULL; i++) {
+		devices = g_udev_client_query_by_subsystem (daemon->priv->gudev_client, subsystems[i]);
+		for (l = devices; l != NULL; l = l->next) {
+			device = l->data;
+			dkp_daemon_device_add (daemon, device, FALSE);
+		}
+		g_list_foreach (devices, (GFunc) g_object_unref, NULL);
+		g_list_free (devices);
 	}
-
-	for (l = devices; l != NULL; l = l->next) {
-		DevkitDevice *device = l->data;
-		dkp_daemon_device_add (daemon, device, FALSE);
-	}
-	g_list_foreach (devices, (GFunc) g_object_unref, NULL);
-	g_list_free (devices);
 
 	daemon->priv->on_battery = (dkp_daemon_get_on_battery_local (daemon) &&
 				    !dkp_daemon_get_on_ac_local (daemon));

@@ -101,10 +101,6 @@ DBUS_GLIB_LIBS = @DBUS_GLIB_LIBS@
 DBUS_LIBS = @DBUS_LIBS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
-DEVKIT_CFLAGS = @DEVKIT_CFLAGS@
-DEVKIT_GOBJECT_CFLAGS = @DEVKIT_GOBJECT_CFLAGS@
-DEVKIT_GOBJECT_LIBS = @DEVKIT_GOBJECT_LIBS@
-DEVKIT_LIBS = @DEVKIT_LIBS@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -121,6 +117,8 @@ GLIB_LIBS = @GLIB_LIBS@
 GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
 GREP = @GREP@
+GUDEV_CFLAGS = @GUDEV_CFLAGS@
+GUDEV_LIBS = @GUDEV_LIBS@
 HTML_DIR = @HTML_DIR@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
@@ -166,8 +164,8 @@ PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
 POFILES = @POFILES@
-POLKIT_DBUS_CFLAGS = @POLKIT_DBUS_CFLAGS@
-POLKIT_DBUS_LIBS = @POLKIT_DBUS_LIBS@
+POLKIT_CFLAGS = @POLKIT_CFLAGS@
+POLKIT_LIBS = @POLKIT_LIBS@
 POSUB = @POSUB@
 PO_IN_DATADIR_FALSE = @PO_IN_DATADIR_FALSE@
 PO_IN_DATADIR_TRUE = @PO_IN_DATADIR_TRUE@
@@ -233,7 +231,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-polkit_policydir = $(datadir)/PolicyKit/policy
+polkit_policydir = $(datadir)/polkit-1/actions
 polkit_policy_DATA = \
 	org.freedesktop.devicekit.power.policy		\
 	org.freedesktop.devicekit.power.qos.policy
@@ -460,10 +458,6 @@ uninstall-am: uninstall-polkit_policyDATA
 # You will need a recent intltool or the patch from this bug
 # http://bugzilla.gnome.org/show_bug.cgi?id=462312
 @INTLTOOL_POLICY_RULE@
-
-check:
-	polkit-policy-file-validate $(top_builddir)/policy/org.freedesktop.devicekit.power.policy
-	polkit-policy-file-validate $(top_builddir)/policy/org.freedesktop.devicekit.power.qos.policy
 
 clean-local :
 	rm -f *~

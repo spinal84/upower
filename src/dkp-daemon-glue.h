@@ -53,7 +53,7 @@ G_BEGIN_DECLS
 #endif /* !G_ENABLE_DEBUG */
 
 
-/* NONE:POINTER (/tmp/dbus-binding-tool-c-marshallers.8SH6WU:1) */
+/* NONE:POINTER (/tmp/dbus-binding-tool-c-marshallers.UOPMXU:1) */
 #define dbus_glib_marshal_dkp_daemon_VOID__POINTER	g_cclosure_marshal_VOID__POINTER
 #define dbus_glib_marshal_dkp_daemon_NONE__POINTER	dbus_glib_marshal_dkp_daemon_VOID__POINTER
 

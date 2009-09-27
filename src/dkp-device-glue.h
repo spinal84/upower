@@ -53,7 +53,7 @@ G_BEGIN_DECLS
 #endif /* !G_ENABLE_DEBUG */
 
 
-/* NONE:STRING,UINT,UINT,POINTER (/tmp/dbus-binding-tool-c-marshallers.5JQOWU:1) */
+/* NONE:STRING,UINT,UINT,POINTER (/tmp/dbus-binding-tool-c-marshallers.I02IXU:1) */
 extern void dbus_glib_marshal_dkp_device_VOID__STRING_UINT_UINT_POINTER (GClosure     *closure,
                                                                          GValue       *return_value,
                                                                          guint         n_param_values,
@@ -101,7 +101,7 @@ dbus_glib_marshal_dkp_device_VOID__STRING_UINT_UINT_POINTER (GClosure     *closu
 }
 #define dbus_glib_marshal_dkp_device_NONE__STRING_UINT_UINT_POINTER	dbus_glib_marshal_dkp_device_VOID__STRING_UINT_UINT_POINTER
 
-/* NONE:STRING,POINTER (/tmp/dbus-binding-tool-c-marshallers.5JQOWU:2) */
+/* NONE:STRING,POINTER (/tmp/dbus-binding-tool-c-marshallers.I02IXU:2) */
 extern void dbus_glib_marshal_dkp_device_VOID__STRING_POINTER (GClosure     *closure,
                                                                GValue       *return_value,
                                                                guint         n_param_values,
@@ -145,7 +145,7 @@ dbus_glib_marshal_dkp_device_VOID__STRING_POINTER (GClosure     *closure,
 }
 #define dbus_glib_marshal_dkp_device_NONE__STRING_POINTER	dbus_glib_marshal_dkp_device_VOID__STRING_POINTER
 
-/* NONE:POINTER (/tmp/dbus-binding-tool-c-marshallers.5JQOWU:3) */
+/* NONE:POINTER (/tmp/dbus-binding-tool-c-marshallers.I02IXU:3) */
 #define dbus_glib_marshal_dkp_device_VOID__POINTER	g_cclosure_marshal_VOID__POINTER
 #define dbus_glib_marshal_dkp_device_NONE__POINTER	dbus_glib_marshal_dkp_device_VOID__POINTER
 

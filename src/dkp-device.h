@@ -23,8 +23,8 @@
 #define __DKP_DEVICE_H__
 
 #include <glib-object.h>
-#include <polkit-dbus/polkit-dbus.h>
-#include <devkit-gobject/devkit-gobject.h>
+#include <gudev/gudev.h>
+#include <polkit/polkit.h>
 #include <dbus/dbus-glib.h>
 
 #include "dkp-daemon.h"
@@ -76,13 +76,13 @@ GType		 dkp_device_error_get_type	(void);
 GType		 dkp_device_get_type		(void);
 gboolean	 dkp_device_coldplug		(DkpDevice	*device,
 						 DkpDaemon	*daemon,
-						 DevkitDevice	*d);
+						 GUdevDevice	*d);
 DkpDaemon	*dkp_device_get_daemon		(DkpDevice	*device);
 gboolean	 dkp_device_changed	 	(DkpDevice	*device,
-						 DevkitDevice	*d,
+						 GUdevDevice	*d,
 						 gboolean	 synthesized);
 void		 dkp_device_removed	 	(DkpDevice	*device);
-DevkitDevice	*dkp_device_get_d		(DkpDevice	*device);
+GUdevDevice	*dkp_device_get_d		(DkpDevice	*device);
 const gchar	*dkp_device_get_object_path	(DkpDevice	*device);
 gboolean	 dkp_device_get_on_battery	(DkpDevice	*device,
 						 gboolean	*on_battery);
@@ -91,6 +91,7 @@ gboolean	 dkp_device_get_low_battery	(DkpDevice	*device,
 gboolean	 dkp_device_get_online		(DkpDevice	*device,
 						 gboolean	*online);
 void		 dkp_device_emit_changed	(DkpDevice	*device);
+gboolean	 dkp_device_refresh_internal	(DkpDevice	*device);
 
 /* exported methods */
 gboolean	 dkp_device_refresh		(DkpDevice		*device,
