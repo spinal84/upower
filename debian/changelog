@@ -2,6 +2,8 @@ devicekit-power (010-2) UNRELEASED; urgency=low
 
   [ Martin Pitt ]
   * debian/control: Add missing libdevkit-power-gobject1 dependency to -dev.
+  * Add debian/devicekit-power.postinst: Kill the old devkit-power-daemon on
+    upgrade, to ensure that the new version will be used at the next occasion.
 
   [ Michael Biebl ]
   * debian/devicekit-power.{install,manpages}: Install manpages using the
