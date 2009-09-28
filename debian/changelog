@@ -1,4 +1,4 @@
-devicekit-power (010-1) UNRELEASED; urgency=low
+devicekit-power (010-1) unstable; urgency=low
 
   [ Martin Pitt ]
   * New upstream release:
@@ -16,8 +16,9 @@ devicekit-power (010-1) UNRELEASED; urgency=low
   [ Michael Biebl ]
   * Add debian/README.source which refers to the quilt documentation.
   * Bump Standards-Version to 3.8.3.
+  * Upload to unstable.
 
- -- Michael Biebl <biebl@debian.org>  Mon, 28 Sep 2009 01:41:43 +0200
+ -- Michael Biebl <biebl@debian.org>  Mon, 28 Sep 2009 06:58:20 +0200
 
 devicekit-power (009-1) experimental; urgency=low
 
