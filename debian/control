@@ -25,6 +25,7 @@ Homepage: http://hal.freedesktop.org/docs/DeviceKit-power
 Package: devicekit-power
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: pm-utils, policykit-1
 Breaks: gnome-power-manager (<< 2.27.5)
 Description: abstraction for power management
  DeviceKit-power provides an interface to enumerate power sources on the system

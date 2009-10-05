@@ -1,3 +1,10 @@
+devicekit-power (010-3) UNRELEASED; urgency=low
+
+  * debian/control
+    - Add Recommends on pm-utils and policykit-1.
+
+ -- Michael Biebl <biebl@debian.org>  Mon, 05 Oct 2009 09:22:30 +0200
+
 devicekit-power (010-2) unstable; urgency=low
 
   [ Martin Pitt ]
