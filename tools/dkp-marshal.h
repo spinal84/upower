@@ -30,6 +30,30 @@ extern void devkit_power_marshal_VOID__STRING_INT (GClosure     *closure,
                                                    gpointer      invocation_hint,
                                                    gpointer      marshal_data);
 
+/* VOID:POINTER,BOOLEAN (../src/dkp-marshal.list:4) */
+extern void devkit_power_marshal_VOID__POINTER_BOOLEAN (GClosure     *closure,
+                                                        GValue       *return_value,
+                                                        guint         n_param_values,
+                                                        const GValue *param_values,
+                                                        gpointer      invocation_hint,
+                                                        gpointer      marshal_data);
+
+/* VOID:POINTER,POINTER (../src/dkp-marshal.list:5) */
+extern void devkit_power_marshal_VOID__POINTER_POINTER (GClosure     *closure,
+                                                        GValue       *return_value,
+                                                        guint         n_param_values,
+                                                        const GValue *param_values,
+                                                        gpointer      invocation_hint,
+                                                        gpointer      marshal_data);
+
+/* VOID:POINTER,POINTER,BOOLEAN (../src/dkp-marshal.list:6) */
+extern void devkit_power_marshal_VOID__POINTER_POINTER_BOOLEAN (GClosure     *closure,
+                                                                GValue       *return_value,
+                                                                guint         n_param_values,
+                                                                const GValue *param_values,
+                                                                gpointer      invocation_hint,
+                                                                gpointer      marshal_data);
+
 G_END_DECLS
 
 #endif /* __devkit_power_marshal_MARSHAL_H__ */

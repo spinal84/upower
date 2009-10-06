@@ -97,8 +97,8 @@ dkp_wakeups_get_data (DkpWakeups *wakeups, GError **error)
 	GPtrArray *array = NULL;
 	gboolean ret;
 
-	g_return_val_if_fail (DKP_IS_WAKEUPS (wakeups), FALSE);
-	g_return_val_if_fail (wakeups->priv->proxy != NULL, FALSE);
+	g_return_val_if_fail (DKP_IS_WAKEUPS (wakeups), NULL);
+	g_return_val_if_fail (wakeups->priv->proxy != NULL, NULL);
 
 	g_type_gvalue_array = dbus_g_type_get_collection ("GPtrArray",
 					dbus_g_type_get_struct("GValueArray",
@@ -163,7 +163,7 @@ dkp_wakeups_get_data (DkpWakeups *wakeups, GError **error)
 	}
 out:
 	if (gvalue_ptr_array != NULL)
-		g_ptr_array_free (gvalue_ptr_array, TRUE);
+		g_ptr_array_unref (gvalue_ptr_array);
 	return array;
 }
 
@@ -195,9 +195,9 @@ dkp_wakeups_ensure_properties (DkpWakeups *wakeups)
 		goto out;
 	}
 
-	value = g_hash_table_lookup (props, "has-capability");
+	value = g_hash_table_lookup (props, "HasCapability");
 	if (value == NULL) {
-		g_warning ("No 'has-capability' property");
+		g_warning ("No 'HasCapability' property");
 		goto out;
 	}
 	wakeups->priv->has_capability = g_value_get_boolean (value);

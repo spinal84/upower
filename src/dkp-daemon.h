@@ -26,6 +26,7 @@
 #include <dbus/dbus-glib.h>
 
 #include "dkp-enum.h"
+#include "dkp-device-list.h"
 
 G_BEGIN_DECLS
 
@@ -65,10 +66,13 @@ GType dkp_daemon_error_get_type (void);
 GQuark		 dkp_daemon_error_quark		(void);
 GType		 dkp_daemon_get_type		(void);
 DkpDaemon	*dkp_daemon_new			(void);
+void		 dkp_daemon_test		(gpointer	 user_data);
 
 /* private */
 guint		 dkp_daemon_get_number_devices_of_type (DkpDaemon	*daemon,
 						 DkpDeviceType		 type);
+DkpDeviceList	*dkp_daemon_get_device_list	(DkpDaemon		*daemon);
+gboolean	 dkp_daemon_startup		(DkpDaemon		*daemon);
 
 /* exported */
 gboolean	 dkp_daemon_enumerate_devices	(DkpDaemon		*daemon,
@@ -87,9 +91,6 @@ gboolean	 dkp_daemon_can_suspend		(DkpDaemon		*daemon,
 gboolean	 dkp_daemon_can_hibernate	(DkpDaemon		*daemon,
 						 gboolean		 interactive,
 						 DBusGMethodInvocation	*context);
-gboolean	 dkp_daemon_set_lid_is_closed	(DkpDaemon		*daemon,
-						 gboolean		 lid_is_closed,
-						 gboolean		 notify);
 
 G_END_DECLS
 

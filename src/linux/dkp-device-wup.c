@@ -74,8 +74,6 @@ struct DkpDeviceWupPrivate
 	int			 fd;
 };
 
-static void	dkp_device_wup_class_init	(DkpDeviceWupClass	*klass);
-
 G_DEFINE_TYPE (DkpDeviceWup, dkp_device_wup, DKP_TYPE_DEVICE)
 #define DKP_DEVICE_WUP_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), DKP_TYPE_WUP, DkpDeviceWupPrivate))
 
@@ -87,13 +85,12 @@ static gboolean		 dkp_device_wup_refresh	 	(DkpDevice *device);
 static gboolean
 dkp_device_wup_poll_cb (DkpDeviceWup *wup)
 {
-	gboolean ret;
 	DkpDevice *device = DKP_DEVICE (wup);
 
 	egg_debug ("Polling: %s", dkp_device_get_object_path (device));
-	ret = dkp_device_wup_refresh (device);
-	if (ret)
-		dkp_device_emit_changed (device);
+	dkp_device_wup_refresh (device);
+
+	/* always continue polling */
 	return TRUE;
 }
 
@@ -298,7 +295,7 @@ static gboolean
 dkp_device_wup_coldplug (DkpDevice *device)
 {
 	DkpDeviceWup *wup = DKP_DEVICE_WUP (device);
-	GUdevDevice *d;
+	GUdevDevice *native;
 	gboolean ret = FALSE;
 	const gchar *device_file;
 	const gchar *type;
@@ -308,17 +305,13 @@ dkp_device_wup_coldplug (DkpDevice *device)
 	const gchar *product;
 
 	/* detect what kind of device we are */
-	d = dkp_device_get_d (device);
-	if (d == NULL)
-		egg_error ("could not get device");
-
-	/* get the type */
-	type = g_udev_device_get_property (d, "DKP_MONITOR_TYPE");
+	native = G_UDEV_DEVICE (dkp_device_get_native (device));
+	type = g_udev_device_get_property (native, "DKP_MONITOR_TYPE");
 	if (type == NULL || g_strcmp0 (type, "wup") != 0)
 		goto out;
 
 	/* get the device file */
-	device_file = g_udev_device_get_device_file (d);
+	device_file = g_udev_device_get_device_file (native);
 	if (device_file == NULL) {
 		egg_debug ("could not get device file for WUP device");
 		goto out;
@@ -341,10 +334,14 @@ dkp_device_wup_coldplug (DkpDevice *device)
 
 	/* attempt to clear */
 	ret = dkp_device_wup_write_command (wup, "#R,W,0;");
+	if (!ret)
+		egg_debug ("failed to clear, nonfatal");
 
 	/* setup logging interval */
 	data = g_strdup_printf ("#L,W,3,E,1,%i;", DKP_DEVICE_WUP_REFRESH_TIMEOUT);
 	ret = dkp_device_wup_write_command (wup, data);
+	if (!ret)
+		egg_debug ("failed to setup logging interval, nonfatal");
 	g_free (data);
 
 	/* dummy read */
@@ -356,15 +353,15 @@ dkp_device_wup_coldplug (DkpDevice *device)
 	g_free (data);
 
 	/* prefer DKP names */
-	vendor = g_udev_device_get_property (d, "DKP_VENDOR");
+	vendor = g_udev_device_get_property (native, "DKP_VENDOR");
 	if (vendor == NULL)
-		vendor = g_udev_device_get_property (d, "ID_VENDOR");
-	product = g_udev_device_get_property (d, "DKP_PRODUCT");
+		vendor = g_udev_device_get_property (native, "ID_VENDOR");
+	product = g_udev_device_get_property (native, "DKP_PRODUCT");
 	if (product == NULL)
-		product = g_udev_device_get_property (d, "ID_PRODUCT");
+		product = g_udev_device_get_property (native, "ID_PRODUCT");
 
 	/* hardcode some values */
-	native_path = g_udev_device_get_sysfs_path (d);
+	native_path = g_udev_device_get_sysfs_path (native);
 	g_object_set (device,
 		      "type", DKP_DEVICE_TYPE_MONITOR,
 		      "is-rechargeable", FALSE,
@@ -379,7 +376,7 @@ dkp_device_wup_coldplug (DkpDevice *device)
 
 	/* coldplug */
 	egg_debug ("coldplug");
-	ret = dkp_device_wup_refresh (device);
+	dkp_device_wup_refresh (device);
 
 	/* hardcode true, as we'll retry later if busy */
 	ret = TRUE;
@@ -397,7 +394,7 @@ static gboolean
 dkp_device_wup_refresh (DkpDevice *device)
 {
 	gboolean ret = FALSE;
-	GTimeVal time;
+	GTimeVal timeval;
 	gchar *data = NULL;
 	DkpDeviceWup *wup = DKP_DEVICE_WUP (device);
 
@@ -416,8 +413,8 @@ dkp_device_wup_refresh (DkpDevice *device)
 	}
 
 	/* reset time */
-	g_get_current_time (&time);
-	g_object_set (device, "update-time", (guint64) time.tv_sec, NULL);
+	g_get_current_time (&timeval);
+	g_object_set (device, "update-time", (guint64) timeval.tv_sec, NULL);
 
 out:
 	g_free (data);

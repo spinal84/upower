@@ -32,13 +32,13 @@
   </refsect1>
   <refsect1 role="properties">
     <title role="properties.title">Properties</title>
-    <synopsis><link linkend="Power:daemon-version">'daemon-version'</link> read      's'
-<link linkend="Power:can-suspend">'can-suspend'</link>    read      'b'
-<link linkend="Power:can-hibernate">'can-hibernate'</link>  read      'b'
-<link linkend="Power:on-battery">'on-battery'</link>     read      'b'
-<link linkend="Power:on-low-battery">'on-low-battery'</link> read      'b'
-<link linkend="Power:lid-is-closed">'lid-is-closed'</link>  read      'b'
-<link linkend="Power:lid-is-present">'lid-is-present'</link> read      'b'
+    <synopsis><link linkend="Power:DaemonVersion">'DaemonVersion'</link> read      's'
+<link linkend="Power:CanSuspend">'CanSuspend'</link>    read      'b'
+<link linkend="Power:CanHibernate">'CanHibernate'</link>  read      'b'
+<link linkend="Power:OnBattery">'OnBattery'</link>     read      'b'
+<link linkend="Power:OnLowBattery">'OnLowBattery'</link>  read      'b'
+<link linkend="Power:LidIsClosed">'LidIsClosed'</link>   read      'b'
+<link linkend="Power:LidIsPresent">'LidIsPresent'</link>  read      'b'
 </synopsis>
   </refsect1>
   <refsect1 role="desc">
@@ -105,29 +105,29 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
             Emitted when one or more properties on the object changes.
           </para>
         <variablelist role="params"/></refsect1>
-  <refsect1 role="property_details"><title role="property_details.title">Property Details</title><refsect2><title><anchor role="function" id="Power:daemon-version"/>The "daemon-version" property</title><indexterm><primary>daemon-version</primary><secondary>Power</secondary></indexterm><programlisting>'daemon-version'  read      's'
+  <refsect1 role="property_details"><title role="property_details.title">Property Details</title><refsect2><title><anchor role="function" id="Power:DaemonVersion"/>The "DaemonVersion" property</title><indexterm><primary>DaemonVersion</primary><secondary>Power</secondary></indexterm><programlisting>'DaemonVersion'  read      's'
 </programlisting></refsect2><para>
             Version of the running daemon, e.g. <literal>002</literal>.
-      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:can-suspend"/>The "can-suspend" property</title><indexterm><primary>can-suspend</primary><secondary>Power</secondary></indexterm><programlisting>'can-suspend'  read      'b'
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:CanSuspend"/>The "CanSuspend" property</title><indexterm><primary>CanSuspend</primary><secondary>Power</secondary></indexterm><programlisting>'CanSuspend'  read      'b'
 </programlisting></refsect2><para>
             Whether the system is able to suspend.
-      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:can-hibernate"/>The "can-hibernate" property</title><indexterm><primary>can-hibernate</primary><secondary>Power</secondary></indexterm><programlisting>'can-hibernate'  read      'b'
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:CanHibernate"/>The "CanHibernate" property</title><indexterm><primary>CanHibernate</primary><secondary>Power</secondary></indexterm><programlisting>'CanHibernate'  read      'b'
 </programlisting></refsect2><para>
             Whether the system is able to hibernate.
-      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:on-battery"/>The "on-battery" property</title><indexterm><primary>on-battery</primary><secondary>Power</secondary></indexterm><programlisting>'on-battery'  read      'b'
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:OnBattery"/>The "OnBattery" property</title><indexterm><primary>OnBattery</primary><secondary>Power</secondary></indexterm><programlisting>'OnBattery'  read      'b'
 </programlisting></refsect2><para>
             Indicates whether the system is running on battery power.
             This property is provided for convenience.
-      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:on-low-battery"/>The "on-low-battery" property</title><indexterm><primary>on-low-battery</primary><secondary>Power</secondary></indexterm><programlisting>'on-low-battery'  read      'b'
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:OnLowBattery"/>The "OnLowBattery" property</title><indexterm><primary>OnLowBattery</primary><secondary>Power</secondary></indexterm><programlisting>'OnLowBattery'  read      'b'
 </programlisting></refsect2><para>
             Indicates whether the system is running on battery power and if the battery is critically low.
             This property is provided for convenience.
-      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:lid-is-closed"/>The "lid-is-closed" property</title><indexterm><primary>lid-is-closed</primary><secondary>Power</secondary></indexterm><programlisting>'lid-is-closed'  read      'b'
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:LidIsClosed"/>The "LidIsClosed" property</title><indexterm><primary>LidIsClosed</primary><secondary>Power</secondary></indexterm><programlisting>'LidIsClosed'  read      'b'
 </programlisting></refsect2>
           <para>
             Indicates if the laptop lid is closed where the display cannot be seen.
           </para>
-        <variablelist role="params"/><refsect2><title><anchor role="function" id="Power:lid-is-present"/>The "lid-is-present" property</title><indexterm><primary>lid-is-present</primary><secondary>Power</secondary></indexterm><programlisting>'lid-is-present'  read      'b'
+        <variablelist role="params"/><refsect2><title><anchor role="function" id="Power:LidIsPresent"/>The "LidIsPresent" property</title><indexterm><primary>LidIsPresent</primary><secondary>Power</secondary></indexterm><programlisting>'LidIsPresent'  read      'b'
 </programlisting></refsect2>
           <para>
             If the system has a lid device.

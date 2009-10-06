@@ -1,5 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
+SUBDIRS = dummy linux
+
 INCLUDES = \
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\"		\
@@ -65,19 +67,22 @@ dbusif_DATA =							\
 devkit_power_daemon_SOURCES =					\
 	egg-debug.c						\
 	egg-debug.h						\
-	dkp-polkit.h			dkp-polkit.c		\
-	dkp-daemon.h			dkp-daemon.c		\
-	dkp-device.h			dkp-device.c		\
-	dkp-device-list.h		dkp-device-list.c	\
-	dkp-device-supply.h		dkp-device-supply.c	\
-	dkp-device-csr.h		dkp-device-csr.c	\
-	dkp-device-wup.h		dkp-device-wup.c	\
-	dkp-device-hid.h		dkp-device-hid.c	\
-	dkp-input.h			dkp-input.c		\
-	dkp-qos.h			dkp-qos.c		\
-	dkp-wakeups.h			dkp-wakeups.c		\
-	dkp-history.h			dkp-history.c		\
-	sysfs-utils.h			sysfs-utils.c		\
+	dkp-polkit.h						\
+	dkp-polkit.c						\
+	dkp-daemon.h						\
+	dkp-daemon.c						\
+	dkp-device.h						\
+	dkp-device.c						\
+	dkp-device-list.h					\
+	dkp-device-list.c					\
+	dkp-qos.h						\
+	dkp-qos.c						\
+	dkp-wakeups.h						\
+	dkp-wakeups.c						\
+	dkp-history.h						\
+	dkp-history.c						\
+	dkp-backend.h						\
+	dkp-native.h						\
 	dkp-main.c						\
 	$(BUILT_SOURCES)
 
@@ -92,9 +97,65 @@ devkit_power_daemon_LDADD =					\
 	$(USB_LIBS)						\
 	$(GIO_LIBS)						\
 	$(DBUS_GLIB_LIBS)					\
-	$(POLKIT_LIBS)						\
+	$(POLKIT_LIBS)
+
+if BACKEND_TYPE_DUMMY
+devkit_power_daemon_LDADD += 					\
+	dummy/libdkpshared.la
+endif
+
+if BACKEND_TYPE_LINUX
+devkit_power_daemon_LDADD += 					\
+	linux/libdkpshared.la					\
+	$(GUDEV_LIBS)						\
+	$(DEVKIT_POWER_LIBS)
+endif
+
+devkit_power_daemon_CFLAGS =					\
+	$(WARNINGFLAGS_C)					\
+	$(NULL)
+
+if EGG_BUILD_TESTS
+check_PROGRAMS =						\
+	dkp-self-test
+
+dkp_self_test_SOURCES =						\
+	egg-test.h						\
+	egg-test.c						\
+	egg-debug.c						\
+	egg-debug.h						\
+	dkp-self-test.c						\
+	dkp-polkit.h						\
+	dkp-polkit.c						\
+	dkp-daemon.h						\
+	dkp-daemon.c						\
+	dkp-device.h						\
+	dkp-device.c						\
+	dkp-device-list.h					\
+	dkp-device-list.c					\
+	dkp-qos.h						\
+	dkp-qos.c						\
+	dkp-wakeups.h						\
+	dkp-wakeups.c						\
+	dkp-history.h						\
+	dkp-history.c						\
+	dkp-backend.h						\
+	dkp-native.h						\
+	$(BUILT_SOURCES)
+
+dkp_self_test_LDADD =						\
+	-lm							\
+	dummy/libdkpshared.la					\
+	$(GLIB_LIBS)						\
+	$(GIO_CFLAGS)						\
+	$(SELFTEST_LIBS)					\
 	$(DEVKIT_POWER_LIBS)					\
-	$(GUDEV_LIBS)
+	$(POLKIT_LIBS)
+
+dkp_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS_C)
+
+TESTS = dkp-self-test
+endif
 
 servicedir       = $(datadir)/dbus-1/system-services
 service_in_files = org.freedesktop.DeviceKit.Power.service.in

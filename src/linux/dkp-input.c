@@ -56,8 +56,6 @@ struct DkpInputPrivate
 	DkpDaemon		*daemon;
 };
 
-static void	dkp_input_class_init	(DkpInputClass	*klass);
-
 G_DEFINE_TYPE (DkpInput, dkp_input, G_TYPE_OBJECT)
 #define DKP_INPUT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), DKP_TYPE_INPUT, DkpInputPrivate))
 
@@ -154,7 +152,9 @@ dkp_input_event_io (GIOChannel *channel, GIOCondition condition, gpointer data)
 
 		/* are we set */
 		ret = test_bit (input->priv->event.code, bitmask);
-		dkp_daemon_set_lid_is_closed (input->priv->daemon, ret, TRUE);
+		g_object_set (input->priv->daemon,
+			      "lid-is-closed", ret,
+			      NULL);
 	}
 out:
 	return TRUE;
@@ -253,8 +253,9 @@ dkp_input_coldplug (DkpInput *input, DkpDaemon *daemon, GUdevDevice *d)
 
 	/* set if we are closed */
 	egg_debug ("using %s for lid event", native_path);
-	dkp_daemon_set_lid_is_closed (daemon, test_bit (SW_LID, bitmask), FALSE);
-
+	g_object_set (input->priv->daemon,
+		      "lid-is-closed", test_bit (SW_LID, bitmask),
+		      NULL);
 out:
 	g_free (path);
 	g_free (contents);

@@ -30,6 +30,7 @@
 
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <glib/gprintf.h>
 #include <glib/gi18n-lib.h>
 #include <glib-object.h>
 #include <gudev/gudev.h>
@@ -90,8 +91,6 @@ struct DkpDeviceHidPrivate
 	int			 fd;
 };
 
-static void	dkp_device_hid_class_init	(DkpDeviceHidClass	*klass);
-
 G_DEFINE_TYPE (DkpDeviceHid, dkp_device_hid, DKP_TYPE_DEVICE)
 #define DKP_DEVICE_HID_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), DKP_TYPE_HID, DkpDeviceHidPrivate))
 
@@ -133,13 +132,12 @@ out:
 static gboolean
 dkp_device_hid_poll (DkpDeviceHid *hid)
 {
-	gboolean ret;
 	DkpDevice *device = DKP_DEVICE (hid);
 
 	egg_debug ("Polling: %s", dkp_device_get_object_path (device));
-	ret = dkp_device_hid_refresh (device);
-	if (ret)
-		dkp_device_emit_changed (device);
+	dkp_device_hid_refresh (device);
+
+	/* always continue polling */
 	return TRUE;
 }
 
@@ -173,8 +171,8 @@ dkp_device_hid_convert_device_technology (const gchar *type)
 {
 	if (type == NULL)
 		return DKP_DEVICE_TECHNOLOGY_UNKNOWN;
-	if (strcasecmp (type, "pb") == 0 ||
-	    strcasecmp (type, "pbac") == 0)
+	if (g_ascii_strcasecmp (type, "pb") == 0 ||
+	    g_ascii_strcasecmp (type, "pbac") == 0)
 		return DKP_DEVICE_TECHNOLOGY_LEAD_ACID;
 	return DKP_DEVICE_TECHNOLOGY_UNKNOWN;
 }
@@ -308,24 +306,20 @@ static gboolean
 dkp_device_hid_coldplug (DkpDevice *device)
 {
 	DkpDeviceHid *hid = DKP_DEVICE_HID (device);
-	GUdevDevice *d;
+	GUdevDevice *native;
 	gboolean ret = FALSE;
 	const gchar *device_file;
 	const gchar *type;
 	const gchar *vendor;
 
 	/* detect what kind of device we are */
-	d = dkp_device_get_d (device);
-	if (d == NULL)
-		egg_error ("could not get device");
-
-	/* get the type */
-	type = g_udev_device_get_property (d, "DKP_BATTERY_TYPE");
+	native = G_UDEV_DEVICE (dkp_device_get_native (device));
+	type = g_udev_device_get_property (native, "DKP_BATTERY_TYPE");
 	if (type == NULL || g_strcmp0 (type, "ups") != 0)
 		goto out;
 
 	/* get the device file */
-	device_file = g_udev_device_get_device_file (d);
+	device_file = g_udev_device_get_device_file (native);
 	if (device_file == NULL) {
 		egg_debug ("could not get device file for HID device");
 		goto out;
@@ -347,9 +341,9 @@ dkp_device_hid_coldplug (DkpDevice *device)
 	}
 
 	/* prefer DKP names */
-	vendor = g_udev_device_get_property (d, "DKP_VENDOR");
+	vendor = g_udev_device_get_property (native, "DKP_VENDOR");
 	if (vendor == NULL)
-		vendor = g_udev_device_get_property (d, "ID_VENDOR");
+		vendor = g_udev_device_get_property (native, "ID_VENDOR");
 
 	/* hardcode some values */
 	g_object_set (device,
@@ -385,15 +379,15 @@ dkp_device_hid_refresh (DkpDevice *device)
 {
 	gboolean set = FALSE;
 	gboolean ret = FALSE;
-	GTimeVal time;
+	GTimeVal timeval;
 	guint i;
 	struct hiddev_event ev[64];
 	int rd;
 	DkpDeviceHid *hid = DKP_DEVICE_HID (device);
 
 	/* reset time */
-	g_get_current_time (&time);
-	g_object_set (device, "update-time", (guint64) time.tv_sec, NULL);
+	g_get_current_time (&timeval);
+	g_object_set (device, "update-time", (guint64) timeval.tv_sec, NULL);
 
 	/* read any data */
 	rd = read (hid->priv->fd, ev, sizeof (ev));

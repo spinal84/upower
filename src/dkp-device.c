@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  * Copyright (C) 2008 David Zeuthen <davidz@redhat.com>
- * Copyright (C) 2008 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2008-2009 Richard Hughes <richard@hughsie.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,12 +31,10 @@
 #include <glib-object.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
-#include <gudev/gudev.h>
 
-#include "sysfs-utils.h"
 #include "egg-debug.h"
 
-#include "dkp-device-supply.h"
+#include "dkp-native.h"
 #include "dkp-device.h"
 #include "dkp-history.h"
 #include "dkp-history-obj.h"
@@ -51,8 +49,9 @@ struct DkpDevicePrivate
 	DBusGProxy		*system_bus_proxy;
 	DkpDaemon		*daemon;
 	DkpHistory		*history;
-	GUdevDevice		*d;
+	GObject			*native;
 	gboolean		 has_ever_refresh;
+	gboolean		 during_coldplug;
 
 	/* properties */
 	guint64			 update_time;
@@ -84,8 +83,6 @@ struct DkpDevicePrivate
 	gchar			*recall_url;
 };
 
-static void     dkp_device_class_init		(DkpDeviceClass *klass);
-static void     dkp_device_init			(DkpDevice *device);
 static gboolean	dkp_device_register_device	(DkpDevice *device);
 
 enum
@@ -123,11 +120,11 @@ enum
 
 enum
 {
-	CHANGED_SIGNAL,
-	LAST_SIGNAL,
+	SIGNAL_CHANGED,
+	SIGNAL_LAST,
 };
 
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint signals[SIGNAL_LAST] = { 0 };
 
 G_DEFINE_TYPE (DkpDevice, dkp_device, G_TYPE_OBJECT)
 #define DKP_DEVICE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), DKP_TYPE_DEVICE, DkpDevicePrivate))
@@ -278,10 +275,10 @@ dkp_device_set_property (GObject *object, guint prop_id, const GValue *value, GP
 	DkpDevice *device = DKP_DEVICE (object);
 
 	switch (prop_id) {
-//	case PROP_NATIVE_PATH:
-//		g_free (device->priv->native_path);
-//		device->priv->native_path = g_strdup (g_value_get_string (value));
-//		break;
+	case PROP_NATIVE_PATH:
+		g_free (device->priv->native_path);
+		device->priv->native_path = g_strdup (g_value_get_string (value));
+		break;
 	case PROP_VENDOR:
 		g_free (device->priv->vendor);
 		device->priv->vendor = g_strdup (g_value_get_string (value));
@@ -369,18 +366,6 @@ dkp_device_set_property (GObject *object, guint prop_id, const GValue *value, GP
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
 	}
-}
-
-/**
- * dkp_device_removed:
- **/
-void
-dkp_device_removed (DkpDevice *device)
-{
-	//DkpDeviceClass *klass = DKP_DEVICE_GET_CLASS (device);
-	//klass->removed (device);
-	g_return_if_fail (DKP_IS_DEVICE (device));
-	egg_warning ("do something here?");
 }
 
 /**
@@ -489,8 +474,32 @@ dkp_device_get_id (DkpDevice *device)
 		id = g_string_free (string, FALSE);
 
 	} else {
-		/* generic fallback */
-		id = g_strdup_printf ("%s-%s-%s", device->priv->vendor, device->priv->model, device->priv->serial);
+		/* generic fallback, get what data we can */
+		string = g_string_new ("");
+		if (device->priv->vendor != NULL) {
+			g_string_append (string, device->priv->vendor);
+			g_string_append_c (string, '-');
+		}
+		if (device->priv->model != NULL) {
+			g_string_append (string, device->priv->model);
+			g_string_append_c (string, '-');
+		}
+		if (device->priv->serial != NULL) {
+			g_string_append (string, device->priv->serial);
+			g_string_append_c (string, '-');
+		}
+
+		/* make sure we are sane */
+		if (string->len == 0) {
+			/* just use something generic */
+			g_string_append (string, "generic_id");
+		} else {
+			/* remove trailing '-' */
+			g_string_set_size (string, string->len - 1);
+		}
+
+		/* the id may have invalid chars that need to be replaced */
+		id = g_string_free (string, FALSE);
 	}
 
 	g_strdelimit (id, "\\\t\"?' /,.", '_');
@@ -518,7 +527,7 @@ dkp_device_get_daemon (DkpDevice *device)
  * Return %TRUE on success, %FALSE if we failed to get data and should be removed
  **/
 gboolean
-dkp_device_coldplug (DkpDevice *device, DkpDaemon *daemon, GUdevDevice *d)
+dkp_device_coldplug (DkpDevice *device, DkpDaemon *daemon, GObject *native)
 {
 	gboolean ret;
 	const gchar *native_path;
@@ -528,30 +537,37 @@ dkp_device_coldplug (DkpDevice *device, DkpDaemon *daemon, GUdevDevice *d)
 	g_return_val_if_fail (DKP_IS_DEVICE (device), FALSE);
 
 	/* save */
-	device->priv->d = g_object_ref (d);
+	device->priv->native = g_object_ref (native);
 	device->priv->daemon = g_object_ref (daemon);
 
-	native_path = g_udev_device_get_sysfs_path (d);
+	native_path = dkp_native_get_native_path (native);
 	device->priv->native_path = g_strdup (native_path);
 
+	/* stop signals and callbacks */
+	egg_debug ("device now coldplug");
+	g_object_freeze_notify (G_OBJECT(device));
+	device->priv->during_coldplug = TRUE;
+
 	/* coldplug source */
-	ret = klass->coldplug (device);
-	if (!ret) {
-		egg_debug ("failed to coldplug %p", device);
-		goto out;
+	if (klass->coldplug != NULL) {
+		ret = klass->coldplug (device);
+		if (!ret) {
+			egg_debug ("failed to coldplug %s", device->priv->native_path);
+			goto out;
+		}
 	}
 
 	/* only put on the bus if we succeeded */
 	ret = dkp_device_register_device (device);
 	if (!ret) {
-		egg_warning ("failed to register device");
+		egg_warning ("failed to register device %s", device->priv->native_path);
 		goto out;
 	}
 
 	/* force a refresh, although failure isn't fatal */
 	ret = dkp_device_refresh_internal (device);
 	if (!ret) {
-		egg_debug ("failed to refresh");
+		egg_debug ("failed to refresh %s", device->priv->native_path);
 
 		/* TODO: refresh should really have seporate
 		 *       success _and_ changed parameters */
@@ -566,6 +582,10 @@ dkp_device_coldplug (DkpDevice *device, DkpDaemon *daemon, GUdevDevice *d)
 	g_free (id);
 
 out:
+	/* start signals and callbacks */
+	g_object_thaw_notify (G_OBJECT(device));
+	device->priv->during_coldplug = FALSE;
+	egg_debug ("device now not coldplug");
 	return ret;
 }
 
@@ -626,10 +646,8 @@ dkp_device_get_statistics (DkpDevice *device, const gchar *type, DBusGMethodInvo
 
 	dbus_g_method_return (context, complex);
 out:
-	if (array != NULL) {
-		g_ptr_array_foreach (array, (GFunc) dkp_stats_obj_free, NULL);
-		g_ptr_array_free (array, TRUE);
-	}
+	if (array != NULL)
+		g_ptr_array_unref (array);
 	return TRUE;
 }
 
@@ -693,8 +711,7 @@ dkp_device_get_history (DkpDevice *device, const gchar *type_string, guint times
 	dbus_g_method_return (context, complex);
 out:
 	if (array != NULL) {
-		g_ptr_array_foreach (array, (GFunc) dkp_history_obj_free, NULL);
-		g_ptr_array_free (array, TRUE);
+		g_ptr_array_unref (array);
 	}
 	return TRUE;
 }
@@ -705,8 +722,12 @@ out:
 gboolean
 dkp_device_refresh_internal (DkpDevice *device)
 {
-	gboolean ret;
+	gboolean ret = FALSE;
 	DkpDeviceClass *klass = DKP_DEVICE_GET_CLASS (device);
+
+	/* not implemented */
+	if (klass->refresh == NULL)
+		goto out;
 
 	/* do the refresh */
 	ret = klass->refresh (device);
@@ -742,32 +763,6 @@ dkp_device_refresh (DkpDevice *device, DBusGMethodInvocation *context)
 	return ret;
 }
 
-
-/**
- * dkp_device_changed:
- **/
-gboolean
-dkp_device_changed (DkpDevice *device, GUdevDevice *d, gboolean synthesized)
-{
-	gboolean ret;
-
-	g_return_val_if_fail (DKP_IS_DEVICE (device), FALSE);
-
-	g_object_unref (device->priv->d);
-	device->priv->d = g_object_ref (d);
-
-	ret = dkp_device_refresh_internal (device);
-
-	/* we failed to refresh, don't emit changed */
-	if (!ret)
-		goto out;
-
-	/* no, it's good .. keep it */
-	dkp_device_emit_changed (device);
-out:
-	return ret;
-}
-
 /**
  * dkp_device_get_object_path:
  **/
@@ -778,38 +773,11 @@ dkp_device_get_object_path (DkpDevice *device)
 	return device->priv->object_path;
 }
 
-GUdevDevice *
-dkp_device_get_d (DkpDevice *device)
+GObject *
+dkp_device_get_native (DkpDevice *device)
 {
 	g_return_val_if_fail (DKP_IS_DEVICE (device), NULL);
-	return device->priv->d;
-}
-
-/**
- * dkp_device_emit_changed:
- **/
-void
-dkp_device_emit_changed (DkpDevice *device)
-{
-	g_return_if_fail (DKP_IS_DEVICE (device));
-
-	/* save new history */
-	dkp_history_set_state (device->priv->history, device->priv->state);
-	dkp_history_set_charge_data (device->priv->history, device->priv->percentage);
-	dkp_history_set_rate_data (device->priv->history, device->priv->energy_rate);
-	dkp_history_set_time_full_data (device->priv->history, device->priv->time_to_full);
-	dkp_history_set_time_empty_data (device->priv->history, device->priv->time_to_empty);
-
-	egg_debug ("emitting changed on %s", device->priv->native_path);
-
-	/*  The order here matters; we want Device::Changed() before
-	 *  the DeviceChanged() signal on the main object; otherwise
-	 *  clients that only listens on DeviceChanged() won't be
-	 *  fully caught up...
-	 */
-	g_signal_emit (device, signals[CHANGED_SIGNAL], 0);
-	g_signal_emit_by_name (device->priv->daemon, "device-changed",
-			       device->priv->object_path, NULL);
+	return device->priv->native;
 }
 
 /**
@@ -869,6 +837,37 @@ dkp_device_register_device (DkpDevice *device)
 }
 
 /**
+ * dkp_device_perhaps_changed_cb:
+ **/
+static void
+dkp_device_perhaps_changed_cb (GObject *object, GParamSpec *pspec, DkpDevice *device)
+{
+	g_return_if_fail (DKP_IS_DEVICE (device));
+
+	/* don't proxy during coldplug */
+	if (device->priv->during_coldplug)
+		return;
+
+	/* save new history */
+	dkp_history_set_state (device->priv->history, device->priv->state);
+	dkp_history_set_charge_data (device->priv->history, device->priv->percentage);
+	dkp_history_set_rate_data (device->priv->history, device->priv->energy_rate);
+	dkp_history_set_time_full_data (device->priv->history, device->priv->time_to_full);
+	dkp_history_set_time_empty_data (device->priv->history, device->priv->time_to_empty);
+
+	/*  The order here matters; we want Device::Changed() before
+	 *  the DeviceChanged() signal on the main object; otherwise
+	 *  clients that only listens on DeviceChanged() won't be
+	 *  fully caught up...
+	 */
+	egg_debug ("emitting changed on %s", device->priv->native_path);
+	g_signal_emit (device, signals[SIGNAL_CHANGED], 0);
+	egg_debug ("emitting device-changed on %s", device->priv->native_path);
+	g_signal_emit_by_name (device->priv->daemon, "device-changed",
+			       device->priv->object_path, NULL);
+}
+
+/**
  * dkp_device_init:
  **/
 static void
@@ -881,8 +880,9 @@ dkp_device_init (DkpDevice *device)
 	device->priv->system_bus_connection = NULL;
 	device->priv->system_bus_proxy = NULL;
 	device->priv->daemon = NULL;
-	device->priv->d = NULL;
+	device->priv->native = NULL;
 	device->priv->has_ever_refresh = FALSE;
+	device->priv->during_coldplug = FALSE;
 	device->priv->history = dkp_history_new ();
 
 	device->priv->system_bus_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
@@ -890,6 +890,7 @@ dkp_device_init (DkpDevice *device)
 		egg_error ("error getting system bus: %s", error->message);
 		g_error_free (error);
 	}
+	g_signal_connect (device, "notify::update-time", G_CALLBACK (dkp_device_perhaps_changed_cb), device);
 }
 
 /**
@@ -905,8 +906,10 @@ dkp_device_finalize (GObject *object)
 
 	device = DKP_DEVICE (object);
 	g_return_if_fail (device->priv != NULL);
-	g_object_unref (device->priv->d);
-	g_object_unref (device->priv->daemon);
+	if (device->priv->native != NULL)
+		g_object_unref (device->priv->native);
+	if (device->priv->daemon != NULL)
+		g_object_unref (device->priv->daemon);
 	g_object_unref (device->priv->history);
 	g_free (device->priv->object_path);
 	g_free (device->priv->vendor);
@@ -932,7 +935,7 @@ dkp_device_class_init (DkpDeviceClass *klass)
 
 	g_type_class_add_private (klass, sizeof (DkpDevicePrivate));
 
-	signals[CHANGED_SIGNAL] =
+	signals[SIGNAL_CHANGED] =
 		g_signal_new ("changed",
 			      G_OBJECT_CLASS_TYPE (klass),
 			      G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
@@ -1184,4 +1187,42 @@ dkp_device_class_init (DkpDeviceClass *klass)
 
 	dbus_g_error_domain_register (DKP_DEVICE_ERROR, NULL, DKP_DEVICE_TYPE_ERROR);
 }
+
+/**
+ * dkp_device_new:
+ **/
+DkpDevice *
+dkp_device_new (void)
+{
+	DkpDevice *device;
+	device = DKP_DEVICE (g_object_new (DKP_TYPE_DEVICE, NULL));
+	return device;
+}
+
+/***************************************************************************
+ ***                          MAKE CHECK TESTS                           ***
+ ***************************************************************************/
+#ifdef EGG_TEST
+#include "egg-test.h"
+
+void
+dkp_device_test (gpointer user_data)
+{
+	EggTest *test = (EggTest *) user_data;
+	DkpDevice *device;
+
+	if (!egg_test_start (test, "DkpDevice"))
+		return;
+
+	/************************************************************/
+	egg_test_title (test, "get instance");
+	device = dkp_device_new ();
+	egg_test_assert (test, device != NULL);
+
+	/* unref */
+	g_object_unref (device);
+
+	egg_test_end (test);
+}
+#endif
 

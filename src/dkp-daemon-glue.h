@@ -53,7 +53,7 @@ G_BEGIN_DECLS
 #endif /* !G_ENABLE_DEBUG */
 
 
-/* NONE:POINTER (/tmp/dbus-binding-tool-c-marshallers.UOPMXU:1) */
+/* NONE:POINTER */
 #define dbus_glib_marshal_dkp_daemon_VOID__POINTER	g_cclosure_marshal_VOID__POINTER
 #define dbus_glib_marshal_dkp_daemon_NONE__POINTER	dbus_glib_marshal_dkp_daemon_VOID__POINTER
 
@@ -74,6 +74,6 @@ const DBusGObjectInfo dbus_glib_dkp_daemon_object_info = {
   3,
 "org.freedesktop.DeviceKit.Power\0EnumerateDevices\0A\0devices\0O\0F\0N\0ao\0\0org.freedesktop.DeviceKit.Power\0Suspend\0A\0\0org.freedesktop.DeviceKit.Power\0Hibernate\0A\0\0\0",
 "org.freedesktop.DeviceKit.Power\0DeviceAdded\0org.freedesktop.DeviceKit.Power\0DeviceRemoved\0org.freedesktop.DeviceKit.Power\0DeviceChanged\0org.freedesktop.DeviceKit.Power\0Changed\0\0",
-"org.freedesktop.DeviceKit.Power\0daemon-version\0org.freedesktop.DeviceKit.Power\0can-suspend\0org.freedesktop.DeviceKit.Power\0can-hibernate\0org.freedesktop.DeviceKit.Power\0on-battery\0org.freedesktop.DeviceKit.Power\0on-low-battery\0org.freedesktop.DeviceKit.Power\0lid-is-closed\0org.freedesktop.DeviceKit.Power\0lid-is-present\0\0"
+"org.freedesktop.DeviceKit.Power\0DaemonVersion\0org.freedesktop.DeviceKit.Power\0CanSuspend\0org.freedesktop.DeviceKit.Power\0CanHibernate\0org.freedesktop.DeviceKit.Power\0OnBattery\0org.freedesktop.DeviceKit.Power\0OnLowBattery\0org.freedesktop.DeviceKit.Power\0LidIsClosed\0org.freedesktop.DeviceKit.Power\0LidIsPresent\0\0"
 };
 
