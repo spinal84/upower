@@ -181,3 +181,116 @@ devkit_power_marshal_VOID__STRING_INT (GClosure     *closure,
             data2);
 }
 
+/* VOID:POINTER,BOOLEAN (../src/dkp-marshal.list:4) */
+void
+devkit_power_marshal_VOID__POINTER_BOOLEAN (GClosure     *closure,
+                                            GValue       *return_value G_GNUC_UNUSED,
+                                            guint         n_param_values,
+                                            const GValue *param_values,
+                                            gpointer      invocation_hint G_GNUC_UNUSED,
+                                            gpointer      marshal_data)
+{
+  typedef void (*GMarshalFunc_VOID__POINTER_BOOLEAN) (gpointer     data1,
+                                                      gpointer     arg_1,
+                                                      gboolean     arg_2,
+                                                      gpointer     data2);
+  register GMarshalFunc_VOID__POINTER_BOOLEAN callback;
+  register GCClosure *cc = (GCClosure*) closure;
+  register gpointer data1, data2;
+
+  g_return_if_fail (n_param_values == 3);
+
+  if (G_CCLOSURE_SWAP_DATA (closure))
+    {
+      data1 = closure->data;
+      data2 = g_value_peek_pointer (param_values + 0);
+    }
+  else
+    {
+      data1 = g_value_peek_pointer (param_values + 0);
+      data2 = closure->data;
+    }
+  callback = (GMarshalFunc_VOID__POINTER_BOOLEAN) (marshal_data ? marshal_data : cc->callback);
+
+  callback (data1,
+            g_marshal_value_peek_pointer (param_values + 1),
+            g_marshal_value_peek_boolean (param_values + 2),
+            data2);
+}
+
+/* VOID:POINTER,POINTER (../src/dkp-marshal.list:5) */
+void
+devkit_power_marshal_VOID__POINTER_POINTER (GClosure     *closure,
+                                            GValue       *return_value G_GNUC_UNUSED,
+                                            guint         n_param_values,
+                                            const GValue *param_values,
+                                            gpointer      invocation_hint G_GNUC_UNUSED,
+                                            gpointer      marshal_data)
+{
+  typedef void (*GMarshalFunc_VOID__POINTER_POINTER) (gpointer     data1,
+                                                      gpointer     arg_1,
+                                                      gpointer     arg_2,
+                                                      gpointer     data2);
+  register GMarshalFunc_VOID__POINTER_POINTER callback;
+  register GCClosure *cc = (GCClosure*) closure;
+  register gpointer data1, data2;
+
+  g_return_if_fail (n_param_values == 3);
+
+  if (G_CCLOSURE_SWAP_DATA (closure))
+    {
+      data1 = closure->data;
+      data2 = g_value_peek_pointer (param_values + 0);
+    }
+  else
+    {
+      data1 = g_value_peek_pointer (param_values + 0);
+      data2 = closure->data;
+    }
+  callback = (GMarshalFunc_VOID__POINTER_POINTER) (marshal_data ? marshal_data : cc->callback);
+
+  callback (data1,
+            g_marshal_value_peek_pointer (param_values + 1),
+            g_marshal_value_peek_pointer (param_values + 2),
+            data2);
+}
+
+/* VOID:POINTER,POINTER,BOOLEAN (../src/dkp-marshal.list:6) */
+void
+devkit_power_marshal_VOID__POINTER_POINTER_BOOLEAN (GClosure     *closure,
+                                                    GValue       *return_value G_GNUC_UNUSED,
+                                                    guint         n_param_values,
+                                                    const GValue *param_values,
+                                                    gpointer      invocation_hint G_GNUC_UNUSED,
+                                                    gpointer      marshal_data)
+{
+  typedef void (*GMarshalFunc_VOID__POINTER_POINTER_BOOLEAN) (gpointer     data1,
+                                                              gpointer     arg_1,
+                                                              gpointer     arg_2,
+                                                              gboolean     arg_3,
+                                                              gpointer     data2);
+  register GMarshalFunc_VOID__POINTER_POINTER_BOOLEAN callback;
+  register GCClosure *cc = (GCClosure*) closure;
+  register gpointer data1, data2;
+
+  g_return_if_fail (n_param_values == 4);
+
+  if (G_CCLOSURE_SWAP_DATA (closure))
+    {
+      data1 = closure->data;
+      data2 = g_value_peek_pointer (param_values + 0);
+    }
+  else
+    {
+      data1 = g_value_peek_pointer (param_values + 0);
+      data2 = closure->data;
+    }
+  callback = (GMarshalFunc_VOID__POINTER_POINTER_BOOLEAN) (marshal_data ? marshal_data : cc->callback);
+
+  callback (data1,
+            g_marshal_value_peek_pointer (param_values + 1),
+            g_marshal_value_peek_pointer (param_values + 2),
+            g_marshal_value_peek_boolean (param_values + 3),
+            data2);
+}
+

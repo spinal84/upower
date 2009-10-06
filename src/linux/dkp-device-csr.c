@@ -28,6 +28,7 @@
 
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <glib/gprintf.h>
 #include <glib/gi18n-lib.h>
 #include <glib-object.h>
 #include <gudev/gudev.h>
@@ -61,8 +62,6 @@ struct DkpDeviceCsrPrivate
 	struct usb_device	*device;
 };
 
-static void	dkp_device_csr_class_init	(DkpDeviceCsrClass	*klass);
-
 G_DEFINE_TYPE (DkpDeviceCsr, dkp_device_csr, DKP_TYPE_DEVICE)
 #define DKP_DEVICE_CSR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), DKP_TYPE_CSR, DkpDeviceCsrPrivate))
 
@@ -74,13 +73,12 @@ static gboolean		 dkp_device_csr_refresh	 	(DkpDevice *device);
 static gboolean
 dkp_device_csr_poll_cb (DkpDeviceCsr *csr)
 {
-	gboolean ret;
 	DkpDevice *device = DKP_DEVICE (csr);
 
 	egg_debug ("Polling: %s", dkp_device_get_object_path (device));
-	ret = dkp_device_csr_refresh (device);
-	if (ret)
-		dkp_device_emit_changed (device);
+	dkp_device_csr_refresh (device);
+
+	/* always continue polling */
 	return TRUE;
 }
 
@@ -101,13 +99,13 @@ dkp_device_csr_find_device (DkpDeviceCsr *csr)
 
 	for (curr_bus = usb_busses; curr_bus != NULL; curr_bus = curr_bus->next) {
 		/* egg_debug ("Checking bus: [%s]", curr_bus->dirname); */
-		if (g_strcasecmp (dir_name, curr_bus->dirname))
+		if (g_ascii_strcasecmp (dir_name, curr_bus->dirname))
 			continue;
 
 		for (curr_device = curr_bus->devices; curr_device != NULL;
 		     curr_device = curr_device->next) {
 			/* egg_debug ("Checking port: [%s]", curr_device->filename); */
-			if (g_strcasecmp (filename, curr_device->filename))
+			if (g_ascii_strcasecmp (filename, curr_device->filename))
 				continue;
 			egg_debug ("Matched device: [%s][%s][%04X:%04X]", curr_bus->dirname,
 				curr_device->filename,
@@ -133,20 +131,16 @@ static gboolean
 dkp_device_csr_coldplug (DkpDevice *device)
 {
 	DkpDeviceCsr *csr = DKP_DEVICE_CSR (device);
-	GUdevDevice *d;
+	GUdevDevice *native;
 	gboolean ret = FALSE;
 	const gchar *type;
 	const gchar *native_path;
 	const gchar *vendor;
 	const gchar *product;
 
-	/* detect what kind of device we are */
-	d = dkp_device_get_d (device);
-	if (d == NULL)
-		egg_error ("could not get device");
-
 	/* get the type */
-	type = g_udev_device_get_property (d, "DKP_BATTERY_TYPE");
+	native = G_UDEV_DEVICE (dkp_device_get_native (device));
+	type = g_udev_device_get_property (native, "DKP_BATTERY_TYPE");
 	if (type == NULL)
 		goto out;
 
@@ -161,7 +155,7 @@ dkp_device_csr_coldplug (DkpDevice *device)
 	}
 
 	/* get what USB device we are */
-	native_path = g_udev_device_get_sysfs_path (d);
+	native_path = g_udev_device_get_sysfs_path (native);
 	csr->priv->bus_num = sysfs_get_int (native_path, "busnum");
 	csr->priv->dev_num = sysfs_get_int (native_path, "devnum");
 
@@ -179,18 +173,18 @@ dkp_device_csr_coldplug (DkpDevice *device)
 	}
 
 	/* get optional quirk parameters */
-	ret = g_udev_device_has_property (d, "DKP_CSR_DUAL");
+	ret = g_udev_device_has_property (native, "DKP_CSR_DUAL");
 	if (ret)
-		csr->priv->is_dual = g_udev_device_get_property_as_boolean (d, "DKP_CSR_DUAL");
+		csr->priv->is_dual = g_udev_device_get_property_as_boolean (native, "DKP_CSR_DUAL");
 	egg_debug ("is_dual=%i", csr->priv->is_dual);
 
 	/* prefer DKP names */
-	vendor = g_udev_device_get_property (d, "DKP_VENDOR");
+	vendor = g_udev_device_get_property (native, "DKP_VENDOR");
 	if (vendor == NULL)
-		vendor = g_udev_device_get_property (d, "ID_VENDOR");
-	product = g_udev_device_get_property (d, "DKP_PRODUCT");
+		vendor = g_udev_device_get_property (native, "ID_VENDOR");
+	product = g_udev_device_get_property (native, "DKP_PRODUCT");
 	if (product == NULL)
-		product = g_udev_device_get_property (d, "ID_PRODUCT");
+		product = g_udev_device_get_property (native, "ID_PRODUCT");
 
 	/* hardcode some values */
 	g_object_set (device,
@@ -225,7 +219,7 @@ static gboolean
 dkp_device_csr_refresh (DkpDevice *device)
 {
 	gboolean ret = FALSE;
-	GTimeVal time;
+	GTimeVal timeval;
 	DkpDeviceCsr *csr = DKP_DEVICE_CSR (device);
 	usb_dev_handle *handle = NULL;
 	char buf[80];
@@ -233,8 +227,8 @@ dkp_device_csr_refresh (DkpDevice *device)
 	gdouble percentage;
 	guint written;
 
-	g_get_current_time (&time);
-	g_object_set (device, "update-time", (guint64) time.tv_sec, NULL);
+	g_get_current_time (&timeval);
+	g_object_set (device, "update-time", (guint64) timeval.tv_sec, NULL);
 
 	/* For dual receivers C502, C504 and C505, the mouse is the
 	 * second device and uses an addr of 1 in the value and index

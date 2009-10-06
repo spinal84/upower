@@ -1,8 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59c)
-AC_INIT(DeviceKit-power, 010, http://lists.freedesktop.org/mailman/listinfo/devkit-devel)
-AM_INIT_AUTOMAKE(DeviceKit-power, 010)
+AC_INIT(DeviceKit-power, 011, http://lists.freedesktop.org/mailman/listinfo/devkit-devel)
+AM_INIT_AUTOMAKE(DeviceKit-power, 011)
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
@@ -19,10 +19,9 @@ AC_SUBST(VERSION)
 # increment;
 # CURRENT	If the API or ABI interface has changed (reset REVISION to 0)
 # REVISION	If the API and ABI remains the same, but bugs are fixed.
-# AGE		If libpackagekit can be linked into executables which can be
-# 		built with previous versions of this library. Don't use.
+# AGE		Don't use.
 LT_CURRENT=1
-LT_REVISION=0
+LT_REVISION=1
 LT_AGE=0
 AC_SUBST(LT_CURRENT)
 AC_SUBST(LT_REVISION)
@@ -67,85 +66,65 @@ AC_SUBST(slashlibdir)
 #### gcc warning flags
 
 dnl ---------------------------------------------------------------------------
-dnl - Extra verbose warning switches, disable if needed
+dnl - Extra verbose warning switches
 dnl ---------------------------------------------------------------------------
+CPPFLAGS="$CPPFLAGS -DG_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_SINGLE_INCLUDES"
+CPPFLAGS="$CPPFLAGS -DG_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED"
+CPPFLAGS="$CPPFLAGS -DGDK_MULTIHEAD_SAFE -DGTK_MULTIHEAD_SAFE"
+CPPFLAGS="$CPPFLAGS -DGSEAL_ENABLE"
+
+dnl ---------------------------------------------------------------------------
+dnl - Use strict options (default enabled for devs, disabled in releases)
+dnl ---------------------------------------------------------------------------
+dnl if .git directory is present, considering we are working in the repository
+if test -d ".git"; then
+	default_strict=yes
+else
+	default_strict=no
+fi
+
+AC_ARG_ENABLE(strict, AC_HELP_STRING([--enable-strict],
+		[Enable strict compilation options]), enable_strict=$enableval,
+		enable_strict=$default_strict)
+if test x$enable_strict != xno; then
+	if test "$GCC" = "yes"; then
+		WARNINGFLAGS_C="$WARNINGFLAGS_C -Werror"
+	fi
+fi
+
 if test "$GCC" = "yes"; then
-	CPPFLAGS="$CPPFLAGS -Werror -Wcast-align -Wno-uninitialized"
-	CPPFLAGS="$CPPFLAGS -Wall -Wformat-security"
-#	CPPFLAGS="$CPPFLAGS -Wall"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wall"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wcast-align -Wno-uninitialized"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wmissing-declarations"
+#	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wredundant-decls"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wpointer-arith"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wcast-align"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wwrite-strings"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Winit-self"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wreturn-type"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wformat-nonliteral"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wformat-security"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wmissing-include-dirs"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wmissing-format-attribute"
+#	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wclobbered"
+#	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wempty-body"
+#	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wignored-qualifiers"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wsign-compare"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wtype-limits"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wuninitialized"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Waggregate-return"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wdeclaration-after-statement"
+#	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wshadow"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wno-strict-aliasing"
+#	WARNINGFLAGS_C="$WARNINGFLAGS_C -Winline"
+#	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wmissing-parameter-type"
+#	WARNINGFLAGS_C="$WARNINGFLAGS_C -Woverride-init"
+else
+	WARNINGFLAGS_C=""
 fi
+AC_SUBST(WARNINGFLAGS_C)
 
-if test "x$GCC" = "xyes"; then
-  changequote(,)dnl
-  case " $CFLAGS " in
-  *[\ \	]-Wall[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wall" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wchar-subscripts[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wchar-subscripts" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wmissing-declarations[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wmissing-declarations" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wnested-externs[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wnested-externs" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wpointer-arith[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wpointer-arith" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wcast-align[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wcast-align" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wsign-compare[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wsign-compare" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wno-strict-aliasing[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wno-strict-aliasing" ;;
-  esac
-
-  if test "x$enable_ansi" = "xyes"; then
-    case " $CFLAGS " in
-    *[\ \	]-ansi[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -ansi" ;;
-    esac
-
-    case " $CFLAGS " in
-    *[\ \	]-D_POSIX_C_SOURCE*) ;;
-    *) CFLAGS="$CFLAGS -D_POSIX_C_SOURCE=199309L" ;;
-    esac
-
-    case " $CFLAGS " in
-    *[\ \	]-D_BSD_SOURCE[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -D_BSD_SOURCE" ;;
-    esac
-
-    case " $CFLAGS " in
-    *[\ \	]-pedantic[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -pedantic" ;;
-    esac
-  fi
-  changequote([,])dnl
-fi
-
-PKG_CHECK_MODULES(GUDEV, [gudev-1.0 >= 001])
-AC_SUBST(GUDEV_CFLAGS)
-AC_SUBST(GUDEV_LIBS)
-
-PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.6.0])
+PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.21.5])
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
 
@@ -165,9 +144,47 @@ PKG_CHECK_MODULES(GIO, [gio-2.0 >= 2.16.1])
 AC_SUBST(GIO_CFLAGS)
 AC_SUBST(GIO_LIBS)
 
-dnl Check libusb
-AC_CHECK_HEADERS(usb.h, , [AC_MSG_ERROR([Can't find usb.h. Please install libusb.])])
-AC_CHECK_LIB([usb], [usb_find_devices], [], [AC_MSG_ERROR([Can't use libusb.])])
+dnl ---------------------------------------------------------------------------
+dnl - Compile time default choice of backend
+dnl ---------------------------------------------------------------------------
+AC_ARG_WITH([backend],
+	    AS_HELP_STRING([--with-backend=<option>],
+			   [Default backend to use linux, dummy (dummy)]))
+# default to a sane option
+if test x$with_backend = x; then
+	if test -e /usr/include/gudev-1.0/gudev/gudev.h ; then
+		with_backend=linux
+	else
+		with_backend=dummy
+	fi
+fi
+AC_DEFINE_UNQUOTED(BACKEND, "$with_backend", [backend])
+AC_SUBST(BACKEND, "$with_backend")
+
+# only need GUdev on linux
+if test x$with_backend = xlinux; then
+	PKG_CHECK_MODULES(GUDEV, [gudev-1.0 >= 001])
+	AC_SUBST(GUDEV_CFLAGS)
+	AC_SUBST(GUDEV_LIBS)
+
+	dnl Check libusb also
+	AC_CHECK_HEADERS(usb.h, , [AC_MSG_ERROR([Can't find usb.h. Please install libusb.])])
+	AC_CHECK_LIB([usb], [usb_find_devices], [], [AC_MSG_ERROR([Can't use libusb.])])
+fi
+
+# export to Makefile.am
+AM_CONDITIONAL(BACKEND_TYPE_DUMMY, [test x$with_backend = xdummy])
+AM_CONDITIONAL(BACKEND_TYPE_LINUX, [test x$with_backend = xlinux])
+
+dnl ---------------------------------------------------------------------------
+dnl - Build self tests
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(tests, AS_HELP_STRING([--enable-tests],[enable unit test code]),
+	      enable_tests=$enableval,enable_tests=yes)
+AM_CONDITIONAL(EGG_BUILD_TESTS, test x$enable_tests = xyes)
+if test x$enable_tests = xyes; then
+	AC_DEFINE(EGG_BUILD_TESTS,1,[Build test code])
+fi
 
 if test "x$GCC" = "xyes"; then
   LDFLAGS="-Wl,--as-needed $LDFLAGS"
@@ -183,6 +200,8 @@ AC_OUTPUT([
 Makefile
 devkit-power-gobject.pc
 src/Makefile
+src/dummy/Makefile
+src/linux/Makefile
 tools/Makefile
 doc/Makefile
 doc/version.xml
@@ -215,6 +234,7 @@ echo "
         cppflags:                   ${CPPFLAGS}
         xsltproc:                   ${XSLTPROC}
 
+        Backend:                    ${with_backend}
         Maintainer mode:            ${USE_MAINTAINER_MODE}
         Building api docs:          ${enable_gtk_doc}
         Building man pages:         ${enable_man_pages}

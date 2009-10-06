@@ -23,44 +23,44 @@
     <function name="The DeviceRemoved signal" link="Power.html#Power::DeviceRemoved"/>
     <function name="The DeviceChanged signal" link="Power.html#Power::DeviceChanged"/>
     <function name="The Changed signal" link="Power.html#Power::Changed"/>
-    <function name="The &quot;daemon-version&quot; property" link="Power.html#Power:daemon-version"/>
-    <function name="The &quot;can-suspend&quot; property" link="Power.html#Power:can-suspend"/>
-    <function name="The &quot;can-hibernate&quot; property" link="Power.html#Power:can-hibernate"/>
-    <function name="The &quot;on-battery&quot; property" link="Power.html#Power:on-battery"/>
-    <function name="The &quot;on-low-battery&quot; property" link="Power.html#Power:on-low-battery"/>
-    <function name="The &quot;lid-is-closed&quot; property" link="Power.html#Power:lid-is-closed"/>
-    <function name="The &quot;lid-is-present&quot; property" link="Power.html#Power:lid-is-present"/>
+    <function name="The &quot;DaemonVersion&quot; property" link="Power.html#Power:DaemonVersion"/>
+    <function name="The &quot;CanSuspend&quot; property" link="Power.html#Power:CanSuspend"/>
+    <function name="The &quot;CanHibernate&quot; property" link="Power.html#Power:CanHibernate"/>
+    <function name="The &quot;OnBattery&quot; property" link="Power.html#Power:OnBattery"/>
+    <function name="The &quot;OnLowBattery&quot; property" link="Power.html#Power:OnLowBattery"/>
+    <function name="The &quot;LidIsClosed&quot; property" link="Power.html#Power:LidIsClosed"/>
+    <function name="The &quot;LidIsPresent&quot; property" link="Power.html#Power:LidIsPresent"/>
     <function name="Refresh ()" link="Device.html#Device.Refresh"/>
     <function name="GetHistory ()" link="Device.html#Device.GetHistory"/>
     <function name="GetStatistics ()" link="Device.html#Device.GetStatistics"/>
     <function name="The Changed signal" link="Device.html#Device::Changed"/>
-    <function name="The &quot;native-path&quot; property" link="Device.html#Device:native-path"/>
-    <function name="The &quot;vendor&quot; property" link="Device.html#Device:vendor"/>
-    <function name="The &quot;model&quot; property" link="Device.html#Device:model"/>
-    <function name="The &quot;serial&quot; property" link="Device.html#Device:serial"/>
-    <function name="The &quot;update-time&quot; property" link="Device.html#Device:update-time"/>
-    <function name="The &quot;type&quot; property" link="Device.html#Device:type"/>
-    <function name="The &quot;power-supply&quot; property" link="Device.html#Device:power-supply"/>
-    <function name="The &quot;has-history&quot; property" link="Device.html#Device:has-history"/>
-    <function name="The &quot;has-statistics&quot; property" link="Device.html#Device:has-statistics"/>
-    <function name="The &quot;online&quot; property" link="Device.html#Device:online"/>
-    <function name="The &quot;energy&quot; property" link="Device.html#Device:energy"/>
-    <function name="The &quot;energy-empty&quot; property" link="Device.html#Device:energy-empty"/>
-    <function name="The &quot;energy-full&quot; property" link="Device.html#Device:energy-full"/>
-    <function name="The &quot;energy-full-design&quot; property" link="Device.html#Device:energy-full-design"/>
-    <function name="The &quot;energy-rate&quot; property" link="Device.html#Device:energy-rate"/>
-    <function name="The &quot;voltage&quot; property" link="Device.html#Device:voltage"/>
-    <function name="The &quot;time-to-empty&quot; property" link="Device.html#Device:time-to-empty"/>
-    <function name="The &quot;time-to-full&quot; property" link="Device.html#Device:time-to-full"/>
-    <function name="The &quot;percentage&quot; property" link="Device.html#Device:percentage"/>
-    <function name="The &quot;is-present&quot; property" link="Device.html#Device:is-present"/>
-    <function name="The &quot;state&quot; property" link="Device.html#Device:state"/>
-    <function name="The &quot;is-rechargeable&quot; property" link="Device.html#Device:is-rechargeable"/>
-    <function name="The &quot;capacity&quot; property" link="Device.html#Device:capacity"/>
-    <function name="The &quot;technology&quot; property" link="Device.html#Device:technology"/>
-    <function name="The &quot;recall-notice&quot; property" link="Device.html#Device:recall-notice"/>
-    <function name="The &quot;recall-vendor&quot; property" link="Device.html#Device:recall-vendor"/>
-    <function name="The &quot;recall-url&quot; property" link="Device.html#Device:recall-url"/>
+    <function name="The &quot;NativePath&quot; property" link="Device.html#Device:NativePath"/>
+    <function name="The &quot;Vendor&quot; property" link="Device.html#Device:Vendor"/>
+    <function name="The &quot;Model&quot; property" link="Device.html#Device:Model"/>
+    <function name="The &quot;Serial&quot; property" link="Device.html#Device:Serial"/>
+    <function name="The &quot;UpdateTime&quot; property" link="Device.html#Device:UpdateTime"/>
+    <function name="The &quot;Type&quot; property" link="Device.html#Device:Type"/>
+    <function name="The &quot;PowerSupply&quot; property" link="Device.html#Device:PowerSupply"/>
+    <function name="The &quot;HasHistory&quot; property" link="Device.html#Device:HasHistory"/>
+    <function name="The &quot;HasStatistics&quot; property" link="Device.html#Device:HasStatistics"/>
+    <function name="The &quot;Online&quot; property" link="Device.html#Device:Online"/>
+    <function name="The &quot;Energy&quot; property" link="Device.html#Device:Energy"/>
+    <function name="The &quot;EnergyEmpty&quot; property" link="Device.html#Device:EnergyEmpty"/>
+    <function name="The &quot;EnergyFull&quot; property" link="Device.html#Device:EnergyFull"/>
+    <function name="The &quot;EnergyFullDesign&quot; property" link="Device.html#Device:EnergyFullDesign"/>
+    <function name="The &quot;EnergyRate&quot; property" link="Device.html#Device:EnergyRate"/>
+    <function name="The &quot;Voltage&quot; property" link="Device.html#Device:Voltage"/>
+    <function name="The &quot;TimeToEmpty&quot; property" link="Device.html#Device:TimeToEmpty"/>
+    <function name="The &quot;TimeToFull&quot; property" link="Device.html#Device:TimeToFull"/>
+    <function name="The &quot;Percentage&quot; property" link="Device.html#Device:Percentage"/>
+    <function name="The &quot;IsPresent&quot; property" link="Device.html#Device:IsPresent"/>
+    <function name="The &quot;State&quot; property" link="Device.html#Device:State"/>
+    <function name="The &quot;IsRechargeable&quot; property" link="Device.html#Device:IsRechargeable"/>
+    <function name="The &quot;Capacity&quot; property" link="Device.html#Device:Capacity"/>
+    <function name="The &quot;Technology&quot; property" link="Device.html#Device:Technology"/>
+    <function name="The &quot;RecallNotice&quot; property" link="Device.html#Device:RecallNotice"/>
+    <function name="The &quot;RecallVendor&quot; property" link="Device.html#Device:RecallVendor"/>
+    <function name="The &quot;RecallUrl&quot; property" link="Device.html#Device:RecallUrl"/>
     <function name="SetMinimumLatency ()" link="QoS.html#QoS.SetMinimumLatency"/>
     <function name="RequestLatency ()" link="QoS.html#QoS.RequestLatency"/>
     <function name="CancelRequest ()" link="QoS.html#QoS.CancelRequest"/>

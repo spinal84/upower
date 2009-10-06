@@ -28,6 +28,7 @@
 
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <glib/gprintf.h>
 #include <glib/gi18n-lib.h>
 #include <glib-object.h>
 #include <gudev/gudev.h>
@@ -50,9 +51,8 @@ struct DkpDeviceSupplyPrivate
 	gdouble			 energy_old;
 	GTimeVal		 energy_old_timespec;
 	guint			 unknown_retries;
+	gboolean		 enable_poll;
 };
-
-static void	dkp_device_supply_class_init	(DkpDeviceSupplyClass	*klass);
 
 G_DEFINE_TYPE (DkpDeviceSupply, dkp_device_supply, DKP_TYPE_DEVICE)
 #define DKP_DEVICE_SUPPLY_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), DKP_TYPE_SUPPLY, DkpDeviceSupplyPrivate))
@@ -68,18 +68,15 @@ static gboolean
 dkp_device_supply_refresh_line_power (DkpDeviceSupply *supply)
 {
 	DkpDevice *device = DKP_DEVICE (supply);
-	GUdevDevice *d;
+	GUdevDevice *native;
 	const gchar *native_path;
-
-	d = dkp_device_get_d (device);
-	if (d == NULL)
-		egg_error ("could not get device");
 
 	/* force true */
 	g_object_set (device, "power-supply", TRUE, NULL);
 
 	/* get new AC value */
-	native_path = g_udev_device_get_sysfs_path (d);
+	native = G_UDEV_DEVICE (dkp_device_get_native (device));
+	native_path = g_udev_device_get_sysfs_path (native);
 	g_object_set (device, "online", sysfs_get_int (native_path, "online"), NULL);
 
 	return TRUE;
@@ -215,7 +212,7 @@ dkp_device_supply_get_online (DkpDevice *device, gboolean *online)
 static void
 dkp_device_supply_calculate_rate (DkpDeviceSupply *supply)
 {
-	guint time;
+	guint time_s;
 	gdouble energy;
 	gdouble energy_rate;
 	GTimeVal now;
@@ -234,9 +231,9 @@ dkp_device_supply_calculate_rate (DkpDeviceSupply *supply)
 
 	/* get the time difference */
 	g_get_current_time (&now);
-	time = now.tv_sec - supply->priv->energy_old_timespec.tv_sec;
+	time_s = now.tv_sec - supply->priv->energy_old_timespec.tv_sec;
 
-	if (time == 0)
+	if (time_s == 0)
 		return;
 
 	/* get the difference in charge */
@@ -245,7 +242,7 @@ dkp_device_supply_calculate_rate (DkpDeviceSupply *supply)
 		return;
 
 	/* probably okay */
-	energy_rate = energy * 3600 / time;
+	energy_rate = energy * 3600 / time_s;
 	g_object_set (device, "energy-rate", energy_rate, NULL);
 }
 
@@ -258,19 +255,19 @@ dkp_device_supply_convert_device_technology (const gchar *type)
 	if (type == NULL)
 		return DKP_DEVICE_TECHNOLOGY_UNKNOWN;
 	/* every case combination of Li-Ion is commonly used.. */
-	if (strcasecmp (type, "li-ion") == 0 ||
-	    strcasecmp (type, "lion") == 0)
+	if (g_ascii_strcasecmp (type, "li-ion") == 0 ||
+	    g_ascii_strcasecmp (type, "lion") == 0)
 		return DKP_DEVICE_TECHNOLOGY_LITHIUM_ION;
-	if (strcasecmp (type, "pb") == 0 ||
-	    strcasecmp (type, "pbac") == 0)
+	if (g_ascii_strcasecmp (type, "pb") == 0 ||
+	    g_ascii_strcasecmp (type, "pbac") == 0)
 		return DKP_DEVICE_TECHNOLOGY_LEAD_ACID;
-	if (strcasecmp (type, "lip") == 0 ||
-	    strcasecmp (type, "lipo") == 0 ||
-	    strcasecmp (type, "li-poly") == 0)
+	if (g_ascii_strcasecmp (type, "lip") == 0 ||
+	    g_ascii_strcasecmp (type, "lipo") == 0 ||
+	    g_ascii_strcasecmp (type, "li-poly") == 0)
 		return DKP_DEVICE_TECHNOLOGY_LITHIUM_POLYMER;
-	if (strcasecmp (type, "nimh") == 0)
+	if (g_ascii_strcasecmp (type, "nimh") == 0)
 		return DKP_DEVICE_TECHNOLOGY_NICKEL_METAL_HYDRIDE;
-	if (strcasecmp (type, "lifo") == 0)
+	if (g_ascii_strcasecmp (type, "lifo") == 0)
 		return DKP_DEVICE_TECHNOLOGY_LITHIUM_IRON_PHOSPHATE;
 	return DKP_DEVICE_TECHNOLOGY_UNKNOWN;
 }
@@ -301,6 +298,49 @@ out:
 }
 
 /**
+ * dkp_device_supply_get_design_voltage:
+ **/
+static gdouble
+dkp_device_supply_get_design_voltage (const gchar *native_path)
+{
+	gdouble voltage;
+
+	/* design maximum */
+	voltage = sysfs_get_double (native_path, "voltage_max_design") / 1000000.0;
+	if (voltage > 1.00f) {
+		egg_debug ("using max design voltage");
+		goto out;
+	}
+
+	/* design minimum */
+	voltage = sysfs_get_double (native_path, "voltage_min_design") / 1000000.0;
+	if (voltage > 1.00f) {
+		egg_debug ("using min design voltage");
+		goto out;
+	}
+
+	/* current voltage */
+	voltage = sysfs_get_double (native_path, "voltage_present") / 1000000.0;
+	if (voltage > 1.00f) {
+		egg_debug ("using present voltage");
+		goto out;
+	}
+
+	/* current voltage, alternate form */
+	voltage = sysfs_get_double (native_path, "voltage_now") / 1000000.0;
+	if (voltage > 1.00f) {
+		egg_debug ("using present voltage (alternate)");
+		goto out;
+	}
+
+	/* completely guess, to avoid getting zero values */
+	egg_warning ("no voltage values, using 10V as approximation");
+	voltage = 10.0f;
+out:
+	return voltage;
+}
+
+/**
  * dkp_device_supply_refresh_battery:
  *
  * Return %TRUE on success, %FALSE if we failed to refresh or no data
@@ -316,7 +356,7 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 	DkpDeviceState state;
 	DkpDevice *device = DKP_DEVICE (supply);
 	const gchar *native_path;
-	GUdevDevice *d;
+	GUdevDevice *native;
 	gboolean is_present;
 	gdouble energy;
 	gdouble energy_full;
@@ -337,14 +377,8 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 	gboolean on_battery;
 	guint battery_count;
 
-	d = dkp_device_get_d (device);
-	if (d == NULL) {
-		egg_warning ("could not get device");
-		ret = FALSE;
-		goto out;
-	}
-
-	native_path = g_udev_device_get_sysfs_path (d);
+	native = G_UDEV_DEVICE (dkp_device_get_native (device));
+	native_path = g_udev_device_get_sysfs_path (native);
 
 	/* have we just been removed? */
 	is_present = sysfs_get_bool (native_path, "present");
@@ -360,14 +394,7 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 		energy = sysfs_get_double (native_path, "energy_avg") / 1000000.0;
 
 	/* used to convert A to W later */
-	voltage_design = sysfs_get_double (native_path, "voltage_max_design") / 1000000.0;
-	if (voltage_design < 1.00) {
-		voltage_design = sysfs_get_double (native_path, "voltage_min_design") / 1000000.0;
-		if (voltage_design < 1.00) {
-			egg_debug ("using present voltage as design voltage");
-			voltage_design = sysfs_get_double (native_path, "voltage_present") / 1000000.0;
-		}
-	}
+	voltage_design = dkp_device_supply_get_design_voltage (native_path);
 
 	/* initial values */
 	if (!supply->priv->has_coldplug_values) {
@@ -386,10 +413,10 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 		serial_number = dkp_device_supply_get_string (native_path, "serial_number");
 
 		/* are we possibly recalled by the vendor? */
-		recall_notice = g_udev_device_has_property (d, "DKP_RECALL_NOTICE");
+		recall_notice = g_udev_device_has_property (native, "DKP_RECALL_NOTICE");
 		if (recall_notice) {
-			recall_vendor = g_udev_device_get_property (d, "DKP_RECALL_VENDOR");
-			recall_url = g_udev_device_get_property (d, "DKP_RECALL_URL");
+			recall_vendor = g_udev_device_get_property (native, "DKP_RECALL_VENDOR");
+			recall_url = g_udev_device_get_property (native, "DKP_RECALL_URL");
 		}
 
 		g_object_set (device,
@@ -453,20 +480,24 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 	}
 
 	status = g_strstrip (sysfs_get_string (native_path, "status"));
-	if (strcasecmp (status, "charging") == 0)
+	if (g_ascii_strcasecmp (status, "charging") == 0)
 		state = DKP_DEVICE_STATE_CHARGING;
-	else if (strcasecmp (status, "discharging") == 0)
+	else if (g_ascii_strcasecmp (status, "discharging") == 0)
 		state = DKP_DEVICE_STATE_DISCHARGING;
-	else if (strcasecmp (status, "full") == 0)
+	else if (g_ascii_strcasecmp (status, "full") == 0)
 		state = DKP_DEVICE_STATE_FULLY_CHARGED;
-	else if (strcasecmp (status, "empty") == 0)
+	else if (g_ascii_strcasecmp (status, "empty") == 0)
 		state = DKP_DEVICE_STATE_EMPTY;
-	else if (strcasecmp (status, "unknown") == 0)
+	else if (g_ascii_strcasecmp (status, "unknown") == 0)
 		state = DKP_DEVICE_STATE_UNKNOWN;
 	else {
 		egg_warning ("unknown status string: %s", status);
 		state = DKP_DEVICE_STATE_UNKNOWN;
 	}
+
+	/* only disable the polling if the kernel tells us we're fully charged,
+	   not if we've guessed the state to be fully charged */
+	supply->priv->enable_poll = (state != DKP_DEVICE_STATE_FULLY_CHARGED);
 
 	/* reset unknown counter */
 	if (state != DKP_DEVICE_STATE_UNKNOWN) {
@@ -523,7 +554,7 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 	/* some batteries stop charging much before 100% */
 	if (state == DKP_DEVICE_STATE_UNKNOWN &&
 	    percentage > DKP_DEVICE_SUPPLY_CHARGED_THRESHOLD) {
-		egg_warning ("fixing up unknown %f", percentage);
+		egg_debug ("fixing up unknown %f", percentage);
 		state = DKP_DEVICE_STATE_FULLY_CHARGED;
 	}
 
@@ -613,14 +644,13 @@ out:
 static gboolean
 dkp_device_supply_poll_battery (DkpDeviceSupply *supply)
 {
-	gboolean ret;
 	DkpDevice *device = DKP_DEVICE (supply);
 
 	egg_debug ("No updates on supply %s for %i seconds; forcing update", dkp_device_get_object_path (device), DKP_DEVICE_SUPPLY_REFRESH_TIMEOUT);
 	supply->priv->poll_timer_id = 0;
-	ret = dkp_device_supply_refresh (device);
-	if (ret)
-		dkp_device_emit_changed (device);
+	dkp_device_supply_refresh (device);
+
+	/* never repeat */
 	return FALSE;
 }
 
@@ -633,31 +663,51 @@ static gboolean
 dkp_device_supply_coldplug (DkpDevice *device)
 {
 	DkpDeviceSupply *supply = DKP_DEVICE_SUPPLY (device);
-	gboolean ret;
-	GUdevDevice *d;
+	gboolean ret = FALSE;
+	GUdevDevice *native;
 	const gchar *native_path;
+	gchar *device_type = NULL;
+	DkpDeviceType type = DKP_DEVICE_TYPE_UNKNOWN;
 
 	dkp_device_supply_reset_values (supply);
 
 	/* detect what kind of device we are */
-	d = dkp_device_get_d (device);
-	if (d == NULL)
-		egg_error ("could not get device");
-
-	native_path = g_udev_device_get_sysfs_path (d);
-	if (native_path == NULL)
-		egg_error ("could not get native path");
-
-	if (sysfs_file_exists (native_path, "online")) {
-		g_object_set (device, "type", DKP_DEVICE_TYPE_LINE_POWER, NULL);
-	} else {
-		/* this is correct, UPS and CSR are not in the kernel */
-		g_object_set (device, "type", DKP_DEVICE_TYPE_BATTERY, NULL);
+	native = G_UDEV_DEVICE (dkp_device_get_native (device));
+	native_path = g_udev_device_get_sysfs_path (native);
+	if (native_path == NULL) {
+		egg_warning ("could not get native path for %p", device);
+		goto out;
 	}
+
+	/* try to detect using the device type */
+	device_type = dkp_device_supply_get_string (native_path, "type");
+	if (device_type != NULL) {
+		if (g_ascii_strcasecmp (device_type, "mains") == 0) {
+			type = DKP_DEVICE_TYPE_LINE_POWER;
+		} else if (g_ascii_strcasecmp (device_type, "battery") == 0) {
+			type = DKP_DEVICE_TYPE_BATTERY;
+		} else {
+			egg_warning ("did not recognise type %s, please report", device_type);
+		}
+	}
+
+	/* if reading the device type did not work, use the previous method */
+	if (type == DKP_DEVICE_TYPE_UNKNOWN) {
+		if (sysfs_file_exists (native_path, "online")) {
+			type = DKP_DEVICE_TYPE_LINE_POWER;
+		} else {
+			/* this is a good guess as UPS and CSR are not in the kernel */
+			type = DKP_DEVICE_TYPE_BATTERY;
+		}
+	}
+
+	/* set the value */
+	g_object_set (device, "type", type, NULL);
 
 	/* coldplug values */
 	ret = dkp_device_supply_refresh (device);
-
+out:
+	g_free (device_type);
 	return ret;
 }
 
@@ -672,8 +722,8 @@ dkp_device_supply_setup_poll (DkpDevice *device)
 
 	g_object_get (device, "state", &state, NULL);
 
-	/* if it's fully charged, don't poll at all */
-	if (state == DKP_DEVICE_STATE_FULLY_CHARGED)
+	/* don't setup the poll only if we're sure */
+	if (!supply->priv->enable_poll)
 		goto out;
 
 	/* if it's unknown, poll faster than we would normally */
@@ -704,7 +754,7 @@ static gboolean
 dkp_device_supply_refresh (DkpDevice *device)
 {
 	gboolean ret;
-	GTimeVal time;
+	GTimeVal timeval;
 	DkpDeviceSupply *supply = DKP_DEVICE_SUPPLY (device);
 	DkpDeviceType type;
 
@@ -713,8 +763,8 @@ dkp_device_supply_refresh (DkpDevice *device)
 		supply->priv->poll_timer_id = 0;
 	}
 
-	g_get_current_time (&time);
-	g_object_set (device, "update-time", (guint64) time.tv_sec, NULL);
+	g_get_current_time (&timeval);
+	g_object_set (device, "update-time", (guint64) timeval.tv_sec, NULL);
 	g_object_get (device, "type", &type, NULL);
 	switch (type) {
 	case DKP_DEVICE_TYPE_LINE_POWER:
@@ -743,6 +793,7 @@ dkp_device_supply_init (DkpDeviceSupply *supply)
 	supply->priv = DKP_DEVICE_SUPPLY_GET_PRIVATE (supply);
 	supply->priv->unknown_retries = 0;
 	supply->priv->poll_timer_id = 0;
+	supply->priv->enable_poll = TRUE;
 }
 
 /**

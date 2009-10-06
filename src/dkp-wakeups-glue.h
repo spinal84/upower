@@ -53,7 +53,7 @@ G_BEGIN_DECLS
 #endif /* !G_ENABLE_DEBUG */
 
 
-/* BOOLEAN:POINTER,POINTER (/tmp/dbus-binding-tool-c-marshallers.BEXKXU:1) */
+/* BOOLEAN:POINTER,POINTER */
 extern void dbus_glib_marshal_dkp_wakeups_BOOLEAN__POINTER_POINTER (GClosure     *closure,
                                                                     GValue       *return_value,
                                                                     guint         n_param_values,
@@ -116,6 +116,6 @@ const DBusGObjectInfo dbus_glib_dkp_wakeups_object_info = {
   2,
 "org.freedesktop.DeviceKit.Power.Wakeups\0GetTotal\0S\0value\0O\0F\0N\0u\0\0org.freedesktop.DeviceKit.Power.Wakeups\0GetData\0S\0data\0O\0F\0N\0a(budss)\0\0\0",
 "org.freedesktop.DeviceKit.Power.Wakeups\0TotalChanged\0org.freedesktop.DeviceKit.Power.Wakeups\0DataChanged\0\0",
-"org.freedesktop.DeviceKit.Power.Wakeups\0has-capability\0\0"
+"org.freedesktop.DeviceKit.Power.Wakeups\0HasCapability\0\0"
 };
 

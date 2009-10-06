@@ -74,9 +74,15 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 libdevkit_power_gobject_la_DEPENDENCIES = $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
-am_libdevkit_power_gobject_la_OBJECTS = dkp-client.lo dkp-device.lo \
-	dkp-wakeups.lo dkp-qos-obj.lo dkp-history-obj.lo \
-	dkp-stats-obj.lo dkp-wakeups-obj.lo dkp-enum.lo
+am_libdevkit_power_gobject_la_OBJECTS =  \
+	libdevkit_power_gobject_la-dkp-client.lo \
+	libdevkit_power_gobject_la-dkp-device.lo \
+	libdevkit_power_gobject_la-dkp-wakeups.lo \
+	libdevkit_power_gobject_la-dkp-qos-obj.lo \
+	libdevkit_power_gobject_la-dkp-history-obj.lo \
+	libdevkit_power_gobject_la-dkp-stats-obj.lo \
+	libdevkit_power_gobject_la-dkp-wakeups-obj.lo \
+	libdevkit_power_gobject_la-dkp-enum.lo
 libdevkit_power_gobject_la_OBJECTS =  \
 	$(am_libdevkit_power_gobject_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
@@ -84,8 +90,8 @@ am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
 libdevkit_power_gobject_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
-	$(AM_CFLAGS) $(CFLAGS) $(libdevkit_power_gobject_la_LDFLAGS) \
-	$(LDFLAGS) -o $@
+	$(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) \
+	$(libdevkit_power_gobject_la_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -127,6 +133,7 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BACKEND = @BACKEND@
 CATALOGS = @CATALOGS@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
@@ -217,6 +224,7 @@ SHELL = @SHELL@
 STRIP = @STRIP@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
+WARNINGFLAGS_C = @WARNINGFLAGS_C@
 XGETTEXT = @XGETTEXT@
 XSLTPROC = @XSLTPROC@
 abs_builddir = @abs_builddir@
@@ -329,6 +337,10 @@ libdevkit_power_gobject_la_LDFLAGS = \
 	-no-undefined						\
 	-export-symbols-regex '^dkp_.*'
 
+libdevkit_power_gobject_la_CFLAGS = \
+	$(WARNINGFLAGS_C)					\
+	$(NULL)
+
 EXTRA_DIST = \
 	dkp-version.h.in
 
@@ -409,14 +421,14 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp-client.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp-device.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp-enum.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp-history-obj.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp-qos-obj.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp-stats-obj.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp-wakeups-obj.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp-wakeups.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdevkit_power_gobject_la-dkp-client.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdevkit_power_gobject_la-dkp-device.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdevkit_power_gobject_la-dkp-enum.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdevkit_power_gobject_la-dkp-history-obj.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdevkit_power_gobject_la-dkp-qos-obj.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdevkit_power_gobject_la-dkp-stats-obj.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdevkit_power_gobject_la-dkp-wakeups-obj.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdevkit_power_gobject_la-dkp-wakeups.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -441,6 +453,70 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+
+libdevkit_power_gobject_la-dkp-client.lo: dkp-client.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -MT libdevkit_power_gobject_la-dkp-client.lo -MD -MP -MF $(DEPDIR)/libdevkit_power_gobject_la-dkp-client.Tpo -c -o libdevkit_power_gobject_la-dkp-client.lo `test -f 'dkp-client.c' || echo '$(srcdir)/'`dkp-client.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdevkit_power_gobject_la-dkp-client.Tpo $(DEPDIR)/libdevkit_power_gobject_la-dkp-client.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-client.c' object='libdevkit_power_gobject_la-dkp-client.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -c -o libdevkit_power_gobject_la-dkp-client.lo `test -f 'dkp-client.c' || echo '$(srcdir)/'`dkp-client.c
+
+libdevkit_power_gobject_la-dkp-device.lo: dkp-device.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -MT libdevkit_power_gobject_la-dkp-device.lo -MD -MP -MF $(DEPDIR)/libdevkit_power_gobject_la-dkp-device.Tpo -c -o libdevkit_power_gobject_la-dkp-device.lo `test -f 'dkp-device.c' || echo '$(srcdir)/'`dkp-device.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdevkit_power_gobject_la-dkp-device.Tpo $(DEPDIR)/libdevkit_power_gobject_la-dkp-device.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-device.c' object='libdevkit_power_gobject_la-dkp-device.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -c -o libdevkit_power_gobject_la-dkp-device.lo `test -f 'dkp-device.c' || echo '$(srcdir)/'`dkp-device.c
+
+libdevkit_power_gobject_la-dkp-wakeups.lo: dkp-wakeups.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -MT libdevkit_power_gobject_la-dkp-wakeups.lo -MD -MP -MF $(DEPDIR)/libdevkit_power_gobject_la-dkp-wakeups.Tpo -c -o libdevkit_power_gobject_la-dkp-wakeups.lo `test -f 'dkp-wakeups.c' || echo '$(srcdir)/'`dkp-wakeups.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdevkit_power_gobject_la-dkp-wakeups.Tpo $(DEPDIR)/libdevkit_power_gobject_la-dkp-wakeups.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-wakeups.c' object='libdevkit_power_gobject_la-dkp-wakeups.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -c -o libdevkit_power_gobject_la-dkp-wakeups.lo `test -f 'dkp-wakeups.c' || echo '$(srcdir)/'`dkp-wakeups.c
+
+libdevkit_power_gobject_la-dkp-qos-obj.lo: dkp-qos-obj.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -MT libdevkit_power_gobject_la-dkp-qos-obj.lo -MD -MP -MF $(DEPDIR)/libdevkit_power_gobject_la-dkp-qos-obj.Tpo -c -o libdevkit_power_gobject_la-dkp-qos-obj.lo `test -f 'dkp-qos-obj.c' || echo '$(srcdir)/'`dkp-qos-obj.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdevkit_power_gobject_la-dkp-qos-obj.Tpo $(DEPDIR)/libdevkit_power_gobject_la-dkp-qos-obj.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-qos-obj.c' object='libdevkit_power_gobject_la-dkp-qos-obj.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -c -o libdevkit_power_gobject_la-dkp-qos-obj.lo `test -f 'dkp-qos-obj.c' || echo '$(srcdir)/'`dkp-qos-obj.c
+
+libdevkit_power_gobject_la-dkp-history-obj.lo: dkp-history-obj.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -MT libdevkit_power_gobject_la-dkp-history-obj.lo -MD -MP -MF $(DEPDIR)/libdevkit_power_gobject_la-dkp-history-obj.Tpo -c -o libdevkit_power_gobject_la-dkp-history-obj.lo `test -f 'dkp-history-obj.c' || echo '$(srcdir)/'`dkp-history-obj.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdevkit_power_gobject_la-dkp-history-obj.Tpo $(DEPDIR)/libdevkit_power_gobject_la-dkp-history-obj.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-history-obj.c' object='libdevkit_power_gobject_la-dkp-history-obj.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -c -o libdevkit_power_gobject_la-dkp-history-obj.lo `test -f 'dkp-history-obj.c' || echo '$(srcdir)/'`dkp-history-obj.c
+
+libdevkit_power_gobject_la-dkp-stats-obj.lo: dkp-stats-obj.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -MT libdevkit_power_gobject_la-dkp-stats-obj.lo -MD -MP -MF $(DEPDIR)/libdevkit_power_gobject_la-dkp-stats-obj.Tpo -c -o libdevkit_power_gobject_la-dkp-stats-obj.lo `test -f 'dkp-stats-obj.c' || echo '$(srcdir)/'`dkp-stats-obj.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdevkit_power_gobject_la-dkp-stats-obj.Tpo $(DEPDIR)/libdevkit_power_gobject_la-dkp-stats-obj.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-stats-obj.c' object='libdevkit_power_gobject_la-dkp-stats-obj.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -c -o libdevkit_power_gobject_la-dkp-stats-obj.lo `test -f 'dkp-stats-obj.c' || echo '$(srcdir)/'`dkp-stats-obj.c
+
+libdevkit_power_gobject_la-dkp-wakeups-obj.lo: dkp-wakeups-obj.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -MT libdevkit_power_gobject_la-dkp-wakeups-obj.lo -MD -MP -MF $(DEPDIR)/libdevkit_power_gobject_la-dkp-wakeups-obj.Tpo -c -o libdevkit_power_gobject_la-dkp-wakeups-obj.lo `test -f 'dkp-wakeups-obj.c' || echo '$(srcdir)/'`dkp-wakeups-obj.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdevkit_power_gobject_la-dkp-wakeups-obj.Tpo $(DEPDIR)/libdevkit_power_gobject_la-dkp-wakeups-obj.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-wakeups-obj.c' object='libdevkit_power_gobject_la-dkp-wakeups-obj.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -c -o libdevkit_power_gobject_la-dkp-wakeups-obj.lo `test -f 'dkp-wakeups-obj.c' || echo '$(srcdir)/'`dkp-wakeups-obj.c
+
+libdevkit_power_gobject_la-dkp-enum.lo: dkp-enum.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -MT libdevkit_power_gobject_la-dkp-enum.lo -MD -MP -MF $(DEPDIR)/libdevkit_power_gobject_la-dkp-enum.Tpo -c -o libdevkit_power_gobject_la-dkp-enum.lo `test -f 'dkp-enum.c' || echo '$(srcdir)/'`dkp-enum.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdevkit_power_gobject_la-dkp-enum.Tpo $(DEPDIR)/libdevkit_power_gobject_la-dkp-enum.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-enum.c' object='libdevkit_power_gobject_la-dkp-enum.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdevkit_power_gobject_la_CFLAGS) $(CFLAGS) -c -o libdevkit_power_gobject_la-dkp-enum.lo `test -f 'dkp-enum.c' || echo '$(srcdir)/'`dkp-enum.c
 
 mostlyclean-libtool:
 	-rm -f *.lo

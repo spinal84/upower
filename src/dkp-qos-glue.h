@@ -53,7 +53,7 @@ G_BEGIN_DECLS
 #endif /* !G_ENABLE_DEBUG */
 
 
-/* NONE:STRING,UINT,POINTER (/tmp/dbus-binding-tool-c-marshallers.ESEIXU:1) */
+/* NONE:STRING,UINT,POINTER */
 extern void dbus_glib_marshal_dkp_qos_VOID__STRING_UINT_POINTER (GClosure     *closure,
                                                                  GValue       *return_value,
                                                                  guint         n_param_values,
@@ -99,7 +99,7 @@ dbus_glib_marshal_dkp_qos_VOID__STRING_UINT_POINTER (GClosure     *closure,
 }
 #define dbus_glib_marshal_dkp_qos_NONE__STRING_UINT_POINTER	dbus_glib_marshal_dkp_qos_VOID__STRING_UINT_POINTER
 
-/* NONE:STRING,INT,BOOLEAN,POINTER (/tmp/dbus-binding-tool-c-marshallers.ESEIXU:2) */
+/* NONE:STRING,INT,BOOLEAN,POINTER */
 extern void dbus_glib_marshal_dkp_qos_VOID__STRING_INT_BOOLEAN_POINTER (GClosure     *closure,
                                                                         GValue       *return_value,
                                                                         guint         n_param_values,
@@ -147,7 +147,7 @@ dbus_glib_marshal_dkp_qos_VOID__STRING_INT_BOOLEAN_POINTER (GClosure     *closur
 }
 #define dbus_glib_marshal_dkp_qos_NONE__STRING_INT_BOOLEAN_POINTER	dbus_glib_marshal_dkp_qos_VOID__STRING_INT_BOOLEAN_POINTER
 
-/* BOOLEAN:STRING,POINTER,POINTER (/tmp/dbus-binding-tool-c-marshallers.ESEIXU:3) */
+/* BOOLEAN:STRING,POINTER,POINTER */
 extern void dbus_glib_marshal_dkp_qos_BOOLEAN__STRING_POINTER_POINTER (GClosure     *closure,
                                                                        GValue       *return_value,
                                                                        guint         n_param_values,
@@ -196,7 +196,7 @@ dbus_glib_marshal_dkp_qos_BOOLEAN__STRING_POINTER_POINTER (GClosure     *closure
   g_value_set_boolean (return_value, v_return);
 }
 
-/* NONE:STRING,INT,POINTER (/tmp/dbus-binding-tool-c-marshallers.ESEIXU:4) */
+/* NONE:STRING,INT,POINTER */
 extern void dbus_glib_marshal_dkp_qos_VOID__STRING_INT_POINTER (GClosure     *closure,
                                                                 GValue       *return_value,
                                                                 guint         n_param_values,
@@ -242,7 +242,7 @@ dbus_glib_marshal_dkp_qos_VOID__STRING_INT_POINTER (GClosure     *closure,
 }
 #define dbus_glib_marshal_dkp_qos_NONE__STRING_INT_POINTER	dbus_glib_marshal_dkp_qos_VOID__STRING_INT_POINTER
 
-/* BOOLEAN:POINTER,POINTER (/tmp/dbus-binding-tool-c-marshallers.ESEIXU:5) */
+/* BOOLEAN:POINTER,POINTER */
 extern void dbus_glib_marshal_dkp_qos_BOOLEAN__POINTER_POINTER (GClosure     *closure,
                                                                 GValue       *return_value,
                                                                 guint         n_param_values,
