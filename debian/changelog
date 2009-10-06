@@ -1,5 +1,6 @@
-devicekit-power (010-3) UNRELEASED; urgency=low
+devicekit-power (011-1) UNRELEASED; urgency=low
 
+  * New upstream release.
   * debian/control
     - Add Recommends on pm-utils and policykit-1.
 
