@@ -1,4 +1,4 @@
-devicekit-power (011-1) UNRELEASED; urgency=low
+devicekit-power (011-1) unstable; urgency=low
 
   [ Michael Biebl ]
   * New upstream release.
@@ -10,7 +10,7 @@ devicekit-power (011-1) UNRELEASED; urgency=low
     and daemon break each other for versions prior to 011, to avoid partial
     upgrades.
 
- -- Michael Biebl <biebl@debian.org>  Mon, 05 Oct 2009 09:22:30 +0200
+ -- Martin Pitt <mpitt@debian.org>  Tue, 06 Oct 2009 18:04:57 +0200
 
 devicekit-power (010-2) unstable; urgency=low
 
