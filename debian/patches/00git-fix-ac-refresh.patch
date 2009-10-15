@@ -1,0 +1,87 @@
+From b69e31ef05a18be74c4ff69ed3a6ce79a0550bc2 Mon Sep 17 00:00:00 2001
+From: Richard Hughes <richard@hughsie.com>
+Date: Wed, 14 Oct 2009 09:34:10 +0000
+Subject: Ensure we only reset the update-time property when we have done the refresh, not before
+
+This should fix the timed callback when the AC changes and and a delayed
+refresh is triggered.
+---
+diff --git a/src/linux/dkp-device-csr.c b/src/linux/dkp-device-csr.c
+index 72c7e78..69582c8 100644
+--- a/src/linux/dkp-device-csr.c
++++ b/src/linux/dkp-device-csr.c
+@@ -227,9 +227,6 @@ dkp_device_csr_refresh (DkpDevice *device)
+ 	gdouble percentage;
+ 	guint written;
+ 
+-	g_get_current_time (&timeval);
+-	g_object_set (device, "update-time", (guint64) timeval.tv_sec, NULL);
+-
+ 	/* For dual receivers C502, C504 and C505, the mouse is the
+ 	 * second device and uses an addr of 1 in the value and index
+ 	 * fields' high byte */
+@@ -270,6 +267,9 @@ dkp_device_csr_refresh (DkpDevice *device)
+ 		egg_debug ("percentage=%f", percentage);
+ 	}
+ 
++	/* reset time */
++	g_get_current_time (&timeval);
++	g_object_set (device, "update-time", (guint64) timeval.tv_sec, NULL);
+ out:
+ 	if (handle != NULL)
+ 		usb_close (handle);
+diff --git a/src/linux/dkp-device-hid.c b/src/linux/dkp-device-hid.c
+index c1e1425..c258fef 100644
+--- a/src/linux/dkp-device-hid.c
++++ b/src/linux/dkp-device-hid.c
+@@ -385,10 +385,6 @@ dkp_device_hid_refresh (DkpDevice *device)
+ 	int rd;
+ 	DkpDeviceHid *hid = DKP_DEVICE_HID (device);
+ 
+-	/* reset time */
+-	g_get_current_time (&timeval);
+-	g_object_set (device, "update-time", (guint64) timeval.tv_sec, NULL);
+-
+ 	/* read any data */
+ 	rd = read (hid->priv->fd, ev, sizeof (ev));
+ 
+@@ -416,6 +412,10 @@ dkp_device_hid_refresh (DkpDevice *device)
+ 
+ 	/* fix up device states */
+ 	dkp_device_hid_fixup_state (device);
++
++	/* reset time */
++	g_get_current_time (&timeval);
++	g_object_set (device, "update-time", (guint64) timeval.tv_sec, NULL);
+ out:
+ 	return ret;
+ }
+diff --git a/src/linux/dkp-device-supply.c b/src/linux/dkp-device-supply.c
+index 20bd48e..9573807 100644
+--- a/src/linux/dkp-device-supply.c
++++ b/src/linux/dkp-device-supply.c
+@@ -763,8 +763,6 @@ dkp_device_supply_refresh (DkpDevice *device)
+ 		supply->priv->poll_timer_id = 0;
+ 	}
+ 
+-	g_get_current_time (&timeval);
+-	g_object_set (device, "update-time", (guint64) timeval.tv_sec, NULL);
+ 	g_object_get (device, "type", &type, NULL);
+ 	switch (type) {
+ 	case DKP_DEVICE_TYPE_LINE_POWER:
+@@ -781,6 +779,13 @@ dkp_device_supply_refresh (DkpDevice *device)
+ 		g_assert_not_reached ();
+ 		break;
+ 	}
++
++	/* reset time if we got new data */
++	if (ret) {
++		g_get_current_time (&timeval);
++		g_object_set (device, "update-time", (guint64) timeval.tv_sec, NULL);
++	}
++
+ 	return ret;
+ }
+ 
+--
+cgit v0.8.2
