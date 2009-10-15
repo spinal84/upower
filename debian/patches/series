@@ -1,1 +1,2 @@
 # Debian patches for DeviceKit-power
+00git-fix-ac-refresh.patch
