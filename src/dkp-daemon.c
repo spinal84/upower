@@ -80,8 +80,11 @@ struct DkpDaemonPrivate
 	gboolean		 lid_is_present;
 	gboolean		 kernel_can_suspend;
 	gboolean		 kernel_can_hibernate;
-	gboolean		 kernel_has_swap_space;
+	gboolean		 hibernate_has_swap_space;
+	gboolean		 hibernate_has_encrypted_swap;
 	gboolean		 during_coldplug;
+	guint			 battery_poll_id;
+	guint			 battery_poll_count;
 };
 
 static void	dkp_daemon_finalize		(GObject	*object);
@@ -97,7 +100,8 @@ G_DEFINE_TYPE (DkpDaemon, dkp_daemon, G_TYPE_OBJECT)
 #define DKP_DAEMON_SWAP_WATERLINE 			80.0f /* % */
 
 /* refresh all the devices after this much time when on-battery has changed */
-#define DKP_DAEMON_ON_BATTERY_REFRESH_DEVICES_DELAY	3 /* seconds */
+#define DKP_DAEMON_ON_BATTERY_REFRESH_DEVICES_DELAY	1 /* seconds */
+#define DKP_DAEMON_POLL_BATTERY_NUMBER_TIMES		5
 
 /**
  * dkp_daemon_check_sleep_states:
@@ -127,10 +131,117 @@ out:
 }
 
 /**
- * dkp_daemon_check_swap:
+ * dkp_daemon_check_encrypted_swap:
+ *
+ * user@local:~$ cat /proc/swaps
+ * Filename                                Type            Size    Used    Priority
+ * /dev/mapper/cryptswap1                  partition       4803392 35872   -1
+ *
+ * user@local:~$ cat /etc/crypttab
+ * # <target name> <source device>         <key file>      <options>
+ * cryptswap1 /dev/sda5 /dev/urandom swap,cipher=aes-cbc-essiv:sha256
+ *
+ * Loop over the swap partitions in /proc/swaps, looking for matches in /etc/crypttab
+ **/
+static gboolean
+dkp_daemon_check_encrypted_swap (DkpDaemon *daemon)
+{
+	gchar *contents_swaps = NULL;
+	gchar *contents_crypttab = NULL;
+	gchar **lines_swaps = NULL;
+	gchar **lines_crypttab = NULL;
+	GError *error = NULL;
+	gboolean ret;
+	gboolean encrypted_swap = FALSE;
+	const gchar *filename_swaps = "/proc/swaps";
+	const gchar *filename_crypttab = "/etc/crypttab";
+	GPtrArray *devices = NULL;
+	gchar *device;
+	guint i, j;
+
+	/* get swaps data */
+	ret = g_file_get_contents (filename_swaps, &contents_swaps, NULL, &error);
+	if (!ret) {
+		egg_warning ("failed to open %s: %s", filename_swaps, error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* get crypttab data */
+	ret = g_file_get_contents (filename_crypttab, &contents_crypttab, NULL, &error);
+	if (!ret) {
+		egg_warning ("failed to open %s: %s", filename_crypttab, error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* split both into lines */
+	lines_swaps = g_strsplit (contents_swaps, "\n", -1);
+	lines_crypttab = g_strsplit (contents_crypttab, "\n", -1);
+
+	/* get valid swap devices */
+	devices = g_ptr_array_new_with_free_func (g_free);
+	for (i=0; lines_swaps[i] != NULL; i++) {
+
+		/* is a device? */
+		if (lines_swaps[i][0] != '/')
+			continue;
+
+		/* only look at first parameter */
+		g_strdelimit (lines_swaps[i], "\t ", '\0');
+
+		/* add base device to list */
+		device = g_path_get_basename (lines_swaps[i]);
+		egg_debug ("adding swap device: %s", device);
+		g_ptr_array_add (devices, device);
+	}
+
+	/* no swap devices? */
+	if (devices->len == 0) {
+		egg_debug ("no swap devices");
+		goto out;
+	}
+
+	/* find matches in crypttab */
+	for (i=0; lines_crypttab[i] != NULL; i++) {
+
+		/* ignore invalid lines */
+		if (lines_crypttab[i][0] == '#' ||
+		    lines_crypttab[i][0] == '\n' ||
+		    lines_crypttab[i][0] == '\t' ||
+		    lines_crypttab[i][0] == '\0')
+			continue;
+
+		/* only look at first parameter */
+		g_strdelimit (lines_crypttab[i], "\t ", '\0');
+
+		/* is a swap device? */
+		for (j=0; j<devices->len; j++) {
+			device = g_ptr_array_index (devices, j);
+			if (g_strcmp0 (device, lines_crypttab[i]) == 0) {
+				egg_debug ("swap device %s is encrypted (so cannot hibernate)", device);
+				encrypted_swap = TRUE;
+				goto out;
+			}
+			egg_debug ("swap device %s is not encrypted (allows hibernate)", device);
+		}
+	}
+
+out:
+	if (devices != NULL)
+		g_ptr_array_unref (devices);
+	g_free (contents_swaps);
+	g_free (contents_crypttab);
+	g_strfreev (lines_swaps);
+	g_strfreev (lines_crypttab);
+	return encrypted_swap;
+}
+
+/**
+ * dkp_daemon_check_swap_space:
  **/
 static gfloat
-dkp_daemon_check_swap (DkpDaemon *daemon)
+dkp_daemon_check_swap_space (DkpDaemon *daemon)
 {
 	gchar *contents = NULL;
 	gchar **lines = NULL;
@@ -442,10 +553,20 @@ dkp_daemon_hibernate (DkpDaemon *daemon, DBusGMethodInvocation *context)
 	}
 
 	/* enough swap? */
-	if (!daemon->priv->kernel_has_swap_space) {
+	if (!daemon->priv->hibernate_has_swap_space) {
 		error = g_error_new (DKP_DAEMON_ERROR,
 				     DKP_DAEMON_ERROR_GENERAL,
 				     "Not enough swap space");
+		g_error_free (error_local);
+		dbus_g_method_return_error (context, error);
+		goto out;
+	}
+
+	/* encrypted swap? */
+	if (!daemon->priv->hibernate_has_encrypted_swap) {
+		error = g_error_new (DKP_DAEMON_ERROR,
+				     DKP_DAEMON_ERROR_GENERAL,
+				     "Swap space is encrypted");
 		g_error_free (error_local);
 		dbus_g_method_return_error (context, error);
 		goto out;
@@ -561,17 +682,6 @@ out:
 }
 
 /**
- * dkp_daemon_refresh_battery_devices_cb:
- **/
-static gboolean
-dkp_daemon_refresh_battery_devices_cb (DkpDaemon *daemon)
-{
-	egg_debug ("doing the delayed refresh");
-	dkp_daemon_refresh_battery_devices (daemon);
-	return FALSE;
-}
-
-/**
  * dkp_daemon_get_device_list:
  **/
 DkpDeviceList *
@@ -581,39 +691,45 @@ dkp_daemon_get_device_list (DkpDaemon *daemon)
 }
 
 /**
- * dkp_daemon_device_added_cb:
+ * dkp_daemon_refresh_battery_devices_cb:
+ **/
+static gboolean
+dkp_daemon_refresh_battery_devices_cb (DkpDaemon *daemon)
+{
+	/* no more left to do? */
+	if (daemon->priv->battery_poll_count-- == 0) {
+		daemon->priv->battery_poll_id = 0;
+		return FALSE;
+	}
+
+	egg_debug ("doing the delayed refresh (%i)", daemon->priv->battery_poll_count);
+	dkp_daemon_refresh_battery_devices (daemon);
+
+	/* keep going until none left to do */
+	return TRUE;
+}
+
+/**
+ * dkp_daemon_poll_battery_devices_for_a_little_bit:
  **/
 static void
-dkp_daemon_device_added_cb (DkpBackend *backend, GObject *native, DkpDevice *device, DkpDaemon *daemon)
+dkp_daemon_poll_battery_devices_for_a_little_bit (DkpDaemon *daemon)
 {
-	const gchar *object_path;
+	daemon->priv->battery_poll_count = DKP_DAEMON_POLL_BATTERY_NUMBER_TIMES;
 
-	g_return_if_fail (DKP_IS_DAEMON (daemon));
-	g_return_if_fail (DKP_IS_DEVICE (device));
-	g_return_if_fail (G_IS_OBJECT (native));
-
-	/* add to device list */
-	dkp_device_list_insert (daemon->priv->power_devices, native, G_OBJECT (device));
-
-	/* emit */
-	if (!daemon->priv->during_coldplug) {
-		object_path = dkp_device_get_object_path (device);
-		egg_debug ("emitting added: %s (during coldplug %i)", object_path, daemon->priv->during_coldplug);
-
-		/* don't crash the session */
-		if (object_path == NULL) {
-			egg_warning ("INTERNAL STATE CORRUPT: not sending NULL, native:%p, device:%p", native, device);
-			return;
-		}
-		g_signal_emit (daemon, signals[SIGNAL_DEVICE_ADDED], 0, object_path);
-	}
+	/* already polling */
+	if (daemon->priv->battery_poll_id != 0)
+		return;
+	daemon->priv->battery_poll_id =
+		g_timeout_add_seconds (DKP_DAEMON_ON_BATTERY_REFRESH_DEVICES_DELAY,
+				       (GSourceFunc) dkp_daemon_refresh_battery_devices_cb, daemon);
 }
 
 /**
  * dkp_daemon_device_changed_cb:
  **/
 static void
-dkp_daemon_device_changed_cb (DkpBackend *backend, GObject *native, DkpDevice *device, DkpDaemon *daemon)
+dkp_daemon_device_changed_cb (DkpDevice *device, DkpDaemon *daemon)
 {
 	const gchar *object_path;
 	DkpDeviceType type;
@@ -621,7 +737,6 @@ dkp_daemon_device_changed_cb (DkpBackend *backend, GObject *native, DkpDevice *d
 
 	g_return_if_fail (DKP_IS_DAEMON (daemon));
 	g_return_if_fail (DKP_IS_DEVICE (device));
-	g_return_if_fail (G_IS_OBJECT (native));
 
 	/* refresh battery devices when AC state changes */
 	g_object_get (device,
@@ -630,8 +745,7 @@ dkp_daemon_device_changed_cb (DkpBackend *backend, GObject *native, DkpDevice *d
 	if (type == DKP_DEVICE_TYPE_LINE_POWER) {
 		/* refresh now, and again in a little while */
 		dkp_daemon_refresh_battery_devices (daemon);
-		g_timeout_add_seconds (DKP_DAEMON_ON_BATTERY_REFRESH_DEVICES_DELAY,
-				       (GSourceFunc) dkp_daemon_refresh_battery_devices_cb, daemon);
+		dkp_daemon_poll_battery_devices_for_a_little_bit (daemon);
 	}
 
 	/* second, check if the on_battery and on_low_battery state has changed */
@@ -654,10 +768,51 @@ dkp_daemon_device_changed_cb (DkpBackend *backend, GObject *native, DkpDevice *d
 
 		/* don't crash the session */
 		if (object_path == NULL) {
-			egg_warning ("INTERNAL STATE CORRUPT: not sending NULL, native:%p, device:%p", native, device);
+			egg_warning ("INTERNAL STATE CORRUPT: not sending NULL, device:%p", device);
 			return;
 		}
 		g_signal_emit (daemon, signals[SIGNAL_DEVICE_CHANGED], 0, object_path);
+	}
+}
+
+/**
+ * dkp_daemon_device_added_cb:
+ **/
+static void
+dkp_daemon_device_added_cb (DkpBackend *backend, GObject *native, DkpDevice *device, DkpDaemon *daemon)
+{
+	DkpDeviceType type;
+	const gchar *object_path;
+
+	g_return_if_fail (DKP_IS_DAEMON (daemon));
+	g_return_if_fail (DKP_IS_DEVICE (device));
+	g_return_if_fail (G_IS_OBJECT (native));
+
+	/* add to device list */
+	dkp_device_list_insert (daemon->priv->power_devices, native, G_OBJECT (device));
+
+	/* connect, so we get changes */
+	g_signal_connect (device, "changed",
+			  G_CALLBACK (dkp_daemon_device_changed_cb), daemon);
+
+	/* refresh after a short delay */
+	g_object_get (device,
+		      "type", &type,
+		      NULL);
+	if (type == DKP_DEVICE_TYPE_BATTERY)
+		dkp_daemon_poll_battery_devices_for_a_little_bit (daemon);
+
+	/* emit */
+	if (!daemon->priv->during_coldplug) {
+		object_path = dkp_device_get_object_path (device);
+		egg_debug ("emitting added: %s (during coldplug %i)", object_path, daemon->priv->during_coldplug);
+
+		/* don't crash the session */
+		if (object_path == NULL) {
+			egg_warning ("INTERNAL STATE CORRUPT: not sending NULL, native:%p, device:%p", native, device);
+			return;
+		}
+		g_signal_emit (daemon, signals[SIGNAL_DEVICE_ADDED], 0, object_path);
 	}
 }
 
@@ -667,6 +822,7 @@ dkp_daemon_device_changed_cb (DkpBackend *backend, GObject *native, DkpDevice *d
 static void
 dkp_daemon_device_removed_cb (DkpBackend *backend, GObject *native, DkpDevice *device, DkpDaemon *daemon)
 {
+	DkpDeviceType type;
 	const gchar *object_path;
 
 	g_return_if_fail (DKP_IS_DAEMON (daemon));
@@ -675,6 +831,13 @@ dkp_daemon_device_removed_cb (DkpBackend *backend, GObject *native, DkpDevice *d
 
 	/* remove from list */
 	dkp_device_list_remove (daemon->priv->power_devices, G_OBJECT(device));
+
+	/* refresh after a short delay */
+	g_object_get (device,
+		      "type", &type,
+		      NULL);
+	if (type == DKP_DEVICE_TYPE_BATTERY)
+		dkp_daemon_poll_battery_devices_for_a_little_bit (daemon);
 
 	/* emit */
 	if (!daemon->priv->during_coldplug) {
@@ -722,17 +885,18 @@ dkp_daemon_init (DkpDaemon *daemon)
 	daemon->priv->lid_is_closed = FALSE;
 	daemon->priv->kernel_can_suspend = FALSE;
 	daemon->priv->kernel_can_hibernate = FALSE;
-	daemon->priv->kernel_has_swap_space = FALSE;
+	daemon->priv->hibernate_has_swap_space = FALSE;
+	daemon->priv->hibernate_has_encrypted_swap = FALSE;
 	daemon->priv->power_devices = dkp_device_list_new ();
 	daemon->priv->on_battery = FALSE;
 	daemon->priv->on_low_battery = FALSE;
 	daemon->priv->during_coldplug = FALSE;
+	daemon->priv->battery_poll_id = 0;
+	daemon->priv->battery_poll_count = 0;
 
 	daemon->priv->backend = dkp_backend_new ();
 	g_signal_connect (daemon->priv->backend, "device-added",
 			  G_CALLBACK (dkp_daemon_device_added_cb), daemon);
-	g_signal_connect (daemon->priv->backend, "device-changed",
-			  G_CALLBACK (dkp_daemon_device_changed_cb), daemon);
 	g_signal_connect (daemon->priv->backend, "device-removed",
 			  G_CALLBACK (dkp_daemon_device_removed_cb), daemon);
 
@@ -751,12 +915,16 @@ dkp_daemon_init (DkpDaemon *daemon)
 
 	/* do we have enough swap? */
 	if (daemon->priv->kernel_can_hibernate) {
-		waterline = dkp_daemon_check_swap (daemon);
+		waterline = dkp_daemon_check_swap_space (daemon);
 		if (waterline < DKP_DAEMON_SWAP_WATERLINE)
-			daemon->priv->kernel_has_swap_space = TRUE;
+			daemon->priv->hibernate_has_swap_space = TRUE;
 		else
 			egg_debug ("not enough swap to enable hibernate");
 	}
+
+	/* is the swap usable? */
+	if (daemon->priv->kernel_can_hibernate)
+		daemon->priv->hibernate_has_encrypted_swap = dkp_daemon_check_encrypted_swap (daemon);
 }
 
 /**
@@ -809,7 +977,9 @@ dkp_daemon_get_property (GObject *object, guint prop_id, GValue *value, GParamSp
 		g_value_set_boolean (value, daemon->priv->kernel_can_suspend);
 		break;
 	case PROP_CAN_HIBERNATE:
-		g_value_set_boolean (value, (daemon->priv->kernel_can_hibernate && daemon->priv->kernel_has_swap_space));
+		g_value_set_boolean (value, (daemon->priv->kernel_can_hibernate &&
+					     daemon->priv->hibernate_has_swap_space &&
+					     !daemon->priv->hibernate_has_encrypted_swap));
 		break;
 	case PROP_ON_BATTERY:
 		g_value_set_boolean (value, daemon->priv->on_battery);
@@ -980,6 +1150,9 @@ dkp_daemon_finalize (GObject *object)
 	daemon = DKP_DAEMON (object);
 
 	g_return_if_fail (daemon->priv != NULL);
+
+	if (daemon->priv->battery_poll_id != 0)
+		g_source_remove (daemon->priv->battery_poll_id);
 
 	if (daemon->priv->proxy != NULL)
 		g_object_unref (daemon->priv->proxy);
