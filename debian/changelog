@@ -5,6 +5,9 @@ devicekit-power (012-1) UNRELEASED; urgency=low
       suspending again when AC state changes during suspend. (LP: #425411)
   * debian/control
     - Add dependency on udev.
+  * debian/devicekit-power.postinst
+    - Use start-stop-daemon instead of kill+pidof to stop the running
+      devkit-power-daemon process on upgrades.
 
  -- Michael Biebl <biebl@debian.org>  Mon, 19 Oct 2009 17:05:29 +0200
 
