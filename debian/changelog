@@ -1,15 +1,12 @@
-devicekit-power (011-2) UNRELEASED; urgency=low
+devicekit-power (012-1) UNRELEASED; urgency=low
 
-  [ Martin Pitt ]
-  * Add 00git-fix-ac-refresh.patch: Properly refresh update-time after AC
-    changes. This avoids immediately suspending again when AC state changes
-    during suspend. (LP: #425411)
-
-  [ Michael Biebl ]
+  * New upstream release
+    - Properly refresh update-time after AC changes. This avoids immediately
+      suspending again when AC state changes during suspend. (LP: #425411)
   * debian/control
     - Add dependency on udev.
 
- -- Martin Pitt <mpitt@debian.org>  Thu, 15 Oct 2009 12:41:20 +0200
+ -- Michael Biebl <biebl@debian.org>  Mon, 19 Oct 2009 17:05:29 +0200
 
 devicekit-power (011-1) unstable; urgency=low
 
