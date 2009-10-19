@@ -718,6 +718,10 @@ out:
 
 /**
  * dkp_device_refresh_internal:
+ *
+ * NOTE: if you're calling this function you have to ensure you're doing the
+ * the changed signals on the right interfaces, although by monitoring
+ * notify::update-time this should be mostly done.
  **/
 gboolean
 dkp_device_refresh_internal (DkpDevice *device)
@@ -856,15 +860,9 @@ dkp_device_perhaps_changed_cb (GObject *object, GParamSpec *pspec, DkpDevice *de
 	dkp_history_set_time_empty_data (device->priv->history, device->priv->time_to_empty);
 
 	/*  The order here matters; we want Device::Changed() before
-	 *  the DeviceChanged() signal on the main object; otherwise
-	 *  clients that only listens on DeviceChanged() won't be
-	 *  fully caught up...
-	 */
+	 *  the DeviceChanged() signal on the main object */
 	egg_debug ("emitting changed on %s", device->priv->native_path);
 	g_signal_emit (device, signals[SIGNAL_CHANGED], 0);
-	egg_debug ("emitting device-changed on %s", device->priv->native_path);
-	g_signal_emit_by_name (device->priv->daemon, "device-changed",
-			       device->priv->object_path, NULL);
 }
 
 /**
