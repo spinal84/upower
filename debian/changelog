@@ -1,3 +1,11 @@
+devicekit-power (012-2) UNRELEASED; urgency=low
+
+  * debian/patches/01-fix-hibernate-has-encrypted-swap-check.patch
+    - Fix broken check if swap space is encrypted. (Closes: #551797)
+      Thanks to Michael Ott for spotting this.
+
+ -- Michael Biebl <biebl@debian.org>  Wed, 21 Oct 2009 16:02:30 +0200
+
 devicekit-power (012-1) unstable; urgency=low
 
   * New upstream release
