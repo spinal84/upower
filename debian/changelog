@@ -1,6 +1,7 @@
 devicekit-power (013-1) UNRELEASED; urgency=low
 
   * New upstream release.
+  * Drop 01-fix-hibernate-has-encrypted-swap-check.patch, merged upstream.
 
  -- Michael Biebl <biebl@debian.org>  Mon, 07 Dec 2009 11:22:05 +0100
 
