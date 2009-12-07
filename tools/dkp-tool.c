@@ -41,16 +41,41 @@ static GMainLoop *loop;
 static gboolean opt_monitor_detail = FALSE;
 
 /**
+ * dkp_tool_get_timestamp:
+ **/
+static gchar *
+dkp_tool_get_timestamp (void)
+{
+	gchar *str_time;
+	gchar *timestamp;
+	time_t the_time;
+	struct timeval time_val;
+
+	time (&the_time);
+	gettimeofday (&time_val, NULL);
+	str_time = g_new0 (gchar, 255);
+	strftime (str_time, 254, "%H:%M:%S", localtime (&the_time));
+
+	/* generate header text */
+	timestamp = g_strdup_printf ("%s.%03i", str_time, (gint) time_val.tv_usec / 1000);
+	g_free (str_time);
+	return timestamp;
+}
+
+/**
  * dkp_tool_device_added_cb:
  **/
 static void
 dkp_tool_device_added_cb (DkpClient *client, const DkpDevice *device, gpointer user_data)
 {
-	g_print ("device added:     %s\n", dkp_device_get_object_path (device));
+	gchar *timestamp;
+	timestamp = dkp_tool_get_timestamp ();
+	g_print ("[%s]\tdevice added:     %s\n", timestamp, dkp_device_get_object_path (device));
 	if (opt_monitor_detail) {
 		dkp_device_print (device);
 		g_print ("\n");
 	}
+	g_free (timestamp);
 }
 
 /**
@@ -59,12 +84,15 @@ dkp_tool_device_added_cb (DkpClient *client, const DkpDevice *device, gpointer u
 static void
 dkp_tool_device_changed_cb (DkpClient *client, const DkpDevice *device, gpointer user_data)
 {
-	g_print ("device changed:     %s\n", dkp_device_get_object_path (device));
+	gchar *timestamp;
+	timestamp = dkp_tool_get_timestamp ();
+	g_print ("[%s]\tdevice changed:     %s\n", timestamp, dkp_device_get_object_path (device));
 	if (opt_monitor_detail) {
 		/* TODO: would be nice to just show the diff */
 		dkp_device_print (device);
 		g_print ("\n");
 	}
+	g_free (timestamp);
 }
 
 /**
@@ -73,9 +101,12 @@ dkp_tool_device_changed_cb (DkpClient *client, const DkpDevice *device, gpointer
 static void
 dkp_tool_device_removed_cb (DkpClient *client, const DkpDevice *device, gpointer user_data)
 {
-	g_print ("device removed:   %s\n", dkp_device_get_object_path (device));
+	gchar *timestamp;
+	timestamp = dkp_tool_get_timestamp ();
+	g_print ("[%s]\tdevice removed:   %s\n", timestamp, dkp_device_get_object_path (device));
 	if (opt_monitor_detail)
 		g_print ("\n");
+	g_free (timestamp);
 }
 
 /**
@@ -119,11 +150,14 @@ dkp_client_print (DkpClient *client)
 static void
 dkp_tool_changed_cb (DkpClient *client, gpointer user_data)
 {
-	g_print ("daemon changed:\n");
+	gchar *timestamp;
+	timestamp = dkp_tool_get_timestamp ();
+	g_print ("[%s]\tdaemon changed:\n", timestamp);
 	if (opt_monitor_detail) {
 		dkp_client_print (client);
 		g_print ("\n");
 	}
+	g_free (timestamp);
 }
 
 /**
@@ -196,7 +230,6 @@ main (int argc, char **argv)
 	gint retval = EXIT_FAILURE;
 	guint i;
 	GOptionContext *context;
-	gboolean verbose = FALSE;
 	gboolean opt_dump = FALSE;
 	gboolean opt_wakeups = FALSE;
 	gboolean opt_enumerate = FALSE;
@@ -210,7 +243,6 @@ main (int argc, char **argv)
 	DkpDevice *device;
 
 	const GOptionEntry entries[] = {
-		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose, _("Show extra debugging information"), NULL },
 		{ "enumerate", 'e', 0, G_OPTION_ARG_NONE, &opt_enumerate, _("Enumerate objects paths for devices"), NULL },
 		{ "dump", 'd', 0, G_OPTION_ARG_NONE, &opt_dump, _("Dump all parameters for all objects"), NULL },
 		{ "wakeups", 'w', 0, G_OPTION_ARG_NONE, &opt_wakeups, _("Get the wakeup data"), NULL },
@@ -225,9 +257,9 @@ main (int argc, char **argv)
 
 	context = g_option_context_new ("DeviceKit-power tool");
 	g_option_context_add_main_entries (context, entries, NULL);
+	g_option_context_add_group (context, egg_debug_get_option_group ());
 	g_option_context_parse (context, &argc, &argv, NULL);
 	g_option_context_free (context);
-	egg_debug_init (verbose);
 
 	loop = g_main_loop_new (NULL, FALSE);
 	client = dkp_client_new ();
