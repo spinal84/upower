@@ -143,6 +143,8 @@ dkp_device_supply_get_on_battery (DkpDevice *device, gboolean *on_battery)
 
 	if (type != DKP_DEVICE_TYPE_BATTERY)
 		return FALSE;
+	if (state == DKP_DEVICE_STATE_UNKNOWN)
+		return FALSE;
 	if (!is_present)
 		return FALSE;
 
@@ -159,7 +161,7 @@ dkp_device_supply_get_low_battery (DkpDevice *device, gboolean *low_battery)
 	gboolean ret;
 	gboolean on_battery;
 	DkpDeviceSupply *supply = DKP_DEVICE_SUPPLY (device);
-	guint percentage;
+	gdouble percentage;
 
 	g_return_val_if_fail (DKP_IS_SUPPLY (supply), FALSE);
 	g_return_val_if_fail (low_battery != NULL, FALSE);
@@ -176,7 +178,7 @@ dkp_device_supply_get_low_battery (DkpDevice *device, gboolean *low_battery)
 	}
 
 	g_object_get (device, "percentage", &percentage, NULL);
-	*low_battery = (percentage < 10);
+	*low_battery = (percentage < 10.0f);
 	return TRUE;
 }
 
@@ -220,10 +222,10 @@ dkp_device_supply_calculate_rate (DkpDeviceSupply *supply)
 
 	g_object_get (device, "energy", &energy, NULL);
 
-	if (energy < 0)
+	if (energy < 0.1f)
 		return;
 
-	if (supply->priv->energy_old < 0)
+	if (supply->priv->energy_old < 0.1f)
 		return;
 
 	if (supply->priv->energy_old == energy)
@@ -238,7 +240,7 @@ dkp_device_supply_calculate_rate (DkpDeviceSupply *supply)
 
 	/* get the difference in charge */
 	energy = supply->priv->energy_old - energy;
-	if (energy < 0.1)
+	if (energy < 0.1f)
 		return;
 
 	/* probably okay */
@@ -341,6 +343,35 @@ out:
 }
 
 /**
+ * dkp_device_supply_make_safe_string:
+ **/
+static void
+dkp_device_supply_make_safe_string (gchar *text)
+{
+	guint i;
+	guint idx = 0;
+
+	/* no point checking */
+	if (text == NULL)
+		return;
+
+	/* shunt up only safe chars */
+	for (i=0; text[i] != '\0'; i++) {
+		if (g_ascii_isprint (text[i])) {
+			/* only copy if the address is going to change */
+			if (idx != i)
+				text[idx] = text[i];
+			idx++;
+		} else {
+			egg_debug ("invalid char '%c'", text[i]);
+		}
+	}
+
+	/* ensure null terminated */
+	text[idx] = '\0';
+}
+
+/**
  * dkp_device_supply_refresh_battery:
  *
  * Return %TRUE on success, %FALSE if we failed to refresh or no data
@@ -349,7 +380,7 @@ static gboolean
 dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 {
 	gchar *status = NULL;
-	gchar *technology_native;
+	gchar *technology_native = NULL;
 	gboolean ret = TRUE;
 	gdouble voltage_design;
 	DkpDeviceState old_state;
@@ -367,9 +398,9 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 	gdouble voltage;
 	guint64 time_to_empty;
 	guint64 time_to_full;
-	gchar *manufacturer;
-	gchar *model_name;
-	gchar *serial_number;
+	gchar *manufacturer = NULL;
+	gchar *model_name = NULL;
+	gchar *serial_number = NULL;
 	gboolean recall_notice;
 	const gchar *recall_vendor = NULL;
 	const gchar *recall_url = NULL;
@@ -405,12 +436,16 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 		/* the ACPI spec is bad at defining battery type constants */
 		technology_native = dkp_device_supply_get_string (native_path, "technology");
 		g_object_set (device, "technology", dkp_device_supply_convert_device_technology (technology_native), NULL);
-		g_free (technology_native);
 
 		/* get values which may be blank */
 		manufacturer = dkp_device_supply_get_string (native_path, "manufacturer");
 		model_name = dkp_device_supply_get_string (native_path, "model_name");
 		serial_number = dkp_device_supply_get_string (native_path, "serial_number");
+
+		/* some vendors fill this with binary garbage */
+		dkp_device_supply_make_safe_string (manufacturer);
+		dkp_device_supply_make_safe_string (model_name);
+		dkp_device_supply_make_safe_string (serial_number);
 
 		/* are we possibly recalled by the vendor? */
 		recall_notice = g_udev_device_has_property (native, "DKP_RECALL_NOTICE");
@@ -430,10 +465,6 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 			      "recall-vendor", recall_vendor,
 			      "recall-url", recall_url,
 			      NULL);
-
-		g_free (manufacturer);
-		g_free (model_name);
-		g_free (serial_number);
 
 		/* these don't change at runtime */
 		energy_full = sysfs_get_double (native_path, "energy_full") / 1000000.0;
@@ -572,14 +603,26 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 		battery_count = dkp_daemon_get_number_devices_of_type (daemon, DKP_DEVICE_TYPE_BATTERY);
 
 		/* try to find a suitable icon depending on AC state */
-		if (on_battery && battery_count > 1)
-			state = DKP_DEVICE_STATE_PENDING_DISCHARGE;
-		else if (battery_count > 1)
-			state = DKP_DEVICE_STATE_PENDING_CHARGE;
-		else if (on_battery)
-			state = DKP_DEVICE_STATE_DISCHARGING;
-		else
-			state = DKP_DEVICE_STATE_FULLY_CHARGED;
+		if (battery_count > 1) {
+			if (on_battery && percentage < 1.0f) {
+				/* battery is low */
+				state = DKP_DEVICE_STATE_EMPTY;
+			} else if (on_battery) {
+				/* battery is waiting */
+				state = DKP_DEVICE_STATE_PENDING_DISCHARGE;
+			} else {
+				/* battery is waiting */
+				state = DKP_DEVICE_STATE_PENDING_CHARGE;
+			}
+		} else {
+			if (on_battery) {
+				/* battery is assumed discharging */
+				state = DKP_DEVICE_STATE_DISCHARGING;
+			} else {
+				/* battery is waiting */
+				state = DKP_DEVICE_STATE_FULLY_CHARGED;
+			}
+		}
 
 		/* print what we did */
 		egg_debug ("guessing battery state '%s' using global on-battery:%i",
@@ -593,6 +636,10 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 		egg_warning ("Setting %s state empty as unknown and very low", native_path);
 		state = DKP_DEVICE_STATE_EMPTY;
 	}
+
+	/* some batteries give out massive rate values when nearly empty */
+	if (energy < 0.1f)
+		energy_rate = 0.0f;
 
 	/* calculate a quick and dirty time remaining value */
 	time_to_empty = 0;
@@ -634,6 +681,10 @@ dkp_device_supply_refresh_battery (DkpDeviceSupply *supply)
 		      NULL);
 
 out:
+	g_free (technology_native);
+	g_free (manufacturer);
+	g_free (model_name);
+	g_free (serial_number);
 	g_free (status);
 	return ret;
 }
