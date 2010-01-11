@@ -1,8 +1,8 @@
-devicekit-power (014-1) UNRELEASED; urgency=low
+devicekit-power (014-1) unstable; urgency=low
 
   * New upstream release.
 
- -- Martin Pitt <mpitt@debian.org>  Mon, 11 Jan 2010 09:28:07 +0100
+ -- Martin Pitt <mpitt@debian.org>  Mon, 11 Jan 2010 09:33:33 +0100
 
 devicekit-power (013-1) unstable; urgency=low
 
