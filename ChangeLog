@@ -59,7 +59,7 @@ Date:   Tue Aug 5 12:25:27 2008 +0100
 
     don't segfault when a history file is present but empty
 
- upower-gobject/up-history-obj.c |    2 +-
+ upower-gobject/up-history-data.c |    2 +-
  src/up-history.c                 |   10 ++++++++--
  2 files changed, 9 insertions(+), 3 deletions(-)
 
@@ -81,7 +81,7 @@ commit 22dfd9e7db9e58584e9f00359528c379f0a98cea
 Author: Richard Hughes <richard@hughsie.com>
 Date:   Tue Aug 5 11:41:26 2008 +0100
 
-    don't get the ID in DkpDevice, we already set it in DkpSource
+    don't get the ID in UpDevice, we already set it in UpSource
 
  src/up-device.c |    5 -----
  1 files changed, 0 insertions(+), 5 deletions(-)
@@ -104,7 +104,7 @@ commit 4e4859c9cba1dfb16a0299bf6328aa58cf001818
 Author: Richard Hughes <richard@hughsie.com>
 Date:   Tue Aug 5 09:45:05 2008 +0100
 
-    add some helpers in DkpSource to get the binary states of primary
+    add some helpers in UpSource to get the binary states of primary
     batteries
 
  src/up-daemon.c |    2 ++
@@ -156,16 +156,16 @@ commit 8c4efc79f33511eafa06074357fffc2c16e8e284
 Author: Richard Hughes <richard@hughsie.com>
 Date:   Mon Aug 4 16:25:25 2008 +0100
 
-    use DkpHistoryObj in upower
+    use UpHistoryData in upower
 
  upower-gobject/Makefile.am       |    2 +
- upower-gobject/up-history-obj.c |  173
+ upower-gobject/up-history-data.c |  173
  +++++++++++++++++++++++++++++++++++++
- upower-gobject/up-history-obj.h |   51 +++++++++++
+ upower-gobject/up-history-data.h |   51 +++++++++++
  src/Makefile.am                   |    1 -
- src/up-history-obj.c             |  173
+ src/up-history-data.c             |  173
  -------------------------------------
- src/up-history-obj.h             |   51 -----------
+ src/up-history-data.h             |   51 -----------
  tools/up-tool.c                  |   29 ++++--
  7 files changed, 245 insertions(+), 235 deletions(-)
 
@@ -227,12 +227,12 @@ commit 1d7655c14fe6b622e6d01269e11c1c193e1a63ce
 Author: Richard Hughes <richard@hughsie.com>
 Date:   Mon Aug 4 14:34:33 2008 +0100
 
-    add some helpers to manipulate DkpHistoryObj objects for the future
+    add some helpers to manipulate UpHistoryData objects for the future
     history and profiling code
 
- src/up-history-obj.c |  173
+ src/up-history-data.c |  173
  +++++++++++++++++++++++++++++++++++++++++++++++++
- src/up-history-obj.h |   51 ++++++++++++++
+ src/up-history-data.h |   51 ++++++++++++++
  2 files changed, 224 insertions(+), 0 deletions(-)
 
 commit 3f606443b59c0f2c5eac3573855080edf1a28468
@@ -240,7 +240,7 @@ Author: Richard Hughes <richard@hughsie.com>
 Date:   Mon Aug 4 14:30:34 2008 +0100
 
     add a function up_object_diff() to pretty print the differences
-    between two DkpObject's
+    between two UpObject's
 
  upower-gobject/up-object.c |  162
  ++++++++++++++++++++++++++++++++++++-----
@@ -372,7 +372,7 @@ commit dee758ac78df79e5378efddd493e6e870c75f3d6
 Author: Richard Hughes <richard@hughsie.com>
 Date:   Fri Aug 1 16:48:33 2008 +0100
 
-    use DkpObject in upower command line tool
+    use UpObject in upower command line tool
 
  tools/up-tool.c |  209
  ++++++++++++------------------------------------------
@@ -478,7 +478,7 @@ commit cbaa6851d4e5c69a9b797c9379446388a989b4b0
 Author: Richard Hughes <richard@hughsie.com>
 Date:   Fri Aug 1 11:24:54 2008 +0100
 
-    change the GObject prefix from DevkitPower to Dkp
+    change the GObject prefix from DevkitPower to Up
 
  src/Makefile.am  |    8 ++--
  src/up-daemon.c |  152

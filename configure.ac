@@ -1,8 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59c)
-AC_INIT(DeviceKit-power, 013, http://lists.freedesktop.org/mailman/listinfo/devkit-devel)
-AM_INIT_AUTOMAKE(DeviceKit-power, 013)
+AC_INIT(DeviceKit-power, 014, http://lists.freedesktop.org/mailman/listinfo/devkit-devel)
+AM_INIT_AUTOMAKE(DeviceKit-power, 014)
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
@@ -104,13 +104,13 @@ if test "$GCC" = "yes"; then
 	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wreturn-type"
 	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wformat-nonliteral"
 	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wformat-security"
-	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wmissing-include-dirs"
+#	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wmissing-include-dirs"
 	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wmissing-format-attribute"
 #	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wclobbered"
 #	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wempty-body"
 #	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wignored-qualifiers"
 	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wsign-compare"
-	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wtype-limits"
+#	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wtype-limits"
 	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wuninitialized"
 	WARNINGFLAGS_C="$WARNINGFLAGS_C -Waggregate-return"
 	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wdeclaration-after-statement"
@@ -149,11 +149,14 @@ dnl - Compile time default choice of backend
 dnl ---------------------------------------------------------------------------
 AC_ARG_WITH([backend],
 	    AS_HELP_STRING([--with-backend=<option>],
-			   [Default backend to use linux, dummy (dummy)]))
+			   [Default backend to use linux, freebsd, dummy (dummy)]))
+UDEV_RULES=
 # default to a sane option
 if test x$with_backend = x; then
 	if test -e /usr/include/gudev-1.0/gudev/gudev.h ; then
 		with_backend=linux
+	elif test -e /usr/include/dev/acpica/acpiio.h ; then
+	    	with_backend=freebsd
 	else
 		with_backend=dummy
 	fi
@@ -170,11 +173,14 @@ if test x$with_backend = xlinux; then
 	dnl Check libusb also
 	AC_CHECK_HEADERS(usb.h, , [AC_MSG_ERROR([Can't find usb.h. Please install libusb.])])
 	AC_CHECK_LIB([usb], [usb_find_devices], [], [AC_MSG_ERROR([Can't use libusb.])])
+	UDEV_RULES="rules"
 fi
+AC_SUBST(UDEV_RULES)
 
 # export to Makefile.am
 AM_CONDITIONAL(BACKEND_TYPE_DUMMY, [test x$with_backend = xdummy])
 AM_CONDITIONAL(BACKEND_TYPE_LINUX, [test x$with_backend = xlinux])
+AM_CONDITIONAL(BACKEND_TYPE_FREEBSD, [test x$with_backend = xfreebsd])
 
 dnl ---------------------------------------------------------------------------
 dnl - Build self tests
@@ -201,6 +207,7 @@ Makefile
 devkit-power-gobject.pc
 src/Makefile
 src/dummy/Makefile
+src/freebsd/Makefile
 src/linux/Makefile
 tools/Makefile
 doc/Makefile

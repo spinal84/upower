@@ -57,12 +57,12 @@
 </pre>
 </div>
 <div class="refsect1" title="Signals">
-<a name="id2853086"></a><h2>Signals</h2>
+<a name="id2841754"></a><h2>Signals</h2>
 <pre class="synopsis"><a class="link" href="Device.html#Device::Changed">Changed</a> ()
 </pre>
 </div>
 <div class="refsect1" title="Implemented Interfaces">
-<a name="id2825516"></a><h2>Implemented Interfaces</h2>
+<a name="id2814184"></a><h2>Implemented Interfaces</h2>
 <p>
     Objects implementing org.freedesktop.DeviceKit.Power.Device also implements
     org.freedesktop.DBus.Introspectable,
@@ -70,7 +70,7 @@
     </p>
 </div>
 <div class="refsect1" title="Properties">
-<a name="id2852823"></a><h2>Properties</h2>
+<a name="id2841491"></a><h2>Properties</h2>
 <pre class="synopsis"><a class="link" href="Device.html#Device:NativePath">'NativePath'</a>       read      's'
 <a class="link" href="Device.html#Device:Vendor">'Vendor'</a>           read      's'
 <a class="link" href="Device.html#Device:Model">'Model'</a>            read      's'
@@ -101,7 +101,7 @@
 </pre>
 </div>
 <div class="refsect1" title="Description">
-<a name="id2769235"></a><h2>Description</h2>
+<a name="id2757902"></a><h2>Description</h2>
 <p>
       
         </p>
@@ -240,9 +240,9 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
     </p>
 </div>
 <div class="refsect1" title="Details">
-<a name="id2769349"></a><h2>Details</h2>
+<a name="id2758016"></a><h2>Details</h2>
 <div class="refsect2" title="Refresh ()">
-<a name="id2769357"></a><h3>
+<a name="id2758025"></a><h3>
 <a name="Device.Refresh"></a>Refresh ()</h3>
 <pre class="programlisting">Refresh ()</pre>
 </div>
@@ -254,7 +254,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 <tbody></tbody>
 </table></div>
 <div class="refsect3" title="Errors">
-<a name="id2845028"></a><h4>Errors</h4>
+<a name="id2833696"></a><h4>Errors</h4>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
@@ -264,12 +264,12 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 </div>
 <div class="refsect3" title="Permissions">
-<a name="id2845047"></a><h4>Permissions</h4>
+<a name="id2833715"></a><h4>Permissions</h4>
 <p class="permission">Callers need the org.freedesktop.devicekit.power.refresh-power-source authorization</p>
 </div>
 <hr>
 <div class="refsect2" title="GetHistory ()">
-<a name="id2845057"></a><h3>
+<a name="id2833724"></a><h3>
 <a name="Device.GetHistory"></a>GetHistory ()</h3>
 <pre class="programlisting">GetHistory (in  's'      type,
             in  'u'      timespan,
@@ -325,7 +325,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title="GetStatistics ()">
-<a name="id2845203"></a><h3>
+<a name="id2833870"></a><h3>
 <a name="Device.GetStatistics"></a>GetStatistics ()</h3>
 <pre class="programlisting">GetStatistics (in  's'     type,
                out 'a(dd)' data)</pre>
@@ -363,9 +363,9 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 </div>
 <div class="refsect1" title="Signal Details">
-<a name="id2853884"></a><h2>Signal Details</h2>
+<a name="id2842552"></a><h2>Signal Details</h2>
 <div class="refsect2" title="The Changed signal">
-<a name="id2853893"></a><h3>
+<a name="id2842560"></a><h3>
 <a name="Device::Changed"></a>The Changed signal</h3>
 <pre class="programlisting">Changed ()</pre>
 </div>
@@ -378,9 +378,9 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 </div>
 <div class="refsect1" title="Property Details">
-<a name="id2853926"></a><h2>Property Details</h2>
+<a name="id2842594"></a><h2>Property Details</h2>
 <div class="refsect2" title='The "NativePath" property'>
-<a name="id2853934"></a><h3>
+<a name="id2842602"></a><h3>
 <a name="Device:NativePath"></a>The "NativePath" property</h3>
 <pre class="programlisting">'NativePath'  read      's'
 </pre>
@@ -398,7 +398,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "Vendor" property'>
-<a name="id2853976"></a><h3>
+<a name="id2842643"></a><h3>
 <a name="Device:Vendor"></a>The "Vendor" property</h3>
 <pre class="programlisting">'Vendor'  read      's'
 </pre>
@@ -412,7 +412,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "Model" property'>
-<a name="id2854007"></a><h3>
+<a name="id2842674"></a><h3>
 <a name="Device:Model"></a>The "Model" property</h3>
 <pre class="programlisting">'Model'  read      's'
 </pre>
@@ -426,7 +426,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "Serial" property'>
-<a name="id2854038"></a><h3>
+<a name="id2842706"></a><h3>
 <a name="Device:Serial"></a>The "Serial" property</h3>
 <pre class="programlisting">'Serial'  read      's'
 </pre>
@@ -440,7 +440,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "UpdateTime" property'>
-<a name="id2854069"></a><h3>
+<a name="id2842737"></a><h3>
 <a name="Device:UpdateTime"></a>The "UpdateTime" property</h3>
 <pre class="programlisting">'UpdateTime'  read      't'
 </pre>
@@ -455,7 +455,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "Type" property'>
-<a name="id2854103"></a><h3>
+<a name="id2842770"></a><h3>
 <a name="Device:Type"></a>The "Type" property</h3>
 <pre class="programlisting">'Type'  read      'u'
 </pre>
@@ -489,7 +489,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "PowerSupply" property'>
-<a name="id2854201"></a><h3>
+<a name="id2842869"></a><h3>
 <a name="Device:PowerSupply"></a>The "PowerSupply" property</h3>
 <pre class="programlisting">'PowerSupply'  read      'b'
 </pre>
@@ -505,7 +505,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "HasHistory" property'>
-<a name="id2854235"></a><h3>
+<a name="id2842903"></a><h3>
 <a name="Device:HasHistory"></a>The "HasHistory" property</h3>
 <pre class="programlisting">'HasHistory'  read      'b'
 </pre>
@@ -519,7 +519,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "HasStatistics" property'>
-<a name="id2854267"></a><h3>
+<a name="id2842935"></a><h3>
 <a name="Device:HasStatistics"></a>The "HasStatistics" property</h3>
 <pre class="programlisting">'HasStatistics'  read      'b'
 </pre>
@@ -533,7 +533,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "Online" property'>
-<a name="id2854299"></a><h3>
+<a name="id2842967"></a><h3>
 <a name="Device:Online"></a>The "Online" property</h3>
 <pre class="programlisting">'Online'  read      'b'
 </pre>
@@ -550,7 +550,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "Energy" property'>
-<a name="id2854342"></a><h3>
+<a name="id2843009"></a><h3>
 <a name="Device:Energy"></a>The "Energy" property</h3>
 <pre class="programlisting">'Energy'  read      'd'
 </pre>
@@ -570,7 +570,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "EnergyEmpty" property'>
-<a name="id2854387"></a><h3>
+<a name="id2843055"></a><h3>
 <a name="Device:EnergyEmpty"></a>The "EnergyEmpty" property</h3>
 <pre class="programlisting">'EnergyEmpty'  read      'd'
 </pre>
@@ -590,7 +590,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "EnergyFull" property'>
-<a name="id2854434"></a><h3>
+<a name="id2843101"></a><h3>
 <a name="Device:EnergyFull"></a>The "EnergyFull" property</h3>
 <pre class="programlisting">'EnergyFull'  read      'd'
 </pre>
@@ -610,7 +610,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "EnergyFullDesign" property'>
-<a name="id2854480"></a><h3>
+<a name="id2843148"></a><h3>
 <a name="Device:EnergyFullDesign"></a>The "EnergyFullDesign" property</h3>
 <pre class="programlisting">'EnergyFullDesign'  read      'd'
 </pre>
@@ -630,7 +630,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "EnergyRate" property'>
-<a name="id2854527"></a><h3>
+<a name="id2843194"></a><h3>
 <a name="Device:EnergyRate"></a>The "EnergyRate" property</h3>
 <pre class="programlisting">'EnergyRate'  read      'd'
 </pre>
@@ -651,7 +651,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "Voltage" property'>
-<a name="id2854574"></a><h3>
+<a name="id2843242"></a><h3>
 <a name="Device:Voltage"></a>The "Voltage" property</h3>
 <pre class="programlisting">'Voltage'  read      'd'
 </pre>
@@ -665,7 +665,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "TimeToEmpty" property'>
-<a name="id2854606"></a><h3>
+<a name="id2843273"></a><h3>
 <a name="Device:TimeToEmpty"></a>The "TimeToEmpty" property</h3>
 <pre class="programlisting">'TimeToEmpty'  read      'x'
 </pre>
@@ -685,7 +685,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "TimeToFull" property'>
-<a name="id2854652"></a><h3>
+<a name="id2843320"></a><h3>
 <a name="Device:TimeToFull"></a>The "TimeToFull" property</h3>
 <pre class="programlisting">'TimeToFull'  read      'x'
 </pre>
@@ -705,7 +705,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "Percentage" property'>
-<a name="id2854698"></a><h3>
+<a name="id2843366"></a><h3>
 <a name="Device:Percentage"></a>The "Percentage" property</h3>
 <pre class="programlisting">'Percentage'  read      'd'
 </pre>
@@ -732,7 +732,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "IsPresent" property'>
-<a name="id2854787"></a><h3>
+<a name="id2843455"></a><h3>
 <a name="Device:IsPresent"></a>The "IsPresent" property</h3>
 <pre class="programlisting">'IsPresent'  read      'b'
 </pre>
@@ -753,7 +753,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "State" property'>
-<a name="id2854834"></a><h3>
+<a name="id2843502"></a><h3>
 <a name="Device:State"></a>The "State" property</h3>
 <pre class="programlisting">'State'  read      'u'
 </pre>
@@ -788,7 +788,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "IsRechargeable" property'>
-<a name="id2854934"></a><h3>
+<a name="id2843601"></a><h3>
 <a name="Device:IsRechargeable"></a>The "IsRechargeable" property</h3>
 <pre class="programlisting">'IsRechargeable'  read      'b'
 </pre>
@@ -807,7 +807,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "Capacity" property'>
-<a name="id2854979"></a><h3>
+<a name="id2843647"></a><h3>
 <a name="Device:Capacity"></a>The "Capacity" property</h3>
 <pre class="programlisting">'Capacity'  read      'd'
 </pre>
@@ -833,7 +833,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "Technology" property'>
-<a name="id2855050"></a><h3>
+<a name="id2843717"></a><h3>
 <a name="Device:Technology"></a>The "Technology" property</h3>
 <pre class="programlisting">'Technology'  read      'u'
 </pre>
@@ -868,7 +868,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "RecallNotice" property'>
-<a name="id2855149"></a><h3>
+<a name="id2843817"></a><h3>
 <a name="Device:RecallNotice"></a>The "RecallNotice" property</h3>
 <pre class="programlisting">'RecallNotice'  read      'b'
 </pre>
@@ -885,7 +885,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "RecallVendor" property'>
-<a name="id2855185"></a><h3>
+<a name="id2843852"></a><h3>
 <a name="Device:RecallVendor"></a>The "RecallVendor" property</h3>
 <pre class="programlisting">'RecallVendor'  read      's'
 </pre>
@@ -902,7 +902,7 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "RecallUrl" property'>
-<a name="id2855222"></a><h3>
+<a name="id2843890"></a><h3>
 <a name="Device:RecallUrl"></a>The "RecallUrl" property</h3>
 <pre class="programlisting">'RecallUrl'  read      's'
 </pre>
