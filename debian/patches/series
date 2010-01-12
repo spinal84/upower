@@ -1,1 +1,2 @@
 # Debian patches for devicekit-power
+01-lid-status-fallback.patch

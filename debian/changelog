@@ -1,3 +1,11 @@
+devicekit-power (014-2) UNRELEASED; urgency=low
+
+  * debian/patches/01-lid-status-fallback.patch
+    - Use a fallback for the capability bit when checking the lid status.
+      Patch pulled from upstream Git. (Closes: #555740)
+
+ -- Michael Biebl <biebl@debian.org>  Tue, 12 Jan 2010 02:45:56 +0100
+
 devicekit-power (014-1) unstable; urgency=low
 
   * New upstream release.

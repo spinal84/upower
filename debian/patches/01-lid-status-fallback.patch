@@ -1,0 +1,24 @@
+commit e93895a257b1215fa0ab0e3667e900df7709fa60
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Jan 11 15:56:53 2010 +0000
+
+    Use a fallback for the capability bit when checking the lid status. Fixes #25041
+
+diff --git a/src/linux/dkp-input.c b/src/linux/dkp-input.c
+index 0ea72b5..e213033 100644
+--- a/src/linux/dkp-input.c
++++ b/src/linux/dkp-input.c
+@@ -183,7 +183,12 @@ dkp_input_coldplug (DkpInput *input, DkpDaemon *daemon, GUdevDevice *d)
+ 	path = g_build_filename (native_path, "../capabilities/sw", NULL);
+ 	if (!g_file_test (path, G_FILE_TEST_EXISTS)) {
+ 		egg_debug ("not a switch [%s]", path);
+-		goto out;
++		g_free (path);
++		path = g_build_filename (native_path, "capabilities/sw", NULL);
++		if (!g_file_test (path, G_FILE_TEST_EXISTS)) {
++			egg_debug ("not a switch [%s]", path);
++			goto out;
++		}
+ 	}
+ 
+ 	/* get caps */
