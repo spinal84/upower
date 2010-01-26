@@ -1,3 +1,11 @@
+devicekit-power (014-3) UNRELEASED; urgency=low
+
+  * Add 02-dkpclient-singleton.patch: Make DkpClient a singleton to avoid some
+    weird race conditions. Patch taken from upstream git. (Closes: #567021, 
+    LP: #425411)
+
+ -- Martin Pitt <mpitt@debian.org>  Tue, 26 Jan 2010 20:19:23 +0100
+
 devicekit-power (014-2) unstable; urgency=low
 
   * debian/patches/01-lid-status-fallback.patch
