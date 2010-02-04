@@ -4,6 +4,8 @@ upower (0.9.0-1) UNRELEASED; urgency=low
     - Rename the project, library, and D-Bus interface to upower.
     - Bug fixes.
     - Translation updates.
+  * Drop 01-lid-status-fallback.patch, 02-dkpclient-singleton.patch: Applied
+    upstream.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 04 Feb 2010 15:36:20 -0800
 
