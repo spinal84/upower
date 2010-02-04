@@ -13,12 +13,13 @@ INCLUDES = \
 	-DPACKAGE_LIB_DIR=\""$(libdir)"\"			\
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
 	-DG_UDEV_API_IS_SUBJECT_TO_CHANGE			\
-	-DDKP_COMPILATION					\
-	-DDKP_DISABLE_DEPRECATED				\
-	-DEGG_LOG_FILE=\""$(DKP_LOG_DIR)/DeviceKit-power"\"	\
-	-DEGG_VERBOSE="\"DKP_VERBOSE\""				\
-	-DEGG_LOGGING="\"DKP_LOGGING\""				\
-	-DEGG_CONSOLE="\"DKP_CONSOLE\""				\
+	-DUP_COMPILATION					\
+	-DUP_DISABLE_DEPRECATED				\
+	-DEGG_LOG_FILE=\""$(UP_LOG_DIR)/DeviceKit-power"\"	\
+	-DEGG_VERBOSE="\"UP_VERBOSE\""				\
+	-DEGG_LOGGING="\"UP_LOGGING\""				\
+	-DEGG_CONSOLE="\"UP_CONSOLE\""				\
+	-I$(top_srcdir)/libupower-glib				\
 	-I$(top_srcdir)/devkit-power-gobject			\
 	-I$(top_srcdir)						\
 	$(GIO_CFLAGS)						\
@@ -30,69 +31,68 @@ INCLUDES = \
 DEVKIT_POWER_LIBS = $(top_builddir)/devkit-power-gobject/libdevkit-power-gobject.la
 
 BUILT_SOURCES =							\
-	dkp-daemon-glue.h					\
-	dkp-device-glue.h					\
-	dkp-qos-glue.h						\
-	dkp-wakeups-glue.h					\
-	dkp-marshal.h						\
-	dkp-marshal.c
+	up-daemon-glue.h					\
+	up-device-glue.h					\
+	up-qos-glue.h						\
+	up-wakeups-glue.h					\
+	up-marshal.h						\
+	up-marshal.c
 
-dkp-marshal.h: dkp-marshal.list
-	glib-genmarshal $< --prefix=dkp_marshal --header > $@
+up-marshal.h: up-marshal.list
+	glib-genmarshal $< --prefix=up_marshal --header > $@
 
-dkp-marshal.c: dkp-marshal.list
-	echo "#include \"dkp-marshal.h\"" > $@ && glib-genmarshal $< --prefix=dkp_marshal --body >> $@
+up-marshal.c: up-marshal.list
+	echo "#include \"up-marshal.h\"" > $@ && glib-genmarshal $< --prefix=up_marshal --body >> $@
 
-dkp-daemon-glue.h: org.freedesktop.DeviceKit.Power.xml Makefile.am
-	dbus-binding-tool --prefix=dkp_daemon --mode=glib-server --output=dkp-daemon-glue.h org.freedesktop.DeviceKit.Power.xml
+up-daemon-glue.h: org.freedesktop.UPower.xml Makefile.am
+	dbus-binding-tool --prefix=up_daemon --mode=glib-server --output=up-daemon-glue.h org.freedesktop.UPower.xml
 
-dkp-device-glue.h: org.freedesktop.DeviceKit.Power.Device.xml Makefile.am
-	dbus-binding-tool --prefix=dkp_device --mode=glib-server --output=dkp-device-glue.h org.freedesktop.DeviceKit.Power.Device.xml
+up-device-glue.h: org.freedesktop.UPower.Device.xml Makefile.am
+	dbus-binding-tool --prefix=up_device --mode=glib-server --output=up-device-glue.h org.freedesktop.UPower.Device.xml
 
-dkp-qos-glue.h: org.freedesktop.DeviceKit.Power.QoS.xml Makefile.am
-	dbus-binding-tool --prefix=dkp_qos --mode=glib-server --output=dkp-qos-glue.h org.freedesktop.DeviceKit.Power.QoS.xml
+up-qos-glue.h: org.freedesktop.UPower.QoS.xml Makefile.am
+	dbus-binding-tool --prefix=up_qos --mode=glib-server --output=up-qos-glue.h org.freedesktop.UPower.QoS.xml
 
-dkp-wakeups-glue.h: org.freedesktop.DeviceKit.Power.Wakeups.xml Makefile.am
-	dbus-binding-tool --prefix=dkp_wakeups --mode=glib-server --output=dkp-wakeups-glue.h org.freedesktop.DeviceKit.Power.Wakeups.xml
+up-wakeups-glue.h: org.freedesktop.UPower.Wakeups.xml Makefile.am
+	dbus-binding-tool --prefix=up_wakeups --mode=glib-server --output=up-wakeups-glue.h org.freedesktop.UPower.Wakeups.xml
 
-libexec_PROGRAMS = devkit-power-daemon
+libexec_PROGRAMS = upowerd
 
 dbusifdir = $(datadir)/dbus-1/interfaces
 dbusif_DATA =							\
-	org.freedesktop.DeviceKit.Power.xml			\
-	org.freedesktop.DeviceKit.Power.Device.xml		\
-	org.freedesktop.DeviceKit.Power.QoS.xml			\
-	org.freedesktop.DeviceKit.Power.Wakeups.xml
+	org.freedesktop.UPower.xml				\
+	org.freedesktop.UPower.Device.xml			\
+	org.freedesktop.UPower.QoS.xml				\
+	org.freedesktop.UPower.Wakeups.xml
 
-devkit_power_daemon_SOURCES =					\
+upowerd_SOURCES =						\
 	egg-debug.c						\
 	egg-debug.h						\
-	dkp-polkit.h						\
-	dkp-polkit.c						\
-	dkp-daemon.h						\
-	dkp-daemon.c						\
-	dkp-device.h						\
-	dkp-device.c						\
-	dkp-device-list.h					\
-	dkp-device-list.c					\
-	dkp-qos.h						\
-	dkp-qos.c						\
-	dkp-wakeups.h						\
-	dkp-wakeups.c						\
-	dkp-history.h						\
-	dkp-history.c						\
-	dkp-backend.h						\
-	dkp-native.h						\
-	dkp-main.c						\
+	up-polkit.h						\
+	up-polkit.c						\
+	up-daemon.h						\
+	up-daemon.c						\
+	up-device.h						\
+	up-device.c						\
+	up-device-list.h					\
+	up-device-list.c					\
+	up-qos.h						\
+	up-qos.c						\
+	up-wakeups.h						\
+	up-wakeups.c						\
+	up-history.h						\
+	up-history.c						\
+	up-backend.h						\
+	up-native.h						\
+	up-main.c						\
 	$(BUILT_SOURCES)
 
-devkit_power_daemon_CPPFLAGS =					\
+upowerd_CPPFLAGS =						\
 	-I$(top_srcdir)/src					\
-	-DG_LOG_DOMAIN=\"dkp-daemon\"				\
-	$(DISABLE_DEPRECATED)					\
+	-DG_LOG_DOMAIN=\"up-daemon\"				\
 	$(AM_CPPFLAGS)
 
-devkit_power_daemon_LDADD =					\
+upowerd_LDADD =							\
 	-lm							\
 	$(USB_LIBS)						\
 	$(GIO_LIBS)						\
@@ -100,78 +100,78 @@ devkit_power_daemon_LDADD =					\
 	$(POLKIT_LIBS)
 
 if BACKEND_TYPE_DUMMY
-devkit_power_daemon_LDADD += 					\
-	dummy/libdkpshared.la
+upowerd_LDADD += 						\
+	dummy/libupshared.la
 endif
 
 if BACKEND_TYPE_FREEBSD
-devkit_power_daemon_LDADD +=					\
-	freebsd/libdkpshared.la					\
+upowerd_LDADD +=						\
+	freebsd/libupshared.la					\
 	$(DEVKIT_POWER_LIBS)
 endif
 
 if BACKEND_TYPE_LINUX
-devkit_power_daemon_LDADD += 					\
-	linux/libdkpshared.la					\
+upowerd_LDADD += 						\
+	linux/libupshared.la					\
 	$(GUDEV_LIBS)						\
 	$(DEVKIT_POWER_LIBS)
 endif
 
-devkit_power_daemon_CFLAGS =					\
+upowerd_CFLAGS =						\
 	$(WARNINGFLAGS_C)					\
 	$(NULL)
 
 if EGG_BUILD_TESTS
 check_PROGRAMS =						\
-	dkp-self-test
+	up-self-test
 
-dkp_self_test_SOURCES =						\
+up_self_test_SOURCES =						\
 	egg-test.h						\
 	egg-test.c						\
 	egg-debug.c						\
 	egg-debug.h						\
-	dkp-self-test.c						\
-	dkp-polkit.h						\
-	dkp-polkit.c						\
-	dkp-daemon.h						\
-	dkp-daemon.c						\
-	dkp-device.h						\
-	dkp-device.c						\
-	dkp-device-list.h					\
-	dkp-device-list.c					\
-	dkp-qos.h						\
-	dkp-qos.c						\
-	dkp-wakeups.h						\
-	dkp-wakeups.c						\
-	dkp-history.h						\
-	dkp-history.c						\
-	dkp-backend.h						\
-	dkp-native.h						\
+	up-self-test.c						\
+	up-polkit.h						\
+	up-polkit.c						\
+	up-daemon.h						\
+	up-daemon.c						\
+	up-device.h						\
+	up-device.c						\
+	up-device-list.h					\
+	up-device-list.c					\
+	up-qos.h						\
+	up-qos.c						\
+	up-wakeups.h						\
+	up-wakeups.c						\
+	up-history.h						\
+	up-history.c						\
+	up-backend.h						\
+	up-native.h						\
 	$(BUILT_SOURCES)
 
-dkp_self_test_LDADD =						\
+up_self_test_LDADD =						\
 	-lm							\
-	dummy/libdkpshared.la					\
+	dummy/libupshared.la					\
 	$(GLIB_LIBS)						\
 	$(GIO_CFLAGS)						\
 	$(SELFTEST_LIBS)					\
 	$(DEVKIT_POWER_LIBS)					\
 	$(POLKIT_LIBS)
 
-dkp_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS_C)
+up_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS_C)
 
-TESTS = dkp-self-test
+TESTS = up-self-test
 endif
 
 servicedir       = $(datadir)/dbus-1/system-services
-service_in_files = org.freedesktop.DeviceKit.Power.service.in
+service_in_files = org.freedesktop.UPower.service.in
 service_DATA     = $(service_in_files:.service.in=.service)
 
 $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
 
 dbusconfdir = $(sysconfdir)/dbus-1/system.d
-dbusconf_in_files = org.freedesktop.DeviceKit.Power.conf.in
+dbusconf_in_files = org.freedesktop.UPower.conf.in
 dbusconf_DATA = $(dbusconf_in_files:.conf.in=.conf)
 
 $(dbusconf_DATA): $(dbusconf_in_files) Makefile
@@ -182,14 +182,17 @@ install-data-hook:
 		mkdir -p $(DESTDIR)$(localstatedir)/lib/DeviceKit-power; \
 	fi
 
+install-exec-hook:
+	cd $(DESTDIR)$(libexecdir) && $(LN_S) -f upowerd devkit-power-daemon
+
 CLEANFILES = $(BUILT_SOURCES)
 
 EXTRA_DIST =							\
-	org.freedesktop.DeviceKit.Power.xml			\
-	org.freedesktop.DeviceKit.Power.Device.xml		\
-	org.freedesktop.DeviceKit.Power.QoS.xml			\
-	org.freedesktop.DeviceKit.Power.Wakeups.xml		\
-	dkp-marshal.list					\
+	org.freedesktop.UPower.xml				\
+	org.freedesktop.UPower.Device.xml			\
+	org.freedesktop.UPower.QoS.xml				\
+	org.freedesktop.UPower.Wakeups.xml			\
+	up-marshal.list						\
 	$(service_in_files)					\
 	$(dbusconf_in_files)
 

@@ -18,7 +18,7 @@
  *
  */
 
-#if !defined (__DEVICEKIT_POWER_H_INSIDE__) && !defined (DKP_COMPILATION)
+#if !defined (__UPOWER_H_INSIDE__) && !defined (UP_COMPILATION)
 #error "Only <devicekit-power.h> can be included directly."
 #endif
 
@@ -39,6 +39,10 @@ typedef struct
 	gchar			*cmdline;
 	gchar			*details;
 } DkpWakeupsObj;
+
+typedef DkpWakeupsObj UpWakeupsObj;
+#define up_wakeup_item_free	dkp_wakeups_obj_free
+#define up_wakeup_item_new	dkp_wakeups_obj_new
 
 DkpWakeupsObj	*dkp_wakeups_obj_new		(void);
 void		 dkp_wakeups_obj_free		(DkpWakeupsObj		*obj);

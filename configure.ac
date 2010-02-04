@@ -1,18 +1,33 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.59c)
-AC_INIT(DeviceKit-power, 014, http://lists.freedesktop.org/mailman/listinfo/devkit-devel)
-AM_INIT_AUTOMAKE(DeviceKit-power, 014)
-AM_CONFIG_HEADER(config.h)
-AM_MAINTAINER_MODE
+m4_define([up_major_version], [0])
+m4_define([up_minor_version], [9])
+m4_define([up_micro_version], [0])
+m4_define([up_version],
+          [up_major_version.up_minor_version.up_micro_version])
+
+AC_PREREQ(2.65)
+AC_INIT([UPower],[up_version],[richard@hughsie.com],[UPower])
+AC_CONFIG_SRCDIR(src)
+AM_INIT_AUTOMAKE([1.9 tar-ustar dist-bzip2])
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_MACRO_DIR([m4])
+
+GOBJECT_INTROSPECTION_CHECK([0.6.7])
 
 # enable nice build output on automake1.11
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
-# use this in dkp-version.h
+# use this in up-version.h
+UP_MAJOR_VERSION=up_major_version
+UP_MINOR_VERSION=up_minor_version
+UP_MICRO_VERSION=up_micro_version
 AC_SUBST(VERSION)
+AC_SUBST(UP_MAJOR_VERSION)
+AC_SUBST(UP_MINOR_VERSION)
+AC_SUBST(UP_MICRO_VERSION)
 
-# libtool versioning - this applies to devkit-power-gobject
+# libtool versioning - this applies to libupower-glib
 #
 # See http://sources.redhat.com/autobook/autobook/autobook_91.html#SEC91 for details
 #
@@ -27,11 +42,11 @@ AC_SUBST(LT_CURRENT)
 AC_SUBST(LT_REVISION)
 AC_SUBST(LT_AGE)
 
-AC_ISC_POSIX
+AC_SEARCH_LIBS([strerror],[cposix])
 AC_PROG_CC
-AM_PROG_CC_STDC
+
 AC_HEADER_STDC
-AM_PROG_LIBTOOL
+LT_INIT
 AC_PROG_MAKE_SET
 AC_PROG_LN_S
 AC_SYS_LARGEFILE
@@ -53,7 +68,7 @@ AC_PATH_PROG([XSLTPROC], [xsltproc])
 fi
 AM_CONDITIONAL(MAN_PAGES_ENABLED, test x$enable_man_pages = xyes)
 
-GTK_DOC_CHECK([1.3])
+GTK_DOC_CHECK([1.9])
 
 # udev rules go in /lib, not /usr/lib
 if test "$prefix" = "/usr" -o "$prefix" = "/usr/local" ; then
@@ -83,8 +98,7 @@ else
 	default_strict=no
 fi
 
-AC_ARG_ENABLE(strict, AC_HELP_STRING([--enable-strict],
-		[Enable strict compilation options]), enable_strict=$enableval,
+AC_ARG_ENABLE(strict, AS_HELP_STRING([--enable-strict],[Enable strict compilation options]), enable_strict=$enableval,
 		enable_strict=$default_strict)
 if test x$enable_strict != xno; then
 	if test "$GCC" = "yes"; then
@@ -197,14 +211,15 @@ if test "x$GCC" = "xyes"; then
 fi
 
 IT_PROG_INTLTOOL([0.40.0])
-GETTEXT_PACKAGE=DeviceKit-power
+GETTEXT_PACKAGE=UPower
 AC_SUBST([GETTEXT_PACKAGE])
 AM_GLIB_GNU_GETTEXT
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[gettext domain])
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
 Makefile
 devkit-power-gobject.pc
+upower-glib.pc
 src/Makefile
 src/dummy/Makefile
 src/freebsd/Makefile
@@ -218,13 +233,16 @@ policy/Makefile
 rules/Makefile
 devkit-power-gobject/Makefile
 devkit-power-gobject/dkp-version.h
+libupower-glib/Makefile
+libupower-glib/up-version.h
 po/Makefile.in
 ])
+AC_OUTPUT
 
 dnl ==========================================================================
 echo "
-               DeviceKit-power $VERSION
-             =======================
+                 UPower $VERSION
+             =========================
 
         prefix:                     ${prefix}
         libdir:                     ${libdir}

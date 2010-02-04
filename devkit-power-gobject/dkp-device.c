@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 #include "config.h"
@@ -126,14 +126,13 @@ dkp_device_get_device_properties (DkpDevice *device, GError **error)
 	GHashTable *hash_table = NULL;
 
 	ret = dbus_g_proxy_call (device->priv->proxy_props, "GetAll", &error_local,
-				 G_TYPE_STRING, "org.freedesktop.DeviceKit.Power.Device",
+				 G_TYPE_STRING, "org.freedesktop.UPower.Device",
 				 G_TYPE_INVALID,
 				 dbus_g_type_get_map ("GHashTable", G_TYPE_STRING, G_TYPE_VALUE),
 				 &hash_table,
 				 G_TYPE_INVALID);
 	if (!ret) {
-		if (error != NULL)
-			*error = g_error_new (1, 0, "Couldn't call GetAll() to get properties for %s: %s", device->priv->object_path, error_local->message);
+		g_set_error (error, 1, 0, "Couldn't call GetAll() to get properties for %s: %s", device->priv->object_path, error_local->message);
 		g_error_free (error_local);
 		goto out;
 	}
@@ -224,8 +223,7 @@ dkp_device_refresh_internal (DkpDevice *device, GError **error)
 	/* get all the properties */
 	hash = dkp_device_get_device_properties (device, &error_local);
 	if (hash == NULL) {
-		if (error != NULL)
-			*error = g_error_new (1, 0, "Cannot get device properties for %s: %s", device->priv->object_path, error_local->message);
+		g_set_error (error, 1, 0, "Cannot get device properties for %s: %s", device->priv->object_path, error_local->message);
 		g_error_free (error_local);
 		return FALSE;
 	}
@@ -266,27 +264,24 @@ dkp_device_set_object_path (DkpDevice *device, const gchar *object_path, GError 
 	/* connect to the bus */
 	device->priv->bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error_local);
 	if (device->priv->bus == NULL) {
-		if (error != NULL)
-			*error = g_error_new (1, 0, "Couldn't connect to system bus: %s", error_local->message);
+		g_set_error (error, 1, 0, "Couldn't connect to system bus: %s", error_local->message);
 		g_error_free (error_local);
 		goto out;
 	}
 
 	/* connect to the correct path for properties */
-	proxy_props = dbus_g_proxy_new_for_name (device->priv->bus, "org.freedesktop.DeviceKit.Power",
+	proxy_props = dbus_g_proxy_new_for_name (device->priv->bus, "org.freedesktop.UPower",
 						 object_path, "org.freedesktop.DBus.Properties");
 	if (proxy_props == NULL) {
-		if (error != NULL)
-			*error = g_error_new (1, 0, "Couldn't connect to proxy");
+		g_set_error_literal (error, 1, 0, "Couldn't connect to proxy");
 		goto out;
 	}
 
 	/* connect to the correct path for all the other methods */
-	proxy_device = dbus_g_proxy_new_for_name (device->priv->bus, "org.freedesktop.DeviceKit.Power",
-						  object_path, "org.freedesktop.DeviceKit.Power.Device");
+	proxy_device = dbus_g_proxy_new_for_name (device->priv->bus, "org.freedesktop.UPower",
+						  object_path, "org.freedesktop.UPower.Device");
 	if (proxy_device == NULL) {
-		if (error != NULL)
-			*error = g_error_new (1, 0, "Couldn't connect to proxy");
+		g_set_error_literal (error, 1, 0, "Couldn't connect to proxy");
 		goto out;
 	}
 
@@ -303,8 +298,7 @@ dkp_device_set_object_path (DkpDevice *device, const gchar *object_path, GError 
 	/* coldplug */
 	ret = dkp_device_refresh_internal (device, &error_local);
 	if (!ret) {
-		if (error != NULL)
-			*error = g_error_new (1, 0, "cannot refresh: %s", error_local->message);
+		g_set_error (error, 1, 0, "cannot refresh: %s", error_local->message);
 		g_error_free (error_local);
 	}
 out:
@@ -500,8 +494,7 @@ dkp_device_refresh (DkpDevice *device, GError **error)
 	ret = dbus_g_proxy_call (device->priv->proxy_device, "Refresh", &error_local,
 				 G_TYPE_INVALID, G_TYPE_INVALID);
 	if (!ret) {
-		if (error != NULL)
-			*error = g_error_new (1, 0, "Refresh() on %s failed: %s", device->priv->object_path, error_local->message);
+		g_set_error (error, 1, 0, "Refresh() on %s failed: %s", device->priv->object_path, error_local->message);
 		g_error_free (error_local);
 		goto out;
 	}
@@ -546,8 +539,7 @@ dkp_device_get_history (const DkpDevice *device, const gchar *type, guint timesp
 				 g_type_gvalue_array, &gvalue_ptr_array,
 				 G_TYPE_INVALID);
 	if (!ret) {
-		if (error != NULL)
-			*error = g_error_new (1, 0, "GetHistory(%s,%i) on %s failed: %s", type, timespec,
+		g_set_error (error, 1, 0, "GetHistory(%s,%i) on %s failed: %s", type, timespec,
 			   device->priv->object_path, error_local->message);
 		g_error_free (error_local);
 		goto out;
@@ -555,8 +547,7 @@ dkp_device_get_history (const DkpDevice *device, const gchar *type, guint timesp
 
 	/* no data */
 	if (gvalue_ptr_array->len == 0) {
-		if (error != NULL)
-			*error = g_error_new (1, 0, "no data");
+		g_set_error_literal (error, 1, 0, "no data");
 		goto out;
 	}
 
@@ -622,17 +613,15 @@ dkp_device_get_statistics (const DkpDevice *device, const gchar *type, GError **
 				 g_type_gvalue_array, &gvalue_ptr_array,
 				 G_TYPE_INVALID);
 	if (!ret) {
-		if (error != NULL)
-			*error = g_error_new (1, 0, "GetStatistics(%s) on %s failed: %s", type,
-					      device->priv->object_path, error_local->message);
+		g_set_error (error, 1, 0, "GetStatistics(%s) on %s failed: %s", type,
+				      device->priv->object_path, error_local->message);
 		g_error_free (error_local);
 		goto out;
 	}
 
 	/* no data */
 	if (gvalue_ptr_array->len == 0) {
-		if (error != NULL)
-			*error = g_error_new (1, 0, "no data");
+		g_set_error_literal (error, 1, 0, "no data");
 		goto out;
 	}
 

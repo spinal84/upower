@@ -37,8 +37,10 @@ host_triplet = @host@
 subdir = src/freebsd
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in TODO
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/gtk-doc.m4 \
+	$(top_srcdir)/m4/intltool.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -46,20 +48,20 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libdkpshared_la_DEPENDENCIES =
-am_libdkpshared_la_OBJECTS = libdkpshared_la-dkp-acpi-native.lo \
-	libdkpshared_la-dkp-backend.lo libdkpshared_la-dkp-devd.lo \
-	libdkpshared_la-dkp-device-supply.lo \
-	libdkpshared_la-dkp-native.lo libdkpshared_la-dkp-util.lo
-libdkpshared_la_OBJECTS = $(am_libdkpshared_la_OBJECTS)
+libupshared_la_DEPENDENCIES =
+am_libupshared_la_OBJECTS = libupshared_la-up-acpi-native.lo \
+	libupshared_la-up-backend.lo libupshared_la-up-devd.lo \
+	libupshared_la-up-device-supply.lo libupshared_la-up-native.lo \
+	libupshared_la-up-util.lo
+libupshared_la_OBJECTS = $(am_libupshared_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
-libdkpshared_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+libupshared_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
-	$(libdkpshared_la_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
-	-o $@
-@BACKEND_TYPE_FREEBSD_TRUE@am_libdkpshared_la_rpath =
+	$(libupshared_la_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o \
+	$@
+@BACKEND_TYPE_FREEBSD_TRUE@am_libupshared_la_rpath =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -86,8 +88,8 @@ am__v_CCLD_0 = @echo "  CCLD  " $@;
 AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
-SOURCES = $(libdkpshared_la_SOURCES)
-DIST_SOURCES = $(libdkpshared_la_SOURCES)
+SOURCES = $(libupshared_la_SOURCES)
+DIST_SOURCES = $(libupshared_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -132,6 +134,9 @@ GLIB_LIBS = @GLIB_LIBS@
 GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
 GREP = @GREP@
+GTKDOC_CHECK = @GTKDOC_CHECK@
+GTKDOC_MKPDF = @GTKDOC_MKPDF@
+GTKDOC_REBASE = @GTKDOC_REBASE@
 GUDEV_CFLAGS = @GUDEV_CFLAGS@
 GUDEV_LIBS = @GUDEV_LIBS@
 HTML_DIR = @HTML_DIR@
@@ -146,6 +151,14 @@ INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
 INTLTOOL_MERGE = @INTLTOOL_MERGE@
 INTLTOOL_PERL = @INTLTOOL_PERL@
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
+INTROSPECTION_CFLAGS = @INTROSPECTION_CFLAGS@
+INTROSPECTION_COMPILER = @INTROSPECTION_COMPILER@
+INTROSPECTION_GENERATE = @INTROSPECTION_GENERATE@
+INTROSPECTION_GIRDIR = @INTROSPECTION_GIRDIR@
+INTROSPECTION_LIBS = @INTROSPECTION_LIBS@
+INTROSPECTION_MAKEFILE = @INTROSPECTION_MAKEFILE@
+INTROSPECTION_SCANNER = @INTROSPECTION_SCANNER@
+INTROSPECTION_TYPELIBDIR = @INTROSPECTION_TYPELIBDIR@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -157,7 +170,6 @@ LTLIBOBJS = @LTLIBOBJS@
 LT_AGE = @LT_AGE@
 LT_CURRENT = @LT_CURRENT@
 LT_REVISION = @LT_REVISION@
-MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
 MKINSTALLDIRS = @MKINSTALLDIRS@
@@ -175,6 +187,7 @@ PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
+PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
@@ -190,6 +203,9 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 UDEV_RULES = @UDEV_RULES@
+UP_MAJOR_VERSION = @UP_MAJOR_VERSION@
+UP_MICRO_VERSION = @UP_MICRO_VERSION@
+UP_MINOR_VERSION = @UP_MINOR_VERSION@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 WARNINGFLAGS_C = @WARNINGFLAGS_C@
@@ -250,46 +266,46 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 INCLUDES = \
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
-	-DEGG_LOG_FILE=\""$(DKP_LOG_DIR)/DeviceKit-power"\"	\
-	-DEGG_VERBOSE="\"DKP_VERBOSE\""				\
-	-DEGG_LOGGING="\"DKP_LOGGING\""				\
-	-DEGG_CONSOLE="\"DKP_CONSOLE\""				\
-	-DDKP_COMPILATION					\
+	-DEGG_LOG_FILE=\""$(UP_LOG_DIR)/DeviceKit-power"\"	\
+	-DEGG_VERBOSE="\"UP_VERBOSE\""				\
+	-DEGG_LOGGING="\"UP_LOGGING\""				\
+	-DEGG_CONSOLE="\"UP_CONSOLE\""				\
+	-DUP_COMPILATION					\
 	-I$(top_srcdir)/devkit-power-gobject			\
 	$(DBUS_GLIB_CFLAGS)					\
 	$(POLKIT_CFLAGS)					\
 	$(GLIB_CFLAGS)
 
-@BACKEND_TYPE_FREEBSD_TRUE@noinst_LTLIBRARIES = libdkpshared.la
-libdkpshared_la_SOURCES = \
-	dkp-acpi-native.c					\
-	dkp-acpi-native.h					\
-	dkp-backend-acpi.h					\
-	dkp-backend.c						\
-	dkp-devd.c						\
-	dkp-devd.h						\
-	dkp-device-supply.c					\
-	dkp-device-supply.h					\
-	dkp-native.c						\
-	dkp-util.c						\
-	dkp-util.h						\
+@BACKEND_TYPE_FREEBSD_TRUE@noinst_LTLIBRARIES = libupshared.la
+libupshared_la_SOURCES = \
+	up-acpi-native.c					\
+	up-acpi-native.h					\
+	up-backend-acpi.h					\
+	up-backend.c						\
+	up-devd.c						\
+	up-devd.h						\
+	up-device-supply.c					\
+	up-device-supply.h					\
+	up-native.c						\
+	up-util.c						\
+	up-util.h						\
 	$(BUILT_SOURCES)
 
-libdkpshared_la_CFLAGS = \
+libupshared_la_CFLAGS = \
 	$(WARNINGFLAGS_C)
 
-libdkpshared_la_LIBADD = \
+libupshared_la_LIBADD = \
 	-lkvm
 
 EXTRA_DIST = \
-	dkp-acpi-native.vala					\
+	up-acpi-native.vala					\
 	TODO
 
 all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -314,9 +330,9 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 
-$(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
+$(top_srcdir)/configure:  $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
+$(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
 
@@ -328,8 +344,8 @@ clean-noinstLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libdkpshared.la: $(libdkpshared_la_OBJECTS) $(libdkpshared_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(libdkpshared_la_LINK) $(am_libdkpshared_la_rpath) $(libdkpshared_la_OBJECTS) $(libdkpshared_la_LIBADD) $(LIBS)
+libupshared.la: $(libupshared_la_OBJECTS) $(libupshared_la_DEPENDENCIES) 
+	$(AM_V_CCLD)$(libupshared_la_LINK) $(am_libupshared_la_rpath) $(libupshared_la_OBJECTS) $(libupshared_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -337,12 +353,12 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdkpshared_la-dkp-acpi-native.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdkpshared_la-dkp-backend.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdkpshared_la-dkp-devd.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdkpshared_la-dkp-device-supply.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdkpshared_la-dkp-native.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdkpshared_la-dkp-util.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-acpi-native.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-backend.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-devd.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-device-supply.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-native.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-util.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -368,53 +384,53 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
-libdkpshared_la-dkp-acpi-native.lo: dkp-acpi-native.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdkpshared_la_CFLAGS) $(CFLAGS) -MT libdkpshared_la-dkp-acpi-native.lo -MD -MP -MF $(DEPDIR)/libdkpshared_la-dkp-acpi-native.Tpo -c -o libdkpshared_la-dkp-acpi-native.lo `test -f 'dkp-acpi-native.c' || echo '$(srcdir)/'`dkp-acpi-native.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdkpshared_la-dkp-acpi-native.Tpo $(DEPDIR)/libdkpshared_la-dkp-acpi-native.Plo
+libupshared_la-up-acpi-native.lo: up-acpi-native.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -MT libupshared_la-up-acpi-native.lo -MD -MP -MF $(DEPDIR)/libupshared_la-up-acpi-native.Tpo -c -o libupshared_la-up-acpi-native.lo `test -f 'up-acpi-native.c' || echo '$(srcdir)/'`up-acpi-native.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupshared_la-up-acpi-native.Tpo $(DEPDIR)/libupshared_la-up-acpi-native.Plo
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-acpi-native.c' object='libdkpshared_la-dkp-acpi-native.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-acpi-native.c' object='libupshared_la-up-acpi-native.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdkpshared_la_CFLAGS) $(CFLAGS) -c -o libdkpshared_la-dkp-acpi-native.lo `test -f 'dkp-acpi-native.c' || echo '$(srcdir)/'`dkp-acpi-native.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -c -o libupshared_la-up-acpi-native.lo `test -f 'up-acpi-native.c' || echo '$(srcdir)/'`up-acpi-native.c
 
-libdkpshared_la-dkp-backend.lo: dkp-backend.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdkpshared_la_CFLAGS) $(CFLAGS) -MT libdkpshared_la-dkp-backend.lo -MD -MP -MF $(DEPDIR)/libdkpshared_la-dkp-backend.Tpo -c -o libdkpshared_la-dkp-backend.lo `test -f 'dkp-backend.c' || echo '$(srcdir)/'`dkp-backend.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdkpshared_la-dkp-backend.Tpo $(DEPDIR)/libdkpshared_la-dkp-backend.Plo
+libupshared_la-up-backend.lo: up-backend.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -MT libupshared_la-up-backend.lo -MD -MP -MF $(DEPDIR)/libupshared_la-up-backend.Tpo -c -o libupshared_la-up-backend.lo `test -f 'up-backend.c' || echo '$(srcdir)/'`up-backend.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupshared_la-up-backend.Tpo $(DEPDIR)/libupshared_la-up-backend.Plo
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-backend.c' object='libdkpshared_la-dkp-backend.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-backend.c' object='libupshared_la-up-backend.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdkpshared_la_CFLAGS) $(CFLAGS) -c -o libdkpshared_la-dkp-backend.lo `test -f 'dkp-backend.c' || echo '$(srcdir)/'`dkp-backend.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -c -o libupshared_la-up-backend.lo `test -f 'up-backend.c' || echo '$(srcdir)/'`up-backend.c
 
-libdkpshared_la-dkp-devd.lo: dkp-devd.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdkpshared_la_CFLAGS) $(CFLAGS) -MT libdkpshared_la-dkp-devd.lo -MD -MP -MF $(DEPDIR)/libdkpshared_la-dkp-devd.Tpo -c -o libdkpshared_la-dkp-devd.lo `test -f 'dkp-devd.c' || echo '$(srcdir)/'`dkp-devd.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdkpshared_la-dkp-devd.Tpo $(DEPDIR)/libdkpshared_la-dkp-devd.Plo
+libupshared_la-up-devd.lo: up-devd.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -MT libupshared_la-up-devd.lo -MD -MP -MF $(DEPDIR)/libupshared_la-up-devd.Tpo -c -o libupshared_la-up-devd.lo `test -f 'up-devd.c' || echo '$(srcdir)/'`up-devd.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupshared_la-up-devd.Tpo $(DEPDIR)/libupshared_la-up-devd.Plo
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-devd.c' object='libdkpshared_la-dkp-devd.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-devd.c' object='libupshared_la-up-devd.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdkpshared_la_CFLAGS) $(CFLAGS) -c -o libdkpshared_la-dkp-devd.lo `test -f 'dkp-devd.c' || echo '$(srcdir)/'`dkp-devd.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -c -o libupshared_la-up-devd.lo `test -f 'up-devd.c' || echo '$(srcdir)/'`up-devd.c
 
-libdkpshared_la-dkp-device-supply.lo: dkp-device-supply.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdkpshared_la_CFLAGS) $(CFLAGS) -MT libdkpshared_la-dkp-device-supply.lo -MD -MP -MF $(DEPDIR)/libdkpshared_la-dkp-device-supply.Tpo -c -o libdkpshared_la-dkp-device-supply.lo `test -f 'dkp-device-supply.c' || echo '$(srcdir)/'`dkp-device-supply.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdkpshared_la-dkp-device-supply.Tpo $(DEPDIR)/libdkpshared_la-dkp-device-supply.Plo
+libupshared_la-up-device-supply.lo: up-device-supply.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -MT libupshared_la-up-device-supply.lo -MD -MP -MF $(DEPDIR)/libupshared_la-up-device-supply.Tpo -c -o libupshared_la-up-device-supply.lo `test -f 'up-device-supply.c' || echo '$(srcdir)/'`up-device-supply.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupshared_la-up-device-supply.Tpo $(DEPDIR)/libupshared_la-up-device-supply.Plo
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-device-supply.c' object='libdkpshared_la-dkp-device-supply.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-device-supply.c' object='libupshared_la-up-device-supply.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdkpshared_la_CFLAGS) $(CFLAGS) -c -o libdkpshared_la-dkp-device-supply.lo `test -f 'dkp-device-supply.c' || echo '$(srcdir)/'`dkp-device-supply.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -c -o libupshared_la-up-device-supply.lo `test -f 'up-device-supply.c' || echo '$(srcdir)/'`up-device-supply.c
 
-libdkpshared_la-dkp-native.lo: dkp-native.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdkpshared_la_CFLAGS) $(CFLAGS) -MT libdkpshared_la-dkp-native.lo -MD -MP -MF $(DEPDIR)/libdkpshared_la-dkp-native.Tpo -c -o libdkpshared_la-dkp-native.lo `test -f 'dkp-native.c' || echo '$(srcdir)/'`dkp-native.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdkpshared_la-dkp-native.Tpo $(DEPDIR)/libdkpshared_la-dkp-native.Plo
+libupshared_la-up-native.lo: up-native.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -MT libupshared_la-up-native.lo -MD -MP -MF $(DEPDIR)/libupshared_la-up-native.Tpo -c -o libupshared_la-up-native.lo `test -f 'up-native.c' || echo '$(srcdir)/'`up-native.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupshared_la-up-native.Tpo $(DEPDIR)/libupshared_la-up-native.Plo
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-native.c' object='libdkpshared_la-dkp-native.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-native.c' object='libupshared_la-up-native.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdkpshared_la_CFLAGS) $(CFLAGS) -c -o libdkpshared_la-dkp-native.lo `test -f 'dkp-native.c' || echo '$(srcdir)/'`dkp-native.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -c -o libupshared_la-up-native.lo `test -f 'up-native.c' || echo '$(srcdir)/'`up-native.c
 
-libdkpshared_la-dkp-util.lo: dkp-util.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdkpshared_la_CFLAGS) $(CFLAGS) -MT libdkpshared_la-dkp-util.lo -MD -MP -MF $(DEPDIR)/libdkpshared_la-dkp-util.Tpo -c -o libdkpshared_la-dkp-util.lo `test -f 'dkp-util.c' || echo '$(srcdir)/'`dkp-util.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdkpshared_la-dkp-util.Tpo $(DEPDIR)/libdkpshared_la-dkp-util.Plo
+libupshared_la-up-util.lo: up-util.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -MT libupshared_la-up-util.lo -MD -MP -MF $(DEPDIR)/libupshared_la-up-util.Tpo -c -o libupshared_la-up-util.lo `test -f 'up-util.c' || echo '$(srcdir)/'`up-util.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupshared_la-up-util.Tpo $(DEPDIR)/libupshared_la-up-util.Plo
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-util.c' object='libdkpshared_la-dkp-util.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-util.c' object='libupshared_la-up-util.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdkpshared_la_CFLAGS) $(CFLAGS) -c -o libdkpshared_la-dkp-util.lo `test -f 'dkp-util.c' || echo '$(srcdir)/'`dkp-util.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -c -o libupshared_la-up-util.lo `test -f 'up-util.c' || echo '$(srcdir)/'`up-util.c
 
 mostlyclean-libtool:
 	-rm -f *.lo

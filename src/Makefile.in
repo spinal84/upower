@@ -35,26 +35,28 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-libexec_PROGRAMS = devkit-power-daemon$(EXEEXT)
+libexec_PROGRAMS = upowerd$(EXEEXT)
 @BACKEND_TYPE_DUMMY_TRUE@am__append_1 = \
-@BACKEND_TYPE_DUMMY_TRUE@	dummy/libdkpshared.la
+@BACKEND_TYPE_DUMMY_TRUE@	dummy/libupshared.la
 
 @BACKEND_TYPE_FREEBSD_TRUE@am__append_2 = \
-@BACKEND_TYPE_FREEBSD_TRUE@	freebsd/libdkpshared.la					\
+@BACKEND_TYPE_FREEBSD_TRUE@	freebsd/libupshared.la					\
 @BACKEND_TYPE_FREEBSD_TRUE@	$(DEVKIT_POWER_LIBS)
 
 @BACKEND_TYPE_LINUX_TRUE@am__append_3 = \
-@BACKEND_TYPE_LINUX_TRUE@	linux/libdkpshared.la					\
+@BACKEND_TYPE_LINUX_TRUE@	linux/libupshared.la					\
 @BACKEND_TYPE_LINUX_TRUE@	$(GUDEV_LIBS)						\
 @BACKEND_TYPE_LINUX_TRUE@	$(DEVKIT_POWER_LIBS)
 
-@EGG_BUILD_TESTS_TRUE@check_PROGRAMS = dkp-self-test$(EXEEXT)
-@EGG_BUILD_TESTS_TRUE@TESTS = dkp-self-test$(EXEEXT)
+@EGG_BUILD_TESTS_TRUE@check_PROGRAMS = up-self-test$(EXEEXT)
+@EGG_BUILD_TESTS_TRUE@TESTS = up-self-test$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/gtk-doc.m4 \
+	$(top_srcdir)/m4/intltool.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -64,61 +66,56 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(libexecdir)" "$(DESTDIR)$(dbusconfdir)" \
 	"$(DESTDIR)$(dbusifdir)" "$(DESTDIR)$(servicedir)"
 PROGRAMS = $(libexec_PROGRAMS)
-am__objects_1 = devkit_power_daemon-dkp-marshal.$(OBJEXT)
-am_devkit_power_daemon_OBJECTS =  \
-	devkit_power_daemon-egg-debug.$(OBJEXT) \
-	devkit_power_daemon-dkp-polkit.$(OBJEXT) \
-	devkit_power_daemon-dkp-daemon.$(OBJEXT) \
-	devkit_power_daemon-dkp-device.$(OBJEXT) \
-	devkit_power_daemon-dkp-device-list.$(OBJEXT) \
-	devkit_power_daemon-dkp-qos.$(OBJEXT) \
-	devkit_power_daemon-dkp-wakeups.$(OBJEXT) \
-	devkit_power_daemon-dkp-history.$(OBJEXT) \
-	devkit_power_daemon-dkp-main.$(OBJEXT) $(am__objects_1)
-devkit_power_daemon_OBJECTS = $(am_devkit_power_daemon_OBJECTS)
+am__up_self_test_SOURCES_DIST = egg-test.h egg-test.c egg-debug.c \
+	egg-debug.h up-self-test.c up-polkit.h up-polkit.c up-daemon.h \
+	up-daemon.c up-device.h up-device.c up-device-list.h \
+	up-device-list.c up-qos.h up-qos.c up-wakeups.h up-wakeups.c \
+	up-history.h up-history.c up-backend.h up-native.h \
+	up-daemon-glue.h up-device-glue.h up-qos-glue.h \
+	up-wakeups-glue.h up-marshal.h up-marshal.c
+am__objects_1 = up_self_test-up-marshal.$(OBJEXT)
+@EGG_BUILD_TESTS_TRUE@am_up_self_test_OBJECTS =  \
+@EGG_BUILD_TESTS_TRUE@	up_self_test-egg-test.$(OBJEXT) \
+@EGG_BUILD_TESTS_TRUE@	up_self_test-egg-debug.$(OBJEXT) \
+@EGG_BUILD_TESTS_TRUE@	up_self_test-up-self-test.$(OBJEXT) \
+@EGG_BUILD_TESTS_TRUE@	up_self_test-up-polkit.$(OBJEXT) \
+@EGG_BUILD_TESTS_TRUE@	up_self_test-up-daemon.$(OBJEXT) \
+@EGG_BUILD_TESTS_TRUE@	up_self_test-up-device.$(OBJEXT) \
+@EGG_BUILD_TESTS_TRUE@	up_self_test-up-device-list.$(OBJEXT) \
+@EGG_BUILD_TESTS_TRUE@	up_self_test-up-qos.$(OBJEXT) \
+@EGG_BUILD_TESTS_TRUE@	up_self_test-up-wakeups.$(OBJEXT) \
+@EGG_BUILD_TESTS_TRUE@	up_self_test-up-history.$(OBJEXT) \
+@EGG_BUILD_TESTS_TRUE@	$(am__objects_1)
+up_self_test_OBJECTS = $(am_up_self_test_OBJECTS)
 am__DEPENDENCIES_1 =
-@BACKEND_TYPE_LINUX_TRUE@am__DEPENDENCIES_2 = linux/libdkpshared.la \
-@BACKEND_TYPE_LINUX_TRUE@	$(am__DEPENDENCIES_1) \
-@BACKEND_TYPE_LINUX_TRUE@	$(DEVKIT_POWER_LIBS)
-devkit_power_daemon_DEPENDENCIES = $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) $(am__append_1) \
-	$(am__append_2) $(am__DEPENDENCIES_2)
-AM_V_lt = $(am__v_lt_$(V))
-am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
-am__v_lt_0 = --silent
-devkit_power_daemon_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
-	$(devkit_power_daemon_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
-am__dkp_self_test_SOURCES_DIST = egg-test.h egg-test.c egg-debug.c \
-	egg-debug.h dkp-self-test.c dkp-polkit.h dkp-polkit.c \
-	dkp-daemon.h dkp-daemon.c dkp-device.h dkp-device.c \
-	dkp-device-list.h dkp-device-list.c dkp-qos.h dkp-qos.c \
-	dkp-wakeups.h dkp-wakeups.c dkp-history.h dkp-history.c \
-	dkp-backend.h dkp-native.h dkp-daemon-glue.h dkp-device-glue.h \
-	dkp-qos-glue.h dkp-wakeups-glue.h dkp-marshal.h dkp-marshal.c
-am__objects_2 = dkp_self_test-dkp-marshal.$(OBJEXT)
-@EGG_BUILD_TESTS_TRUE@am_dkp_self_test_OBJECTS =  \
-@EGG_BUILD_TESTS_TRUE@	dkp_self_test-egg-test.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	dkp_self_test-egg-debug.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	dkp_self_test-dkp-self-test.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	dkp_self_test-dkp-polkit.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	dkp_self_test-dkp-daemon.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	dkp_self_test-dkp-device.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	dkp_self_test-dkp-device-list.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	dkp_self_test-dkp-qos.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	dkp_self_test-dkp-wakeups.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	dkp_self_test-dkp-history.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	$(am__objects_2)
-dkp_self_test_OBJECTS = $(am_dkp_self_test_OBJECTS)
-@EGG_BUILD_TESTS_TRUE@dkp_self_test_DEPENDENCIES =  \
-@EGG_BUILD_TESTS_TRUE@	dummy/libdkpshared.la \
+@EGG_BUILD_TESTS_TRUE@up_self_test_DEPENDENCIES =  \
+@EGG_BUILD_TESTS_TRUE@	dummy/libupshared.la \
 @EGG_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
 @EGG_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
 @EGG_BUILD_TESTS_TRUE@	$(DEVKIT_POWER_LIBS) \
 @EGG_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1)
-dkp_self_test_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(dkp_self_test_CFLAGS) \
+AM_V_lt = $(am__v_lt_$(V))
+am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
+am__v_lt_0 = --silent
+up_self_test_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(up_self_test_CFLAGS) \
+	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+am__objects_2 = upowerd-up-marshal.$(OBJEXT)
+am_upowerd_OBJECTS = upowerd-egg-debug.$(OBJEXT) \
+	upowerd-up-polkit.$(OBJEXT) upowerd-up-daemon.$(OBJEXT) \
+	upowerd-up-device.$(OBJEXT) upowerd-up-device-list.$(OBJEXT) \
+	upowerd-up-qos.$(OBJEXT) upowerd-up-wakeups.$(OBJEXT) \
+	upowerd-up-history.$(OBJEXT) upowerd-up-main.$(OBJEXT) \
+	$(am__objects_2)
+upowerd_OBJECTS = $(am_upowerd_OBJECTS)
+@BACKEND_TYPE_LINUX_TRUE@am__DEPENDENCIES_2 = linux/libupshared.la \
+@BACKEND_TYPE_LINUX_TRUE@	$(am__DEPENDENCIES_1) \
+@BACKEND_TYPE_LINUX_TRUE@	$(DEVKIT_POWER_LIBS)
+upowerd_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__append_1) $(am__append_2) \
+	$(am__DEPENDENCIES_2)
+upowerd_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(upowerd_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -146,9 +143,8 @@ am__v_CCLD_0 = @echo "  CCLD  " $@;
 AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
-SOURCES = $(devkit_power_daemon_SOURCES) $(dkp_self_test_SOURCES)
-DIST_SOURCES = $(devkit_power_daemon_SOURCES) \
-	$(am__dkp_self_test_SOURCES_DIST)
+SOURCES = $(up_self_test_SOURCES) $(upowerd_SOURCES)
+DIST_SOURCES = $(am__up_self_test_SOURCES_DIST) $(upowerd_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -255,6 +251,9 @@ GLIB_LIBS = @GLIB_LIBS@
 GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
 GREP = @GREP@
+GTKDOC_CHECK = @GTKDOC_CHECK@
+GTKDOC_MKPDF = @GTKDOC_MKPDF@
+GTKDOC_REBASE = @GTKDOC_REBASE@
 GUDEV_CFLAGS = @GUDEV_CFLAGS@
 GUDEV_LIBS = @GUDEV_LIBS@
 HTML_DIR = @HTML_DIR@
@@ -269,6 +268,14 @@ INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
 INTLTOOL_MERGE = @INTLTOOL_MERGE@
 INTLTOOL_PERL = @INTLTOOL_PERL@
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
+INTROSPECTION_CFLAGS = @INTROSPECTION_CFLAGS@
+INTROSPECTION_COMPILER = @INTROSPECTION_COMPILER@
+INTROSPECTION_GENERATE = @INTROSPECTION_GENERATE@
+INTROSPECTION_GIRDIR = @INTROSPECTION_GIRDIR@
+INTROSPECTION_LIBS = @INTROSPECTION_LIBS@
+INTROSPECTION_MAKEFILE = @INTROSPECTION_MAKEFILE@
+INTROSPECTION_SCANNER = @INTROSPECTION_SCANNER@
+INTROSPECTION_TYPELIBDIR = @INTROSPECTION_TYPELIBDIR@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -280,7 +287,6 @@ LTLIBOBJS = @LTLIBOBJS@
 LT_AGE = @LT_AGE@
 LT_CURRENT = @LT_CURRENT@
 LT_REVISION = @LT_REVISION@
-MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
 MKINSTALLDIRS = @MKINSTALLDIRS@
@@ -298,6 +304,7 @@ PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
+PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
@@ -313,6 +320,9 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 UDEV_RULES = @UDEV_RULES@
+UP_MAJOR_VERSION = @UP_MAJOR_VERSION@
+UP_MICRO_VERSION = @UP_MICRO_VERSION@
+UP_MINOR_VERSION = @UP_MINOR_VERSION@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 WARNINGFLAGS_C = @WARNINGFLAGS_C@
@@ -383,12 +393,13 @@ INCLUDES = \
 	-DPACKAGE_LIB_DIR=\""$(libdir)"\"			\
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
 	-DG_UDEV_API_IS_SUBJECT_TO_CHANGE			\
-	-DDKP_COMPILATION					\
-	-DDKP_DISABLE_DEPRECATED				\
-	-DEGG_LOG_FILE=\""$(DKP_LOG_DIR)/DeviceKit-power"\"	\
-	-DEGG_VERBOSE="\"DKP_VERBOSE\""				\
-	-DEGG_LOGGING="\"DKP_LOGGING\""				\
-	-DEGG_CONSOLE="\"DKP_CONSOLE\""				\
+	-DUP_COMPILATION					\
+	-DUP_DISABLE_DEPRECATED				\
+	-DEGG_LOG_FILE=\""$(UP_LOG_DIR)/DeviceKit-power"\"	\
+	-DEGG_VERBOSE="\"UP_VERBOSE\""				\
+	-DEGG_LOGGING="\"UP_LOGGING\""				\
+	-DEGG_CONSOLE="\"UP_CONSOLE\""				\
+	-I$(top_srcdir)/libupower-glib				\
 	-I$(top_srcdir)/devkit-power-gobject			\
 	-I$(top_srcdir)						\
 	$(GIO_CFLAGS)						\
@@ -399,102 +410,100 @@ INCLUDES = \
 
 DEVKIT_POWER_LIBS = $(top_builddir)/devkit-power-gobject/libdevkit-power-gobject.la
 BUILT_SOURCES = \
-	dkp-daemon-glue.h					\
-	dkp-device-glue.h					\
-	dkp-qos-glue.h						\
-	dkp-wakeups-glue.h					\
-	dkp-marshal.h						\
-	dkp-marshal.c
+	up-daemon-glue.h					\
+	up-device-glue.h					\
+	up-qos-glue.h						\
+	up-wakeups-glue.h					\
+	up-marshal.h						\
+	up-marshal.c
 
 dbusifdir = $(datadir)/dbus-1/interfaces
 dbusif_DATA = \
-	org.freedesktop.DeviceKit.Power.xml			\
-	org.freedesktop.DeviceKit.Power.Device.xml		\
-	org.freedesktop.DeviceKit.Power.QoS.xml			\
-	org.freedesktop.DeviceKit.Power.Wakeups.xml
+	org.freedesktop.UPower.xml				\
+	org.freedesktop.UPower.Device.xml			\
+	org.freedesktop.UPower.QoS.xml				\
+	org.freedesktop.UPower.Wakeups.xml
 
-devkit_power_daemon_SOURCES = \
+upowerd_SOURCES = \
 	egg-debug.c						\
 	egg-debug.h						\
-	dkp-polkit.h						\
-	dkp-polkit.c						\
-	dkp-daemon.h						\
-	dkp-daemon.c						\
-	dkp-device.h						\
-	dkp-device.c						\
-	dkp-device-list.h					\
-	dkp-device-list.c					\
-	dkp-qos.h						\
-	dkp-qos.c						\
-	dkp-wakeups.h						\
-	dkp-wakeups.c						\
-	dkp-history.h						\
-	dkp-history.c						\
-	dkp-backend.h						\
-	dkp-native.h						\
-	dkp-main.c						\
+	up-polkit.h						\
+	up-polkit.c						\
+	up-daemon.h						\
+	up-daemon.c						\
+	up-device.h						\
+	up-device.c						\
+	up-device-list.h					\
+	up-device-list.c					\
+	up-qos.h						\
+	up-qos.c						\
+	up-wakeups.h						\
+	up-wakeups.c						\
+	up-history.h						\
+	up-history.c						\
+	up-backend.h						\
+	up-native.h						\
+	up-main.c						\
 	$(BUILT_SOURCES)
 
-devkit_power_daemon_CPPFLAGS = \
+upowerd_CPPFLAGS = \
 	-I$(top_srcdir)/src					\
-	-DG_LOG_DOMAIN=\"dkp-daemon\"				\
-	$(DISABLE_DEPRECATED)					\
+	-DG_LOG_DOMAIN=\"up-daemon\"				\
 	$(AM_CPPFLAGS)
 
-devkit_power_daemon_LDADD = -lm $(USB_LIBS) $(GIO_LIBS) \
-	$(DBUS_GLIB_LIBS) $(POLKIT_LIBS) $(am__append_1) \
-	$(am__append_2) $(am__append_3)
-devkit_power_daemon_CFLAGS = \
+upowerd_LDADD = -lm $(USB_LIBS) $(GIO_LIBS) $(DBUS_GLIB_LIBS) \
+	$(POLKIT_LIBS) $(am__append_1) $(am__append_2) $(am__append_3)
+upowerd_CFLAGS = \
 	$(WARNINGFLAGS_C)					\
 	$(NULL)
 
-@EGG_BUILD_TESTS_TRUE@dkp_self_test_SOURCES = \
+@EGG_BUILD_TESTS_TRUE@up_self_test_SOURCES = \
 @EGG_BUILD_TESTS_TRUE@	egg-test.h						\
 @EGG_BUILD_TESTS_TRUE@	egg-test.c						\
 @EGG_BUILD_TESTS_TRUE@	egg-debug.c						\
 @EGG_BUILD_TESTS_TRUE@	egg-debug.h						\
-@EGG_BUILD_TESTS_TRUE@	dkp-self-test.c						\
-@EGG_BUILD_TESTS_TRUE@	dkp-polkit.h						\
-@EGG_BUILD_TESTS_TRUE@	dkp-polkit.c						\
-@EGG_BUILD_TESTS_TRUE@	dkp-daemon.h						\
-@EGG_BUILD_TESTS_TRUE@	dkp-daemon.c						\
-@EGG_BUILD_TESTS_TRUE@	dkp-device.h						\
-@EGG_BUILD_TESTS_TRUE@	dkp-device.c						\
-@EGG_BUILD_TESTS_TRUE@	dkp-device-list.h					\
-@EGG_BUILD_TESTS_TRUE@	dkp-device-list.c					\
-@EGG_BUILD_TESTS_TRUE@	dkp-qos.h						\
-@EGG_BUILD_TESTS_TRUE@	dkp-qos.c						\
-@EGG_BUILD_TESTS_TRUE@	dkp-wakeups.h						\
-@EGG_BUILD_TESTS_TRUE@	dkp-wakeups.c						\
-@EGG_BUILD_TESTS_TRUE@	dkp-history.h						\
-@EGG_BUILD_TESTS_TRUE@	dkp-history.c						\
-@EGG_BUILD_TESTS_TRUE@	dkp-backend.h						\
-@EGG_BUILD_TESTS_TRUE@	dkp-native.h						\
+@EGG_BUILD_TESTS_TRUE@	up-self-test.c						\
+@EGG_BUILD_TESTS_TRUE@	up-polkit.h						\
+@EGG_BUILD_TESTS_TRUE@	up-polkit.c						\
+@EGG_BUILD_TESTS_TRUE@	up-daemon.h						\
+@EGG_BUILD_TESTS_TRUE@	up-daemon.c						\
+@EGG_BUILD_TESTS_TRUE@	up-device.h						\
+@EGG_BUILD_TESTS_TRUE@	up-device.c						\
+@EGG_BUILD_TESTS_TRUE@	up-device-list.h					\
+@EGG_BUILD_TESTS_TRUE@	up-device-list.c					\
+@EGG_BUILD_TESTS_TRUE@	up-qos.h						\
+@EGG_BUILD_TESTS_TRUE@	up-qos.c						\
+@EGG_BUILD_TESTS_TRUE@	up-wakeups.h						\
+@EGG_BUILD_TESTS_TRUE@	up-wakeups.c						\
+@EGG_BUILD_TESTS_TRUE@	up-history.h						\
+@EGG_BUILD_TESTS_TRUE@	up-history.c						\
+@EGG_BUILD_TESTS_TRUE@	up-backend.h						\
+@EGG_BUILD_TESTS_TRUE@	up-native.h						\
 @EGG_BUILD_TESTS_TRUE@	$(BUILT_SOURCES)
 
-@EGG_BUILD_TESTS_TRUE@dkp_self_test_LDADD = \
+@EGG_BUILD_TESTS_TRUE@up_self_test_LDADD = \
 @EGG_BUILD_TESTS_TRUE@	-lm							\
-@EGG_BUILD_TESTS_TRUE@	dummy/libdkpshared.la					\
+@EGG_BUILD_TESTS_TRUE@	dummy/libupshared.la					\
 @EGG_BUILD_TESTS_TRUE@	$(GLIB_LIBS)						\
 @EGG_BUILD_TESTS_TRUE@	$(GIO_CFLAGS)						\
 @EGG_BUILD_TESTS_TRUE@	$(SELFTEST_LIBS)					\
 @EGG_BUILD_TESTS_TRUE@	$(DEVKIT_POWER_LIBS)					\
 @EGG_BUILD_TESTS_TRUE@	$(POLKIT_LIBS)
 
-@EGG_BUILD_TESTS_TRUE@dkp_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS_C)
+@EGG_BUILD_TESTS_TRUE@up_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS_C)
 servicedir = $(datadir)/dbus-1/system-services
-service_in_files = org.freedesktop.DeviceKit.Power.service.in
+service_in_files = org.freedesktop.UPower.service.in
 service_DATA = $(service_in_files:.service.in=.service)
 dbusconfdir = $(sysconfdir)/dbus-1/system.d
-dbusconf_in_files = org.freedesktop.DeviceKit.Power.conf.in
+dbusconf_in_files = org.freedesktop.UPower.conf.in
 dbusconf_DATA = $(dbusconf_in_files:.conf.in=.conf)
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = \
-	org.freedesktop.DeviceKit.Power.xml			\
-	org.freedesktop.DeviceKit.Power.Device.xml		\
-	org.freedesktop.DeviceKit.Power.QoS.xml			\
-	org.freedesktop.DeviceKit.Power.Wakeups.xml		\
-	dkp-marshal.list					\
+	org.freedesktop.UPower.xml				\
+	org.freedesktop.UPower.Device.xml			\
+	org.freedesktop.UPower.QoS.xml				\
+	org.freedesktop.UPower.Wakeups.xml			\
+	up-marshal.list						\
 	$(service_in_files)					\
 	$(dbusconf_in_files)
 
@@ -503,7 +512,7 @@ all: $(BUILT_SOURCES)
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -528,9 +537,9 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 
-$(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
+$(top_srcdir)/configure:  $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
+$(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
 
@@ -585,12 +594,12 @@ clean-libexecPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
-devkit-power-daemon$(EXEEXT): $(devkit_power_daemon_OBJECTS) $(devkit_power_daemon_DEPENDENCIES) 
-	@rm -f devkit-power-daemon$(EXEEXT)
-	$(AM_V_CCLD)$(devkit_power_daemon_LINK) $(devkit_power_daemon_OBJECTS) $(devkit_power_daemon_LDADD) $(LIBS)
-dkp-self-test$(EXEEXT): $(dkp_self_test_OBJECTS) $(dkp_self_test_DEPENDENCIES) 
-	@rm -f dkp-self-test$(EXEEXT)
-	$(AM_V_CCLD)$(dkp_self_test_LINK) $(dkp_self_test_OBJECTS) $(dkp_self_test_LDADD) $(LIBS)
+up-self-test$(EXEEXT): $(up_self_test_OBJECTS) $(up_self_test_DEPENDENCIES) 
+	@rm -f up-self-test$(EXEEXT)
+	$(AM_V_CCLD)$(up_self_test_LINK) $(up_self_test_OBJECTS) $(up_self_test_LDADD) $(LIBS)
+upowerd$(EXEEXT): $(upowerd_OBJECTS) $(upowerd_DEPENDENCIES) 
+	@rm -f upowerd$(EXEEXT)
+	$(AM_V_CCLD)$(upowerd_LINK) $(upowerd_OBJECTS) $(upowerd_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -598,27 +607,27 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-daemon.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-device-list.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-device.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-history.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-marshal.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-polkit.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-qos.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-dkp-wakeups.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power_daemon-egg-debug.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp_self_test-dkp-daemon.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp_self_test-dkp-device-list.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp_self_test-dkp-device.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp_self_test-dkp-history.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp_self_test-dkp-marshal.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp_self_test-dkp-polkit.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp_self_test-dkp-qos.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp_self_test-dkp-self-test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp_self_test-dkp-wakeups.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp_self_test-egg-debug.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dkp_self_test-egg-test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-egg-debug.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-egg-test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-daemon.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-device-list.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-device.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-history.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-marshal.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-polkit.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-qos.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-self-test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-wakeups.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-egg-debug.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-daemon.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-device-list.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-device.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-history.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-marshal.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-polkit.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-qos.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-wakeups.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -644,341 +653,341 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
-devkit_power_daemon-egg-debug.o: egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-egg-debug.o -MD -MP -MF $(DEPDIR)/devkit_power_daemon-egg-debug.Tpo -c -o devkit_power_daemon-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-egg-debug.Tpo $(DEPDIR)/devkit_power_daemon-egg-debug.Po
+up_self_test-egg-test.o: egg-test.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-egg-test.o -MD -MP -MF $(DEPDIR)/up_self_test-egg-test.Tpo -c -o up_self_test-egg-test.o `test -f 'egg-test.c' || echo '$(srcdir)/'`egg-test.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-egg-test.Tpo $(DEPDIR)/up_self_test-egg-test.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='devkit_power_daemon-egg-debug.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-test.c' object='up_self_test-egg-test.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-egg-test.o `test -f 'egg-test.c' || echo '$(srcdir)/'`egg-test.c
 
-devkit_power_daemon-egg-debug.obj: egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-egg-debug.obj -MD -MP -MF $(DEPDIR)/devkit_power_daemon-egg-debug.Tpo -c -o devkit_power_daemon-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-egg-debug.Tpo $(DEPDIR)/devkit_power_daemon-egg-debug.Po
+up_self_test-egg-test.obj: egg-test.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-egg-test.obj -MD -MP -MF $(DEPDIR)/up_self_test-egg-test.Tpo -c -o up_self_test-egg-test.obj `if test -f 'egg-test.c'; then $(CYGPATH_W) 'egg-test.c'; else $(CYGPATH_W) '$(srcdir)/egg-test.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-egg-test.Tpo $(DEPDIR)/up_self_test-egg-test.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='devkit_power_daemon-egg-debug.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-test.c' object='up_self_test-egg-test.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-egg-test.obj `if test -f 'egg-test.c'; then $(CYGPATH_W) 'egg-test.c'; else $(CYGPATH_W) '$(srcdir)/egg-test.c'; fi`
 
-devkit_power_daemon-dkp-polkit.o: dkp-polkit.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-polkit.o -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-polkit.Tpo -c -o devkit_power_daemon-dkp-polkit.o `test -f 'dkp-polkit.c' || echo '$(srcdir)/'`dkp-polkit.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-polkit.Tpo $(DEPDIR)/devkit_power_daemon-dkp-polkit.Po
+up_self_test-egg-debug.o: egg-debug.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-egg-debug.o -MD -MP -MF $(DEPDIR)/up_self_test-egg-debug.Tpo -c -o up_self_test-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-egg-debug.Tpo $(DEPDIR)/up_self_test-egg-debug.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-polkit.c' object='devkit_power_daemon-dkp-polkit.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='up_self_test-egg-debug.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-polkit.o `test -f 'dkp-polkit.c' || echo '$(srcdir)/'`dkp-polkit.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
 
-devkit_power_daemon-dkp-polkit.obj: dkp-polkit.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-polkit.obj -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-polkit.Tpo -c -o devkit_power_daemon-dkp-polkit.obj `if test -f 'dkp-polkit.c'; then $(CYGPATH_W) 'dkp-polkit.c'; else $(CYGPATH_W) '$(srcdir)/dkp-polkit.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-polkit.Tpo $(DEPDIR)/devkit_power_daemon-dkp-polkit.Po
+up_self_test-egg-debug.obj: egg-debug.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-egg-debug.obj -MD -MP -MF $(DEPDIR)/up_self_test-egg-debug.Tpo -c -o up_self_test-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-egg-debug.Tpo $(DEPDIR)/up_self_test-egg-debug.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-polkit.c' object='devkit_power_daemon-dkp-polkit.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='up_self_test-egg-debug.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-polkit.obj `if test -f 'dkp-polkit.c'; then $(CYGPATH_W) 'dkp-polkit.c'; else $(CYGPATH_W) '$(srcdir)/dkp-polkit.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
 
-devkit_power_daemon-dkp-daemon.o: dkp-daemon.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-daemon.o -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-daemon.Tpo -c -o devkit_power_daemon-dkp-daemon.o `test -f 'dkp-daemon.c' || echo '$(srcdir)/'`dkp-daemon.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-daemon.Tpo $(DEPDIR)/devkit_power_daemon-dkp-daemon.Po
+up_self_test-up-self-test.o: up-self-test.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-self-test.o -MD -MP -MF $(DEPDIR)/up_self_test-up-self-test.Tpo -c -o up_self_test-up-self-test.o `test -f 'up-self-test.c' || echo '$(srcdir)/'`up-self-test.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-self-test.Tpo $(DEPDIR)/up_self_test-up-self-test.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-daemon.c' object='devkit_power_daemon-dkp-daemon.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-self-test.c' object='up_self_test-up-self-test.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-daemon.o `test -f 'dkp-daemon.c' || echo '$(srcdir)/'`dkp-daemon.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-self-test.o `test -f 'up-self-test.c' || echo '$(srcdir)/'`up-self-test.c
 
-devkit_power_daemon-dkp-daemon.obj: dkp-daemon.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-daemon.obj -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-daemon.Tpo -c -o devkit_power_daemon-dkp-daemon.obj `if test -f 'dkp-daemon.c'; then $(CYGPATH_W) 'dkp-daemon.c'; else $(CYGPATH_W) '$(srcdir)/dkp-daemon.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-daemon.Tpo $(DEPDIR)/devkit_power_daemon-dkp-daemon.Po
+up_self_test-up-self-test.obj: up-self-test.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-self-test.obj -MD -MP -MF $(DEPDIR)/up_self_test-up-self-test.Tpo -c -o up_self_test-up-self-test.obj `if test -f 'up-self-test.c'; then $(CYGPATH_W) 'up-self-test.c'; else $(CYGPATH_W) '$(srcdir)/up-self-test.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-self-test.Tpo $(DEPDIR)/up_self_test-up-self-test.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-daemon.c' object='devkit_power_daemon-dkp-daemon.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-self-test.c' object='up_self_test-up-self-test.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-daemon.obj `if test -f 'dkp-daemon.c'; then $(CYGPATH_W) 'dkp-daemon.c'; else $(CYGPATH_W) '$(srcdir)/dkp-daemon.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-self-test.obj `if test -f 'up-self-test.c'; then $(CYGPATH_W) 'up-self-test.c'; else $(CYGPATH_W) '$(srcdir)/up-self-test.c'; fi`
 
-devkit_power_daemon-dkp-device.o: dkp-device.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-device.o -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-device.Tpo -c -o devkit_power_daemon-dkp-device.o `test -f 'dkp-device.c' || echo '$(srcdir)/'`dkp-device.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-device.Tpo $(DEPDIR)/devkit_power_daemon-dkp-device.Po
+up_self_test-up-polkit.o: up-polkit.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-polkit.o -MD -MP -MF $(DEPDIR)/up_self_test-up-polkit.Tpo -c -o up_self_test-up-polkit.o `test -f 'up-polkit.c' || echo '$(srcdir)/'`up-polkit.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-polkit.Tpo $(DEPDIR)/up_self_test-up-polkit.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-device.c' object='devkit_power_daemon-dkp-device.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-polkit.c' object='up_self_test-up-polkit.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-device.o `test -f 'dkp-device.c' || echo '$(srcdir)/'`dkp-device.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-polkit.o `test -f 'up-polkit.c' || echo '$(srcdir)/'`up-polkit.c
 
-devkit_power_daemon-dkp-device.obj: dkp-device.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-device.obj -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-device.Tpo -c -o devkit_power_daemon-dkp-device.obj `if test -f 'dkp-device.c'; then $(CYGPATH_W) 'dkp-device.c'; else $(CYGPATH_W) '$(srcdir)/dkp-device.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-device.Tpo $(DEPDIR)/devkit_power_daemon-dkp-device.Po
+up_self_test-up-polkit.obj: up-polkit.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-polkit.obj -MD -MP -MF $(DEPDIR)/up_self_test-up-polkit.Tpo -c -o up_self_test-up-polkit.obj `if test -f 'up-polkit.c'; then $(CYGPATH_W) 'up-polkit.c'; else $(CYGPATH_W) '$(srcdir)/up-polkit.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-polkit.Tpo $(DEPDIR)/up_self_test-up-polkit.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-device.c' object='devkit_power_daemon-dkp-device.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-polkit.c' object='up_self_test-up-polkit.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-device.obj `if test -f 'dkp-device.c'; then $(CYGPATH_W) 'dkp-device.c'; else $(CYGPATH_W) '$(srcdir)/dkp-device.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-polkit.obj `if test -f 'up-polkit.c'; then $(CYGPATH_W) 'up-polkit.c'; else $(CYGPATH_W) '$(srcdir)/up-polkit.c'; fi`
 
-devkit_power_daemon-dkp-device-list.o: dkp-device-list.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-device-list.o -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-device-list.Tpo -c -o devkit_power_daemon-dkp-device-list.o `test -f 'dkp-device-list.c' || echo '$(srcdir)/'`dkp-device-list.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-device-list.Tpo $(DEPDIR)/devkit_power_daemon-dkp-device-list.Po
+up_self_test-up-daemon.o: up-daemon.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-daemon.o -MD -MP -MF $(DEPDIR)/up_self_test-up-daemon.Tpo -c -o up_self_test-up-daemon.o `test -f 'up-daemon.c' || echo '$(srcdir)/'`up-daemon.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-daemon.Tpo $(DEPDIR)/up_self_test-up-daemon.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-device-list.c' object='devkit_power_daemon-dkp-device-list.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-daemon.c' object='up_self_test-up-daemon.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-device-list.o `test -f 'dkp-device-list.c' || echo '$(srcdir)/'`dkp-device-list.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-daemon.o `test -f 'up-daemon.c' || echo '$(srcdir)/'`up-daemon.c
 
-devkit_power_daemon-dkp-device-list.obj: dkp-device-list.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-device-list.obj -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-device-list.Tpo -c -o devkit_power_daemon-dkp-device-list.obj `if test -f 'dkp-device-list.c'; then $(CYGPATH_W) 'dkp-device-list.c'; else $(CYGPATH_W) '$(srcdir)/dkp-device-list.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-device-list.Tpo $(DEPDIR)/devkit_power_daemon-dkp-device-list.Po
+up_self_test-up-daemon.obj: up-daemon.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-daemon.obj -MD -MP -MF $(DEPDIR)/up_self_test-up-daemon.Tpo -c -o up_self_test-up-daemon.obj `if test -f 'up-daemon.c'; then $(CYGPATH_W) 'up-daemon.c'; else $(CYGPATH_W) '$(srcdir)/up-daemon.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-daemon.Tpo $(DEPDIR)/up_self_test-up-daemon.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-device-list.c' object='devkit_power_daemon-dkp-device-list.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-daemon.c' object='up_self_test-up-daemon.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-device-list.obj `if test -f 'dkp-device-list.c'; then $(CYGPATH_W) 'dkp-device-list.c'; else $(CYGPATH_W) '$(srcdir)/dkp-device-list.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-daemon.obj `if test -f 'up-daemon.c'; then $(CYGPATH_W) 'up-daemon.c'; else $(CYGPATH_W) '$(srcdir)/up-daemon.c'; fi`
 
-devkit_power_daemon-dkp-qos.o: dkp-qos.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-qos.o -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-qos.Tpo -c -o devkit_power_daemon-dkp-qos.o `test -f 'dkp-qos.c' || echo '$(srcdir)/'`dkp-qos.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-qos.Tpo $(DEPDIR)/devkit_power_daemon-dkp-qos.Po
+up_self_test-up-device.o: up-device.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-device.o -MD -MP -MF $(DEPDIR)/up_self_test-up-device.Tpo -c -o up_self_test-up-device.o `test -f 'up-device.c' || echo '$(srcdir)/'`up-device.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-device.Tpo $(DEPDIR)/up_self_test-up-device.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-qos.c' object='devkit_power_daemon-dkp-qos.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-device.c' object='up_self_test-up-device.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-qos.o `test -f 'dkp-qos.c' || echo '$(srcdir)/'`dkp-qos.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-device.o `test -f 'up-device.c' || echo '$(srcdir)/'`up-device.c
 
-devkit_power_daemon-dkp-qos.obj: dkp-qos.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-qos.obj -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-qos.Tpo -c -o devkit_power_daemon-dkp-qos.obj `if test -f 'dkp-qos.c'; then $(CYGPATH_W) 'dkp-qos.c'; else $(CYGPATH_W) '$(srcdir)/dkp-qos.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-qos.Tpo $(DEPDIR)/devkit_power_daemon-dkp-qos.Po
+up_self_test-up-device.obj: up-device.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-device.obj -MD -MP -MF $(DEPDIR)/up_self_test-up-device.Tpo -c -o up_self_test-up-device.obj `if test -f 'up-device.c'; then $(CYGPATH_W) 'up-device.c'; else $(CYGPATH_W) '$(srcdir)/up-device.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-device.Tpo $(DEPDIR)/up_self_test-up-device.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-qos.c' object='devkit_power_daemon-dkp-qos.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-device.c' object='up_self_test-up-device.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-qos.obj `if test -f 'dkp-qos.c'; then $(CYGPATH_W) 'dkp-qos.c'; else $(CYGPATH_W) '$(srcdir)/dkp-qos.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-device.obj `if test -f 'up-device.c'; then $(CYGPATH_W) 'up-device.c'; else $(CYGPATH_W) '$(srcdir)/up-device.c'; fi`
 
-devkit_power_daemon-dkp-wakeups.o: dkp-wakeups.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-wakeups.o -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-wakeups.Tpo -c -o devkit_power_daemon-dkp-wakeups.o `test -f 'dkp-wakeups.c' || echo '$(srcdir)/'`dkp-wakeups.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-wakeups.Tpo $(DEPDIR)/devkit_power_daemon-dkp-wakeups.Po
+up_self_test-up-device-list.o: up-device-list.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-device-list.o -MD -MP -MF $(DEPDIR)/up_self_test-up-device-list.Tpo -c -o up_self_test-up-device-list.o `test -f 'up-device-list.c' || echo '$(srcdir)/'`up-device-list.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-device-list.Tpo $(DEPDIR)/up_self_test-up-device-list.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-wakeups.c' object='devkit_power_daemon-dkp-wakeups.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-device-list.c' object='up_self_test-up-device-list.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-wakeups.o `test -f 'dkp-wakeups.c' || echo '$(srcdir)/'`dkp-wakeups.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-device-list.o `test -f 'up-device-list.c' || echo '$(srcdir)/'`up-device-list.c
 
-devkit_power_daemon-dkp-wakeups.obj: dkp-wakeups.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-wakeups.obj -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-wakeups.Tpo -c -o devkit_power_daemon-dkp-wakeups.obj `if test -f 'dkp-wakeups.c'; then $(CYGPATH_W) 'dkp-wakeups.c'; else $(CYGPATH_W) '$(srcdir)/dkp-wakeups.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-wakeups.Tpo $(DEPDIR)/devkit_power_daemon-dkp-wakeups.Po
+up_self_test-up-device-list.obj: up-device-list.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-device-list.obj -MD -MP -MF $(DEPDIR)/up_self_test-up-device-list.Tpo -c -o up_self_test-up-device-list.obj `if test -f 'up-device-list.c'; then $(CYGPATH_W) 'up-device-list.c'; else $(CYGPATH_W) '$(srcdir)/up-device-list.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-device-list.Tpo $(DEPDIR)/up_self_test-up-device-list.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-wakeups.c' object='devkit_power_daemon-dkp-wakeups.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-device-list.c' object='up_self_test-up-device-list.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-wakeups.obj `if test -f 'dkp-wakeups.c'; then $(CYGPATH_W) 'dkp-wakeups.c'; else $(CYGPATH_W) '$(srcdir)/dkp-wakeups.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-device-list.obj `if test -f 'up-device-list.c'; then $(CYGPATH_W) 'up-device-list.c'; else $(CYGPATH_W) '$(srcdir)/up-device-list.c'; fi`
 
-devkit_power_daemon-dkp-history.o: dkp-history.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-history.o -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-history.Tpo -c -o devkit_power_daemon-dkp-history.o `test -f 'dkp-history.c' || echo '$(srcdir)/'`dkp-history.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-history.Tpo $(DEPDIR)/devkit_power_daemon-dkp-history.Po
+up_self_test-up-qos.o: up-qos.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-qos.o -MD -MP -MF $(DEPDIR)/up_self_test-up-qos.Tpo -c -o up_self_test-up-qos.o `test -f 'up-qos.c' || echo '$(srcdir)/'`up-qos.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-qos.Tpo $(DEPDIR)/up_self_test-up-qos.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-history.c' object='devkit_power_daemon-dkp-history.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-qos.c' object='up_self_test-up-qos.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-history.o `test -f 'dkp-history.c' || echo '$(srcdir)/'`dkp-history.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-qos.o `test -f 'up-qos.c' || echo '$(srcdir)/'`up-qos.c
 
-devkit_power_daemon-dkp-history.obj: dkp-history.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-history.obj -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-history.Tpo -c -o devkit_power_daemon-dkp-history.obj `if test -f 'dkp-history.c'; then $(CYGPATH_W) 'dkp-history.c'; else $(CYGPATH_W) '$(srcdir)/dkp-history.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-history.Tpo $(DEPDIR)/devkit_power_daemon-dkp-history.Po
+up_self_test-up-qos.obj: up-qos.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-qos.obj -MD -MP -MF $(DEPDIR)/up_self_test-up-qos.Tpo -c -o up_self_test-up-qos.obj `if test -f 'up-qos.c'; then $(CYGPATH_W) 'up-qos.c'; else $(CYGPATH_W) '$(srcdir)/up-qos.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-qos.Tpo $(DEPDIR)/up_self_test-up-qos.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-history.c' object='devkit_power_daemon-dkp-history.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-qos.c' object='up_self_test-up-qos.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-history.obj `if test -f 'dkp-history.c'; then $(CYGPATH_W) 'dkp-history.c'; else $(CYGPATH_W) '$(srcdir)/dkp-history.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-qos.obj `if test -f 'up-qos.c'; then $(CYGPATH_W) 'up-qos.c'; else $(CYGPATH_W) '$(srcdir)/up-qos.c'; fi`
 
-devkit_power_daemon-dkp-main.o: dkp-main.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-main.o -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-main.Tpo -c -o devkit_power_daemon-dkp-main.o `test -f 'dkp-main.c' || echo '$(srcdir)/'`dkp-main.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-main.Tpo $(DEPDIR)/devkit_power_daemon-dkp-main.Po
+up_self_test-up-wakeups.o: up-wakeups.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-wakeups.o -MD -MP -MF $(DEPDIR)/up_self_test-up-wakeups.Tpo -c -o up_self_test-up-wakeups.o `test -f 'up-wakeups.c' || echo '$(srcdir)/'`up-wakeups.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-wakeups.Tpo $(DEPDIR)/up_self_test-up-wakeups.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-main.c' object='devkit_power_daemon-dkp-main.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-wakeups.c' object='up_self_test-up-wakeups.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-main.o `test -f 'dkp-main.c' || echo '$(srcdir)/'`dkp-main.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-wakeups.o `test -f 'up-wakeups.c' || echo '$(srcdir)/'`up-wakeups.c
 
-devkit_power_daemon-dkp-main.obj: dkp-main.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-main.obj -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-main.Tpo -c -o devkit_power_daemon-dkp-main.obj `if test -f 'dkp-main.c'; then $(CYGPATH_W) 'dkp-main.c'; else $(CYGPATH_W) '$(srcdir)/dkp-main.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-main.Tpo $(DEPDIR)/devkit_power_daemon-dkp-main.Po
+up_self_test-up-wakeups.obj: up-wakeups.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-wakeups.obj -MD -MP -MF $(DEPDIR)/up_self_test-up-wakeups.Tpo -c -o up_self_test-up-wakeups.obj `if test -f 'up-wakeups.c'; then $(CYGPATH_W) 'up-wakeups.c'; else $(CYGPATH_W) '$(srcdir)/up-wakeups.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-wakeups.Tpo $(DEPDIR)/up_self_test-up-wakeups.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-main.c' object='devkit_power_daemon-dkp-main.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-wakeups.c' object='up_self_test-up-wakeups.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-main.obj `if test -f 'dkp-main.c'; then $(CYGPATH_W) 'dkp-main.c'; else $(CYGPATH_W) '$(srcdir)/dkp-main.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-wakeups.obj `if test -f 'up-wakeups.c'; then $(CYGPATH_W) 'up-wakeups.c'; else $(CYGPATH_W) '$(srcdir)/up-wakeups.c'; fi`
 
-devkit_power_daemon-dkp-marshal.o: dkp-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-marshal.o -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-marshal.Tpo -c -o devkit_power_daemon-dkp-marshal.o `test -f 'dkp-marshal.c' || echo '$(srcdir)/'`dkp-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-marshal.Tpo $(DEPDIR)/devkit_power_daemon-dkp-marshal.Po
+up_self_test-up-history.o: up-history.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-history.o -MD -MP -MF $(DEPDIR)/up_self_test-up-history.Tpo -c -o up_self_test-up-history.o `test -f 'up-history.c' || echo '$(srcdir)/'`up-history.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-history.Tpo $(DEPDIR)/up_self_test-up-history.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-marshal.c' object='devkit_power_daemon-dkp-marshal.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-history.c' object='up_self_test-up-history.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-marshal.o `test -f 'dkp-marshal.c' || echo '$(srcdir)/'`dkp-marshal.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-history.o `test -f 'up-history.c' || echo '$(srcdir)/'`up-history.c
 
-devkit_power_daemon-dkp-marshal.obj: dkp-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -MT devkit_power_daemon-dkp-marshal.obj -MD -MP -MF $(DEPDIR)/devkit_power_daemon-dkp-marshal.Tpo -c -o devkit_power_daemon-dkp-marshal.obj `if test -f 'dkp-marshal.c'; then $(CYGPATH_W) 'dkp-marshal.c'; else $(CYGPATH_W) '$(srcdir)/dkp-marshal.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power_daemon-dkp-marshal.Tpo $(DEPDIR)/devkit_power_daemon-dkp-marshal.Po
+up_self_test-up-history.obj: up-history.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-history.obj -MD -MP -MF $(DEPDIR)/up_self_test-up-history.Tpo -c -o up_self_test-up-history.obj `if test -f 'up-history.c'; then $(CYGPATH_W) 'up-history.c'; else $(CYGPATH_W) '$(srcdir)/up-history.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-history.Tpo $(DEPDIR)/up_self_test-up-history.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-marshal.c' object='devkit_power_daemon-dkp-marshal.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-history.c' object='up_self_test-up-history.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_daemon_CPPFLAGS) $(CPPFLAGS) $(devkit_power_daemon_CFLAGS) $(CFLAGS) -c -o devkit_power_daemon-dkp-marshal.obj `if test -f 'dkp-marshal.c'; then $(CYGPATH_W) 'dkp-marshal.c'; else $(CYGPATH_W) '$(srcdir)/dkp-marshal.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-history.obj `if test -f 'up-history.c'; then $(CYGPATH_W) 'up-history.c'; else $(CYGPATH_W) '$(srcdir)/up-history.c'; fi`
 
-dkp_self_test-egg-test.o: egg-test.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-egg-test.o -MD -MP -MF $(DEPDIR)/dkp_self_test-egg-test.Tpo -c -o dkp_self_test-egg-test.o `test -f 'egg-test.c' || echo '$(srcdir)/'`egg-test.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-egg-test.Tpo $(DEPDIR)/dkp_self_test-egg-test.Po
+up_self_test-up-marshal.o: up-marshal.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-marshal.o -MD -MP -MF $(DEPDIR)/up_self_test-up-marshal.Tpo -c -o up_self_test-up-marshal.o `test -f 'up-marshal.c' || echo '$(srcdir)/'`up-marshal.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-marshal.Tpo $(DEPDIR)/up_self_test-up-marshal.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-test.c' object='dkp_self_test-egg-test.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-marshal.c' object='up_self_test-up-marshal.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-egg-test.o `test -f 'egg-test.c' || echo '$(srcdir)/'`egg-test.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-marshal.o `test -f 'up-marshal.c' || echo '$(srcdir)/'`up-marshal.c
 
-dkp_self_test-egg-test.obj: egg-test.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-egg-test.obj -MD -MP -MF $(DEPDIR)/dkp_self_test-egg-test.Tpo -c -o dkp_self_test-egg-test.obj `if test -f 'egg-test.c'; then $(CYGPATH_W) 'egg-test.c'; else $(CYGPATH_W) '$(srcdir)/egg-test.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-egg-test.Tpo $(DEPDIR)/dkp_self_test-egg-test.Po
+up_self_test-up-marshal.obj: up-marshal.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-marshal.obj -MD -MP -MF $(DEPDIR)/up_self_test-up-marshal.Tpo -c -o up_self_test-up-marshal.obj `if test -f 'up-marshal.c'; then $(CYGPATH_W) 'up-marshal.c'; else $(CYGPATH_W) '$(srcdir)/up-marshal.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-marshal.Tpo $(DEPDIR)/up_self_test-up-marshal.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-test.c' object='dkp_self_test-egg-test.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-marshal.c' object='up_self_test-up-marshal.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-egg-test.obj `if test -f 'egg-test.c'; then $(CYGPATH_W) 'egg-test.c'; else $(CYGPATH_W) '$(srcdir)/egg-test.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-marshal.obj `if test -f 'up-marshal.c'; then $(CYGPATH_W) 'up-marshal.c'; else $(CYGPATH_W) '$(srcdir)/up-marshal.c'; fi`
 
-dkp_self_test-egg-debug.o: egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-egg-debug.o -MD -MP -MF $(DEPDIR)/dkp_self_test-egg-debug.Tpo -c -o dkp_self_test-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-egg-debug.Tpo $(DEPDIR)/dkp_self_test-egg-debug.Po
+upowerd-egg-debug.o: egg-debug.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-egg-debug.o -MD -MP -MF $(DEPDIR)/upowerd-egg-debug.Tpo -c -o upowerd-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-egg-debug.Tpo $(DEPDIR)/upowerd-egg-debug.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='dkp_self_test-egg-debug.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='upowerd-egg-debug.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
 
-dkp_self_test-egg-debug.obj: egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-egg-debug.obj -MD -MP -MF $(DEPDIR)/dkp_self_test-egg-debug.Tpo -c -o dkp_self_test-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-egg-debug.Tpo $(DEPDIR)/dkp_self_test-egg-debug.Po
+upowerd-egg-debug.obj: egg-debug.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-egg-debug.obj -MD -MP -MF $(DEPDIR)/upowerd-egg-debug.Tpo -c -o upowerd-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-egg-debug.Tpo $(DEPDIR)/upowerd-egg-debug.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='dkp_self_test-egg-debug.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='upowerd-egg-debug.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
 
-dkp_self_test-dkp-self-test.o: dkp-self-test.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-self-test.o -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-self-test.Tpo -c -o dkp_self_test-dkp-self-test.o `test -f 'dkp-self-test.c' || echo '$(srcdir)/'`dkp-self-test.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-self-test.Tpo $(DEPDIR)/dkp_self_test-dkp-self-test.Po
+upowerd-up-polkit.o: up-polkit.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-polkit.o -MD -MP -MF $(DEPDIR)/upowerd-up-polkit.Tpo -c -o upowerd-up-polkit.o `test -f 'up-polkit.c' || echo '$(srcdir)/'`up-polkit.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-polkit.Tpo $(DEPDIR)/upowerd-up-polkit.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-self-test.c' object='dkp_self_test-dkp-self-test.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-polkit.c' object='upowerd-up-polkit.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-self-test.o `test -f 'dkp-self-test.c' || echo '$(srcdir)/'`dkp-self-test.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-polkit.o `test -f 'up-polkit.c' || echo '$(srcdir)/'`up-polkit.c
 
-dkp_self_test-dkp-self-test.obj: dkp-self-test.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-self-test.obj -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-self-test.Tpo -c -o dkp_self_test-dkp-self-test.obj `if test -f 'dkp-self-test.c'; then $(CYGPATH_W) 'dkp-self-test.c'; else $(CYGPATH_W) '$(srcdir)/dkp-self-test.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-self-test.Tpo $(DEPDIR)/dkp_self_test-dkp-self-test.Po
+upowerd-up-polkit.obj: up-polkit.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-polkit.obj -MD -MP -MF $(DEPDIR)/upowerd-up-polkit.Tpo -c -o upowerd-up-polkit.obj `if test -f 'up-polkit.c'; then $(CYGPATH_W) 'up-polkit.c'; else $(CYGPATH_W) '$(srcdir)/up-polkit.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-polkit.Tpo $(DEPDIR)/upowerd-up-polkit.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-self-test.c' object='dkp_self_test-dkp-self-test.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-polkit.c' object='upowerd-up-polkit.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-self-test.obj `if test -f 'dkp-self-test.c'; then $(CYGPATH_W) 'dkp-self-test.c'; else $(CYGPATH_W) '$(srcdir)/dkp-self-test.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-polkit.obj `if test -f 'up-polkit.c'; then $(CYGPATH_W) 'up-polkit.c'; else $(CYGPATH_W) '$(srcdir)/up-polkit.c'; fi`
 
-dkp_self_test-dkp-polkit.o: dkp-polkit.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-polkit.o -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-polkit.Tpo -c -o dkp_self_test-dkp-polkit.o `test -f 'dkp-polkit.c' || echo '$(srcdir)/'`dkp-polkit.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-polkit.Tpo $(DEPDIR)/dkp_self_test-dkp-polkit.Po
+upowerd-up-daemon.o: up-daemon.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-daemon.o -MD -MP -MF $(DEPDIR)/upowerd-up-daemon.Tpo -c -o upowerd-up-daemon.o `test -f 'up-daemon.c' || echo '$(srcdir)/'`up-daemon.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-daemon.Tpo $(DEPDIR)/upowerd-up-daemon.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-polkit.c' object='dkp_self_test-dkp-polkit.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-daemon.c' object='upowerd-up-daemon.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-polkit.o `test -f 'dkp-polkit.c' || echo '$(srcdir)/'`dkp-polkit.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-daemon.o `test -f 'up-daemon.c' || echo '$(srcdir)/'`up-daemon.c
 
-dkp_self_test-dkp-polkit.obj: dkp-polkit.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-polkit.obj -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-polkit.Tpo -c -o dkp_self_test-dkp-polkit.obj `if test -f 'dkp-polkit.c'; then $(CYGPATH_W) 'dkp-polkit.c'; else $(CYGPATH_W) '$(srcdir)/dkp-polkit.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-polkit.Tpo $(DEPDIR)/dkp_self_test-dkp-polkit.Po
+upowerd-up-daemon.obj: up-daemon.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-daemon.obj -MD -MP -MF $(DEPDIR)/upowerd-up-daemon.Tpo -c -o upowerd-up-daemon.obj `if test -f 'up-daemon.c'; then $(CYGPATH_W) 'up-daemon.c'; else $(CYGPATH_W) '$(srcdir)/up-daemon.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-daemon.Tpo $(DEPDIR)/upowerd-up-daemon.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-polkit.c' object='dkp_self_test-dkp-polkit.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-daemon.c' object='upowerd-up-daemon.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-polkit.obj `if test -f 'dkp-polkit.c'; then $(CYGPATH_W) 'dkp-polkit.c'; else $(CYGPATH_W) '$(srcdir)/dkp-polkit.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-daemon.obj `if test -f 'up-daemon.c'; then $(CYGPATH_W) 'up-daemon.c'; else $(CYGPATH_W) '$(srcdir)/up-daemon.c'; fi`
 
-dkp_self_test-dkp-daemon.o: dkp-daemon.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-daemon.o -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-daemon.Tpo -c -o dkp_self_test-dkp-daemon.o `test -f 'dkp-daemon.c' || echo '$(srcdir)/'`dkp-daemon.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-daemon.Tpo $(DEPDIR)/dkp_self_test-dkp-daemon.Po
+upowerd-up-device.o: up-device.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-device.o -MD -MP -MF $(DEPDIR)/upowerd-up-device.Tpo -c -o upowerd-up-device.o `test -f 'up-device.c' || echo '$(srcdir)/'`up-device.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-device.Tpo $(DEPDIR)/upowerd-up-device.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-daemon.c' object='dkp_self_test-dkp-daemon.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-device.c' object='upowerd-up-device.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-daemon.o `test -f 'dkp-daemon.c' || echo '$(srcdir)/'`dkp-daemon.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-device.o `test -f 'up-device.c' || echo '$(srcdir)/'`up-device.c
 
-dkp_self_test-dkp-daemon.obj: dkp-daemon.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-daemon.obj -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-daemon.Tpo -c -o dkp_self_test-dkp-daemon.obj `if test -f 'dkp-daemon.c'; then $(CYGPATH_W) 'dkp-daemon.c'; else $(CYGPATH_W) '$(srcdir)/dkp-daemon.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-daemon.Tpo $(DEPDIR)/dkp_self_test-dkp-daemon.Po
+upowerd-up-device.obj: up-device.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-device.obj -MD -MP -MF $(DEPDIR)/upowerd-up-device.Tpo -c -o upowerd-up-device.obj `if test -f 'up-device.c'; then $(CYGPATH_W) 'up-device.c'; else $(CYGPATH_W) '$(srcdir)/up-device.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-device.Tpo $(DEPDIR)/upowerd-up-device.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-daemon.c' object='dkp_self_test-dkp-daemon.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-device.c' object='upowerd-up-device.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-daemon.obj `if test -f 'dkp-daemon.c'; then $(CYGPATH_W) 'dkp-daemon.c'; else $(CYGPATH_W) '$(srcdir)/dkp-daemon.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-device.obj `if test -f 'up-device.c'; then $(CYGPATH_W) 'up-device.c'; else $(CYGPATH_W) '$(srcdir)/up-device.c'; fi`
 
-dkp_self_test-dkp-device.o: dkp-device.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-device.o -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-device.Tpo -c -o dkp_self_test-dkp-device.o `test -f 'dkp-device.c' || echo '$(srcdir)/'`dkp-device.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-device.Tpo $(DEPDIR)/dkp_self_test-dkp-device.Po
+upowerd-up-device-list.o: up-device-list.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-device-list.o -MD -MP -MF $(DEPDIR)/upowerd-up-device-list.Tpo -c -o upowerd-up-device-list.o `test -f 'up-device-list.c' || echo '$(srcdir)/'`up-device-list.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-device-list.Tpo $(DEPDIR)/upowerd-up-device-list.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-device.c' object='dkp_self_test-dkp-device.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-device-list.c' object='upowerd-up-device-list.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-device.o `test -f 'dkp-device.c' || echo '$(srcdir)/'`dkp-device.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-device-list.o `test -f 'up-device-list.c' || echo '$(srcdir)/'`up-device-list.c
 
-dkp_self_test-dkp-device.obj: dkp-device.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-device.obj -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-device.Tpo -c -o dkp_self_test-dkp-device.obj `if test -f 'dkp-device.c'; then $(CYGPATH_W) 'dkp-device.c'; else $(CYGPATH_W) '$(srcdir)/dkp-device.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-device.Tpo $(DEPDIR)/dkp_self_test-dkp-device.Po
+upowerd-up-device-list.obj: up-device-list.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-device-list.obj -MD -MP -MF $(DEPDIR)/upowerd-up-device-list.Tpo -c -o upowerd-up-device-list.obj `if test -f 'up-device-list.c'; then $(CYGPATH_W) 'up-device-list.c'; else $(CYGPATH_W) '$(srcdir)/up-device-list.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-device-list.Tpo $(DEPDIR)/upowerd-up-device-list.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-device.c' object='dkp_self_test-dkp-device.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-device-list.c' object='upowerd-up-device-list.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-device.obj `if test -f 'dkp-device.c'; then $(CYGPATH_W) 'dkp-device.c'; else $(CYGPATH_W) '$(srcdir)/dkp-device.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-device-list.obj `if test -f 'up-device-list.c'; then $(CYGPATH_W) 'up-device-list.c'; else $(CYGPATH_W) '$(srcdir)/up-device-list.c'; fi`
 
-dkp_self_test-dkp-device-list.o: dkp-device-list.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-device-list.o -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-device-list.Tpo -c -o dkp_self_test-dkp-device-list.o `test -f 'dkp-device-list.c' || echo '$(srcdir)/'`dkp-device-list.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-device-list.Tpo $(DEPDIR)/dkp_self_test-dkp-device-list.Po
+upowerd-up-qos.o: up-qos.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-qos.o -MD -MP -MF $(DEPDIR)/upowerd-up-qos.Tpo -c -o upowerd-up-qos.o `test -f 'up-qos.c' || echo '$(srcdir)/'`up-qos.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-qos.Tpo $(DEPDIR)/upowerd-up-qos.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-device-list.c' object='dkp_self_test-dkp-device-list.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-qos.c' object='upowerd-up-qos.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-device-list.o `test -f 'dkp-device-list.c' || echo '$(srcdir)/'`dkp-device-list.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-qos.o `test -f 'up-qos.c' || echo '$(srcdir)/'`up-qos.c
 
-dkp_self_test-dkp-device-list.obj: dkp-device-list.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-device-list.obj -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-device-list.Tpo -c -o dkp_self_test-dkp-device-list.obj `if test -f 'dkp-device-list.c'; then $(CYGPATH_W) 'dkp-device-list.c'; else $(CYGPATH_W) '$(srcdir)/dkp-device-list.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-device-list.Tpo $(DEPDIR)/dkp_self_test-dkp-device-list.Po
+upowerd-up-qos.obj: up-qos.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-qos.obj -MD -MP -MF $(DEPDIR)/upowerd-up-qos.Tpo -c -o upowerd-up-qos.obj `if test -f 'up-qos.c'; then $(CYGPATH_W) 'up-qos.c'; else $(CYGPATH_W) '$(srcdir)/up-qos.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-qos.Tpo $(DEPDIR)/upowerd-up-qos.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-device-list.c' object='dkp_self_test-dkp-device-list.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-qos.c' object='upowerd-up-qos.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-device-list.obj `if test -f 'dkp-device-list.c'; then $(CYGPATH_W) 'dkp-device-list.c'; else $(CYGPATH_W) '$(srcdir)/dkp-device-list.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-qos.obj `if test -f 'up-qos.c'; then $(CYGPATH_W) 'up-qos.c'; else $(CYGPATH_W) '$(srcdir)/up-qos.c'; fi`
 
-dkp_self_test-dkp-qos.o: dkp-qos.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-qos.o -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-qos.Tpo -c -o dkp_self_test-dkp-qos.o `test -f 'dkp-qos.c' || echo '$(srcdir)/'`dkp-qos.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-qos.Tpo $(DEPDIR)/dkp_self_test-dkp-qos.Po
+upowerd-up-wakeups.o: up-wakeups.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-wakeups.o -MD -MP -MF $(DEPDIR)/upowerd-up-wakeups.Tpo -c -o upowerd-up-wakeups.o `test -f 'up-wakeups.c' || echo '$(srcdir)/'`up-wakeups.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-wakeups.Tpo $(DEPDIR)/upowerd-up-wakeups.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-qos.c' object='dkp_self_test-dkp-qos.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-wakeups.c' object='upowerd-up-wakeups.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-qos.o `test -f 'dkp-qos.c' || echo '$(srcdir)/'`dkp-qos.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-wakeups.o `test -f 'up-wakeups.c' || echo '$(srcdir)/'`up-wakeups.c
 
-dkp_self_test-dkp-qos.obj: dkp-qos.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-qos.obj -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-qos.Tpo -c -o dkp_self_test-dkp-qos.obj `if test -f 'dkp-qos.c'; then $(CYGPATH_W) 'dkp-qos.c'; else $(CYGPATH_W) '$(srcdir)/dkp-qos.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-qos.Tpo $(DEPDIR)/dkp_self_test-dkp-qos.Po
+upowerd-up-wakeups.obj: up-wakeups.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-wakeups.obj -MD -MP -MF $(DEPDIR)/upowerd-up-wakeups.Tpo -c -o upowerd-up-wakeups.obj `if test -f 'up-wakeups.c'; then $(CYGPATH_W) 'up-wakeups.c'; else $(CYGPATH_W) '$(srcdir)/up-wakeups.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-wakeups.Tpo $(DEPDIR)/upowerd-up-wakeups.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-qos.c' object='dkp_self_test-dkp-qos.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-wakeups.c' object='upowerd-up-wakeups.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-qos.obj `if test -f 'dkp-qos.c'; then $(CYGPATH_W) 'dkp-qos.c'; else $(CYGPATH_W) '$(srcdir)/dkp-qos.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-wakeups.obj `if test -f 'up-wakeups.c'; then $(CYGPATH_W) 'up-wakeups.c'; else $(CYGPATH_W) '$(srcdir)/up-wakeups.c'; fi`
 
-dkp_self_test-dkp-wakeups.o: dkp-wakeups.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-wakeups.o -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-wakeups.Tpo -c -o dkp_self_test-dkp-wakeups.o `test -f 'dkp-wakeups.c' || echo '$(srcdir)/'`dkp-wakeups.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-wakeups.Tpo $(DEPDIR)/dkp_self_test-dkp-wakeups.Po
+upowerd-up-history.o: up-history.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-history.o -MD -MP -MF $(DEPDIR)/upowerd-up-history.Tpo -c -o upowerd-up-history.o `test -f 'up-history.c' || echo '$(srcdir)/'`up-history.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-history.Tpo $(DEPDIR)/upowerd-up-history.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-wakeups.c' object='dkp_self_test-dkp-wakeups.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-history.c' object='upowerd-up-history.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-wakeups.o `test -f 'dkp-wakeups.c' || echo '$(srcdir)/'`dkp-wakeups.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-history.o `test -f 'up-history.c' || echo '$(srcdir)/'`up-history.c
 
-dkp_self_test-dkp-wakeups.obj: dkp-wakeups.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-wakeups.obj -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-wakeups.Tpo -c -o dkp_self_test-dkp-wakeups.obj `if test -f 'dkp-wakeups.c'; then $(CYGPATH_W) 'dkp-wakeups.c'; else $(CYGPATH_W) '$(srcdir)/dkp-wakeups.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-wakeups.Tpo $(DEPDIR)/dkp_self_test-dkp-wakeups.Po
+upowerd-up-history.obj: up-history.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-history.obj -MD -MP -MF $(DEPDIR)/upowerd-up-history.Tpo -c -o upowerd-up-history.obj `if test -f 'up-history.c'; then $(CYGPATH_W) 'up-history.c'; else $(CYGPATH_W) '$(srcdir)/up-history.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-history.Tpo $(DEPDIR)/upowerd-up-history.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-wakeups.c' object='dkp_self_test-dkp-wakeups.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-history.c' object='upowerd-up-history.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-wakeups.obj `if test -f 'dkp-wakeups.c'; then $(CYGPATH_W) 'dkp-wakeups.c'; else $(CYGPATH_W) '$(srcdir)/dkp-wakeups.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-history.obj `if test -f 'up-history.c'; then $(CYGPATH_W) 'up-history.c'; else $(CYGPATH_W) '$(srcdir)/up-history.c'; fi`
 
-dkp_self_test-dkp-history.o: dkp-history.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-history.o -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-history.Tpo -c -o dkp_self_test-dkp-history.o `test -f 'dkp-history.c' || echo '$(srcdir)/'`dkp-history.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-history.Tpo $(DEPDIR)/dkp_self_test-dkp-history.Po
+upowerd-up-main.o: up-main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-main.o -MD -MP -MF $(DEPDIR)/upowerd-up-main.Tpo -c -o upowerd-up-main.o `test -f 'up-main.c' || echo '$(srcdir)/'`up-main.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-main.Tpo $(DEPDIR)/upowerd-up-main.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-history.c' object='dkp_self_test-dkp-history.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-main.c' object='upowerd-up-main.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-history.o `test -f 'dkp-history.c' || echo '$(srcdir)/'`dkp-history.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-main.o `test -f 'up-main.c' || echo '$(srcdir)/'`up-main.c
 
-dkp_self_test-dkp-history.obj: dkp-history.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-history.obj -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-history.Tpo -c -o dkp_self_test-dkp-history.obj `if test -f 'dkp-history.c'; then $(CYGPATH_W) 'dkp-history.c'; else $(CYGPATH_W) '$(srcdir)/dkp-history.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-history.Tpo $(DEPDIR)/dkp_self_test-dkp-history.Po
+upowerd-up-main.obj: up-main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-main.obj -MD -MP -MF $(DEPDIR)/upowerd-up-main.Tpo -c -o upowerd-up-main.obj `if test -f 'up-main.c'; then $(CYGPATH_W) 'up-main.c'; else $(CYGPATH_W) '$(srcdir)/up-main.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-main.Tpo $(DEPDIR)/upowerd-up-main.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-history.c' object='dkp_self_test-dkp-history.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-main.c' object='upowerd-up-main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-history.obj `if test -f 'dkp-history.c'; then $(CYGPATH_W) 'dkp-history.c'; else $(CYGPATH_W) '$(srcdir)/dkp-history.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-main.obj `if test -f 'up-main.c'; then $(CYGPATH_W) 'up-main.c'; else $(CYGPATH_W) '$(srcdir)/up-main.c'; fi`
 
-dkp_self_test-dkp-marshal.o: dkp-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-marshal.o -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-marshal.Tpo -c -o dkp_self_test-dkp-marshal.o `test -f 'dkp-marshal.c' || echo '$(srcdir)/'`dkp-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-marshal.Tpo $(DEPDIR)/dkp_self_test-dkp-marshal.Po
+upowerd-up-marshal.o: up-marshal.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-marshal.o -MD -MP -MF $(DEPDIR)/upowerd-up-marshal.Tpo -c -o upowerd-up-marshal.o `test -f 'up-marshal.c' || echo '$(srcdir)/'`up-marshal.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-marshal.Tpo $(DEPDIR)/upowerd-up-marshal.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-marshal.c' object='dkp_self_test-dkp-marshal.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-marshal.c' object='upowerd-up-marshal.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-marshal.o `test -f 'dkp-marshal.c' || echo '$(srcdir)/'`dkp-marshal.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-marshal.o `test -f 'up-marshal.c' || echo '$(srcdir)/'`up-marshal.c
 
-dkp_self_test-dkp-marshal.obj: dkp-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -MT dkp_self_test-dkp-marshal.obj -MD -MP -MF $(DEPDIR)/dkp_self_test-dkp-marshal.Tpo -c -o dkp_self_test-dkp-marshal.obj `if test -f 'dkp-marshal.c'; then $(CYGPATH_W) 'dkp-marshal.c'; else $(CYGPATH_W) '$(srcdir)/dkp-marshal.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dkp_self_test-dkp-marshal.Tpo $(DEPDIR)/dkp_self_test-dkp-marshal.Po
+upowerd-up-marshal.obj: up-marshal.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-marshal.obj -MD -MP -MF $(DEPDIR)/upowerd-up-marshal.Tpo -c -o upowerd-up-marshal.obj `if test -f 'up-marshal.c'; then $(CYGPATH_W) 'up-marshal.c'; else $(CYGPATH_W) '$(srcdir)/up-marshal.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-marshal.Tpo $(DEPDIR)/upowerd-up-marshal.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-marshal.c' object='dkp_self_test-dkp-marshal.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-marshal.c' object='upowerd-up-marshal.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dkp_self_test_CFLAGS) $(CFLAGS) -c -o dkp_self_test-dkp-marshal.obj `if test -f 'dkp-marshal.c'; then $(CYGPATH_W) 'dkp-marshal.c'; else $(CYGPATH_W) '$(srcdir)/dkp-marshal.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-marshal.obj `if test -f 'up-marshal.c'; then $(CYGPATH_W) 'up-marshal.c'; else $(CYGPATH_W) '$(srcdir)/up-marshal.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -1402,7 +1411,8 @@ install-dvi: install-dvi-recursive
 install-dvi-am:
 
 install-exec-am: install-libexecPROGRAMS
-
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 install-html: install-html-recursive
 
 install-html-am:
@@ -1446,7 +1456,7 @@ uninstall-am: uninstall-dbusconfDATA uninstall-dbusifDATA \
 
 .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) all check \
 	check-am ctags-recursive install install-am install-data-am \
-	install-strip tags-recursive
+	install-exec-am install-strip tags-recursive
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am check check-TESTS check-am clean \
@@ -1457,34 +1467,35 @@ uninstall-am: uninstall-dbusconfDATA uninstall-dbusifDATA \
 	install install-am install-data install-data-am \
 	install-data-hook install-dbusconfDATA install-dbusifDATA \
 	install-dvi install-dvi-am install-exec install-exec-am \
-	install-html install-html-am install-info install-info-am \
-	install-libexecPROGRAMS install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-serviceDATA install-strip \
-	installcheck installcheck-am installdirs installdirs-am \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
+	install-exec-hook install-html install-html-am install-info \
+	install-info-am install-libexecPROGRAMS install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-serviceDATA install-strip installcheck installcheck-am \
+	installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags tags-recursive uninstall uninstall-am \
 	uninstall-dbusconfDATA uninstall-dbusifDATA \
 	uninstall-libexecPROGRAMS uninstall-serviceDATA
 
 
-dkp-marshal.h: dkp-marshal.list
-	glib-genmarshal $< --prefix=dkp_marshal --header > $@
+up-marshal.h: up-marshal.list
+	glib-genmarshal $< --prefix=up_marshal --header > $@
 
-dkp-marshal.c: dkp-marshal.list
-	echo "#include \"dkp-marshal.h\"" > $@ && glib-genmarshal $< --prefix=dkp_marshal --body >> $@
+up-marshal.c: up-marshal.list
+	echo "#include \"up-marshal.h\"" > $@ && glib-genmarshal $< --prefix=up_marshal --body >> $@
 
-dkp-daemon-glue.h: org.freedesktop.DeviceKit.Power.xml Makefile.am
-	dbus-binding-tool --prefix=dkp_daemon --mode=glib-server --output=dkp-daemon-glue.h org.freedesktop.DeviceKit.Power.xml
+up-daemon-glue.h: org.freedesktop.UPower.xml Makefile.am
+	dbus-binding-tool --prefix=up_daemon --mode=glib-server --output=up-daemon-glue.h org.freedesktop.UPower.xml
 
-dkp-device-glue.h: org.freedesktop.DeviceKit.Power.Device.xml Makefile.am
-	dbus-binding-tool --prefix=dkp_device --mode=glib-server --output=dkp-device-glue.h org.freedesktop.DeviceKit.Power.Device.xml
+up-device-glue.h: org.freedesktop.UPower.Device.xml Makefile.am
+	dbus-binding-tool --prefix=up_device --mode=glib-server --output=up-device-glue.h org.freedesktop.UPower.Device.xml
 
-dkp-qos-glue.h: org.freedesktop.DeviceKit.Power.QoS.xml Makefile.am
-	dbus-binding-tool --prefix=dkp_qos --mode=glib-server --output=dkp-qos-glue.h org.freedesktop.DeviceKit.Power.QoS.xml
+up-qos-glue.h: org.freedesktop.UPower.QoS.xml Makefile.am
+	dbus-binding-tool --prefix=up_qos --mode=glib-server --output=up-qos-glue.h org.freedesktop.UPower.QoS.xml
 
-dkp-wakeups-glue.h: org.freedesktop.DeviceKit.Power.Wakeups.xml Makefile.am
-	dbus-binding-tool --prefix=dkp_wakeups --mode=glib-server --output=dkp-wakeups-glue.h org.freedesktop.DeviceKit.Power.Wakeups.xml
+up-wakeups-glue.h: org.freedesktop.UPower.Wakeups.xml Makefile.am
+	dbus-binding-tool --prefix=up_wakeups --mode=glib-server --output=up-wakeups-glue.h org.freedesktop.UPower.Wakeups.xml
 
 $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
@@ -1496,6 +1507,9 @@ install-data-hook:
 	if test -w $(DESTDIR)$(prefix)/; then \
 		mkdir -p $(DESTDIR)$(localstatedir)/lib/DeviceKit-power; \
 	fi
+
+install-exec-hook:
+	cd $(DESTDIR)$(libexecdir) && $(LN_S) -f upowerd devkit-power-daemon
 
 clean-local :
 	rm -f *~ $(service_DATA) $(dbusconf_DATA)
