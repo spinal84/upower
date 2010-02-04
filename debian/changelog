@@ -1,3 +1,12 @@
+upower (0.9.0-1) UNRELEASED; urgency=low
+
+  * New upstream release:
+    - Rename the project, library, and D-Bus interface to upower.
+    - Bug fixes.
+    - Translation updates.
+
+ -- Martin Pitt <mpitt@debian.org>  Thu, 04 Feb 2010 15:36:20 -0800
+
 devicekit-power (014-3) unstable; urgency=low
 
   * Add 02-dkpclient-singleton.patch: Make DkpClient a singleton to avoid some

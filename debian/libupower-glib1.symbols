@@ -1,4 +1,4 @@
-libdevkit-power-gobject.so.1 libdevkit-power-gobject1 #MINVER#
+libupower-glib.so.1 libupower-glib1 #MINVER#
  dkp_client_can_hibernate@Base 010
  dkp_client_can_suspend@Base 010
  dkp_client_enumerate_devices@Base 010

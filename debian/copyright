@@ -1,4 +1,4 @@
-Name: DeviceKit-power
+Name: upower
 Maintainer: David Zeuthen <davidz@redhat.com>
             Richard Hughes <richard@hughsie.com>
 Source: http://hal.freedesktop.org/releases/
