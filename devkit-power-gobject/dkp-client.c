@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 #include "config.h"
@@ -74,6 +74,7 @@ enum {
 };
 
 static guint signals [DKP_CLIENT_LAST_SIGNAL] = { 0 };
+static gpointer dkp_client_object = NULL;
 
 G_DEFINE_TYPE (DkpClient, dkp_client, G_TYPE_OBJECT)
 
@@ -138,8 +139,7 @@ dkp_client_enumerate_devices_private (DkpClient *client, GError **error)
 				 G_TYPE_INVALID);
 	if (!ret) {
 		g_warning ("Couldn't enumerate devices: %s", error_local->message);
-		if (error != NULL)
-			*error = g_error_new (1, 0, "%s", error_local->message);
+		g_set_error (error, 1, 0, "%s", error_local->message);
 		g_error_free (error_local);
 	}
 	return devices;
@@ -178,8 +178,7 @@ dkp_client_suspend (DkpClient *client, GError **error)
 
 		/* an actual error */
 		g_warning ("Couldn't suspend: %s", error_local->message);
-		if (error != NULL)
-			*error = g_error_new (1, 0, "%s", error_local->message);
+		g_set_error (error, 1, 0, "%s", error_local->message);
 	}
 out:
 	if (error_local != NULL)
@@ -218,8 +217,7 @@ dkp_client_hibernate (DkpClient *client, GError **error)
 
 		/* an actual error */
 		g_warning ("Couldn't hibernate: %s", error_local->message);
-		if (error != NULL)
-			*error = g_error_new (1, 0, "%s", error_local->message);
+		g_set_error (error, 1, 0, "%s", error_local->message);
 	}
 out:
 	if (error_local != NULL)
@@ -247,7 +245,7 @@ dkp_client_ensure_properties (DkpClient *client)
 
 	error = NULL;
 	ret = dbus_g_proxy_call (client->priv->prop_proxy, "GetAll", &error,
-				 G_TYPE_STRING, "org.freedesktop.DeviceKit.Power",
+				 G_TYPE_STRING, "org.freedesktop.UPower",
 				 G_TYPE_INVALID,
 				 dbus_g_type_get_map ("GHashTable", G_TYPE_STRING, G_TYPE_VALUE), &props,
 				 G_TYPE_INVALID);
@@ -338,7 +336,7 @@ out:
 		g_hash_table_unref (props);
 }
 
-#ifndef DKP_DISABLE_DEPRECATED
+#ifndef UP_DISABLE_DEPRECATED
 /**
  * dkp_client_get_daemon_version:
  * @client : a #DkpClient instance.
@@ -655,9 +653,9 @@ dkp_client_init (DkpClient *client)
 
 	/* connect to main interface */
 	client->priv->proxy = dbus_g_proxy_new_for_name (client->priv->bus,
-							 "org.freedesktop.DeviceKit.Power",
-							 "/org/freedesktop/DeviceKit/Power",
-							 "org.freedesktop.DeviceKit.Power");
+							 "org.freedesktop.UPower",
+							 "/org/freedesktop/UPower",
+							 "org.freedesktop.UPower");
 	if (client->priv->proxy == NULL) {
 		g_warning ("Couldn't connect to proxy");
 		goto out;
@@ -665,8 +663,8 @@ dkp_client_init (DkpClient *client)
 
 	/* connect to properties interface */
 	client->priv->prop_proxy = dbus_g_proxy_new_for_name (client->priv->bus,
-							      "org.freedesktop.DeviceKit.Power",
-							      "/org/freedesktop/DeviceKit/Power",
+							      "org.freedesktop.UPower",
+							      "/org/freedesktop/UPower",
 							      "org.freedesktop.DBus.Properties");
 	if (client->priv->prop_proxy == NULL) {
 		g_warning ("Couldn't connect to proxy");
@@ -737,8 +735,12 @@ dkp_client_finalize (GObject *object)
 DkpClient *
 dkp_client_new (void)
 {
-	DkpClient *client;
-	client = g_object_new (DKP_TYPE_CLIENT, NULL);
-	return DKP_CLIENT (client);
+	if (dkp_client_object != NULL) {
+		g_object_ref (dkp_client_object);
+	} else {
+		dkp_client_object = g_object_new (DKP_TYPE_CLIENT, NULL);
+		g_object_add_weak_pointer (dkp_client_object, &dkp_client_object);
+	}
+	return DKP_CLIENT (dkp_client_object);
 }
 

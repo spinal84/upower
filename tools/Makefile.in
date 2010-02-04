@@ -34,12 +34,14 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = devkit-power$(EXEEXT)
+bin_PROGRAMS = upower$(EXEEXT)
 subdir = tools
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/gtk-doc.m4 \
+	$(top_srcdir)/m4/intltool.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -48,12 +50,11 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am__objects_1 = devkit_power-dkp-marshal.$(OBJEXT)
-am_devkit_power_OBJECTS = devkit_power-egg-debug.$(OBJEXT) \
-	devkit_power-dkp-tool.$(OBJEXT) $(am__objects_1)
-devkit_power_OBJECTS = $(am_devkit_power_OBJECTS)
+am_upower_OBJECTS = upower-egg-debug.$(OBJEXT) \
+	upower-up-tool.$(OBJEXT)
+upower_OBJECTS = $(am_upower_OBJECTS)
 am__DEPENDENCIES_1 =
-devkit_power_DEPENDENCIES = $(am__DEPENDENCIES_1) $(DEVKIT_POWER_LIBS)
+upower_DEPENDENCIES = $(am__DEPENDENCIES_1) $(DEVKIT_POWER_LIBS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
@@ -83,8 +84,8 @@ am__v_CCLD_0 = @echo "  CCLD  " $@;
 AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
-SOURCES = $(devkit_power_SOURCES)
-DIST_SOURCES = $(devkit_power_SOURCES)
+SOURCES = $(upower_SOURCES)
+DIST_SOURCES = $(upower_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -129,6 +130,9 @@ GLIB_LIBS = @GLIB_LIBS@
 GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
 GREP = @GREP@
+GTKDOC_CHECK = @GTKDOC_CHECK@
+GTKDOC_MKPDF = @GTKDOC_MKPDF@
+GTKDOC_REBASE = @GTKDOC_REBASE@
 GUDEV_CFLAGS = @GUDEV_CFLAGS@
 GUDEV_LIBS = @GUDEV_LIBS@
 HTML_DIR = @HTML_DIR@
@@ -143,6 +147,14 @@ INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
 INTLTOOL_MERGE = @INTLTOOL_MERGE@
 INTLTOOL_PERL = @INTLTOOL_PERL@
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
+INTROSPECTION_CFLAGS = @INTROSPECTION_CFLAGS@
+INTROSPECTION_COMPILER = @INTROSPECTION_COMPILER@
+INTROSPECTION_GENERATE = @INTROSPECTION_GENERATE@
+INTROSPECTION_GIRDIR = @INTROSPECTION_GIRDIR@
+INTROSPECTION_LIBS = @INTROSPECTION_LIBS@
+INTROSPECTION_MAKEFILE = @INTROSPECTION_MAKEFILE@
+INTROSPECTION_SCANNER = @INTROSPECTION_SCANNER@
+INTROSPECTION_TYPELIBDIR = @INTROSPECTION_TYPELIBDIR@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -154,7 +166,6 @@ LTLIBOBJS = @LTLIBOBJS@
 LT_AGE = @LT_AGE@
 LT_CURRENT = @LT_CURRENT@
 LT_REVISION = @LT_REVISION@
-MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
 MKINSTALLDIRS = @MKINSTALLDIRS@
@@ -172,6 +183,7 @@ PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
+PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
@@ -187,6 +199,9 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 UDEV_RULES = @UDEV_RULES@
+UP_MAJOR_VERSION = @UP_MAJOR_VERSION@
+UP_MICRO_VERSION = @UP_MICRO_VERSION@
+UP_MINOR_VERSION = @UP_MINOR_VERSION@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 WARNINGFLAGS_C = @WARNINGFLAGS_C@
@@ -246,17 +261,8 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 INCLUDES = \
-	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\"		\
-	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\"		\
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\"			\
-	-DPACKAGE_BIN_DIR=\""$(bindir)"\"			\
-	-DPACKAGE_LOCALSTATE_DIR=\""$(localstatedir)"\"		\
-	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\"			\
-	-DPACKAGE_LIB_DIR=\""$(libdir)"\"			\
-	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
-	-DDKP_COMPILATION					\
-	-DDKP_DISABLE_DEPRECATED				\
-	-DEGG_LOG_FILE=\""$(DKP_LOG_DIR)/DeviceKit-power"\"	\
+	-DUP_COMPILATION					\
+	-DEGG_LOG_FILE=\""$(UP_LOG_DIR)/DeviceKit-power"\"	\
 	-DEGG_VERBOSE="\"DKP_VERBOSE\""				\
 	-DEGG_LOGGING="\"DKP_LOGGING\""				\
 	-DEGG_CONSOLE="\"DKP_CONSOLE\""				\
@@ -267,33 +273,26 @@ INCLUDES = \
 	$(GLIB_CFLAGS)
 
 DEVKIT_POWER_LIBS = $(top_builddir)/devkit-power-gobject/libdevkit-power-gobject.la
-BUILT_SOURCES = \
-	dkp-daemon-glue.h				\
-	dkp-marshal.h		dkp-marshal.c
-
-devkit_power_SOURCES = \
+upower_SOURCES = \
 	egg-debug.c					\
 	egg-debug.h					\
-	dkp-tool.c					\
+	up-tool.c					\
 	$(BUILT_SOURCES)
 
-devkit_power_CPPFLAGS = \
-	-DG_LOG_DOMAIN=\"devkit-power\"		        \
-	$(DISABLE_DEPRECATED)				\
+upower_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
-devkit_power_LDADD = \
+upower_LDADD = \
 	$(DBUS_GLIB_LIBS)				\
 	$(DEVKIT_POWER_LIBS)				\
 	$(POLKIT_DBUS_LIBS)
 
 CLEANFILES = $(BUILT_SOURCES)
-all: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) all-am
+all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -318,9 +317,9 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 
-$(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
+$(top_srcdir)/configure:  $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
+$(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
 install-binPROGRAMS: $(bin_PROGRAMS)
@@ -366,9 +365,9 @@ clean-binPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
-devkit-power$(EXEEXT): $(devkit_power_OBJECTS) $(devkit_power_DEPENDENCIES) 
-	@rm -f devkit-power$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(devkit_power_OBJECTS) $(devkit_power_LDADD) $(LIBS)
+upower$(EXEEXT): $(upower_OBJECTS) $(upower_DEPENDENCIES) 
+	@rm -f upower$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(upower_OBJECTS) $(upower_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -376,9 +375,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power-dkp-marshal.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power-dkp-tool.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/devkit_power-egg-debug.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upower-egg-debug.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upower-up-tool.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -404,53 +402,37 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
-devkit_power-egg-debug.o: egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT devkit_power-egg-debug.o -MD -MP -MF $(DEPDIR)/devkit_power-egg-debug.Tpo -c -o devkit_power-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power-egg-debug.Tpo $(DEPDIR)/devkit_power-egg-debug.Po
+upower-egg-debug.o: egg-debug.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upower_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT upower-egg-debug.o -MD -MP -MF $(DEPDIR)/upower-egg-debug.Tpo -c -o upower-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upower-egg-debug.Tpo $(DEPDIR)/upower-egg-debug.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='devkit_power-egg-debug.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='upower-egg-debug.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o devkit_power-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upower_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o upower-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
 
-devkit_power-egg-debug.obj: egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT devkit_power-egg-debug.obj -MD -MP -MF $(DEPDIR)/devkit_power-egg-debug.Tpo -c -o devkit_power-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power-egg-debug.Tpo $(DEPDIR)/devkit_power-egg-debug.Po
+upower-egg-debug.obj: egg-debug.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upower_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT upower-egg-debug.obj -MD -MP -MF $(DEPDIR)/upower-egg-debug.Tpo -c -o upower-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upower-egg-debug.Tpo $(DEPDIR)/upower-egg-debug.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='devkit_power-egg-debug.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='upower-egg-debug.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o devkit_power-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upower_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o upower-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
 
-devkit_power-dkp-tool.o: dkp-tool.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT devkit_power-dkp-tool.o -MD -MP -MF $(DEPDIR)/devkit_power-dkp-tool.Tpo -c -o devkit_power-dkp-tool.o `test -f 'dkp-tool.c' || echo '$(srcdir)/'`dkp-tool.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power-dkp-tool.Tpo $(DEPDIR)/devkit_power-dkp-tool.Po
+upower-up-tool.o: up-tool.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upower_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT upower-up-tool.o -MD -MP -MF $(DEPDIR)/upower-up-tool.Tpo -c -o upower-up-tool.o `test -f 'up-tool.c' || echo '$(srcdir)/'`up-tool.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upower-up-tool.Tpo $(DEPDIR)/upower-up-tool.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-tool.c' object='devkit_power-dkp-tool.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-tool.c' object='upower-up-tool.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o devkit_power-dkp-tool.o `test -f 'dkp-tool.c' || echo '$(srcdir)/'`dkp-tool.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upower_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o upower-up-tool.o `test -f 'up-tool.c' || echo '$(srcdir)/'`up-tool.c
 
-devkit_power-dkp-tool.obj: dkp-tool.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT devkit_power-dkp-tool.obj -MD -MP -MF $(DEPDIR)/devkit_power-dkp-tool.Tpo -c -o devkit_power-dkp-tool.obj `if test -f 'dkp-tool.c'; then $(CYGPATH_W) 'dkp-tool.c'; else $(CYGPATH_W) '$(srcdir)/dkp-tool.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power-dkp-tool.Tpo $(DEPDIR)/devkit_power-dkp-tool.Po
+upower-up-tool.obj: up-tool.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upower_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT upower-up-tool.obj -MD -MP -MF $(DEPDIR)/upower-up-tool.Tpo -c -o upower-up-tool.obj `if test -f 'up-tool.c'; then $(CYGPATH_W) 'up-tool.c'; else $(CYGPATH_W) '$(srcdir)/up-tool.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upower-up-tool.Tpo $(DEPDIR)/upower-up-tool.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-tool.c' object='devkit_power-dkp-tool.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-tool.c' object='upower-up-tool.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o devkit_power-dkp-tool.obj `if test -f 'dkp-tool.c'; then $(CYGPATH_W) 'dkp-tool.c'; else $(CYGPATH_W) '$(srcdir)/dkp-tool.c'; fi`
-
-devkit_power-dkp-marshal.o: dkp-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT devkit_power-dkp-marshal.o -MD -MP -MF $(DEPDIR)/devkit_power-dkp-marshal.Tpo -c -o devkit_power-dkp-marshal.o `test -f 'dkp-marshal.c' || echo '$(srcdir)/'`dkp-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power-dkp-marshal.Tpo $(DEPDIR)/devkit_power-dkp-marshal.Po
-@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-marshal.c' object='devkit_power-dkp-marshal.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o devkit_power-dkp-marshal.o `test -f 'dkp-marshal.c' || echo '$(srcdir)/'`dkp-marshal.c
-
-devkit_power-dkp-marshal.obj: dkp-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT devkit_power-dkp-marshal.obj -MD -MP -MF $(DEPDIR)/devkit_power-dkp-marshal.Tpo -c -o devkit_power-dkp-marshal.obj `if test -f 'dkp-marshal.c'; then $(CYGPATH_W) 'dkp-marshal.c'; else $(CYGPATH_W) '$(srcdir)/dkp-marshal.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/devkit_power-dkp-marshal.Tpo $(DEPDIR)/devkit_power-dkp-marshal.Po
-@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dkp-marshal.c' object='devkit_power-dkp-marshal.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(devkit_power_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o devkit_power-dkp-marshal.obj `if test -f 'dkp-marshal.c'; then $(CYGPATH_W) 'dkp-marshal.c'; else $(CYGPATH_W) '$(srcdir)/dkp-marshal.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upower_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o upower-up-tool.obj `if test -f 'up-tool.c'; then $(CYGPATH_W) 'up-tool.c'; else $(CYGPATH_W) '$(srcdir)/up-tool.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -541,15 +523,13 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) check-am
+check: check-am
 all-am: Makefile $(PROGRAMS)
 installdirs:
 	for dir in "$(DESTDIR)$(bindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) install-am
+install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -575,7 +555,6 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic clean-libtool clean-local \
@@ -606,7 +585,8 @@ install-dvi: install-dvi-am
 install-dvi-am:
 
 install-exec-am: install-binPROGRAMS
-
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 install-html: install-html-am
 
 install-html-am:
@@ -647,7 +627,7 @@ ps-am:
 
 uninstall-am: uninstall-binPROGRAMS
 
-.MAKE: all check install install-am install-strip
+.MAKE: install-am install-exec-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
 	clean-generic clean-libtool clean-local ctags distclean \
@@ -655,23 +635,17 @@ uninstall-am: uninstall-binPROGRAMS
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
 	install install-am install-binPROGRAMS install-data \
 	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
+	install-exec-am install-exec-hook install-html install-html-am \
+	install-info install-info-am install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-binPROGRAMS
 
 
-dkp-marshal.h: $(top_srcdir)/src/dkp-marshal.list
-	glib-genmarshal $< --prefix=devkit_power_marshal --header > $@
-
-dkp-marshal.c: $(top_srcdir)/src/dkp-marshal.list
-	echo "#include \"dkp-marshal.h\"" > $@ && glib-genmarshal $< --prefix=devkit_power_marshal --body >> $@
-
-dkp-daemon-glue.h: $(top_srcdir)/src/org.freedesktop.DeviceKit.Power.xml Makefile.am
-	dbus-binding-tool --prefix=devkit_power_daemon --mode=glib-client --output=dkp-daemon-glue.h $(top_srcdir)/src/org.freedesktop.DeviceKit.Power.xml
+install-exec-hook:
+	cd $(DESTDIR)$(bindir) && $(LN_S) -f upower devkit-power
 
 clean-local :
 	rm -f *~ $(service_DATA) $(dbusconf_DATA)

@@ -2,11 +2,11 @@
 
 INCLUDES = \
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
-	-DEGG_LOG_FILE=\""$(DKP_LOG_DIR)/DeviceKit-power"\"	\
-	-DEGG_VERBOSE="\"DKP_VERBOSE\""				\
-	-DEGG_LOGGING="\"DKP_LOGGING\""				\
-	-DEGG_CONSOLE="\"DKP_CONSOLE\""				\
-	-DDKP_COMPILATION					\
+	-DEGG_LOG_FILE=\""$(UP_LOG_DIR)/DeviceKit-power"\"	\
+	-DEGG_VERBOSE="\"UP_VERBOSE\""				\
+	-DEGG_LOGGING="\"UP_LOGGING\""				\
+	-DEGG_CONSOLE="\"UP_CONSOLE\""				\
+	-DUP_COMPILATION					\
 	-DG_UDEV_API_IS_SUBJECT_TO_CHANGE			\
 	-I$(top_srcdir)/devkit-power-gobject			\
 	$(GIO_CFLAGS)						\
@@ -16,27 +16,27 @@ INCLUDES = \
 	$(GLIB_CFLAGS)
 
 if BACKEND_TYPE_LINUX
-noinst_LTLIBRARIES = libdkpshared.la
+noinst_LTLIBRARIES = libupshared.la
 endif
 
-libdkpshared_la_SOURCES =					\
-	dkp-device-supply.c					\
-	dkp-device-supply.h					\
-	dkp-device-csr.c					\
-	dkp-device-csr.h					\
-	dkp-device-hid.c					\
-	dkp-device-hid.h					\
-	dkp-device-wup.c					\
-	dkp-device-wup.h					\
-	dkp-input.c						\
-	dkp-input.h						\
-	dkp-backend.c						\
-	dkp-native.c						\
+libupshared_la_SOURCES =					\
+	up-device-supply.c					\
+	up-device-supply.h					\
+	up-device-csr.c						\
+	up-device-csr.h						\
+	up-device-hid.c						\
+	up-device-hid.h						\
+	up-device-wup.c						\
+	up-device-wup.h						\
+	up-input.c						\
+	up-input.h						\
+	up-backend.c						\
+	up-native.c						\
 	sysfs-utils.c						\
 	sysfs-utils.h						\
 	$(BUILT_SOURCES)
 
-libdkpshared_la_CFLAGS =					\
+libupshared_la_CFLAGS =					\
 	$(WARNINGFLAGS_C)
 
 clean-local :

@@ -3,10 +3,15 @@ INCLUDES = \
 	$(DBUS_GLIB_CFLAGS)					\
 	-I$(top_srcdir)						\
 	-I$(top_srcdir)/devkit-power-gobject			\
-	-DDKP_COMPILATION					\
+	-DUP_COMPILATION					\
 	-DG_LOG_DOMAIN=\"devkit-power-gobject\"			\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"			\
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"
+
+-include $(INTROSPECTION_MAKEFILE)
+INTROSPECTION_GIRS =
+INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir)
+INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 
 lib_LTLIBRARIES =						\
 	libdevkit-power-gobject.la
@@ -60,10 +65,37 @@ libdevkit_power_gobject_la_CFLAGS =				\
 	$(NULL)
 
 EXTRA_DIST =							\
+	up-client.h						\
+	up-device.h						\
+	up-enum.h						\
+	up-history-obj.h					\
+	up-qos-obj.h						\
+	up-stats-obj.h						\
+	up-wakeups-obj.h					\
+	up-wakeups.h						\
 	dkp-version.h.in
+
+CLEANFILES = $(BUILT_SOURCES)
+
+if HAVE_INTROSPECTION
+introspection_sources = $(libdevkit_power_gobject_la_SOURCES)
+
+DeviceKitPowerGlib-1.0.gir: libdevkit-power-gobject.la
+DeviceKitPowerGlib_1_0_gir_INCLUDES = GObject-2.0 Gio-2.0
+DeviceKitPowerGlib_1_0_gir_CFLAGS = $(INCLUDES) -DI_KNOW_THE_DEVICEKIT_POWER_API_IS_SUBJECT_TO_CHANGE
+DeviceKitPowerGlib_1_0_gir_LIBS = libdevkit-power-gobject.la
+DeviceKitPowerGlib_1_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_sources))
+INTROSPECTION_GIRS += DeviceKitPowerGlib-1.0.gir
+
+girdir = $(datadir)/gir-1.0
+dist_gir_DATA = $(INTROSPECTION_GIRS)
+
+typelibdir = $(libdir)/girepositry-1.0
+typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
+
+CLEANFILES += $(dist_gir_DATA) $(typelib_DATA)
+endif
 
 clean-local:
 	rm -f *~
-
-CLEANFILES = $(BUILT_SOURCES)
 

@@ -1,8 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = devkit-power-gobject src doc tools policy po $(UDEV_RULES)
+ACLOCAL_AMFLAGS = -I m4
 
-DIST_SUBDIRS = devkit-power-gobject src doc tools policy po rules
+SUBDIRS = devkit-power-gobject libupower-glib src doc tools policy po $(UDEV_RULES)
+
+DIST_SUBDIRS = devkit-power-gobject libupower-glib src doc tools policy po rules
 
 # Creating ChangeLog from git log (taken from cairo/Makefile.am):
 ChangeLog: $(srcdir)/ChangeLog
@@ -29,10 +31,10 @@ snapshot:
 	$(MAKE) dist distdir=$(PACKAGE)-$(VERSION)-`date +"%Y%m%d"`
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = devkit-power-gobject.pc
+pkgconfig_DATA = devkit-power-gobject.pc upower-glib.pc
 
 # xsltproc barfs on 'make distcheck'; disable for now
-DISTCHECK_CONFIGURE_FLAGS=--disable-man-pages --disable-gtk-doc
+DISTCHECK_CONFIGURE_FLAGS=--disable-man-pages --enable-gtk-doc --enable-introspection
 
 clean-local :
 	rm -f *~
