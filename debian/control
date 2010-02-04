@@ -36,8 +36,8 @@ Package: upower-doc
 Architecture: all
 Section: doc
 Depends: ${misc:Depends}
-Conflicts: devicekit-power-doc
-Replaces: devicekit-power-doc
+Conflicts: devicekit-power-doc (<< 1:0)
+Replaces: devicekit-power-doc (<< 1:0)
 Suggests: devhelp
 Description: abstraction for power management - documentation
  upower provides an interface to enumerate power sources on the system
