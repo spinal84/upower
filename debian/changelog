@@ -1,5 +1,6 @@
 upower (0.9.0-1) UNRELEASED; urgency=low
 
+  [ Martin Pitt ]
   * New upstream release:
     - Rename the project, library, and D-Bus interface to upower.
     - Bug fixes.
@@ -10,8 +11,10 @@ upower (0.9.0-1) UNRELEASED; urgency=low
     devicekit-power-doc package, so that the upgrade will actually work.
   * debian/rules: Explicitly enable gtk-doc building, upstream configure
     disables that now.
-  * debian/rules: Do not install the transitional symlink, it's already
-    shipped in devicekit-power and we do not want to proliferate it.
+
+  [ Michael Biebl ]
+  * debian/upower.install: Only install upower and upowerd, not the
+    transitional symlinks.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 04 Feb 2010 15:36:20 -0800
 

@@ -11,7 +11,3 @@ DEB_CONFIGURE_EXTRA_FLAGS = --enable-gtk-doc
 # epoch the transitional packages
 DEB_DH_GENCONTROL_ARGS_devicekit-power-doc = -- -v1:$(DEB_VERSION)
 
-binary-install/upower::
-	# do not install the transitional symlink, it's already shipped in
-	# devicekit-power and we do not want to proliferate it
-	rm debian/$(cdbs_curpkg)/usr/bin/devkit-power
