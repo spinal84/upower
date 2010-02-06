@@ -2,7 +2,7 @@
 set -e
 
 if [ "$1" = "configure" ]; then
-    start-stop-daemon --stop --quiet --oknodo --exec /usr/lib/devicekit-power/devkit-power-daemon
+    start-stop-daemon --stop --quiet --oknodo --exec /usr/lib/upower/upowerd
 fi
 
 #DEBHELPER#
