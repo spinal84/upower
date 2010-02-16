@@ -13,5 +13,6 @@ DEB_MAKE_CHECK_TARGET = check
 # epoch the transitional packages
 DEB_DH_GENCONTROL_ARGS_devicekit-power-doc = -- -v1:$(DEB_VERSION)
 DEB_DH_GENCONTROL_ARGS_libdevkit-power-gobject1 = -- -v1:$(DEB_VERSION)
+DEB_DH_MAKESHLIBS_ARGS_libdevkit-power-gobject1 = -- -v1:$(DEB_VERSION)
 DEB_DH_GENCONTROL_ARGS_libdevkit-power-gobject-dev = -- -v1:$(DEB_VERSION)
 
