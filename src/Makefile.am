@@ -15,10 +15,6 @@ INCLUDES = \
 	-DG_UDEV_API_IS_SUBJECT_TO_CHANGE			\
 	-DUP_COMPILATION					\
 	-DUP_DISABLE_DEPRECATED				\
-	-DEGG_LOG_FILE=\""$(UP_LOG_DIR)/DeviceKit-power"\"	\
-	-DEGG_VERBOSE="\"UP_VERBOSE\""				\
-	-DEGG_LOGGING="\"UP_LOGGING\""				\
-	-DEGG_CONSOLE="\"UP_CONSOLE\""				\
 	-I$(top_srcdir)/libupower-glib				\
 	-I$(top_srcdir)/devkit-power-gobject			\
 	-I$(top_srcdir)						\
@@ -29,6 +25,7 @@ INCLUDES = \
 	$(GLIB_CFLAGS)
 
 DEVKIT_POWER_LIBS = $(top_builddir)/devkit-power-gobject/libdevkit-power-gobject.la
+UPOWER_LIBS = $(top_builddir)/libupower-glib/libupower-glib.la
 
 BUILT_SOURCES =							\
 	up-daemon-glue.h					\
@@ -97,7 +94,8 @@ upowerd_LDADD =							\
 	$(USB_LIBS)						\
 	$(GIO_LIBS)						\
 	$(DBUS_GLIB_LIBS)					\
-	$(POLKIT_LIBS)
+	$(POLKIT_LIBS)						\
+	$(UPOWER_LIBS)
 
 if BACKEND_TYPE_DUMMY
 upowerd_LDADD += 						\
@@ -154,9 +152,10 @@ up_self_test_LDADD =						\
 	dummy/libupshared.la					\
 	$(GLIB_LIBS)						\
 	$(GIO_CFLAGS)						\
-	$(SELFTEST_LIBS)					\
+	$(DBUS_GLIB_LIBS)					\
 	$(DEVKIT_POWER_LIBS)					\
-	$(POLKIT_LIBS)
+	$(POLKIT_LIBS)						\
+	$(UPOWER_LIBS)
 
 up_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS_C)
 
@@ -179,7 +178,7 @@ $(dbusconf_DATA): $(dbusconf_in_files) Makefile
 
 install-data-hook:
 	if test -w $(DESTDIR)$(prefix)/; then \
-		mkdir -p $(DESTDIR)$(localstatedir)/lib/DeviceKit-power; \
+		mkdir -p $(DESTDIR)$(localstatedir)/lib/upower; \
 	fi
 
 install-exec-hook:

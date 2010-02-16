@@ -28,12 +28,17 @@
   </chapters>
   <functions>
     <function name="EnumerateDevices ()" link="UPower.html#UPower.EnumerateDevices"/>
+    <function name="AboutToSleep ()" link="UPower.html#UPower.AboutToSleep"/>
     <function name="Suspend ()" link="UPower.html#UPower.Suspend"/>
+    <function name="SuspendAllowed ()" link="UPower.html#UPower.SuspendAllowed"/>
     <function name="Hibernate ()" link="UPower.html#UPower.Hibernate"/>
+    <function name="HibernateAllowed ()" link="UPower.html#UPower.HibernateAllowed"/>
     <function name="The DeviceAdded signal" link="UPower.html#UPower::DeviceAdded"/>
     <function name="The DeviceRemoved signal" link="UPower.html#UPower::DeviceRemoved"/>
     <function name="The DeviceChanged signal" link="UPower.html#UPower::DeviceChanged"/>
     <function name="The Changed signal" link="UPower.html#UPower::Changed"/>
+    <function name="The Sleeping signal" link="UPower.html#UPower::Sleeping"/>
+    <function name="The Resuming signal" link="UPower.html#UPower::Resuming"/>
     <function name="The &quot;DaemonVersion&quot; property" link="UPower.html#UPower:DaemonVersion"/>
     <function name="The &quot;CanSuspend&quot; property" link="UPower.html#UPower:CanSuspend"/>
     <function name="The &quot;CanHibernate&quot; property" link="UPower.html#UPower:CanHibernate"/>
@@ -79,8 +84,8 @@
     <function name="GetLatencyRequests ()" link="QoS.html#QoS.GetLatencyRequests"/>
     <function name="The LatencyChanged signal" link="QoS.html#QoS::LatencyChanged"/>
     <function name="The RequestsChanged signal" link="QoS.html#QoS::RequestsChanged"/>
-    <function name="UP_CLIENT_ERROR" link="UPower-up-client.html#UP-CLIENT-ERROR:CAPS"/>
-    <function name="UP_CLIENT_TYPE_ERROR" link="UPower-up-client.html#UP-CLIENT-TYPE-ERROR:CAPS"/>
+    <function name="UP_CLIENT_ERROR" link="UPower-up-client.html#UP-CLIENT-ERROR--CAPS"/>
+    <function name="UP_CLIENT_TYPE_ERROR" link="UPower-up-client.html#UP-CLIENT-TYPE-ERROR--CAPS"/>
     <function name="UpClientPrivate" link="UPower-up-client.html#UpClientPrivate"/>
     <function name="device_added ()" link="UPower-up-client.html#device-added"/>
     <function name="device_changed ()" link="UPower-up-client.html#device-changed"/>
@@ -90,6 +95,7 @@
     <function name="up_client_get_properties_sync ()" link="UPower-up-client.html#up-client-get-properties-sync"/>
     <function name="up_client_enumerate_devices_sync ()" link="UPower-up-client.html#up-client-enumerate-devices-sync"/>
     <function name="up_client_suspend_sync ()" link="UPower-up-client.html#up-client-suspend-sync"/>
+    <function name="up_client_about_to_sleep_sync ()" link="UPower-up-client.html#up-client-about-to-sleep-sync"/>
     <function name="up_client_hibernate_sync ()" link="UPower-up-client.html#up-client-hibernate-sync"/>
     <function name="up_client_get_devices ()" link="UPower-up-client.html#up-client-get-devices"/>
     <function name="up_client_get_daemon_version ()" link="UPower-up-client.html#up-client-get-daemon-version"/>
@@ -98,14 +104,16 @@
     <function name="up_client_get_can_suspend ()" link="UPower-up-client.html#up-client-get-can-suspend"/>
     <function name="up_client_get_on_battery ()" link="UPower-up-client.html#up-client-get-on-battery"/>
     <function name="up_client_get_on_low_battery ()" link="UPower-up-client.html#up-client-get-on-low-battery"/>
-    <function name="UP_DEVICE_ERROR" link="UPower-up-device.html#UP-DEVICE-ERROR:CAPS"/>
-    <function name="UP_DEVICE_TYPE_ERROR" link="UPower-up-device.html#UP-DEVICE-TYPE-ERROR:CAPS"/>
+    <function name="UP_DEVICE_ERROR" link="UPower-up-device.html#UP-DEVICE-ERROR--CAPS"/>
+    <function name="UP_DEVICE_TYPE_ERROR" link="UPower-up-device.html#UP-DEVICE-TYPE-ERROR--CAPS"/>
     <function name="UpDevicePrivate" link="UPower-up-device.html#UpDevicePrivate"/>
     <function name="changed ()" link="UPower-up-device.html#changed"/>
     <function name="up_device_new ()" link="UPower-up-device.html#up-device-new"/>
     <function name="up_device_to_text ()" link="UPower-up-device.html#up-device-to-text"/>
     <function name="up_device_refresh_sync ()" link="UPower-up-device.html#up-device-refresh-sync"/>
     <function name="up_device_set_object_path_sync ()" link="UPower-up-device.html#up-device-set-object-path-sync"/>
+    <function name="up_device_get_history_sync ()" link="UPower-up-device.html#up-device-get-history-sync"/>
+    <function name="up_device_get_statistics_sync ()" link="UPower-up-device.html#up-device-get-statistics-sync"/>
     <function name="up_device_get_object_path ()" link="UPower-up-device.html#up-device-get-object-path"/>
     <function name="UpHistoryItemPrivate" link="UPower-up-history-item.html#UpHistoryItemPrivate"/>
     <function name="up_history_item_new ()" link="UPower-up-history-item.html#up-history-item-new"/>

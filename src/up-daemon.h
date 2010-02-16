@@ -25,7 +25,7 @@
 #include <polkit/polkit.h>
 #include <dbus/dbus-glib.h>
 
-#include "up-enum.h"
+#include "up-types.h"
 #include "up-device-list.h"
 
 G_BEGIN_DECLS
@@ -83,7 +83,13 @@ gboolean	 up_daemon_get_low_battery	(UpDaemon		*daemon,
 						 DBusGMethodInvocation	*context);
 gboolean	 up_daemon_suspend		(UpDaemon		*daemon,
 						 DBusGMethodInvocation	*context);
+gboolean	 up_daemon_about_to_sleep	(UpDaemon		*daemon,
+						 DBusGMethodInvocation	*context);
+gboolean	 up_daemon_suspend_allowed	(UpDaemon		*daemon,
+						 DBusGMethodInvocation	*context);
 gboolean	 up_daemon_hibernate		(UpDaemon		*daemon,
+						 DBusGMethodInvocation	*context);
+gboolean	 up_daemon_hibernate_allowed	(UpDaemon		*daemon,
 						 DBusGMethodInvocation	*context);
 gboolean	 up_daemon_can_suspend		(UpDaemon		*daemon,
 						 gboolean		 interactive,

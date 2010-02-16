@@ -8,7 +8,7 @@
 <link rel="up" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="prev" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="next" href="Device.html" title="org.freedesktop.UPower.Device">
-<meta name="generator" content="GTK-Doc V1.13 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.11 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 <link rel="reference" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="reference" href="libupower-glib.html" title="libpackagekit GObjects">
@@ -28,14 +28,14 @@
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#UPower.synopsis" class="shortcut">Top</a>
-                   | 
-                  <a href="#UPower.description" class="shortcut">Description</a>
-                   | 
-                  <a href="#UPower.implemented-interfaces" class="shortcut">Implemented Interfaces</a>
-                   | 
-                  <a href="#UPower.properties" class="shortcut">Properties</a>
-                   | 
-                  <a href="#UPower.signals" class="shortcut">Signals</a>
+                 | 
+                <a href="#UPower.description" class="shortcut">Description</a>
+                 | 
+                <a href="#UPower.implemented-interfaces" class="shortcut">Implemented Interfaces</a>
+                 | 
+                <a href="#UPower.properties" class="shortcut">Properties</a>
+                 | 
+                <a href="#UPower.signals" class="shortcut">Signals</a>
 </td></tr>
 </table>
 <div class="refentry" title="org.freedesktop.UPower">
@@ -50,20 +50,25 @@
 <div class="refsynopsisdiv" title="Methods">
 <h2>Methods</h2>
 <pre class="synopsis"><a class="link" href="UPower.html#UPower.EnumerateDevices">EnumerateDevices</a> (out 'ao' devices)
+<a class="link" href="UPower.html#UPower.AboutToSleep">AboutToSleep</a>     ()
 <a class="link" href="UPower.html#UPower.Suspend">Suspend</a>          ()
+<a class="link" href="UPower.html#UPower.SuspendAllowed">SuspendAllowed</a>   (out 'b'  allowed)
 <a class="link" href="UPower.html#UPower.Hibernate">Hibernate</a>        ()
+<a class="link" href="UPower.html#UPower.HibernateAllowed">HibernateAllowed</a> (out 'b'  allowed)
 </pre>
 </div>
 <div class="refsect1" title="Signals">
-<a name="id3114188"></a><h2>Signals</h2>
+<a name="id367079"></a><h2>Signals</h2>
 <pre class="synopsis"><a class="link" href="UPower.html#UPower::DeviceAdded">DeviceAdded</a>   ('o' device)
 <a class="link" href="UPower.html#UPower::DeviceRemoved">DeviceRemoved</a> ('o' device)
 <a class="link" href="UPower.html#UPower::DeviceChanged">DeviceChanged</a> ('o' device)
 <a class="link" href="UPower.html#UPower::Changed">Changed</a>       ()
+<a class="link" href="UPower.html#UPower::Sleeping">Sleeping</a>      ()
+<a class="link" href="UPower.html#UPower::Resuming">Resuming</a>      ()
 </pre>
 </div>
 <div class="refsect1" title="Implemented Interfaces">
-<a name="id3063428"></a><h2>Implemented Interfaces</h2>
+<a name="id313437"></a><h2>Implemented Interfaces</h2>
 <p>
     Objects implementing org.freedesktop.UPower also implements
     org.freedesktop.DBus.Introspectable,
@@ -71,7 +76,7 @@
     </p>
 </div>
 <div class="refsect1" title="Properties">
-<a name="id3048812"></a><h2>Properties</h2>
+<a name="id304292"></a><h2>Properties</h2>
 <pre class="synopsis"><a class="link" href="UPower.html#UPower:DaemonVersion">'DaemonVersion'</a> read      's'
 <a class="link" href="UPower.html#UPower:CanSuspend">'CanSuspend'</a>    read      'b'
 <a class="link" href="UPower.html#UPower:CanHibernate">'CanHibernate'</a>  read      'b'
@@ -82,7 +87,7 @@
 </pre>
 </div>
 <div class="refsect1" title="Description">
-<a name="id3050272"></a><h2>Description</h2>
+<a name="id304350"></a><h2>Description</h2>
 <p>
       
         </p>
@@ -118,9 +123,9 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
     </p>
 </div>
 <div class="refsect1" title="Details">
-<a name="id3050332"></a><h2>Details</h2>
+<a name="id304404"></a><h2>Details</h2>
 <div class="refsect2" title="EnumerateDevices ()">
-<a name="id3050340"></a><h3>
+<a name="id304412"></a><h3>
 <a name="UPower.EnumerateDevices"></a>EnumerateDevices ()</h3>
 <pre class="programlisting">EnumerateDevices (out 'ao' devices)</pre>
 </div>
@@ -135,8 +140,36 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </tr></tbody>
 </table></div>
 <hr>
+<div class="refsect2" title="AboutToSleep ()">
+<a name="id303032"></a><h3>
+<a name="UPower.AboutToSleep"></a>AboutToSleep ()</h3>
+<pre class="programlisting">AboutToSleep ()</pre>
+</div>
+<p>
+            This method tells UPower that the Suspend() or Hibernate() method
+            is about to be called.
+            This allows UPower to emit the Suspending signal whilst
+            session activities are happening that have to be done before the
+            suspend process is started.
+          </p>
+<p>
+            This method would typically be called by the session power
+            management daemon, before it locks the screen and waits for the
+            screen to fade to black.
+            The session power management component would then call Suspend() or
+            Hibernate() when these syncronous tasks have completed.
+          </p>
+<p>
+            If this method is not called than nothing bad will happen and
+            Suspend() or Hibernate() will block for the required second.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
 <div class="refsect2" title="Suspend ()">
-<a name="id3049142"></a><h3>
+<a name="id303076"></a><h3>
 <a name="UPower.Suspend"></a>Suspend ()</h3>
 <pre class="programlisting">Suspend ()</pre>
 </div>
@@ -144,13 +177,39 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
             Suspends the computer into a low power state.
             System state is not preserved if the power is lost.
           </p>
+<p>
+            If AboutToRequestSleep() has not been called then UPower will send
+            the Sleeping() signal and block for one second.
+          </p>
+<p>
+            If AboutToRequestSleep() has been called less than one second
+            before this method is called then UPower will block for the
+            remaining time to complete one second of delay.
+          </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody></tbody>
 </table></div>
 <hr>
+<div class="refsect2" title="SuspendAllowed ()">
+<a name="id303118"></a><h3>
+<a name="UPower.SuspendAllowed"></a>SuspendAllowed ()</h3>
+<pre class="programlisting">SuspendAllowed (out 'b' allowed)</pre>
+</div>
+<p>
+            Check if the caller has (or can get) the PolicyKit privilege to call
+            <code class="function">Suspend</code>.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>allowed</code></em>:</span></p></td>
+<td>TRUE if allowed, otherwise FALSE</td>
+</tr></tbody>
+</table></div>
+<hr>
 <div class="refsect2" title="Hibernate ()">
-<a name="id3049175"></a><h3>
+<a name="id360686"></a><h3>
 <a name="UPower.Hibernate"></a>Hibernate ()</h3>
 <pre class="programlisting">Hibernate ()</pre>
 </div>
@@ -158,15 +217,41 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
             Hibernates the computer into a low power state.
             System state is preserved if the power is lost.
           </p>
+<p>
+            If AboutToRequestSleep() has not been called then UPower will send
+            the Sleeping() signal and block for one second.
+          </p>
+<p>
+            If AboutToRequestSleep() has been called less than one second
+            before this method is called then UPower will block for the
+            remaining time to complete one second of delay.
+          </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody></tbody>
 </table></div>
+<hr>
+<div class="refsect2" title="HibernateAllowed ()">
+<a name="id360728"></a><h3>
+<a name="UPower.HibernateAllowed"></a>HibernateAllowed ()</h3>
+<pre class="programlisting">HibernateAllowed (out 'b' allowed)</pre>
+</div>
+<p>
+            Check if the caller has (or can get) the PolicyKit privilege to call
+            <code class="function">Hibernate</code>.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>allowed</code></em>:</span></p></td>
+<td>TRUE if allowed, otherwise FALSE</td>
+</tr></tbody>
+</table></div>
 </div>
 <div class="refsect1" title="Signal Details">
-<a name="id3049209"></a><h2>Signal Details</h2>
+<a name="id360782"></a><h2>Signal Details</h2>
 <div class="refsect2" title="The DeviceAdded signal">
-<a name="id3049217"></a><h3>
+<a name="id360790"></a><h3>
 <a name="UPower::DeviceAdded"></a>The DeviceAdded signal</h3>
 <pre class="programlisting">DeviceAdded ('o' device)</pre>
 </div>
@@ -182,7 +267,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title="The DeviceRemoved signal">
-<a name="id3049260"></a><h3>
+<a name="id360832"></a><h3>
 <a name="UPower::DeviceRemoved"></a>The DeviceRemoved signal</h3>
 <pre class="programlisting">DeviceRemoved ('o' device)</pre>
 </div>
@@ -198,7 +283,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title="The DeviceChanged signal">
-<a name="id3050023"></a><h3>
+<a name="id360874"></a><h3>
 <a name="UPower::DeviceChanged"></a>The DeviceChanged signal</h3>
 <pre class="programlisting">DeviceChanged ('o' device)</pre>
 </div>
@@ -214,7 +299,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title="The Changed signal">
-<a name="id3050065"></a><h3>
+<a name="id360916"></a><h3>
 <a name="UPower::Changed"></a>The Changed signal</h3>
 <pre class="programlisting">Changed ()</pre>
 </div>
@@ -225,11 +310,44 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 <col align="left" valign="top">
 <tbody></tbody>
 </table></div>
+<hr>
+<div class="refsect2" title="The Sleeping signal">
+<a name="id360947"></a><h3>
+<a name="UPower::Sleeping"></a>The Sleeping signal</h3>
+<pre class="programlisting">Sleeping ()</pre>
+</div>
+<p>
+            This signal is sent when the session is about to be suspended or
+            hibernated.
+            Session and system programs have one second to do anything required
+            before the sleep action is taken (such as sending out Avahi or
+            Jabber messages).
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" title="The Resuming signal">
+<a name="id360980"></a><h3>
+<a name="UPower::Resuming"></a>The Resuming signal</h3>
+<pre class="programlisting">Resuming ()</pre>
+</div>
+<p>
+            This signal is sent when the session has just returned from
+            Suspend() or Hibernate().
+            Session and system programs can then do anything required (such as
+            sending out Avahi or Jabber messages).
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
 </div>
 <div class="refsect1" title="Property Details">
-<a name="id3050098"></a><h2>Property Details</h2>
+<a name="id361013"></a><h2>Property Details</h2>
 <div class="refsect2" title='The "DaemonVersion" property'>
-<a name="id3050106"></a><h3>
+<a name="id361021"></a><h3>
 <a name="UPower:DaemonVersion"></a>The "DaemonVersion" property</h3>
 <pre class="programlisting">'DaemonVersion'  read      's'
 </pre>
@@ -243,7 +361,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "CanSuspend" property'>
-<a name="id3050140"></a><h3>
+<a name="id361055"></a><h3>
 <a name="UPower:CanSuspend"></a>The "CanSuspend" property</h3>
 <pre class="programlisting">'CanSuspend'  read      'b'
 </pre>
@@ -257,7 +375,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "CanHibernate" property'>
-<a name="id3054577"></a><h3>
+<a name="id361083"></a><h3>
 <a name="UPower:CanHibernate"></a>The "CanHibernate" property</h3>
 <pre class="programlisting">'CanHibernate'  read      'b'
 </pre>
@@ -271,7 +389,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "OnBattery" property'>
-<a name="id3054607"></a><h3>
+<a name="id361111"></a><h3>
 <a name="UPower:OnBattery"></a>The "OnBattery" property</h3>
 <pre class="programlisting">'OnBattery'  read      'b'
 </pre>
@@ -286,7 +404,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "OnLowBattery" property'>
-<a name="id3054637"></a><h3>
+<a name="id361140"></a><h3>
 <a name="UPower:OnLowBattery"></a>The "OnLowBattery" property</h3>
 <pre class="programlisting">'OnLowBattery'  read      'b'
 </pre>
@@ -301,7 +419,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "LidIsClosed" property'>
-<a name="id3054668"></a><h3>
+<a name="id361170"></a><h3>
 <a name="UPower:LidIsClosed"></a>The "LidIsClosed" property</h3>
 <pre class="programlisting">'LidIsClosed'  read      'b'
 </pre>
@@ -315,7 +433,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "LidIsPresent" property'>
-<a name="id3054700"></a><h3>
+<a name="id361201"></a><h3>
 <a name="UPower:LidIsPresent"></a>The "LidIsPresent" property</h3>
 <pre class="programlisting">'LidIsPresent'  read      'b'
 </pre>
@@ -331,6 +449,6 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.13</div>
+          Generated by GTK-Doc V1.11</div>
 </body>
 </html>

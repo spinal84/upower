@@ -2,13 +2,10 @@
 
 INCLUDES = \
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
-	-DEGG_LOG_FILE=\""$(UP_LOG_DIR)/DeviceKit-power"\"	\
-	-DEGG_VERBOSE="\"UP_VERBOSE\""				\
-	-DEGG_LOGGING="\"UP_LOGGING\""				\
-	-DEGG_CONSOLE="\"UP_CONSOLE\""				\
 	-DUP_COMPILATION					\
 	-DG_UDEV_API_IS_SUBJECT_TO_CHANGE			\
 	-I$(top_srcdir)/devkit-power-gobject			\
+	-I$(top_srcdir)/libupower-glib				\
 	$(GIO_CFLAGS)						\
 	$(DBUS_GLIB_CFLAGS)					\
 	$(GUDEV_CFLAGS)						\

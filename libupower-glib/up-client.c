@@ -156,6 +156,7 @@ up_client_get_devices_private (UpClient *client, GError **error)
 /**
  * up_client_suspend_sync:
  * @client: a #UpClient instance.
+ * @cancellable: a #GCancellable or %NULL
  * @error: a #GError, or %NULL.
  *
  * Puts the computer into a low power state, but state is not preserved if the
@@ -168,7 +169,7 @@ up_client_get_devices_private (UpClient *client, GError **error)
  * Since: 0.9.0
  **/
 gboolean
-up_client_suspend_sync (UpClient *client, GError **error)
+up_client_suspend_sync (UpClient *client, GCancellable *cancellable, GError **error)
 {
 	gboolean ret;
 	GError *error_local = NULL;
@@ -199,6 +200,7 @@ out:
 /**
  * up_client_hibernate_sync:
  * @client: a #UpClient instance.
+ * @cancellable: a #GCancellable or %NULL
  * @error: a #GError.
  *
  * Puts the computer into a low power state, where state is preserved if the
@@ -209,7 +211,7 @@ out:
  * Since: 0.9.0
  **/
 gboolean
-up_client_hibernate_sync (UpClient *client, GError **error)
+up_client_hibernate_sync (UpClient *client, GCancellable *cancellable, GError **error)
 {
 	gboolean ret;
 	GError *error_local = NULL;
@@ -238,8 +240,51 @@ out:
 }
 
 /**
+ * up_client_about_to_sleep_sync:
+ * @client: a #UpClient instance.
+ * @cancellable: a #GCancellable or %NULL
+ * @error: a #GError, or %NULL.
+ *
+ * Tells UPower that we are soon to reqest either Suspend() or Hibernate()
+ * and that session and system components should be notified of this.
+ *
+ * Return value: TRUE if system suspended okay, FALSE other wise.
+ *
+ * Since: 0.9.1
+ **/
+gboolean
+up_client_about_to_sleep_sync (UpClient *client, GCancellable *cancellable, GError **error)
+{
+	gboolean ret;
+	GError *error_local = NULL;
+
+	g_return_val_if_fail (UP_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (client->priv->proxy != NULL, FALSE);
+
+	ret = dbus_g_proxy_call (client->priv->proxy, "AboutToSleep", &error_local,
+				 G_TYPE_INVALID, G_TYPE_INVALID);
+	if (!ret) {
+		/* DBus might time out, which is okay */
+		if (g_error_matches (error_local, DBUS_GERROR, DBUS_GERROR_NO_REPLY)) {
+			g_debug ("DBUS timed out, but recovering");
+			ret = TRUE;
+			goto out;
+		}
+
+		/* an actual error */
+		g_warning ("Couldn't sent that we were about to sleep: %s", error_local->message);
+		g_set_error (error, 1, 0, "%s", error_local->message);
+	}
+out:
+	if (error_local != NULL)
+		g_error_free (error_local);
+	return ret;
+}
+
+/**
  * up_client_get_properties_sync:
  * @client: a #UpClient instance.
+ * @cancellable: a #GCancellable or %NULL
  * @error: a #GError, or %NULL.
  *
  * Get all the properties from UPower daemon.
@@ -249,9 +294,10 @@ out:
  * Since: 0.9.0
  **/
 gboolean
-up_client_get_properties_sync (UpClient *client, GError **error)
+up_client_get_properties_sync (UpClient *client, GCancellable *cancellable, GError **error)
 {
 	gboolean ret = TRUE;
+	gboolean allowed = FALSE;
 	GHashTable *props;
 	GValue *value;
 
@@ -283,7 +329,13 @@ up_client_get_properties_sync (UpClient *client, GError **error)
 		g_warning ("No 'CanSuspend' property");
 		goto out;
 	}
-	ret = g_value_get_boolean (value);
+	
+	ret = dbus_g_proxy_call (client->priv->proxy, "SuspendAllowed", error,
+		G_TYPE_INVALID, G_TYPE_BOOLEAN, &allowed, G_TYPE_INVALID);
+	if (!ret)
+		goto out;
+
+	ret = g_value_get_boolean (value) && allowed;
 	if (ret != client->priv->can_suspend) {
 		client->priv->can_suspend = ret;
 		g_object_notify (G_OBJECT(client), "can-suspend");
@@ -294,7 +346,12 @@ up_client_get_properties_sync (UpClient *client, GError **error)
 		g_warning ("No 'CanHibernate' property");
 		goto out;
 	}
-	ret = g_value_get_boolean (value);
+	ret = dbus_g_proxy_call (client->priv->proxy, "HibernateAllowed", error,
+		G_TYPE_INVALID, G_TYPE_BOOLEAN, &allowed, G_TYPE_INVALID);
+	if (!ret)
+		goto out;
+
+	ret = g_value_get_boolean (value) && allowed;
 	if (ret != client->priv->can_hibernate) {
 		client->priv->can_hibernate = ret;
 		g_object_notify (G_OBJECT(client), "can-hibernate");
@@ -367,7 +424,7 @@ const gchar *
 up_client_get_daemon_version (UpClient *client)
 {
 	g_return_val_if_fail (UP_IS_CLIENT (client), NULL);
-	up_client_get_properties_sync (client, NULL);
+	up_client_get_properties_sync (client, NULL, NULL);
 	return client->priv->daemon_version;
 }
 
@@ -385,7 +442,7 @@ gboolean
 up_client_get_can_hibernate (UpClient *client)
 {
 	g_return_val_if_fail (UP_IS_CLIENT (client), FALSE);
-	up_client_get_properties_sync (client, NULL);
+	up_client_get_properties_sync (client, NULL, NULL);
 	return client->priv->can_hibernate;
 }
 
@@ -401,7 +458,7 @@ gboolean
 up_client_get_lid_is_closed (UpClient *client)
 {
 	g_return_val_if_fail (UP_IS_CLIENT (client), FALSE);
-	up_client_get_properties_sync (client, NULL);
+	up_client_get_properties_sync (client, NULL, NULL);
 	return client->priv->lid_is_closed;
 }
 
@@ -419,7 +476,7 @@ gboolean
 up_client_get_can_suspend (UpClient *client)
 {
 	g_return_val_if_fail (UP_IS_CLIENT (client), FALSE);
-	up_client_get_properties_sync (client, NULL);
+	up_client_get_properties_sync (client, NULL, NULL);
 	return client->priv->can_suspend;
 }
 
@@ -437,7 +494,7 @@ gboolean
 up_client_get_on_battery (UpClient *client)
 {
 	g_return_val_if_fail (UP_IS_CLIENT (client), FALSE);
-	up_client_get_properties_sync (client, NULL);
+	up_client_get_properties_sync (client, NULL, NULL);
 	return client->priv->on_battery;
 }
 
@@ -455,7 +512,7 @@ gboolean
 up_client_get_on_low_battery (UpClient *client)
 {
 	g_return_val_if_fail (UP_IS_CLIENT (client), FALSE);
-	up_client_get_properties_sync (client, NULL);
+	up_client_get_properties_sync (client, NULL, NULL);
 	return client->priv->on_low_battery;
 }
 
@@ -470,7 +527,7 @@ up_client_add (UpClient *client, const gchar *object_path)
 
 	/* create new device */
 	device = up_device_new ();
-	ret = up_device_set_object_path_sync (device, object_path, NULL);
+	ret = up_device_set_object_path_sync (device, object_path, NULL, NULL);
 	if (!ret)
 		goto out;
 
@@ -535,7 +592,7 @@ up_client_get_property (GObject *object,
 	UpClient *client;
 	client = UP_CLIENT (object);
 
-	up_client_get_properties_sync (client, NULL);
+	up_client_get_properties_sync (client, NULL, NULL);
 
 	switch (prop_id) {
 	case PROP_DAEMON_VERSION:
@@ -754,7 +811,7 @@ up_client_class_init (UpClientClass *klass)
  * Since: 0.9.0
  **/
 gboolean
-up_client_enumerate_devices_sync (UpClient *client, GError **error)
+up_client_enumerate_devices_sync (UpClient *client, GCancellable *cancellable, GError **error)
 {
 	const gchar *object_path;
 	GPtrArray *devices;

@@ -2,17 +2,13 @@
 
 INCLUDES = \
 	-DUP_COMPILATION					\
-	-DEGG_LOG_FILE=\""$(UP_LOG_DIR)/DeviceKit-power"\"	\
-	-DEGG_VERBOSE="\"DKP_VERBOSE\""				\
-	-DEGG_LOGGING="\"DKP_LOGGING\""				\
-	-DEGG_CONSOLE="\"DKP_CONSOLE\""				\
 	-I$(top_srcdir)						\
-	-I$(top_srcdir)/devkit-power-gobject			\
+	-I$(top_srcdir)/libupower-glib				\
 	$(DBUS_GLIB_CFLAGS)					\
 	$(POLKIT_DBUS_CFLAGS)					\
 	$(GLIB_CFLAGS)
 
-DEVKIT_POWER_LIBS = $(top_builddir)/devkit-power-gobject/libdevkit-power-gobject.la
+UPOWER_LIBS = $(top_builddir)/libupower-glib/libupower-glib.la
 
 bin_PROGRAMS = upower
 
@@ -27,7 +23,7 @@ upower_CPPFLAGS = 					\
 
 upower_LDADD = 						\
 	$(DBUS_GLIB_LIBS)				\
-	$(DEVKIT_POWER_LIBS)				\
+	$(UPOWER_LIBS)					\
 	$(POLKIT_DBUS_LIBS)
 
 install-exec-hook:

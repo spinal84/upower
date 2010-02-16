@@ -64,16 +64,19 @@ G_END_DECLS
 #include <dbus/dbus-glib.h>
 static const DBusGMethodInfo dbus_glib_up_daemon_methods[] = {
   { (GCallback) up_daemon_enumerate_devices, dbus_glib_marshal_up_daemon_NONE__POINTER, 0 },
-  { (GCallback) up_daemon_suspend, dbus_glib_marshal_up_daemon_NONE__POINTER, 60 },
-  { (GCallback) up_daemon_hibernate, dbus_glib_marshal_up_daemon_NONE__POINTER, 94 },
+  { (GCallback) up_daemon_about_to_sleep, dbus_glib_marshal_up_daemon_NONE__POINTER, 60 },
+  { (GCallback) up_daemon_suspend, dbus_glib_marshal_up_daemon_NONE__POINTER, 99 },
+  { (GCallback) up_daemon_suspend_allowed, dbus_glib_marshal_up_daemon_NONE__POINTER, 133 },
+  { (GCallback) up_daemon_hibernate, dbus_glib_marshal_up_daemon_NONE__POINTER, 190 },
+  { (GCallback) up_daemon_hibernate_allowed, dbus_glib_marshal_up_daemon_NONE__POINTER, 226 },
 };
 
 const DBusGObjectInfo dbus_glib_up_daemon_object_info = {
   0,
   dbus_glib_up_daemon_methods,
-  3,
-"org.freedesktop.UPower\0EnumerateDevices\0A\0devices\0O\0F\0N\0ao\0\0org.freedesktop.UPower\0Suspend\0A\0\0org.freedesktop.UPower\0Hibernate\0A\0\0\0",
-"org.freedesktop.UPower\0DeviceAdded\0org.freedesktop.UPower\0DeviceRemoved\0org.freedesktop.UPower\0DeviceChanged\0org.freedesktop.UPower\0Changed\0\0",
+  6,
+"org.freedesktop.UPower\0EnumerateDevices\0A\0devices\0O\0F\0N\0ao\0\0org.freedesktop.UPower\0AboutToSleep\0A\0\0org.freedesktop.UPower\0Suspend\0A\0\0org.freedesktop.UPower\0SuspendAllowed\0A\0allowed\0O\0F\0N\0b\0\0org.freedesktop.UPower\0Hibernate\0A\0\0org.freedesktop.UPower\0HibernateAllowed\0A\0allowed\0O\0F\0N\0b\0\0\0",
+"org.freedesktop.UPower\0DeviceAdded\0org.freedesktop.UPower\0DeviceRemoved\0org.freedesktop.UPower\0DeviceChanged\0org.freedesktop.UPower\0Changed\0org.freedesktop.UPower\0Sleeping\0org.freedesktop.UPower\0Resuming\0\0",
 "org.freedesktop.UPower\0DaemonVersion\0org.freedesktop.UPower\0CanSuspend\0org.freedesktop.UPower\0CanHibernate\0org.freedesktop.UPower\0OnBattery\0org.freedesktop.UPower\0OnLowBattery\0org.freedesktop.UPower\0LidIsClosed\0org.freedesktop.UPower\0LidIsPresent\0\0"
 };
 
