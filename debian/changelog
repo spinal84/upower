@@ -13,6 +13,7 @@ upower (0.9.0+git20100216.72bb2-1) UNRELEASED; urgency=low
     devicekit-power-doc package, so that the upgrade will actually work.
   * debian/rules: Explicitly enable gtk-doc building, upstream configure
     disables that now.
+  * debian/rules: Run tests during build.
 
   [ Michael Biebl ]
   * debian/upower.install: Only install upower and upowerd, not the
