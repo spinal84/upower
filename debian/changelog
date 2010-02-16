@@ -1,10 +1,12 @@
-upower (0.9.0-1) UNRELEASED; urgency=low
+upower (0.9.0+git20100216.72bb2-1) UNRELEASED; urgency=low
 
   [ Martin Pitt ]
-  * New upstream release:
+  * New upstream release, and updating to current git head:
     - Rename the project, library, and D-Bus interface to upower.
     - Bug fixes.
     - Translation updates.
+    - Set client library's can_{suspend,hibernate} properties to False if
+      suspend/hibernate is prohibited through PolicyKit. (LP: #432598)
   * Drop 01-lid-status-fallback.patch, 02-dkpclient-singleton.patch: Applied
     upstream.
   * debian/rules, debian/control: Add an epoch to the transitional
