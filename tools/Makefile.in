@@ -38,10 +38,7 @@ bin_PROGRAMS = upower$(EXEEXT)
 subdir = tools
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/gtk-doc.m4 \
-	$(top_srcdir)/m4/intltool.m4 $(top_srcdir)/m4/libtool.m4 \
-	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
-	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -54,7 +51,7 @@ am_upower_OBJECTS = upower-egg-debug.$(OBJEXT) \
 	upower-up-tool.$(OBJEXT)
 upower_OBJECTS = $(am_upower_OBJECTS)
 am__DEPENDENCIES_1 =
-upower_DEPENDENCIES = $(am__DEPENDENCIES_1) $(DEVKIT_POWER_LIBS)
+upower_DEPENDENCIES = $(am__DEPENDENCIES_1) $(UPOWER_LIBS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
@@ -131,8 +128,6 @@ GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
 GREP = @GREP@
 GTKDOC_CHECK = @GTKDOC_CHECK@
-GTKDOC_MKPDF = @GTKDOC_MKPDF@
-GTKDOC_REBASE = @GTKDOC_REBASE@
 GUDEV_CFLAGS = @GUDEV_CFLAGS@
 GUDEV_LIBS = @GUDEV_LIBS@
 HTML_DIR = @HTML_DIR@
@@ -262,17 +257,13 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 INCLUDES = \
 	-DUP_COMPILATION					\
-	-DEGG_LOG_FILE=\""$(UP_LOG_DIR)/DeviceKit-power"\"	\
-	-DEGG_VERBOSE="\"DKP_VERBOSE\""				\
-	-DEGG_LOGGING="\"DKP_LOGGING\""				\
-	-DEGG_CONSOLE="\"DKP_CONSOLE\""				\
 	-I$(top_srcdir)						\
-	-I$(top_srcdir)/devkit-power-gobject			\
+	-I$(top_srcdir)/libupower-glib				\
 	$(DBUS_GLIB_CFLAGS)					\
 	$(POLKIT_DBUS_CFLAGS)					\
 	$(GLIB_CFLAGS)
 
-DEVKIT_POWER_LIBS = $(top_builddir)/devkit-power-gobject/libdevkit-power-gobject.la
+UPOWER_LIBS = $(top_builddir)/libupower-glib/libupower-glib.la
 upower_SOURCES = \
 	egg-debug.c					\
 	egg-debug.h					\
@@ -284,7 +275,7 @@ upower_CPPFLAGS = \
 
 upower_LDADD = \
 	$(DBUS_GLIB_LIBS)				\
-	$(DEVKIT_POWER_LIBS)				\
+	$(UPOWER_LIBS)					\
 	$(POLKIT_DBUS_LIBS)
 
 CLEANFILES = $(BUILT_SOURCES)

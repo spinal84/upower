@@ -10,8 +10,11 @@
   <refsynopsisdiv role="synopsis">
     <title role="synopsis.title">Methods</title>
     <synopsis><link linkend="UPower.EnumerateDevices">EnumerateDevices</link> (out 'ao' devices)
+<link linkend="UPower.AboutToSleep">AboutToSleep</link>     ()
 <link linkend="UPower.Suspend">Suspend</link>          ()
+<link linkend="UPower.SuspendAllowed">SuspendAllowed</link>   (out 'b'  allowed)
 <link linkend="UPower.Hibernate">Hibernate</link>        ()
+<link linkend="UPower.HibernateAllowed">HibernateAllowed</link> (out 'b'  allowed)
 </synopsis>
   </refsynopsisdiv>
   <refsect1 role="signal_proto">
@@ -20,6 +23,8 @@
 <link linkend="UPower::DeviceRemoved">DeviceRemoved</link> ('o' device)
 <link linkend="UPower::DeviceChanged">DeviceChanged</link> ('o' device)
 <link linkend="UPower::Changed">Changed</link>       ()
+<link linkend="UPower::Sleeping">Sleeping</link>      ()
+<link linkend="UPower::Resuming">Resuming</link>      ()
 </synopsis>
   </refsect1>
   <refsect1 role="impl_interfaces">
@@ -77,17 +82,64 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
           <para>
             Enumerate all power objects on the system.
           </para>
-        <variablelist role="params"><varlistentry><term><parameter>devices</parameter>:</term><listitem><simpara>An array of object paths for devices.</simpara></listitem></varlistentry></variablelist><refsect2><title><anchor role="function" id="UPower.Suspend"/>Suspend ()</title><indexterm><primary>Suspend</primary><secondary>UPower</secondary></indexterm><programlisting>Suspend ()</programlisting></refsect2>
+        <variablelist role="params"><varlistentry><term><parameter>devices</parameter>:</term><listitem><simpara>An array of object paths for devices.</simpara></listitem></varlistentry></variablelist><refsect2><title><anchor role="function" id="UPower.AboutToSleep"/>AboutToSleep ()</title><indexterm><primary>AboutToSleep</primary><secondary>UPower</secondary></indexterm><programlisting>AboutToSleep ()</programlisting></refsect2>
+          <para>
+            This method tells UPower that the Suspend() or Hibernate() method
+            is about to be called.
+            This allows UPower to emit the Suspending signal whilst
+            session activities are happening that have to be done before the
+            suspend process is started.
+          </para>
+          <para>
+            This method would typically be called by the session power
+            management daemon, before it locks the screen and waits for the
+            screen to fade to black.
+            The session power management component would then call Suspend() or
+            Hibernate() when these syncronous tasks have completed.
+          </para>
+          <para>
+            If this method is not called than nothing bad will happen and
+            Suspend() or Hibernate() will block for the required second.
+          </para>
+        <variablelist role="params"/><refsect2><title><anchor role="function" id="UPower.Suspend"/>Suspend ()</title><indexterm><primary>Suspend</primary><secondary>UPower</secondary></indexterm><programlisting>Suspend ()</programlisting></refsect2>
           <para>
             Suspends the computer into a low power state.
             System state is not preserved if the power is lost.
           </para>
-        <variablelist role="params"/><refsect2><title><anchor role="function" id="UPower.Hibernate"/>Hibernate ()</title><indexterm><primary>Hibernate</primary><secondary>UPower</secondary></indexterm><programlisting>Hibernate ()</programlisting></refsect2>
+          <para>
+            If AboutToRequestSleep() has not been called then UPower will send
+            the Sleeping() signal and block for one second.
+          </para>
+          <para>
+            If AboutToRequestSleep() has been called less than one second
+            before this method is called then UPower will block for the
+            remaining time to complete one second of delay.
+          </para>
+        <variablelist role="params"/><refsect2><title><anchor role="function" id="UPower.SuspendAllowed"/>SuspendAllowed ()</title><indexterm><primary>SuspendAllowed</primary><secondary>UPower</secondary></indexterm><programlisting>SuspendAllowed (out 'b' allowed)</programlisting></refsect2>
+          <para>
+            Check if the caller has (or can get) the PolicyKit privilege to call
+            <link linkend="Power.Suspend"><function>Suspend</function></link>.
+          </para>
+        <variablelist role="params"><varlistentry><term><parameter>allowed</parameter>:</term><listitem><simpara>TRUE if allowed, otherwise FALSE</simpara></listitem></varlistentry></variablelist><refsect2><title><anchor role="function" id="UPower.Hibernate"/>Hibernate ()</title><indexterm><primary>Hibernate</primary><secondary>UPower</secondary></indexterm><programlisting>Hibernate ()</programlisting></refsect2>
           <para>
             Hibernates the computer into a low power state.
             System state is preserved if the power is lost.
           </para>
-        <variablelist role="params"/></refsect1>
+          <para>
+            If AboutToRequestSleep() has not been called then UPower will send
+            the Sleeping() signal and block for one second.
+          </para>
+          <para>
+            If AboutToRequestSleep() has been called less than one second
+            before this method is called then UPower will block for the
+            remaining time to complete one second of delay.
+          </para>
+        <variablelist role="params"/><refsect2><title><anchor role="function" id="UPower.HibernateAllowed"/>HibernateAllowed ()</title><indexterm><primary>HibernateAllowed</primary><secondary>UPower</secondary></indexterm><programlisting>HibernateAllowed (out 'b' allowed)</programlisting></refsect2>
+          <para>
+            Check if the caller has (or can get) the PolicyKit privilege to call
+            <link linkend="Power.Hibernate"><function>Hibernate</function></link>.
+          </para>
+        <variablelist role="params"><varlistentry><term><parameter>allowed</parameter>:</term><listitem><simpara>TRUE if allowed, otherwise FALSE</simpara></listitem></varlistentry></variablelist></refsect1>
   <refsect1 role="signals"><title role="signals.title">Signal Details</title><refsect2><title><anchor role="function" id="UPower::DeviceAdded"/>The DeviceAdded signal</title><indexterm><primary>DeviceAdded</primary><secondary>UPower</secondary></indexterm><programlisting>DeviceAdded ('o' device)</programlisting></refsect2>
           <para>
             Emitted when a device is added.
@@ -103,6 +155,21 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
         <variablelist role="params"><varlistentry><term><parameter>device</parameter>:</term><listitem><simpara>Object path of device that was changed.</simpara></listitem></varlistentry></variablelist><refsect2><title><anchor role="function" id="UPower::Changed"/>The Changed signal</title><indexterm><primary>Changed</primary><secondary>UPower</secondary></indexterm><programlisting>Changed ()</programlisting></refsect2>
           <para>
             Emitted when one or more properties on the object changes.
+          </para>
+        <variablelist role="params"/><refsect2><title><anchor role="function" id="UPower::Sleeping"/>The Sleeping signal</title><indexterm><primary>Sleeping</primary><secondary>UPower</secondary></indexterm><programlisting>Sleeping ()</programlisting></refsect2>
+          <para>
+            This signal is sent when the session is about to be suspended or
+            hibernated.
+            Session and system programs have one second to do anything required
+            before the sleep action is taken (such as sending out Avahi or
+            Jabber messages).
+          </para>
+        <variablelist role="params"/><refsect2><title><anchor role="function" id="UPower::Resuming"/>The Resuming signal</title><indexterm><primary>Resuming</primary><secondary>UPower</secondary></indexterm><programlisting>Resuming ()</programlisting></refsect2>
+          <para>
+            This signal is sent when the session has just returned from
+            Suspend() or Hibernate().
+            Session and system programs can then do anything required (such as
+            sending out Avahi or Jabber messages).
           </para>
         <variablelist role="params"/></refsect1>
   <refsect1 role="property_details"><title role="property_details.title">Property Details</title><refsect2><title><anchor role="function" id="UPower:DaemonVersion"/>The "DaemonVersion" property</title><indexterm><primary>DaemonVersion</primary><secondary>UPower</secondary></indexterm><programlisting>'DaemonVersion'  read      's'

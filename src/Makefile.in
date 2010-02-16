@@ -53,10 +53,7 @@ libexec_PROGRAMS = upowerd$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/gtk-doc.m4 \
-	$(top_srcdir)/m4/intltool.m4 $(top_srcdir)/m4/libtool.m4 \
-	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
-	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -92,8 +89,9 @@ am__DEPENDENCIES_1 =
 @EGG_BUILD_TESTS_TRUE@	dummy/libupshared.la \
 @EGG_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
 @EGG_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
+@EGG_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
 @EGG_BUILD_TESTS_TRUE@	$(DEVKIT_POWER_LIBS) \
-@EGG_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1)
+@EGG_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) $(UPOWER_LIBS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
@@ -112,8 +110,8 @@ upowerd_OBJECTS = $(am_upowerd_OBJECTS)
 @BACKEND_TYPE_LINUX_TRUE@	$(am__DEPENDENCIES_1) \
 @BACKEND_TYPE_LINUX_TRUE@	$(DEVKIT_POWER_LIBS)
 upowerd_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__append_1) $(am__append_2) \
-	$(am__DEPENDENCIES_2)
+	$(am__DEPENDENCIES_1) $(UPOWER_LIBS) $(am__append_1) \
+	$(am__append_2) $(am__DEPENDENCIES_2)
 upowerd_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(upowerd_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
@@ -252,8 +250,6 @@ GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
 GREP = @GREP@
 GTKDOC_CHECK = @GTKDOC_CHECK@
-GTKDOC_MKPDF = @GTKDOC_MKPDF@
-GTKDOC_REBASE = @GTKDOC_REBASE@
 GUDEV_CFLAGS = @GUDEV_CFLAGS@
 GUDEV_LIBS = @GUDEV_LIBS@
 HTML_DIR = @HTML_DIR@
@@ -395,10 +391,6 @@ INCLUDES = \
 	-DG_UDEV_API_IS_SUBJECT_TO_CHANGE			\
 	-DUP_COMPILATION					\
 	-DUP_DISABLE_DEPRECATED				\
-	-DEGG_LOG_FILE=\""$(UP_LOG_DIR)/DeviceKit-power"\"	\
-	-DEGG_VERBOSE="\"UP_VERBOSE\""				\
-	-DEGG_LOGGING="\"UP_LOGGING\""				\
-	-DEGG_CONSOLE="\"UP_CONSOLE\""				\
 	-I$(top_srcdir)/libupower-glib				\
 	-I$(top_srcdir)/devkit-power-gobject			\
 	-I$(top_srcdir)						\
@@ -409,6 +401,7 @@ INCLUDES = \
 	$(GLIB_CFLAGS)
 
 DEVKIT_POWER_LIBS = $(top_builddir)/devkit-power-gobject/libdevkit-power-gobject.la
+UPOWER_LIBS = $(top_builddir)/libupower-glib/libupower-glib.la
 BUILT_SOURCES = \
 	up-daemon-glue.h					\
 	up-device-glue.h					\
@@ -452,7 +445,8 @@ upowerd_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 upowerd_LDADD = -lm $(USB_LIBS) $(GIO_LIBS) $(DBUS_GLIB_LIBS) \
-	$(POLKIT_LIBS) $(am__append_1) $(am__append_2) $(am__append_3)
+	$(POLKIT_LIBS) $(UPOWER_LIBS) $(am__append_1) $(am__append_2) \
+	$(am__append_3)
 upowerd_CFLAGS = \
 	$(WARNINGFLAGS_C)					\
 	$(NULL)
@@ -486,9 +480,10 @@ upowerd_CFLAGS = \
 @EGG_BUILD_TESTS_TRUE@	dummy/libupshared.la					\
 @EGG_BUILD_TESTS_TRUE@	$(GLIB_LIBS)						\
 @EGG_BUILD_TESTS_TRUE@	$(GIO_CFLAGS)						\
-@EGG_BUILD_TESTS_TRUE@	$(SELFTEST_LIBS)					\
+@EGG_BUILD_TESTS_TRUE@	$(DBUS_GLIB_LIBS)					\
 @EGG_BUILD_TESTS_TRUE@	$(DEVKIT_POWER_LIBS)					\
-@EGG_BUILD_TESTS_TRUE@	$(POLKIT_LIBS)
+@EGG_BUILD_TESTS_TRUE@	$(POLKIT_LIBS)						\
+@EGG_BUILD_TESTS_TRUE@	$(UPOWER_LIBS)
 
 @EGG_BUILD_TESTS_TRUE@up_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS_C)
 servicedir = $(datadir)/dbus-1/system-services
@@ -1505,7 +1500,7 @@ $(dbusconf_DATA): $(dbusconf_in_files) Makefile
 
 install-data-hook:
 	if test -w $(DESTDIR)$(prefix)/; then \
-		mkdir -p $(DESTDIR)$(localstatedir)/lib/DeviceKit-power; \
+		mkdir -p $(DESTDIR)$(localstatedir)/lib/upower; \
 	fi
 
 install-exec-hook:

@@ -26,11 +26,13 @@ libupower_glib_include_HEADERS =				\
 	up-wakeup-item.h					\
 	up-stats-item.h						\
 	up-history-item.h					\
+	up-wakeups.h						\
 	up-client.h
 
 libupower_glib_la_SOURCES =					\
 	up-types.c						\
 	up-client.c						\
+	up-wakeups.c						\
 	up-qos-item.c						\
 	up-wakeup-item.c					\
 	up-stats-item.c						\
@@ -70,7 +72,7 @@ INTROSPECTION_GIRS += UPowerGlib-1.0.gir
 girdir = $(datadir)/gir-1.0
 dist_gir_DATA = $(INTROSPECTION_GIRS)
 
-typelibdir = $(libdir)/girepositry-1.0
+typelibdir = $(libdir)/girepository-1.0
 typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
 CLEANFILES += $(dist_gir_DATA) $(typelib_DATA)

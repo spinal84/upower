@@ -262,6 +262,7 @@ up_device_changed_cb (DBusGProxy *proxy, UpDevice *device)
  * up_device_set_object_path_sync:
  * @device: a #UpDevice instance.
  * @object_path: The UPower object path.
+ * @cancellable: a #GCancellable or %NULL
  * @error: a #GError, or %NULL.
  *
  * Sets the object path of the object and fills up initial properties.
@@ -271,7 +272,7 @@ up_device_changed_cb (DBusGProxy *proxy, UpDevice *device)
  * Since: 0.9.0
  **/
 gboolean
-up_device_set_object_path_sync (UpDevice *device, const gchar *object_path, GError **error)
+up_device_set_object_path_sync (UpDevice *device, const gchar *object_path, GCancellable *cancellable, GError **error)
 {
 	GError *error_local = NULL;
 	gboolean ret = FALSE;
@@ -357,15 +358,15 @@ up_device_to_text_history (UpDevice *device, GString *string, const gchar *type)
 	UpHistoryItem *item;
 
 	/* get a fair chunk of data */
-	array = up_device_get_history_sync (device, type, 120, 10, NULL);
+	array = up_device_get_history_sync (device, type, 120, 10, NULL, NULL);
 	if (array == NULL)
 		return;
 
 	/* pretty print */
-	g_string_printf (string, "  History (%s):\n", type);
+	g_string_append_printf (string, "  History (%s):\n", type);
 	for (i=0; i<array->len; i++) {
 		item = (UpHistoryItem *) g_ptr_array_index (array, i);
-		g_string_printf (string, "    %i\t%.3f\t%s\n",
+		g_string_append_printf (string, "    %i\t%.3f\t%s\n",
 				 up_history_item_get_time (item),
 				 up_history_item_get_value (item),
 				 up_device_state_to_string (up_history_item_get_state (item)));
@@ -431,58 +432,58 @@ up_device_to_text (UpDevice *device)
 	strftime (time_buf, sizeof time_buf, "%c", time_tm);
 
 	string = g_string_new ("");
-	g_string_printf (string, "  native-path:          %s\n", device->priv->native_path);
+	g_string_append_printf (string, "  native-path:          %s\n", device->priv->native_path);
 	if (device->priv->vendor != NULL && device->priv->vendor[0] != '\0')
-		g_string_printf (string, "  vendor:               %s\n", device->priv->vendor);
+		g_string_append_printf (string, "  vendor:               %s\n", device->priv->vendor);
 	if (device->priv->model != NULL && device->priv->model[0] != '\0')
-		g_string_printf (string, "  model:                %s\n", device->priv->model);
+		g_string_append_printf (string, "  model:                %s\n", device->priv->model);
 	if (device->priv->serial != NULL && device->priv->serial[0] != '\0')
-		g_string_printf (string, "  serial:               %s\n", device->priv->serial);
-	g_string_printf (string, "  power supply:         %s\n", up_device_bool_to_string (device->priv->power_supply));
-	g_string_printf (string, "  updated:              %s (%d seconds ago)\n", time_buf, (int) (time (NULL) - device->priv->update_time));
-	g_string_printf (string, "  has history:          %s\n", up_device_bool_to_string (device->priv->has_history));
-	g_string_printf (string, "  has statistics:       %s\n", up_device_bool_to_string (device->priv->has_statistics));
-	g_string_printf (string, "  %s\n", up_device_kind_to_string (device->priv->kind));
+		g_string_append_printf (string, "  serial:               %s\n", device->priv->serial);
+	g_string_append_printf (string, "  power supply:         %s\n", up_device_bool_to_string (device->priv->power_supply));
+	g_string_append_printf (string, "  updated:              %s (%d seconds ago)\n", time_buf, (int) (time (NULL) - device->priv->update_time));
+	g_string_append_printf (string, "  has history:          %s\n", up_device_bool_to_string (device->priv->has_history));
+	g_string_append_printf (string, "  has statistics:       %s\n", up_device_bool_to_string (device->priv->has_statistics));
+	g_string_append_printf (string, "  %s\n", up_device_kind_to_string (device->priv->kind));
 
 	if (device->priv->kind == UP_DEVICE_KIND_BATTERY ||
 	    device->priv->kind == UP_DEVICE_KIND_MOUSE ||
 	    device->priv->kind == UP_DEVICE_KIND_KEYBOARD ||
 	    device->priv->kind == UP_DEVICE_KIND_UPS)
-		g_string_printf (string, "    present:             %s\n", up_device_bool_to_string (device->priv->is_present));
+		g_string_append_printf (string, "    present:             %s\n", up_device_bool_to_string (device->priv->is_present));
 	if (device->priv->kind == UP_DEVICE_KIND_BATTERY ||
 	    device->priv->kind == UP_DEVICE_KIND_MOUSE ||
 	    device->priv->kind == UP_DEVICE_KIND_KEYBOARD)
-		g_string_printf (string, "    rechargeable:        %s\n", up_device_bool_to_string (device->priv->is_rechargeable));
+		g_string_append_printf (string, "    rechargeable:        %s\n", up_device_bool_to_string (device->priv->is_rechargeable));
 	if (device->priv->kind == UP_DEVICE_KIND_BATTERY ||
 	    device->priv->kind == UP_DEVICE_KIND_MOUSE ||
 	    device->priv->kind == UP_DEVICE_KIND_KEYBOARD ||
 	    device->priv->kind == UP_DEVICE_KIND_UPS)
-		g_string_printf (string, "    state:               %s\n", up_device_state_to_string (device->priv->state));
+		g_string_append_printf (string, "    state:               %s\n", up_device_state_to_string (device->priv->state));
 	if (device->priv->kind == UP_DEVICE_KIND_BATTERY) {
-		g_string_printf (string, "    energy:              %g Wh\n", device->priv->energy);
-		g_string_printf (string, "    energy-empty:        %g Wh\n", device->priv->energy_empty);
-		g_string_printf (string, "    energy-full:         %g Wh\n", device->priv->energy_full);
-		g_string_printf (string, "    energy-full-design:  %g Wh\n", device->priv->energy_full_design);
+		g_string_append_printf (string, "    energy:              %g Wh\n", device->priv->energy);
+		g_string_append_printf (string, "    energy-empty:        %g Wh\n", device->priv->energy_empty);
+		g_string_append_printf (string, "    energy-full:         %g Wh\n", device->priv->energy_full);
+		g_string_append_printf (string, "    energy-full-design:  %g Wh\n", device->priv->energy_full_design);
 	}
 	if (device->priv->kind == UP_DEVICE_KIND_BATTERY ||
 	    device->priv->kind == UP_DEVICE_KIND_MONITOR)
-		g_string_printf (string, "    energy-rate:         %g W\n", device->priv->energy_rate);
+		g_string_append_printf (string, "    energy-rate:         %g W\n", device->priv->energy_rate);
 	if (device->priv->kind == UP_DEVICE_KIND_UPS ||
 	    device->priv->kind == UP_DEVICE_KIND_BATTERY ||
 	    device->priv->kind == UP_DEVICE_KIND_MONITOR) {
 		if (device->priv->voltage > 0)
-			g_string_printf (string, "    voltage:             %g V\n", device->priv->voltage);
+			g_string_append_printf (string, "    voltage:             %g V\n", device->priv->voltage);
 	}
 	if (device->priv->kind == UP_DEVICE_KIND_BATTERY ||
 	    device->priv->kind == UP_DEVICE_KIND_UPS) {
 		if (device->priv->time_to_full > 0) {
 			time_str = up_device_to_text_time_to_string (device->priv->time_to_full);
-			g_string_printf (string, "    time to full:        %s\n", time_str);
+			g_string_append_printf (string, "    time to full:        %s\n", time_str);
 			g_free (time_str);
 		}
 		if (device->priv->time_to_empty > 0) {
 			time_str = up_device_to_text_time_to_string (device->priv->time_to_empty);
-			g_string_printf (string, "    time to empty:       %s\n", time_str);
+			g_string_append_printf (string, "    time to empty:       %s\n", time_str);
 			g_free (time_str);
 		}
 	}
@@ -490,21 +491,21 @@ up_device_to_text (UpDevice *device)
 	    device->priv->kind == UP_DEVICE_KIND_MOUSE ||
 	    device->priv->kind == UP_DEVICE_KIND_KEYBOARD ||
 	    device->priv->kind == UP_DEVICE_KIND_UPS)
-		g_string_printf (string, "    percentage:          %g%%\n", device->priv->percentage);
+		g_string_append_printf (string, "    percentage:          %g%%\n", device->priv->percentage);
 	if (device->priv->kind == UP_DEVICE_KIND_BATTERY) {
 		if (device->priv->capacity > 0)
-			g_string_printf (string, "    capacity:            %g%%\n", device->priv->capacity);
+			g_string_append_printf (string, "    capacity:            %g%%\n", device->priv->capacity);
 	}
 	if (device->priv->kind == UP_DEVICE_KIND_BATTERY) {
 		if (device->priv->technology != UP_DEVICE_TECHNOLOGY_UNKNOWN)
-			g_string_printf (string, "    technology:          %s\n", up_device_technology_to_string (device->priv->technology));
+			g_string_append_printf (string, "    technology:          %s\n", up_device_technology_to_string (device->priv->technology));
 	}
 	if (device->priv->kind == UP_DEVICE_KIND_LINE_POWER)
-		g_string_printf (string, "    online:             %s\n", up_device_bool_to_string (device->priv->online));
+		g_string_append_printf (string, "    online:             %s\n", up_device_bool_to_string (device->priv->online));
 	if (device->priv->kind == UP_DEVICE_KIND_BATTERY) {
 		if (device->priv->recall_notice) {
-			g_string_printf (string, "    recall vendor:       %s\n", device->priv->recall_vendor);
-			g_string_printf (string, "    recall url:          %s\n", device->priv->recall_url);
+			g_string_append_printf (string, "    recall vendor:       %s\n", device->priv->recall_vendor);
+			g_string_append_printf (string, "    recall url:          %s\n", device->priv->recall_url);
 		}
 	}
 
@@ -520,6 +521,7 @@ up_device_to_text (UpDevice *device)
 /**
  * up_device_refresh_sync:
  * @device: a #UpDevice instance.
+ * @cancellable: a #GCancellable or %NULL
  * @error: a #GError, or %NULL.
  *
  * Refreshes properties on the device.
@@ -530,7 +532,7 @@ up_device_to_text (UpDevice *device)
  * Since: 0.9.0
  **/
 gboolean
-up_device_refresh_sync (UpDevice *device, GError **error)
+up_device_refresh_sync (UpDevice *device, GCancellable *cancellable, GError **error)
 {
 	GError *error_local = NULL;
 	gboolean ret;
@@ -556,6 +558,7 @@ out:
  * @type: The type of history, known values are "rate" and "charge".
  * @timespec: the amount of time to look back into time.
  * @resolution: the resolution of data.
+ * @cancellable: a #GCancellable or %NULL
  * @error: a #GError, or %NULL.
  *
  * Gets the device history.
@@ -565,7 +568,7 @@ out:
  * Since: 0.9.0
  **/
 GPtrArray *
-up_device_get_history_sync (UpDevice *device, const gchar *type, guint timespec, guint resolution, GError **error)
+up_device_get_history_sync (UpDevice *device, const gchar *type, guint timespec, guint resolution, GCancellable *cancellable, GError **error)
 {
 	GError *error_local = NULL;
 	GType g_type_gvalue_array;
@@ -640,6 +643,7 @@ out:
  * up_device_get_statistics_sync:
  * @device: a #UpDevice instance.
  * @type: the type of statistics.
+ * @cancellable: a #GCancellable or %NULL
  * @error: a #GError, or %NULL.
  *
  * Gets the device current statistics.
@@ -649,7 +653,7 @@ out:
  * Since: 0.9.0
  **/
 GPtrArray *
-up_device_get_statistics_sync (UpDevice *device, const gchar *type, GError **error)
+up_device_get_statistics_sync (UpDevice *device, const gchar *type, GCancellable *cancellable, GError **error)
 {
 	GError *error_local = NULL;
 	GType g_type_gvalue_array;

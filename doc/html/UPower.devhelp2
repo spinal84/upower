@@ -28,12 +28,17 @@
   </chapters>
   <functions>
     <keyword type="" name="EnumerateDevices ()" link="UPower.html#UPower.EnumerateDevices"/>
+    <keyword type="" name="AboutToSleep ()" link="UPower.html#UPower.AboutToSleep"/>
     <keyword type="" name="Suspend ()" link="UPower.html#UPower.Suspend"/>
+    <keyword type="" name="SuspendAllowed ()" link="UPower.html#UPower.SuspendAllowed"/>
     <keyword type="" name="Hibernate ()" link="UPower.html#UPower.Hibernate"/>
+    <keyword type="" name="HibernateAllowed ()" link="UPower.html#UPower.HibernateAllowed"/>
     <keyword type="" name="The DeviceAdded signal" link="UPower.html#UPower::DeviceAdded"/>
     <keyword type="" name="The DeviceRemoved signal" link="UPower.html#UPower::DeviceRemoved"/>
     <keyword type="" name="The DeviceChanged signal" link="UPower.html#UPower::DeviceChanged"/>
     <keyword type="" name="The Changed signal" link="UPower.html#UPower::Changed"/>
+    <keyword type="" name="The Sleeping signal" link="UPower.html#UPower::Sleeping"/>
+    <keyword type="" name="The Resuming signal" link="UPower.html#UPower::Resuming"/>
     <keyword type="" name="The &quot;DaemonVersion&quot; property" link="UPower.html#UPower:DaemonVersion"/>
     <keyword type="" name="The &quot;CanSuspend&quot; property" link="UPower.html#UPower:CanSuspend"/>
     <keyword type="" name="The &quot;CanHibernate&quot; property" link="UPower.html#UPower:CanHibernate"/>
@@ -79,8 +84,8 @@
     <keyword type="" name="GetLatencyRequests ()" link="QoS.html#QoS.GetLatencyRequests"/>
     <keyword type="" name="The LatencyChanged signal" link="QoS.html#QoS::LatencyChanged"/>
     <keyword type="" name="The RequestsChanged signal" link="QoS.html#QoS::RequestsChanged"/>
-    <keyword type="macro" name="UP_CLIENT_ERROR" link="UPower-up-client.html#UP-CLIENT-ERROR:CAPS"/>
-    <keyword type="macro" name="UP_CLIENT_TYPE_ERROR" link="UPower-up-client.html#UP-CLIENT-TYPE-ERROR:CAPS"/>
+    <keyword type="macro" name="UP_CLIENT_ERROR" link="UPower-up-client.html#UP-CLIENT-ERROR--CAPS"/>
+    <keyword type="macro" name="UP_CLIENT_TYPE_ERROR" link="UPower-up-client.html#UP-CLIENT-TYPE-ERROR--CAPS"/>
     <keyword type="struct" name="UpClientPrivate" link="UPower-up-client.html#UpClientPrivate"/>
     <keyword type="function" name="device_added ()" link="UPower-up-client.html#device-added"/>
     <keyword type="function" name="device_changed ()" link="UPower-up-client.html#device-changed"/>
@@ -90,6 +95,7 @@
     <keyword type="function" name="up_client_get_properties_sync ()" link="UPower-up-client.html#up-client-get-properties-sync" since="0.9.0"/>
     <keyword type="function" name="up_client_enumerate_devices_sync ()" link="UPower-up-client.html#up-client-enumerate-devices-sync" since="0.9.0"/>
     <keyword type="function" name="up_client_suspend_sync ()" link="UPower-up-client.html#up-client-suspend-sync" since="0.9.0"/>
+    <keyword type="function" name="up_client_about_to_sleep_sync ()" link="UPower-up-client.html#up-client-about-to-sleep-sync" since="0.9.1"/>
     <keyword type="function" name="up_client_hibernate_sync ()" link="UPower-up-client.html#up-client-hibernate-sync" since="0.9.0"/>
     <keyword type="function" name="up_client_get_devices ()" link="UPower-up-client.html#up-client-get-devices" since="0.9.0"/>
     <keyword type="function" name="up_client_get_daemon_version ()" link="UPower-up-client.html#up-client-get-daemon-version" since="0.9.0"/>
@@ -98,14 +104,16 @@
     <keyword type="function" name="up_client_get_can_suspend ()" link="UPower-up-client.html#up-client-get-can-suspend" since="0.9.0"/>
     <keyword type="function" name="up_client_get_on_battery ()" link="UPower-up-client.html#up-client-get-on-battery" since="0.9.0"/>
     <keyword type="function" name="up_client_get_on_low_battery ()" link="UPower-up-client.html#up-client-get-on-low-battery" since="0.9.0"/>
-    <keyword type="macro" name="UP_DEVICE_ERROR" link="UPower-up-device.html#UP-DEVICE-ERROR:CAPS"/>
-    <keyword type="macro" name="UP_DEVICE_TYPE_ERROR" link="UPower-up-device.html#UP-DEVICE-TYPE-ERROR:CAPS"/>
+    <keyword type="macro" name="UP_DEVICE_ERROR" link="UPower-up-device.html#UP-DEVICE-ERROR--CAPS"/>
+    <keyword type="macro" name="UP_DEVICE_TYPE_ERROR" link="UPower-up-device.html#UP-DEVICE-TYPE-ERROR--CAPS"/>
     <keyword type="struct" name="UpDevicePrivate" link="UPower-up-device.html#UpDevicePrivate"/>
     <keyword type="function" name="changed ()" link="UPower-up-device.html#changed"/>
     <keyword type="function" name="up_device_new ()" link="UPower-up-device.html#up-device-new" since="0.9.0"/>
     <keyword type="function" name="up_device_to_text ()" link="UPower-up-device.html#up-device-to-text" since="0.9.0"/>
     <keyword type="function" name="up_device_refresh_sync ()" link="UPower-up-device.html#up-device-refresh-sync" since="0.9.0"/>
     <keyword type="function" name="up_device_set_object_path_sync ()" link="UPower-up-device.html#up-device-set-object-path-sync" since="0.9.0"/>
+    <keyword type="function" name="up_device_get_history_sync ()" link="UPower-up-device.html#up-device-get-history-sync" since="0.9.0"/>
+    <keyword type="function" name="up_device_get_statistics_sync ()" link="UPower-up-device.html#up-device-get-statistics-sync" since="0.9.0"/>
     <keyword type="function" name="up_device_get_object_path ()" link="UPower-up-device.html#up-device-get-object-path" since="0.9.0"/>
     <keyword type="typedef" name="UpHistoryItemPrivate" link="UPower-up-history-item.html#UpHistoryItemPrivate"/>
     <keyword type="function" name="up_history_item_new ()" link="UPower-up-history-item.html#up-history-item-new" since="0.9.0"/>
