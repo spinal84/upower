@@ -1,4 +1,4 @@
-upower (0.9.0+git20100216.72bb2-1) UNRELEASED; urgency=low
+upower (0.9.0+git20100216.72bb2-1) experimental; urgency=low
 
   [ Martin Pitt ]
   * New upstream release, and updating to current git head:
@@ -22,7 +22,7 @@ upower (0.9.0+git20100216.72bb2-1) UNRELEASED; urgency=low
     transitional symlinks.
   * debian/control: Bump Standards-Version to 3.8.4. No further changes.
 
- -- Martin Pitt <mpitt@debian.org>  Thu, 04 Feb 2010 15:36:20 -0800
+ -- Martin Pitt <mpitt@debian.org>  Tue, 16 Feb 2010 10:10:47 +0100
 
 devicekit-power (014-3) unstable; urgency=low
 
