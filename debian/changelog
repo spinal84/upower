@@ -13,7 +13,6 @@ upower (0.9.0+git20100216.72bb2-1) UNRELEASED; urgency=low
     devicekit-power-doc package, so that the upgrade will actually work.
   * debian/rules: Explicitly enable gtk-doc building, upstream configure
     disables that now.
-  * debian/rules: Run tests during build.
   * Build libdevkit-power-gobject{1,-dev} packages, but mark them as obsolete.
     These are still necessary, until upowerd is fully ported to the new
     libupower-glib.
