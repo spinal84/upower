@@ -1,3 +1,9 @@
+upower (0.9.0+git20100216.b9bb78-2) unstable; urgency=low
+
+  * Upload to unstable.
+
+ -- Michael Biebl <biebl@debian.org>  Tue, 23 Feb 2010 01:51:37 +0100
+
 upower (0.9.0+git20100216.b9bb78-1) experimental; urgency=low
 
   * New upstream git snapshot:
