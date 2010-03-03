@@ -5,6 +5,9 @@ upower (0.9.1-1) UNRELEASED; urgency=low
     BSD backend to compile.
   * debian/upower.postinst: Restart the daemon if we stopped it, so that
     clients don't suddenly stop getting signals.
+  * debian/control: Add udisks Conflicts/Replaces to devicekit-power, and
+    an additional Conflicts: to libdevkit-gobject, so that devicekit-power
+    gets properly cleaned up on upgrade.
 
   [ Michael Biebl ]
   * debian/control

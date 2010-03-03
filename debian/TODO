@@ -1,3 +1,2 @@
-- Add conflicts/replaces against devicekit-power
 - Cleanup/migrate history files from /var/lib/DeviceKit-power to /var/lib/upower
 - Enable introspection?
