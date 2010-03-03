@@ -62,8 +62,8 @@
 <ANCHOR id="UPower-up-client.synopsis" href="UPower/UPower-up-client.html#UPower-up-client.synopsis">
 <ANCHOR id="UPower-up-client.description" href="UPower/UPower-up-client.html#UPower-up-client.description">
 <ANCHOR id="UPower-up-client.details" href="UPower/UPower-up-client.html#UPower-up-client.details">
-<ANCHOR id="UP-CLIENT-ERROR--CAPS" href="UPower/UPower-up-client.html#UP-CLIENT-ERROR--CAPS">
-<ANCHOR id="UP-CLIENT-TYPE-ERROR--CAPS" href="UPower/UPower-up-client.html#UP-CLIENT-TYPE-ERROR--CAPS">
+<ANCHOR id="UP-CLIENT-ERROR:CAPS" href="UPower/UPower-up-client.html#UP-CLIENT-ERROR:CAPS">
+<ANCHOR id="UP-CLIENT-TYPE-ERROR:CAPS" href="UPower/UPower-up-client.html#UP-CLIENT-TYPE-ERROR:CAPS">
 <ANCHOR id="UpClientPrivate" href="UPower/UPower-up-client.html#UpClientPrivate">
 <ANCHOR id="device-added" href="UPower/UPower-up-client.html#device-added">
 <ANCHOR id="device-changed" href="UPower/UPower-up-client.html#device-changed">
@@ -86,8 +86,8 @@
 <ANCHOR id="UPower-up-device.synopsis" href="UPower/UPower-up-device.html#UPower-up-device.synopsis">
 <ANCHOR id="UPower-up-device.description" href="UPower/UPower-up-device.html#UPower-up-device.description">
 <ANCHOR id="UPower-up-device.details" href="UPower/UPower-up-device.html#UPower-up-device.details">
-<ANCHOR id="UP-DEVICE-ERROR--CAPS" href="UPower/UPower-up-device.html#UP-DEVICE-ERROR--CAPS">
-<ANCHOR id="UP-DEVICE-TYPE-ERROR--CAPS" href="UPower/UPower-up-device.html#UP-DEVICE-TYPE-ERROR--CAPS">
+<ANCHOR id="UP-DEVICE-ERROR:CAPS" href="UPower/UPower-up-device.html#UP-DEVICE-ERROR:CAPS">
+<ANCHOR id="UP-DEVICE-TYPE-ERROR:CAPS" href="UPower/UPower-up-device.html#UP-DEVICE-TYPE-ERROR:CAPS">
 <ANCHOR id="UpDevicePrivate" href="UPower/UPower-up-device.html#UpDevicePrivate">
 <ANCHOR id="changed" href="UPower/UPower-up-device.html#changed">
 <ANCHOR id="up-device-new" href="UPower/UPower-up-device.html#up-device-new">
