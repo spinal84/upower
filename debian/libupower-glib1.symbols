@@ -1,5 +1,5 @@
 libupower-glib.so.1 libupower-glib1 #MINVER#
- up_client_about_to_sleep_sync@Base 0.9.0+git20100216.72bb2
+ up_client_about_to_sleep_sync@Base 0.9.1
  up_client_enumerate_devices_sync@Base 0.9.0
  up_client_get_can_hibernate@Base 0.9.0
  up_client_get_can_suspend@Base 0.9.0
@@ -77,9 +77,9 @@ libupower-glib.so.1 libupower-glib1 #MINVER#
  up_wakeup_item_set_is_userspace@Base 0.9.0
  up_wakeup_item_set_old@Base 0.9.0
  up_wakeup_item_set_value@Base 0.9.0
- up_wakeups_get_data_sync@Base 0.9.0+git20100216.72bb2
- up_wakeups_get_has_capability@Base 0.9.0+git20100216.72bb2
- up_wakeups_get_properties_sync@Base 0.9.0+git20100216.72bb2
- up_wakeups_get_total_sync@Base 0.9.0+git20100216.72bb2
- up_wakeups_get_type@Base 0.9.0+git20100216.72bb2
- up_wakeups_new@Base 0.9.0+git20100216.72bb2
+ up_wakeups_get_data_sync@Base 0.9.1
+ up_wakeups_get_has_capability@Base 0.9.1
+ up_wakeups_get_properties_sync@Base 0.9.1
+ up_wakeups_get_total_sync@Base 0.9.1
+ up_wakeups_get_type@Base 0.9.1
+ up_wakeups_new@Base 0.9.1

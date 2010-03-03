@@ -13,6 +13,8 @@ upower (0.9.1-1) UNRELEASED; urgency=low
     - Add build dependency on libkvm-dev for kfreebsd-*.
     - Don't build depend on libgudev-1.0-dev for kfreebsd-*.
   * Install udev rules files conditionally on linux only.
+  * debian/*.symbols
+    - Bump symbol versions from previous git snapshot versions to 0.9.1.
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 03 Mar 2010 16:57:26 +0100
 
