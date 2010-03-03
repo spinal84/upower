@@ -9,6 +9,8 @@ upower (0.9.1-1) UNRELEASED; urgency=low
     an additional Conflicts: to libdevkit-gobject, so that devicekit-power
     gets properly cleaned up on upgrade.
   * debian/upower.postinst: Migrate DeviceKit-power history on upgrade.
+  * Add debian/upower.postrm: Clean up /var/lib/upower on purge.
+    (Closes: #571156)
 
   [ Michael Biebl ]
   * debian/control
