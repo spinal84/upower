@@ -2,6 +2,14 @@
 set -e
 
 if [ "$1" = "configure" ]; then
+    # migrate power history from DeviceKit-power
+    if dpkg --compare-versions "$2" lt-nl "0.9.1-1" && [ -d /var/lib/DeviceKit-power/ ]; then
+	if [ ! -d /var/lib/upower ] || rmdir /var/lib/upower 2>/dev/null; then
+	    echo "Migrating old DeviceKit-power history.."
+	    mv /var/lib/DeviceKit-power/ /var/lib/upower
+	fi
+    fi
+
     # restart upowerd
     if start-stop-daemon --stop --quiet --exec /usr/lib/upower/upowerd; then
 	upower --version >/dev/null # will trigger through D-Bus activation

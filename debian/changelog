@@ -8,6 +8,7 @@ upower (0.9.1-1) UNRELEASED; urgency=low
   * debian/control: Add udisks Conflicts/Replaces to devicekit-power, and
     an additional Conflicts: to libdevkit-gobject, so that devicekit-power
     gets properly cleaned up on upgrade.
+  * debian/upower.postinst: Migrate DeviceKit-power history on upgrade.
 
   [ Michael Biebl ]
   * debian/control
