@@ -2,6 +2,8 @@ upower (0.9.1-1) UNRELEASED; urgency=low
 
   * New upstream release. Compared to our git snapshot, this just fixes the
     BSD backend to compile.
+  * debian/upower.postinst: Restart the daemon if we stopped it, so that
+    clients don't suddenly stop getting signals.
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 03 Mar 2010 16:57:26 +0100
 

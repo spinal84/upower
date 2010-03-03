@@ -2,7 +2,10 @@
 set -e
 
 if [ "$1" = "configure" ]; then
-    start-stop-daemon --stop --quiet --oknodo --exec /usr/lib/upower/upowerd
+    # restart upowerd
+    if start-stop-daemon --stop --quiet --exec /usr/lib/upower/upowerd; then
+	upower --version >/dev/null # will trigger through D-Bus activation
+    fi
 fi
 
 #DEBHELPER#
