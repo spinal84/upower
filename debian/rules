@@ -14,3 +14,9 @@ DEB_DH_GENCONTROL_ARGS_libdevkit-power-gobject1 = -- -v1:$(DEB_VERSION)
 DEB_DH_MAKESHLIBS_ARGS_libdevkit-power-gobject1 = -- -v1:$(DEB_VERSION)
 DEB_DH_GENCONTROL_ARGS_libdevkit-power-gobject-dev = -- -v1:$(DEB_VERSION)
 
+binary-install/upower::
+	# Only install udev rules on Linux architectures. The
+	# directory doesn't even exist on e.g. GNU/kFreeBSD
+ifeq ($(DEB_HOST_ARCH_OS),linux)
+	dh_install -pupower debian/tmp/lib/udev/rules.d/
+endif
