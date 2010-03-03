@@ -14,7 +14,8 @@ Build-Depends: debhelper (>= 7),
  libdbus-glib-1-dev (>= 0.76),
  libdbus-1-dev (>= 1.0),
  libglib2.0-dev (>= 2.16.1),
- libgudev-1.0-dev,
+ libgudev-1.0-dev [!kfreebsd-amd64 !kfreebsd-i386],
+ libkvm-dev [kfreebsd-amd64 kfreebsd-i386],
  libpolkit-gobject-1-dev (>= 0.91),
  libusb-dev
 Standards-Version: 3.8.4
@@ -24,7 +25,7 @@ Homepage: http://hal.freedesktop.org/docs/DeviceKit-power
 
 Package: upower
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, udev, dbus
+Depends: ${shlibs:Depends}, ${misc:Depends}, udev [linux-any], dbus
 Recommends: pm-utils, policykit-1
 Description: abstraction for power management
  upower provides an interface to enumerate power sources on the system
