@@ -84,8 +84,8 @@
     <keyword type="" name="GetLatencyRequests ()" link="QoS.html#QoS.GetLatencyRequests"/>
     <keyword type="" name="The LatencyChanged signal" link="QoS.html#QoS::LatencyChanged"/>
     <keyword type="" name="The RequestsChanged signal" link="QoS.html#QoS::RequestsChanged"/>
-    <keyword type="macro" name="UP_CLIENT_ERROR" link="UPower-up-client.html#UP-CLIENT-ERROR--CAPS"/>
-    <keyword type="macro" name="UP_CLIENT_TYPE_ERROR" link="UPower-up-client.html#UP-CLIENT-TYPE-ERROR--CAPS"/>
+    <keyword type="macro" name="UP_CLIENT_ERROR" link="UPower-up-client.html#UP-CLIENT-ERROR:CAPS"/>
+    <keyword type="macro" name="UP_CLIENT_TYPE_ERROR" link="UPower-up-client.html#UP-CLIENT-TYPE-ERROR:CAPS"/>
     <keyword type="struct" name="UpClientPrivate" link="UPower-up-client.html#UpClientPrivate"/>
     <keyword type="function" name="device_added ()" link="UPower-up-client.html#device-added"/>
     <keyword type="function" name="device_changed ()" link="UPower-up-client.html#device-changed"/>
@@ -104,8 +104,8 @@
     <keyword type="function" name="up_client_get_can_suspend ()" link="UPower-up-client.html#up-client-get-can-suspend" since="0.9.0"/>
     <keyword type="function" name="up_client_get_on_battery ()" link="UPower-up-client.html#up-client-get-on-battery" since="0.9.0"/>
     <keyword type="function" name="up_client_get_on_low_battery ()" link="UPower-up-client.html#up-client-get-on-low-battery" since="0.9.0"/>
-    <keyword type="macro" name="UP_DEVICE_ERROR" link="UPower-up-device.html#UP-DEVICE-ERROR--CAPS"/>
-    <keyword type="macro" name="UP_DEVICE_TYPE_ERROR" link="UPower-up-device.html#UP-DEVICE-TYPE-ERROR--CAPS"/>
+    <keyword type="macro" name="UP_DEVICE_ERROR" link="UPower-up-device.html#UP-DEVICE-ERROR:CAPS"/>
+    <keyword type="macro" name="UP_DEVICE_TYPE_ERROR" link="UPower-up-device.html#UP-DEVICE-TYPE-ERROR:CAPS"/>
     <keyword type="struct" name="UpDevicePrivate" link="UPower-up-device.html#UpDevicePrivate"/>
     <keyword type="function" name="changed ()" link="UPower-up-device.html#changed"/>
     <keyword type="function" name="up_device_new ()" link="UPower-up-device.html#up-device-new" since="0.9.0"/>

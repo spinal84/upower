@@ -8,7 +8,7 @@
 <link rel="up" href="libupower-glib.html" title="libpackagekit GObjects">
 <link rel="prev" href="UPower-up-stats-item.html" title="up-stats-item">
 <link rel="next" href="libupower-glib-helpers.html" title="libupower-glib helpers">
-<meta name="generator" content="GTK-Doc V1.11 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.13 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 <link rel="reference" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="reference" href="libupower-glib.html" title="libpackagekit GObjects">
@@ -28,8 +28,8 @@
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#UPower-up-wakeup-item.synopsis" class="shortcut">Top</a>
-                 | 
-                <a href="#UPower-up-wakeup-item.description" class="shortcut">Description</a>
+                   | 
+                  <a href="#UPower-up-wakeup-item.description" class="shortcut">Description</a>
 </td></tr>
 </table>
 <div class="refentry" title="up-wakeup-item">
@@ -43,51 +43,26 @@
 </tr></table></div>
 <div class="refsynopsisdiv" title="Synopsis">
 <a name="UPower-up-wakeup-item.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">
-typedef             <a class="link" href="UPower-up-wakeup-item.html#UpWakeupItemPrivate" title="UpWakeupItemPrivate">UpWakeupItemPrivate</a>;
-UpWakeupItem *      <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-new" title="up_wakeup_item_new ()">up_wakeup_item_new</a>                  (void);
-<a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
->gboolean</a>            <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-get-is-userspace" title="up_wakeup_item_get_is_userspace ()">up_wakeup_item_get_is_userspace</a>     (UpWakeupItem *wakeup_item);
-void                <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-set-is-userspace" title="up_wakeup_item_set_is_userspace ()">up_wakeup_item_set_is_userspace</a>     (UpWakeupItem *wakeup_item,
-                                                         <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
->gboolean</a> is_userspace);
-<a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
->guint</a>               <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-get-id" title="up_wakeup_item_get_id ()">up_wakeup_item_get_id</a>               (UpWakeupItem *wakeup_item);
-void                <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-set-id" title="up_wakeup_item_set_id ()">up_wakeup_item_set_id</a>               (UpWakeupItem *wakeup_item,
-                                                         <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
->guint</a> id);
-<a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
->guint</a>               <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-get-old" title="up_wakeup_item_get_old ()">up_wakeup_item_get_old</a>              (UpWakeupItem *wakeup_item);
-void                <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-set-old" title="up_wakeup_item_set_old ()">up_wakeup_item_set_old</a>              (UpWakeupItem *wakeup_item,
-                                                         <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
->guint</a> old);
-<a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"
->gdouble</a>             <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-get-value" title="up_wakeup_item_get_value ()">up_wakeup_item_get_value</a>            (UpWakeupItem *wakeup_item);
-void                <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-set-value" title="up_wakeup_item_set_value ()">up_wakeup_item_set_value</a>            (UpWakeupItem *wakeup_item,
-                                                         <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"
->gdouble</a> value);
-const <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
->gchar</a> *       <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-get-cmdline" title="up_wakeup_item_get_cmdline ()">up_wakeup_item_get_cmdline</a>          (UpWakeupItem *wakeup_item);
-void                <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-set-cmdline" title="up_wakeup_item_set_cmdline ()">up_wakeup_item_set_cmdline</a>          (UpWakeupItem *wakeup_item,
-                                                         const <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
->gchar</a> *cmdline);
-const <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
->gchar</a> *       <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-get-details" title="up_wakeup_item_get_details ()">up_wakeup_item_get_details</a>          (UpWakeupItem *wakeup_item);
-void                <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-set-details" title="up_wakeup_item_set_details ()">up_wakeup_item_set_details</a>          (UpWakeupItem *wakeup_item,
-                                                         const <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
->gchar</a> *details);
+<pre class="synopsis">typedef             <a class="link" href="UPower-up-wakeup-item.html#UpWakeupItemPrivate" title="UpWakeupItemPrivate">UpWakeupItemPrivate</a>;
+<span class="returnvalue">UpWakeupItem</span> *      <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-new" title="up_wakeup_item_new ()">up_wakeup_item_new</a>                  (void);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-get-is-userspace" title="up_wakeup_item_get_is_userspace ()">up_wakeup_item_get_is_userspace</a>     (<span class="returnvalue">UpWakeupItem</span> *wakeup_item);
+<span class="returnvalue">void</span>                <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-set-is-userspace" title="up_wakeup_item_set_is_userspace ()">up_wakeup_item_set_is_userspace</a>     (<span class="returnvalue">UpWakeupItem</span> *wakeup_item,
+                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a> is_userspace);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-get-id" title="up_wakeup_item_get_id ()">up_wakeup_item_get_id</a>               (<span class="returnvalue">UpWakeupItem</span> *wakeup_item);
+<span class="returnvalue">void</span>                <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-set-id" title="up_wakeup_item_set_id ()">up_wakeup_item_set_id</a>               (<span class="returnvalue">UpWakeupItem</span> *wakeup_item,
+                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a> id);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-get-old" title="up_wakeup_item_get_old ()">up_wakeup_item_get_old</a>              (<span class="returnvalue">UpWakeupItem</span> *wakeup_item);
+<span class="returnvalue">void</span>                <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-set-old" title="up_wakeup_item_set_old ()">up_wakeup_item_set_old</a>              (<span class="returnvalue">UpWakeupItem</span> *wakeup_item,
+                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a> old);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="returnvalue">gdouble</span></a>             <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-get-value" title="up_wakeup_item_get_value ()">up_wakeup_item_get_value</a>            (<span class="returnvalue">UpWakeupItem</span> *wakeup_item);
+<span class="returnvalue">void</span>                <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-set-value" title="up_wakeup_item_set_value ()">up_wakeup_item_set_value</a>            (<span class="returnvalue">UpWakeupItem</span> *wakeup_item,
+                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="returnvalue">gdouble</span></a> value);
+const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-get-cmdline" title="up_wakeup_item_get_cmdline ()">up_wakeup_item_get_cmdline</a>          (<span class="returnvalue">UpWakeupItem</span> *wakeup_item);
+<span class="returnvalue">void</span>                <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-set-cmdline" title="up_wakeup_item_set_cmdline ()">up_wakeup_item_set_cmdline</a>          (<span class="returnvalue">UpWakeupItem</span> *wakeup_item,
+                                                         const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *cmdline);
+const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-get-details" title="up_wakeup_item_get_details ()">up_wakeup_item_get_details</a>          (<span class="returnvalue">UpWakeupItem</span> *wakeup_item);
+<span class="returnvalue">void</span>                <a class="link" href="UPower-up-wakeup-item.html#up-wakeup-item-set-details" title="up_wakeup_item_set_details ()">up_wakeup_item_set_details</a>          (<span class="returnvalue">UpWakeupItem</span> *wakeup_item,
+                                                         const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *details);
 </pre>
 </div>
 <div class="refsect1" title="Description">
@@ -109,9 +84,7 @@ See also: <span class="type">UpDevice</span>, <span class="type">UpClient</span>
 <hr>
 <div class="refsect2" title="up_wakeup_item_new ()">
 <a name="up-wakeup-item-new"></a><h3>up_wakeup_item_new ()</h3>
-<pre class="programlisting">UpWakeupItem *      up_wakeup_item_new                  (void);</pre>
-<p>
-</p>
+<pre class="programlisting"><span class="returnvalue">UpWakeupItem</span> *      up_wakeup_item_new                  (void);</pre>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
@@ -126,9 +99,7 @@ See also: <span class="type">UpDevice</span>, <span class="type">UpClient</span>
 <hr>
 <div class="refsect2" title="up_wakeup_item_get_is_userspace ()">
 <a name="up-wakeup-item-get-is-userspace"></a><h3>up_wakeup_item_get_is_userspace ()</h3>
-<pre class="programlisting"><a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
->gboolean</a>            up_wakeup_item_get_is_userspace     (UpWakeupItem *wakeup_item);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_wakeup_item_get_is_userspace     (<span class="returnvalue">UpWakeupItem</span> *wakeup_item);</pre>
 <p>
 Gets if the item is userspace.</p>
 <div class="variablelist"><table border="0">
@@ -152,10 +123,8 @@ Gets if the item is userspace.</p>
 <hr>
 <div class="refsect2" title="up_wakeup_item_set_is_userspace ()">
 <a name="up-wakeup-item-set-is-userspace"></a><h3>up_wakeup_item_set_is_userspace ()</h3>
-<pre class="programlisting">void                up_wakeup_item_set_is_userspace     (UpWakeupItem *wakeup_item,
-                                                         <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
->gboolean</a> is_userspace);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span>                up_wakeup_item_set_is_userspace     (<span class="returnvalue">UpWakeupItem</span> *wakeup_item,
+                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a> is_userspace);</pre>
 <p>
 Sets if the item is userspace.</p>
 <div class="variablelist"><table border="0">
@@ -178,9 +147,7 @@ Sets if the item is userspace.</p>
 <hr>
 <div class="refsect2" title="up_wakeup_item_get_id ()">
 <a name="up-wakeup-item-get-id"></a><h3>up_wakeup_item_get_id ()</h3>
-<pre class="programlisting"><a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
->guint</a>               up_wakeup_item_get_id               (UpWakeupItem *wakeup_item);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               up_wakeup_item_get_id               (<span class="returnvalue">UpWakeupItem</span> *wakeup_item);</pre>
 <p>
 Gets the item id.</p>
 <div class="variablelist"><table border="0">
@@ -204,10 +171,8 @@ Gets the item id.</p>
 <hr>
 <div class="refsect2" title="up_wakeup_item_set_id ()">
 <a name="up-wakeup-item-set-id"></a><h3>up_wakeup_item_set_id ()</h3>
-<pre class="programlisting">void                up_wakeup_item_set_id               (UpWakeupItem *wakeup_item,
-                                                         <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
->guint</a> id);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span>                up_wakeup_item_set_id               (<span class="returnvalue">UpWakeupItem</span> *wakeup_item,
+                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a> id);</pre>
 <p>
 Sets the item id.</p>
 <div class="variablelist"><table border="0">
@@ -230,9 +195,7 @@ Sets the item id.</p>
 <hr>
 <div class="refsect2" title="up_wakeup_item_get_old ()">
 <a name="up-wakeup-item-get-old"></a><h3>up_wakeup_item_get_old ()</h3>
-<pre class="programlisting"><a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
->guint</a>               up_wakeup_item_get_old              (UpWakeupItem *wakeup_item);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               up_wakeup_item_get_old              (<span class="returnvalue">UpWakeupItem</span> *wakeup_item);</pre>
 <p>
 Gets the item old.</p>
 <div class="variablelist"><table border="0">
@@ -256,10 +219,8 @@ Gets the item old.</p>
 <hr>
 <div class="refsect2" title="up_wakeup_item_set_old ()">
 <a name="up-wakeup-item-set-old"></a><h3>up_wakeup_item_set_old ()</h3>
-<pre class="programlisting">void                up_wakeup_item_set_old              (UpWakeupItem *wakeup_item,
-                                                         <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
->guint</a> old);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span>                up_wakeup_item_set_old              (<span class="returnvalue">UpWakeupItem</span> *wakeup_item,
+                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a> old);</pre>
 <p>
 Sets the item old.</p>
 <div class="variablelist"><table border="0">
@@ -282,9 +243,7 @@ Sets the item old.</p>
 <hr>
 <div class="refsect2" title="up_wakeup_item_get_value ()">
 <a name="up-wakeup-item-get-value"></a><h3>up_wakeup_item_get_value ()</h3>
-<pre class="programlisting"><a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"
->gdouble</a>             up_wakeup_item_get_value            (UpWakeupItem *wakeup_item);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="returnvalue">gdouble</span></a>             up_wakeup_item_get_value            (<span class="returnvalue">UpWakeupItem</span> *wakeup_item);</pre>
 <p>
 Gets the item value.</p>
 <div class="variablelist"><table border="0">
@@ -308,10 +267,8 @@ Gets the item value.</p>
 <hr>
 <div class="refsect2" title="up_wakeup_item_set_value ()">
 <a name="up-wakeup-item-set-value"></a><h3>up_wakeup_item_set_value ()</h3>
-<pre class="programlisting">void                up_wakeup_item_set_value            (UpWakeupItem *wakeup_item,
-                                                         <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"
->gdouble</a> value);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span>                up_wakeup_item_set_value            (<span class="returnvalue">UpWakeupItem</span> *wakeup_item,
+                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="returnvalue">gdouble</span></a> value);</pre>
 <p>
 Sets the item value.</p>
 <div class="variablelist"><table border="0">
@@ -334,9 +291,7 @@ Sets the item value.</p>
 <hr>
 <div class="refsect2" title="up_wakeup_item_get_cmdline ()">
 <a name="up-wakeup-item-get-cmdline"></a><h3>up_wakeup_item_get_cmdline ()</h3>
-<pre class="programlisting">const <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
->gchar</a> *       up_wakeup_item_get_cmdline          (UpWakeupItem *wakeup_item);</pre>
+<pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       up_wakeup_item_get_cmdline          (<span class="returnvalue">UpWakeupItem</span> *wakeup_item);</pre>
 <p>
 Gets the item cmdline.</p>
 <div class="variablelist"><table border="0">
@@ -360,10 +315,8 @@ Gets the item cmdline.</p>
 <hr>
 <div class="refsect2" title="up_wakeup_item_set_cmdline ()">
 <a name="up-wakeup-item-set-cmdline"></a><h3>up_wakeup_item_set_cmdline ()</h3>
-<pre class="programlisting">void                up_wakeup_item_set_cmdline          (UpWakeupItem *wakeup_item,
-                                                         const <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
->gchar</a> *cmdline);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span>                up_wakeup_item_set_cmdline          (<span class="returnvalue">UpWakeupItem</span> *wakeup_item,
+                                                         const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *cmdline);</pre>
 <p>
 Sets the item cmdline.</p>
 <div class="variablelist"><table border="0">
@@ -386,9 +339,7 @@ Sets the item cmdline.</p>
 <hr>
 <div class="refsect2" title="up_wakeup_item_get_details ()">
 <a name="up-wakeup-item-get-details"></a><h3>up_wakeup_item_get_details ()</h3>
-<pre class="programlisting">const <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
->gchar</a> *       up_wakeup_item_get_details          (UpWakeupItem *wakeup_item);</pre>
+<pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       up_wakeup_item_get_details          (<span class="returnvalue">UpWakeupItem</span> *wakeup_item);</pre>
 <p>
 Gets the item details.</p>
 <div class="variablelist"><table border="0">
@@ -412,10 +363,8 @@ Gets the item details.</p>
 <hr>
 <div class="refsect2" title="up_wakeup_item_set_details ()">
 <a name="up-wakeup-item-set-details"></a><h3>up_wakeup_item_set_details ()</h3>
-<pre class="programlisting">void                up_wakeup_item_set_details          (UpWakeupItem *wakeup_item,
-                                                         const <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
->gchar</a> *details);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span>                up_wakeup_item_set_details          (<span class="returnvalue">UpWakeupItem</span> *wakeup_item,
+                                                         const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *details);</pre>
 <p>
 Sets the item details.</p>
 <div class="variablelist"><table border="0">
@@ -439,6 +388,6 @@ Sets the item details.</p>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.11</div>
+          Generated by GTK-Doc V1.13</div>
 </body>
 </html>

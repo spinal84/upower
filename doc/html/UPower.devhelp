@@ -84,8 +84,8 @@
     <function name="GetLatencyRequests ()" link="QoS.html#QoS.GetLatencyRequests"/>
     <function name="The LatencyChanged signal" link="QoS.html#QoS::LatencyChanged"/>
     <function name="The RequestsChanged signal" link="QoS.html#QoS::RequestsChanged"/>
-    <function name="UP_CLIENT_ERROR" link="UPower-up-client.html#UP-CLIENT-ERROR--CAPS"/>
-    <function name="UP_CLIENT_TYPE_ERROR" link="UPower-up-client.html#UP-CLIENT-TYPE-ERROR--CAPS"/>
+    <function name="UP_CLIENT_ERROR" link="UPower-up-client.html#UP-CLIENT-ERROR:CAPS"/>
+    <function name="UP_CLIENT_TYPE_ERROR" link="UPower-up-client.html#UP-CLIENT-TYPE-ERROR:CAPS"/>
     <function name="UpClientPrivate" link="UPower-up-client.html#UpClientPrivate"/>
     <function name="device_added ()" link="UPower-up-client.html#device-added"/>
     <function name="device_changed ()" link="UPower-up-client.html#device-changed"/>
@@ -104,8 +104,8 @@
     <function name="up_client_get_can_suspend ()" link="UPower-up-client.html#up-client-get-can-suspend"/>
     <function name="up_client_get_on_battery ()" link="UPower-up-client.html#up-client-get-on-battery"/>
     <function name="up_client_get_on_low_battery ()" link="UPower-up-client.html#up-client-get-on-low-battery"/>
-    <function name="UP_DEVICE_ERROR" link="UPower-up-device.html#UP-DEVICE-ERROR--CAPS"/>
-    <function name="UP_DEVICE_TYPE_ERROR" link="UPower-up-device.html#UP-DEVICE-TYPE-ERROR--CAPS"/>
+    <function name="UP_DEVICE_ERROR" link="UPower-up-device.html#UP-DEVICE-ERROR:CAPS"/>
+    <function name="UP_DEVICE_TYPE_ERROR" link="UPower-up-device.html#UP-DEVICE-TYPE-ERROR:CAPS"/>
     <function name="UpDevicePrivate" link="UPower-up-device.html#UpDevicePrivate"/>
     <function name="changed ()" link="UPower-up-device.html#changed"/>
     <function name="up_device_new ()" link="UPower-up-device.html#up-device-new"/>
