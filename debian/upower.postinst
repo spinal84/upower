@@ -12,7 +12,7 @@ if [ "$1" = "configure" ]; then
 
     # restart upowerd
     if start-stop-daemon --stop --quiet --exec /usr/lib/upower/upowerd; then
-	upower --version >/dev/null # will trigger through D-Bus activation
+	upower --version >/dev/null || true # will trigger through D-Bus activation
     fi
 fi
 
