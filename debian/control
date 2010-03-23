@@ -21,7 +21,7 @@ Build-Depends: debhelper (>= 7),
 Standards-Version: 3.8.4
 Vcs-Git: git://git.debian.org/git/pkg-utopia/upower.git
 Vcs-Browser: http://git.debian.org/?p=pkg-utopia/upower.git;a=summary
-Homepage: http://hal.freedesktop.org/docs/DeviceKit-power
+Homepage: http://upower.freedesktop.org/
 
 Package: upower
 Architecture: any
