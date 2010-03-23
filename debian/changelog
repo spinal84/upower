@@ -1,7 +1,11 @@
 upower (0.9.1-2) UNRELEASED; urgency=low
 
+  [ Michael Biebl ]
   * debian/control
     - Update Homepage field.
+
+  [ Martin Pitt ]
+  * debian/watch: Update for new upstream location.
 
  -- Michael Biebl <biebl@debian.org>  Tue, 23 Mar 2010 19:24:21 +0100
 
