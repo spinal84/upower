@@ -1,0 +1,173 @@
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 9a04709..74fa3b7 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -95,7 +95,8 @@ upowerd_LDADD =							\
+ 	$(GIO_LIBS)						\
+ 	$(DBUS_GLIB_LIBS)					\
+ 	$(POLKIT_LIBS)						\
+-	$(UPOWER_LIBS)
++	$(UPOWER_LIBS)						\
++	$(DEVKIT_POWER_LIBS)
+ 
+ if BACKEND_TYPE_DUMMY
+ upowerd_LDADD += 						\
+@@ -104,15 +105,13 @@ endif
+ 
+ if BACKEND_TYPE_FREEBSD
+ upowerd_LDADD +=						\
+-	freebsd/libupshared.la					\
+-	$(DEVKIT_POWER_LIBS)
++	freebsd/libupshared.la
+ endif
+ 
+ if BACKEND_TYPE_LINUX
+ upowerd_LDADD += 						\
+ 	linux/libupshared.la					\
+-	$(GUDEV_LIBS)						\
+-	$(DEVKIT_POWER_LIBS)
++	$(GUDEV_LIBS)
+ endif
+ 
+ upowerd_CFLAGS =						\
+@@ -149,7 +148,7 @@ up_self_test_SOURCES =						\
+ 
+ up_self_test_LDADD =						\
+ 	-lm							\
+-	dummy/libupshared.la					\
++	dummy/libuptest.la					\
+ 	$(GLIB_LIBS)						\
+ 	$(GIO_CFLAGS)						\
+ 	$(DBUS_GLIB_LIBS)					\
+diff --git a/src/dummy/Makefile.am b/src/dummy/Makefile.am
+index bcfe937..71c094a 100644
+--- a/src/dummy/Makefile.am
++++ b/src/dummy/Makefile.am
+@@ -3,20 +3,28 @@
+ INCLUDES = \
+ 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
+ 	-DUP_COMPILATION					\
+-	-DEGG_TEST						\
+-	-I$(top_srcdir)/devkit-power-gobject			\
+ 	-I$(top_srcdir)/libupower-glib				\
+ 	$(DBUS_GLIB_CFLAGS)					\
+ 	$(POLKIT_CFLAGS)					\
+ 	$(GLIB_CFLAGS)
+ 
+-noinst_LTLIBRARIES = libupshared.la
++noinst_LTLIBRARIES =
++
++if BACKEND_TYPE_DUMMY
++noinst_LTLIBRARIES += libupshared.la
++endif
+ 
+ libupshared_la_SOURCES =					\
+ 	up-backend.c						\
+ 	up-native.c						\
+ 	$(BUILT_SOURCES)
+ 
++if EGG_BUILD_TESTS
++noinst_LTLIBRARIES += libuptest.la
++libuptest_la_CFLAGS = -DEGG_TEST
++libuptest_la_SOURCES = $(libupshared_la_SOURCES)
++endif
++
+ clean-local :
+ 	rm -f *~
+ 
+diff --git a/src/dummy/up-backend.c b/src/dummy/up-backend.c
+index 02909e9..8c99359 100644
+--- a/src/dummy/up-backend.c
++++ b/src/dummy/up-backend.c
+@@ -43,9 +43,13 @@ static void	up_backend_finalize	(GObject		*object);
+ struct UpBackendPrivate
+ {
+ 	UpDaemon		*daemon;
++#ifdef EGG_TEST
+ 	UpDevice		*device;
++#endif
+ 	UpDeviceList		*device_list; /* unused */
++#ifdef EGG_TEST
+ 	GObject			*native;
++#endif
+ };
+ 
+ enum {
+@@ -58,6 +62,7 @@ static guint signals [SIGNAL_LAST] = { 0 };
+ 
+ G_DEFINE_TYPE (UpBackend, up_backend, G_TYPE_OBJECT)
+ 
++#ifdef EGG_TEST
+ /**
+  * up_backend_changed_time_cb:
+  **/
+@@ -99,6 +104,7 @@ up_backend_add_cb (UpBackend *backend)
+ out:
+ 	return FALSE;
+ }
++#endif
+ 
+ /**
+  * up_backend_coldplug:
+@@ -116,8 +122,10 @@ up_backend_coldplug (UpBackend *backend, UpDaemon *daemon)
+ 	backend->priv->daemon = g_object_ref (daemon);
+ 	backend->priv->device_list = up_daemon_get_device_list (daemon);
+ 
++#ifdef EGG_TEST
+ 	/* small delay until first device is added */
+ 	g_timeout_add_seconds (1, (GSourceFunc) up_backend_add_cb, backend);
++#endif
+ 
+ 	return TRUE;
+ }
+@@ -157,6 +165,7 @@ up_backend_init (UpBackend *backend)
+ 	backend->priv = UP_BACKEND_GET_PRIVATE (backend);
+ 	backend->priv->daemon = NULL;
+ 	backend->priv->device_list = NULL;
++#ifdef EGG_TEST
+ 	backend->priv->native = g_object_new (UP_TYPE_DEVICE, NULL);
+ 	backend->priv->device = up_device_new ();
+ 
+@@ -181,6 +190,7 @@ up_backend_init (UpBackend *backend)
+ 		      "energy-rate", 5.0f,
+ 		      "percentage", 50.0f,
+ 		      NULL);
++#endif
+ }
+ 
+ /**
+@@ -200,8 +210,10 @@ up_backend_finalize (GObject *object)
+ 	if (backend->priv->device_list != NULL)
+ 		g_object_unref (backend->priv->device_list);
+ 
++#ifdef EGG_TEST
+ 	g_object_unref (backend->priv->native);
+ 	g_object_unref (backend->priv->device);
++#endif
+ 
+ 	G_OBJECT_CLASS (up_backend_parent_class)->finalize (object);
+ }
+diff --git a/src/freebsd/Makefile.am b/src/freebsd/Makefile.am
+index c524522..2bf50f5 100644
+--- a/src/freebsd/Makefile.am
++++ b/src/freebsd/Makefile.am
+@@ -3,7 +3,6 @@
+ INCLUDES = \
+ 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
+ 	-DUP_COMPILATION					\
+-	-I$(top_srcdir)/devkit-power-gobject			\
+ 	-I$(top_srcdir)/libupower-glib				\
+ 	$(DBUS_GLIB_CFLAGS)					\
+ 	$(POLKIT_CFLAGS)					\
+diff --git a/src/linux/Makefile.am b/src/linux/Makefile.am
+index e6d9630..3e715a3 100644
+--- a/src/linux/Makefile.am
++++ b/src/linux/Makefile.am
+@@ -4,7 +4,6 @@ INCLUDES = \
+ 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
+ 	-DUP_COMPILATION					\
+ 	-DG_UDEV_API_IS_SUBJECT_TO_CHANGE			\
+-	-I$(top_srcdir)/devkit-power-gobject			\
+ 	-I$(top_srcdir)/libupower-glib				\
+ 	$(GIO_CFLAGS)						\
+ 	$(DBUS_GLIB_CFLAGS)					\
