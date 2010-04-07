@@ -8,14 +8,8 @@
 <link rel="up" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="prev" href="Device.html" title="org.freedesktop.UPower.Device">
 <link rel="next" href="libupower-glib.html" title="libpackagekit GObjects">
-<meta name="generator" content="GTK-Doc V1.13 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.14 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
-<link rel="reference" href="ref-dbus.html" title="D-Bus API Reference">
-<link rel="reference" href="libupower-glib.html" title="libpackagekit GObjects">
-<link rel="reference" href="libupower-glib-helpers.html" title="libupower-glib helpers">
-<link rel="reference" href="tools-fileformats.html" title="Manual Pages">
-<link rel="index" href="ix01.html" title="Index">
-<link rel="appendix" href="license.html" title="Appendix A. License">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
@@ -61,14 +55,14 @@
 </pre>
 </div>
 <div class="refsect1" title="Signals">
-<a name="id2571861"></a><h2>Signals</h2>
+<a name="id3111735"></a><h2>Signals</h2>
 <pre class="synopsis"><a class="link" href="QoS.html#QoS::LatencyChanged">LatencyChanged</a>  ('s' type,
                  'i' value)
 <a class="link" href="QoS.html#QoS::RequestsChanged">RequestsChanged</a> ()
 </pre>
 </div>
 <div class="refsect1" title="Implemented Interfaces">
-<a name="id2574068"></a><h2>Implemented Interfaces</h2>
+<a name="id3130246"></a><h2>Implemented Interfaces</h2>
 <p>
     Objects implementing org.freedesktop.UPower.QoS also implements
     org.freedesktop.DBus.Introspectable,
@@ -76,7 +70,7 @@
     </p>
 </div>
 <div class="refsect1" title="Description">
-<a name="id2570068"></a><h2>Description</h2>
+<a name="id3116006"></a><h2>Description</h2>
 <p>
       
         </p>
@@ -163,9 +157,9 @@
     </p>
 </div>
 <div class="refsect1" title="Details">
-<a name="id2539666"></a><h2>Details</h2>
+<a name="id3110030"></a><h2>Details</h2>
 <div class="refsect2" title="SetMinimumLatency ()">
-<a name="id2539674"></a><h3>
+<a name="id3110038"></a><h3>
 <a name="QoS.SetMinimumLatency"></a>SetMinimumLatency ()</h3>
 <pre class="programlisting">SetMinimumLatency (in  's' type,
                    in  'i' value)</pre>
@@ -199,7 +193,7 @@
 </tbody>
 </table></div>
 <div class="refsect3" title="Errors">
-<a name="id2569714"></a><h4>Errors</h4>
+<a name="id3119789"></a><h4>Errors</h4>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
@@ -209,12 +203,12 @@
 </table></div>
 </div>
 <div class="refsect3" title="Permissions">
-<a name="id2569733"></a><h4>Permissions</h4>
+<a name="id3119808"></a><h4>Permissions</h4>
 <p class="permission">Callers need the <code class="literal">org.freedesktop.upower.qos.set-minimum-latency</code> authorization</p>
 </div>
 <hr>
 <div class="refsect2" title="RequestLatency ()">
-<a name="id2569748"></a><h3>
+<a name="id3119823"></a><h3>
 <a name="QoS.RequestLatency"></a>RequestLatency ()</h3>
 <pre class="programlisting">RequestLatency (in  's' type,
                 in  'i' value,
@@ -262,7 +256,7 @@
 </tbody>
 </table></div>
 <div class="refsect3" title="Errors">
-<a name="id2581591"></a><h4>Errors</h4>
+<a name="id3074077"></a><h4>Errors</h4>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
@@ -272,7 +266,7 @@
 </table></div>
 </div>
 <div class="refsect3" title="Permissions">
-<a name="id2581609"></a><h4>Permissions</h4>
+<a name="id3074096"></a><h4>Permissions</h4>
 <p class="permission">
           Callers need the
           <code class="literal">org.freedesktop.upower.qos.request-latency-persistent</code>
@@ -282,7 +276,7 @@
 </div>
 <hr>
 <div class="refsect2" title="CancelRequest ()">
-<a name="id2581636"></a><h3>
+<a name="id3074122"></a><h3>
 <a name="QoS.CancelRequest"></a>CancelRequest ()</h3>
 <pre class="programlisting">CancelRequest (in  's' type,
                in  'u' cookie)</pre>
@@ -310,7 +304,7 @@
 </tbody>
 </table></div>
 <div class="refsect3" title="Errors">
-<a name="id2581708"></a><h4>Errors</h4>
+<a name="id3074194"></a><h4>Errors</h4>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
@@ -320,7 +314,7 @@
 </table></div>
 </div>
 <div class="refsect3" title="Permissions">
-<a name="id2581727"></a><h4>Permissions</h4>
+<a name="id3074214"></a><h4>Permissions</h4>
 <p class="permission">
           Callers need the
           <code class="literal">org.freedesktop.upower.qos.cancel-request</code>
@@ -329,7 +323,7 @@
 </div>
 <hr>
 <div class="refsect2" title="GetLatency ()">
-<a name="id2581742"></a><h3>
+<a name="id3074229"></a><h3>
 <a name="QoS.GetLatency"></a>GetLatency ()</h3>
 <pre class="programlisting">GetLatency (in  's' type,
             out 'i' value)</pre>
@@ -357,7 +351,7 @@
 </tbody>
 </table></div>
 <div class="refsect3" title="Errors">
-<a name="id2581818"></a><h4>Errors</h4>
+<a name="id3074305"></a><h4>Errors</h4>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
@@ -368,7 +362,7 @@
 </div>
 <hr>
 <div class="refsect2" title="GetLatencyRequests ()">
-<a name="id2604761"></a><h3>
+<a name="id3138877"></a><h3>
 <a name="QoS.GetLatencyRequests"></a>GetLatencyRequests ()</h3>
 <pre class="programlisting">GetLatencyRequests (out 'a(uuusxbssi)' requests)</pre>
 </div>
@@ -422,9 +416,9 @@
 </table></div>
 </div>
 <div class="refsect1" title="Signal Details">
-<a name="id2604889"></a><h2>Signal Details</h2>
+<a name="id3139005"></a><h2>Signal Details</h2>
 <div class="refsect2" title="The LatencyChanged signal">
-<a name="id2604897"></a><h3>
+<a name="id3139013"></a><h3>
 <a name="QoS::LatencyChanged"></a>The LatencyChanged signal</h3>
 <pre class="programlisting">LatencyChanged ('s' type,
                 'i' value)</pre>
@@ -453,7 +447,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title="The RequestsChanged signal">
-<a name="id2604956"></a><h3>
+<a name="id3139072"></a><h3>
 <a name="QoS::RequestsChanged"></a>The RequestsChanged signal</h3>
 <pre class="programlisting">RequestsChanged ()</pre>
 </div>
@@ -468,6 +462,6 @@
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.13</div>
+          Generated by GTK-Doc V1.14</div>
 </body>
 </html>
