@@ -5,6 +5,10 @@ upower (0.9.2-1) UNRELEASED; urgency=low
     - Get sleep capabilities, swap information and suspend and hibernate
       commands from the backend, rather than hardcoding Linux specifics.
     - Make dummy backend usable for architectures without a native backend.
+  * debian/patches/01-dummy-backend.patch
+    - Removed, merged upstream.
+  * debian/patches/99-autoreconf.patch
+    - Removed, no longer needed.
 
  -- Michael Biebl <biebl@debian.org>  Wed, 07 Apr 2010 10:48:13 +0200
 
