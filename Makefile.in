@@ -34,6 +34,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@BACKEND_TYPE_LINUX_TRUE@am__append_1 = rules
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
@@ -42,7 +43,11 @@ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	COPYING ChangeLog INSTALL NEWS compile config.guess config.sub \
 	depcomp install-sh ltmain.sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/gtk-doc.m4 \
+	$(top_srcdir)/m4/intltool.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
@@ -96,6 +101,8 @@ AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
 	distdir dist dist-all distcheck
 ETAGS = etags
 CTAGS = ctags
+DIST_SUBDIRS = devkit-power-gobject libupower-glib src doc tools \
+	policy po rules
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -241,7 +248,6 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-UDEV_RULES = @UDEV_RULES@
 UP_MAJOR_VERSION = @UP_MAJOR_VERSION@
 UP_MICRO_VERSION = @UP_MICRO_VERSION@
 UP_MINOR_VERSION = @UP_MINOR_VERSION@
@@ -304,8 +310,8 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = devkit-power-gobject libupower-glib src doc tools policy po $(UDEV_RULES)
-DIST_SUBDIRS = devkit-power-gobject libupower-glib src doc tools policy po rules
+SUBDIRS = devkit-power-gobject libupower-glib src doc tools policy po \
+	$(am__append_1)
 EXTRA_DIST = \
 	HACKING 		\
 	ChangeLog

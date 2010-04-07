@@ -108,200 +108,6 @@ G_DEFINE_TYPE (UpDaemon, up_daemon, G_TYPE_OBJECT)
 #define UP_DAEMON_POLL_BATTERY_NUMBER_TIMES		5
 
 /**
- * up_daemon_check_sleep_states:
- **/
-static gboolean
-up_daemon_check_sleep_states (UpDaemon *daemon)
-{
-	gchar *contents = NULL;
-	GError *error = NULL;
-	gboolean ret;
-	const gchar *filename = "/sys/power/state";
-
-	/* see what kernel can do */
-	ret = g_file_get_contents (filename, &contents, NULL, &error);
-	if (!ret) {
-		egg_warning ("failed to open %s: %s", filename, error->message);
-		g_error_free (error);
-		goto out;
-	}
-
-	/* does the kernel advertise this */
-	daemon->priv->kernel_can_suspend = (g_strstr_len (contents, -1, "mem") != NULL);
-	daemon->priv->kernel_can_hibernate = (g_strstr_len (contents, -1, "disk") != NULL);
-out:
-	g_free (contents);
-	return ret;
-}
-
-/**
- * up_daemon_check_encrypted_swap:
- *
- * user@local:~$ cat /proc/swaps
- * Filename                                Type            Size    Used    Priority
- * /dev/mapper/cryptswap1                  partition       4803392 35872   -1
- *
- * user@local:~$ cat /etc/crypttab
- * # <target name> <source device>         <key file>      <options>
- * cryptswap1 /dev/sda5 /dev/urandom swap,cipher=aes-cbc-essiv:sha256
- *
- * Loop over the swap partitions in /proc/swaps, looking for matches in /etc/crypttab
- **/
-static gboolean
-up_daemon_check_encrypted_swap (UpDaemon *daemon)
-{
-	gchar *contents_swaps = NULL;
-	gchar *contents_crypttab = NULL;
-	gchar **lines_swaps = NULL;
-	gchar **lines_crypttab = NULL;
-	GError *error = NULL;
-	gboolean ret;
-	gboolean encrypted_swap = FALSE;
-	const gchar *filename_swaps = "/proc/swaps";
-	const gchar *filename_crypttab = "/etc/crypttab";
-	GPtrArray *devices = NULL;
-	gchar *device;
-	guint i, j;
-
-	/* get swaps data */
-	ret = g_file_get_contents (filename_swaps, &contents_swaps, NULL, &error);
-	if (!ret) {
-		egg_warning ("failed to open %s: %s", filename_swaps, error->message);
-		g_error_free (error);
-		goto out;
-	}
-
-	/* get crypttab data */
-	ret = g_file_get_contents (filename_crypttab, &contents_crypttab, NULL, &error);
-	if (!ret) {
-		egg_warning ("failed to open %s: %s", filename_crypttab, error->message);
-		g_error_free (error);
-		goto out;
-	}
-
-	/* split both into lines */
-	lines_swaps = g_strsplit (contents_swaps, "\n", -1);
-	lines_crypttab = g_strsplit (contents_crypttab, "\n", -1);
-
-	/* get valid swap devices */
-	devices = g_ptr_array_new_with_free_func (g_free);
-	for (i=0; lines_swaps[i] != NULL; i++) {
-
-		/* is a device? */
-		if (lines_swaps[i][0] != '/')
-			continue;
-
-		/* only look at first parameter */
-		g_strdelimit (lines_swaps[i], "\t ", '\0');
-
-		/* add base device to list */
-		device = g_path_get_basename (lines_swaps[i]);
-		egg_debug ("adding swap device: %s", device);
-		g_ptr_array_add (devices, device);
-	}
-
-	/* no swap devices? */
-	if (devices->len == 0) {
-		egg_debug ("no swap devices");
-		goto out;
-	}
-
-	/* find matches in crypttab */
-	for (i=0; lines_crypttab[i] != NULL; i++) {
-
-		/* ignore invalid lines */
-		if (lines_crypttab[i][0] == '#' ||
-		    lines_crypttab[i][0] == '\n' ||
-		    lines_crypttab[i][0] == '\t' ||
-		    lines_crypttab[i][0] == '\0')
-			continue;
-
-		/* only look at first parameter */
-		g_strdelimit (lines_crypttab[i], "\t ", '\0');
-
-		/* is a swap device? */
-		for (j=0; j<devices->len; j++) {
-			device = g_ptr_array_index (devices, j);
-			if (g_strcmp0 (device, lines_crypttab[i]) == 0) {
-				egg_debug ("swap device %s is encrypted (so cannot hibernate)", device);
-				encrypted_swap = TRUE;
-				goto out;
-			}
-			egg_debug ("swap device %s is not encrypted (allows hibernate)", device);
-		}
-	}
-
-out:
-	if (devices != NULL)
-		g_ptr_array_unref (devices);
-	g_free (contents_swaps);
-	g_free (contents_crypttab);
-	g_strfreev (lines_swaps);
-	g_strfreev (lines_crypttab);
-	return encrypted_swap;
-}
-
-/**
- * up_daemon_check_swap_space:
- **/
-static gfloat
-up_daemon_check_swap_space (UpDaemon *daemon)
-{
-	gchar *contents = NULL;
-	gchar **lines = NULL;
-	GError *error = NULL;
-	gchar **tokens;
-	gboolean ret;
-	guint active = 0;
-	guint swap_free = 0;
-	guint swap_total = 0;
-	guint len;
-	guint i;
-	gfloat percentage = 0.0f;
-	const gchar *filename = "/proc/meminfo";
-
-	/* get memory data */
-	ret = g_file_get_contents (filename, &contents, NULL, &error);
-	if (!ret) {
-		egg_warning ("failed to open %s: %s", filename, error->message);
-		g_error_free (error);
-		goto out;
-	}
-
-	/* process each line */
-	lines = g_strsplit (contents, "\n", -1);
-	for (i=1; lines[i] != NULL; i++) {
-		tokens = g_strsplit_set (lines[i], ": ", -1);
-		len = g_strv_length (tokens);
-		if (len > 3) {
-			if (g_strcmp0 (tokens[0], "SwapFree") == 0)
-				swap_free = atoi (tokens[len-2]);
-			if (g_strcmp0 (tokens[0], "SwapTotal") == 0)
-				swap_total = atoi (tokens[len-2]);
-			else if (g_strcmp0 (tokens[0], "Active") == 0)
-				active = atoi (tokens[len-2]);
-		}
-		g_strfreev (tokens);
-	}
-
-	/* first check if we even have swap, if not consider all swap space used */
-	if (swap_total == 0) {
-		egg_debug ("no swap space found");
-		percentage = 100.0f;
-		goto out;
-	}
-
-	/* work out how close to the line we are */
-	if (swap_free > 0 && active > 0)
-		percentage = (active * 100) / swap_free;
-	egg_debug ("total swap available %i kb, active memory %i kb (%.1f%%)", swap_free, active, percentage);
-out:
-	g_free (contents);
-	g_strfreev (lines);
-	return percentage;
-}
-
-/**
  * up_daemon_get_on_battery_local:
  *
  * As soon as _any_ battery goes discharging, this is true
@@ -624,6 +430,7 @@ up_daemon_suspend (UpDaemon *daemon, DBusGMethodInvocation *context)
 {
 	GError *error;
 	PolkitSubject *subject = NULL;
+	const gchar *command;
 
 	/* no kernel support */
 	if (!daemon->priv->kernel_can_suspend) {
@@ -651,7 +458,8 @@ up_daemon_suspend (UpDaemon *daemon, DBusGMethodInvocation *context)
 	}
 
 	/* do this deferred action */
-	up_daemon_deferred_sleep (daemon, "/usr/sbin/pm-suspend", context);
+	command = up_backend_get_suspend_command (daemon->priv->backend);
+	up_daemon_deferred_sleep (daemon, command, context);
 out:
 	if (subject != NULL)
 		g_object_unref (subject);
@@ -688,6 +496,7 @@ up_daemon_hibernate (UpDaemon *daemon, DBusGMethodInvocation *context)
 {
 	GError *error;
 	PolkitSubject *subject = NULL;
+	const gchar *command;
 
 	/* no kernel support */
 	if (!daemon->priv->kernel_can_hibernate) {
@@ -733,7 +542,8 @@ up_daemon_hibernate (UpDaemon *daemon, DBusGMethodInvocation *context)
 	}
 
 	/* do this deferred action */
-	up_daemon_deferred_sleep (daemon, "/usr/sbin/pm-hibernate", context);
+	command = up_backend_get_hibernate_command (daemon->priv->backend);
+	up_daemon_deferred_sleep (daemon, command, context);
 out:
 	if (subject != NULL)
 		g_object_unref (subject);
@@ -1081,11 +891,12 @@ up_daemon_init (UpDaemon *daemon)
 			  G_CALLBACK (up_daemon_properties_changed_cb), daemon);
 
 	/* check if we have support */
-	up_daemon_check_sleep_states (daemon);
+	daemon->priv->kernel_can_suspend = up_backend_kernel_can_suspend (daemon->priv->backend);
+	daemon->priv->kernel_can_hibernate = up_backend_kernel_can_hibernate (daemon->priv->backend);
 
 	/* do we have enough swap? */
 	if (daemon->priv->kernel_can_hibernate) {
-		waterline = up_daemon_check_swap_space (daemon);
+		waterline = up_backend_get_used_swap (daemon->priv->backend);
 		if (waterline < UP_DAEMON_SWAP_WATERLINE)
 			daemon->priv->hibernate_has_swap_space = TRUE;
 		else
@@ -1094,7 +905,7 @@ up_daemon_init (UpDaemon *daemon)
 
 	/* is the swap usable? */
 	if (daemon->priv->kernel_can_hibernate)
-		daemon->priv->hibernate_has_encrypted_swap = up_daemon_check_encrypted_swap (daemon);
+		daemon->priv->hibernate_has_encrypted_swap = up_backend_has_encrypted_swap (daemon->priv->backend);
 }
 
 /**

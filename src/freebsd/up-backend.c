@@ -301,7 +301,7 @@ up_backend_coldplug (UpBackend *backend, UpDaemon *daemon)
 /**
  * up_backend_get_powersave_command:
  **/
-gchar *
+const gchar *
 up_backend_get_powersave_command (UpBackend *backend, gboolean powersave)
 {
 	/* XXX: Do we want to use powerd here? */
@@ -311,35 +311,35 @@ up_backend_get_powersave_command (UpBackend *backend, gboolean powersave)
 /**
  * up_backend_get_suspend_command:
  **/
-gchar *
+const gchar *
 up_backend_get_suspend_command (UpBackend *backend)
 {
-	return g_strdup (UP_BACKEND_SUSPEND_COMMAND);
+	return UP_BACKEND_SUSPEND_COMMAND;
 }
 
 /**
  * up_backend_get_hibernate_command:
  **/
-gchar *
+const gchar *
 up_backend_get_hibernate_command (UpBackend *backend)
 {
-	return g_strdup (UP_BACKEND_HIBERNATE_COMMAND);
+	return UP_BACKEND_HIBERNATE_COMMAND;
 }
 
 /**
- * up_backend_can_suspend:
+ * up_backend_kernel_can_suspend:
  **/
 gboolean
-up_backend_can_suspend (UpBackend *backend)
+up_backend_kernel_can_suspend (UpBackend *backend)
 {
 	return up_backend_supports_sleep_state ("S3");
 }
 
 /**
- * up_backend_can_hibernate:
+ * up_backend_kernel_can_hibernate:
  **/
 gboolean
-up_backend_can_hibernate (UpBackend *backend)
+up_backend_kernel_can_hibernate (UpBackend *backend)
 {
 	return up_backend_supports_sleep_state ("S4");
 }
@@ -351,6 +351,7 @@ up_backend_has_encrypted_swap (UpBackend *backend)
 	return FALSE;
 }
 
+/* Return value: a percentage value */
 gfloat
 up_backend_get_used_swap (UpBackend *backend)
 {

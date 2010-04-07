@@ -34,10 +34,16 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@BACKEND_TYPE_DUMMY_TRUE@am__append_1 = libupshared.la
+@EGG_BUILD_TESTS_TRUE@am__append_2 = libuptest.la
 subdir = src/dummy
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/gtk-doc.m4 \
+	$(top_srcdir)/m4/intltool.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -51,6 +57,16 @@ libupshared_la_OBJECTS = $(am_libupshared_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
+@BACKEND_TYPE_DUMMY_TRUE@am_libupshared_la_rpath =
+libuptest_la_LIBADD =
+am__libuptest_la_SOURCES_DIST = up-backend.c up-native.c
+am__objects_1 = libuptest_la-up-backend.lo libuptest_la-up-native.lo
+@EGG_BUILD_TESTS_TRUE@am_libuptest_la_OBJECTS = $(am__objects_1)
+libuptest_la_OBJECTS = $(am_libuptest_la_OBJECTS)
+libuptest_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libuptest_la_CFLAGS) \
+	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+@EGG_BUILD_TESTS_TRUE@am_libuptest_la_rpath =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -77,8 +93,9 @@ am__v_CCLD_0 = @echo "  CCLD  " $@;
 AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
-SOURCES = $(libupshared_la_SOURCES)
-DIST_SOURCES = $(libupshared_la_SOURCES)
+SOURCES = $(libupshared_la_SOURCES) $(libuptest_la_SOURCES)
+DIST_SOURCES = $(libupshared_la_SOURCES) \
+	$(am__libuptest_la_SOURCES_DIST)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -191,7 +208,6 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-UDEV_RULES = @UDEV_RULES@
 UP_MAJOR_VERSION = @UP_MAJOR_VERSION@
 UP_MICRO_VERSION = @UP_MICRO_VERSION@
 UP_MINOR_VERSION = @UP_MINOR_VERSION@
@@ -256,19 +272,19 @@ top_srcdir = @top_srcdir@
 INCLUDES = \
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
 	-DUP_COMPILATION					\
-	-DEGG_TEST						\
-	-I$(top_srcdir)/devkit-power-gobject			\
 	-I$(top_srcdir)/libupower-glib				\
 	$(DBUS_GLIB_CFLAGS)					\
 	$(POLKIT_CFLAGS)					\
 	$(GLIB_CFLAGS)
 
-noinst_LTLIBRARIES = libupshared.la
+noinst_LTLIBRARIES = $(am__append_1) $(am__append_2)
 libupshared_la_SOURCES = \
 	up-backend.c						\
 	up-native.c						\
 	$(BUILT_SOURCES)
 
+@EGG_BUILD_TESTS_TRUE@libuptest_la_CFLAGS = -DEGG_TEST
+@EGG_BUILD_TESTS_TRUE@libuptest_la_SOURCES = $(libupshared_la_SOURCES)
 all: all-am
 
 .SUFFIXES:
@@ -313,7 +329,9 @@ clean-noinstLTLIBRARIES:
 	  rm -f "$${dir}/so_locations"; \
 	done
 libupshared.la: $(libupshared_la_OBJECTS) $(libupshared_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(LINK)  $(libupshared_la_OBJECTS) $(libupshared_la_LIBADD) $(LIBS)
+	$(AM_V_CCLD)$(LINK) $(am_libupshared_la_rpath) $(libupshared_la_OBJECTS) $(libupshared_la_LIBADD) $(LIBS)
+libuptest.la: $(libuptest_la_OBJECTS) $(libuptest_la_DEPENDENCIES) 
+	$(AM_V_CCLD)$(libuptest_la_LINK) $(am_libuptest_la_rpath) $(libuptest_la_OBJECTS) $(libuptest_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -321,6 +339,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libuptest_la-up-backend.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libuptest_la-up-native.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up-backend.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up-native.Plo@am__quote@
 
@@ -347,6 +367,22 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+
+libuptest_la-up-backend.lo: up-backend.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libuptest_la_CFLAGS) $(CFLAGS) -MT libuptest_la-up-backend.lo -MD -MP -MF $(DEPDIR)/libuptest_la-up-backend.Tpo -c -o libuptest_la-up-backend.lo `test -f 'up-backend.c' || echo '$(srcdir)/'`up-backend.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libuptest_la-up-backend.Tpo $(DEPDIR)/libuptest_la-up-backend.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-backend.c' object='libuptest_la-up-backend.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libuptest_la_CFLAGS) $(CFLAGS) -c -o libuptest_la-up-backend.lo `test -f 'up-backend.c' || echo '$(srcdir)/'`up-backend.c
+
+libuptest_la-up-native.lo: up-native.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libuptest_la_CFLAGS) $(CFLAGS) -MT libuptest_la-up-native.lo -MD -MP -MF $(DEPDIR)/libuptest_la-up-native.Tpo -c -o libuptest_la-up-native.lo `test -f 'up-native.c' || echo '$(srcdir)/'`up-native.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libuptest_la-up-native.Tpo $(DEPDIR)/libuptest_la-up-native.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-native.c' object='libuptest_la-up-native.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libuptest_la_CFLAGS) $(CFLAGS) -c -o libuptest_la-up-native.lo `test -f 'up-native.c' || echo '$(srcdir)/'`up-native.c
 
 mostlyclean-libtool:
 	-rm -f *.lo

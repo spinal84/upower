@@ -43,9 +43,13 @@ static void	up_backend_finalize	(GObject		*object);
 struct UpBackendPrivate
 {
 	UpDaemon		*daemon;
+#ifdef EGG_TEST
 	UpDevice		*device;
+#endif
 	UpDeviceList		*device_list; /* unused */
+#ifdef EGG_TEST
 	GObject			*native;
+#endif
 };
 
 enum {
@@ -58,6 +62,7 @@ static guint signals [SIGNAL_LAST] = { 0 };
 
 G_DEFINE_TYPE (UpBackend, up_backend, G_TYPE_OBJECT)
 
+#ifdef EGG_TEST
 /**
  * up_backend_changed_time_cb:
  **/
@@ -99,6 +104,7 @@ up_backend_add_cb (UpBackend *backend)
 out:
 	return FALSE;
 }
+#endif
 
 /**
  * up_backend_coldplug:
@@ -116,8 +122,10 @@ up_backend_coldplug (UpBackend *backend, UpDaemon *daemon)
 	backend->priv->daemon = g_object_ref (daemon);
 	backend->priv->device_list = up_daemon_get_device_list (daemon);
 
+#ifdef EGG_TEST
 	/* small delay until first device is added */
 	g_timeout_add_seconds (1, (GSourceFunc) up_backend_add_cb, backend);
+#endif
 
 	return TRUE;
 }
@@ -157,6 +165,7 @@ up_backend_init (UpBackend *backend)
 	backend->priv = UP_BACKEND_GET_PRIVATE (backend);
 	backend->priv->daemon = NULL;
 	backend->priv->device_list = NULL;
+#ifdef EGG_TEST
 	backend->priv->native = g_object_new (UP_TYPE_DEVICE, NULL);
 	backend->priv->device = up_device_new ();
 
@@ -181,6 +190,7 @@ up_backend_init (UpBackend *backend)
 		      "energy-rate", 5.0f,
 		      "percentage", 50.0f,
 		      NULL);
+#endif
 }
 
 /**
@@ -200,8 +210,10 @@ up_backend_finalize (GObject *object)
 	if (backend->priv->device_list != NULL)
 		g_object_unref (backend->priv->device_list);
 
+#ifdef EGG_TEST
 	g_object_unref (backend->priv->native);
 	g_object_unref (backend->priv->device);
+#endif
 
 	G_OBJECT_CLASS (up_backend_parent_class)->finalize (object);
 }
@@ -217,6 +229,62 @@ up_backend_new (void)
 	UpBackend *backend;
 	backend = g_object_new (UP_TYPE_BACKEND, NULL);
 	return UP_BACKEND (backend);
+}
+
+/**
+ * up_backend_kernel_can_suspend:
+ **/
+gboolean
+up_backend_kernel_can_suspend (UpBackend *backend)
+{
+	return FALSE;
+}
+
+/**
+ * up_backend_kernel_can_hibernate:
+ **/
+gboolean
+up_backend_kernel_can_hibernate (UpBackend *backend)
+{
+	return FALSE;
+}
+
+/**
+ * up_backend_has_encrypted_swap:
+ **/
+gboolean
+up_backend_has_encrypted_swap (UpBackend *backend)
+{
+	return FALSE;
+}
+
+/**
+ * up_backend_get_used_swap:
+ *
+ * Return value: a percentage value
+ **/
+gfloat
+up_backend_get_used_swap (UpBackend *backend)
+{
+	return 0.0;
+}
+
+/**
+ * up_backend_get_suspend_command:
+ **/
+const gchar *
+up_backend_get_suspend_command (UpBackend *backend)
+{
+	return "/bin/true";
+}
+
+/**
+ * up_backend_get_hibernate_command:
+ **/
+const gchar *
+up_backend_get_hibernate_command (UpBackend *backend)
+{
+	return "/bin/true";
 }
 
 /***************************************************************************

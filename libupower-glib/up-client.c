@@ -64,6 +64,7 @@ struct _UpClientPrivate
 	gboolean		 on_battery;
 	gboolean		 on_low_battery;
 	gboolean		 lid_is_present;
+	gboolean		 done_enumerate;
 };
 
 enum {
@@ -116,6 +117,8 @@ up_client_get_device (UpClient *client, const gchar *object_path)
  * @client: a #UpClient instance.
  *
  * Get a copy of the device objects.
+ * You must have called up_client_enumerate_devices_sync() before calling this
+ * function.
  *
  * Return value: an array of #UpDevice objects, free with g_ptr_array_unref()
  *
@@ -124,6 +127,8 @@ up_client_get_device (UpClient *client, const gchar *object_path)
 GPtrArray *
 up_client_get_devices (UpClient *client)
 {
+	g_return_val_if_fail (UP_IS_CLIENT (client), NULL);
+	g_return_val_if_fail (client->priv->done_enumerate, NULL);
 	return g_ptr_array_ref (client->priv->array);
 }
 
@@ -453,6 +458,8 @@ up_client_get_can_hibernate (UpClient *client)
  * Get whether the laptop lid is closed.
  *
  * Return value: %TRUE if lid is closed or %FALSE otherwise.
+ *
+ * Since: 0.9.0
  */
 gboolean
 up_client_get_lid_is_closed (UpClient *client)
@@ -460,6 +467,24 @@ up_client_get_lid_is_closed (UpClient *client)
 	g_return_val_if_fail (UP_IS_CLIENT (client), FALSE);
 	up_client_get_properties_sync (client, NULL, NULL);
 	return client->priv->lid_is_closed;
+}
+
+/**
+ * up_client_get_lid_is_present:
+ * @client: a #UpClient instance.
+ *
+ * Get whether a laptop lid is present on this machine.
+ *
+ * Return value: %TRUE if the machine has a laptop lid
+ *
+ * Since: 0.9.2
+ */
+gboolean
+up_client_get_lid_is_present (UpClient *client)
+{
+	g_return_val_if_fail (UP_IS_CLIENT (client), FALSE);
+	up_client_get_properties_sync (client, NULL, NULL);
+	return client->priv->lid_is_present;
 }
 
 /**
@@ -818,6 +843,10 @@ up_client_enumerate_devices_sync (UpClient *client, GCancellable *cancellable, G
 	guint i;
 	gboolean ret = TRUE;
 
+	/* already done */
+	if (client->priv->done_enumerate)
+		goto out;
+
 	/* coldplug */
 	devices = up_client_get_devices_private (client, error);
 	if (devices == NULL) {
@@ -828,6 +857,9 @@ up_client_enumerate_devices_sync (UpClient *client, GCancellable *cancellable, G
 		object_path = (const gchar *) g_ptr_array_index (devices, i);
 		up_client_add (client, object_path);
 	}
+
+	/* only do this once per instance */
+	client->priv->done_enumerate = TRUE;
 out:
 	return ret;
 }
@@ -844,6 +876,7 @@ up_client_init (UpClient *client)
 	client->priv = UP_CLIENT_GET_PRIVATE (client);
 	client->priv->array = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 	client->priv->have_properties = FALSE;
+	client->priv->done_enumerate = FALSE;
 
 	/* get on the bus */
 	client->priv->bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);

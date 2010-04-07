@@ -2,12 +2,12 @@ dnl Process this file with autoconf to produce a configure script.
 
 m4_define([up_major_version], [0])
 m4_define([up_minor_version], [9])
-m4_define([up_micro_version], [1])
+m4_define([up_micro_version], [2])
 m4_define([up_version],
           [up_major_version.up_minor_version.up_micro_version])
 
 AC_PREREQ(2.65)
-AC_INIT([UPower],[up_version],[richard@hughsie.com],[UPower])
+AC_INIT([upower],[up_version],[richard@hughsie.com],[upower])
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE([1.9 tar-ustar dist-bzip2])
 AC_CONFIG_HEADERS([config.h])
@@ -164,7 +164,6 @@ dnl ---------------------------------------------------------------------------
 AC_ARG_WITH([backend],
 	    AS_HELP_STRING([--with-backend=<option>],
 			   [Default backend to use linux, freebsd, dummy (dummy)]))
-UDEV_RULES=
 # default to a sane option
 if test x$with_backend = x; then
 	if test -e /usr/include/gudev-1.0/gudev/gudev.h ; then
@@ -187,9 +186,7 @@ if test x$with_backend = xlinux; then
 	dnl Check libusb also
 	AC_CHECK_HEADERS(usb.h, , [AC_MSG_ERROR([Can't find usb.h. Please install libusb.])])
 	AC_CHECK_LIB([usb], [usb_find_devices], [], [AC_MSG_ERROR([Can't use libusb.])])
-	UDEV_RULES="rules"
 fi
-AC_SUBST(UDEV_RULES)
 
 # export to Makefile.am
 AM_CONDITIONAL(BACKEND_TYPE_DUMMY, [test x$with_backend = xdummy])
@@ -263,4 +260,5 @@ echo "
         Maintainer mode:            ${USE_MAINTAINER_MODE}
         Building api docs:          ${enable_gtk_doc}
         Building man pages:         ${enable_man_pages}
+        Building unit tests:        ${enable_tests}
 "
