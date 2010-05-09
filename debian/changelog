@@ -1,4 +1,4 @@
-upower (0.9.3-1) UNRELEASED; urgency=low
+upower (0.9.3-1) unstable; urgency=low
 
   * New upstream release.
     - Add a config file with SleepTimeout and AllowHibernateEncryptedSwap
@@ -7,7 +7,7 @@ upower (0.9.3-1) UNRELEASED; urgency=low
   * debian/control: Add missing ${misc:Depends} to quiesce lintian.
   * Add debian/source/format (1.0).
 
- -- Martin Pitt <mpitt@debian.org>  Sun, 09 May 2010 18:14:04 +0200
+ -- Martin Pitt <mpitt@debian.org>  Sun, 09 May 2010 18:48:38 +0200
 
 upower (0.9.2-1) unstable; urgency=low
 
