@@ -5,8 +5,8 @@
 <title>up-client</title>
 <meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="index.html" title="UPower Reference Manual">
-<link rel="up" href="libupower-glib.html" title="libpackagekit GObjects">
-<link rel="prev" href="libupower-glib.html" title="libpackagekit GObjects">
+<link rel="up" href="libupower-glib.html" title="libupower-glib GObjects">
+<link rel="prev" href="libupower-glib.html" title="libupower-glib GObjects">
 <link rel="next" href="UPower-up-device.html" title="up-device">
 <meta name="generator" content="GTK-Doc V1.14 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
@@ -48,28 +48,28 @@
                                                          <span class="returnvalue">UpDevice</span> *device);
 <span class="returnvalue">void</span>                <a class="link" href="UPower-up-client.html#changed" title="changed ()">changed</a>                             (<span class="returnvalue">UpClient</span> *client);
 <span class="returnvalue">UpClient</span> *          <a class="link" href="UPower-up-client.html#up-client-new" title="up_client_new ()">up_client_new</a>                       (void);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-properties-sync" title="up_client_get_properties_sync ()">up_client_get_properties_sync</a>       (<span class="returnvalue">UpClient</span> *client,
-                                                         <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
-                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-enumerate-devices-sync" title="up_client_enumerate_devices_sync ()">up_client_enumerate_devices_sync</a>    (<span class="returnvalue">UpClient</span> *client,
-                                                         <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
-                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-suspend-sync" title="up_client_suspend_sync ()">up_client_suspend_sync</a>              (<span class="returnvalue">UpClient</span> *client,
-                                                         <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
-                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-about-to-sleep-sync" title="up_client_about_to_sleep_sync ()">up_client_about_to_sleep_sync</a>       (<span class="returnvalue">UpClient</span> *client,
-                                                         <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
-                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-hibernate-sync" title="up_client_hibernate_sync ()">up_client_hibernate_sync</a>            (<span class="returnvalue">UpClient</span> *client,
-                                                         <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
-                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Pointer-Arrays.html#GPtrArray"><span class="returnvalue">GPtrArray</span></a> *         <a class="link" href="UPower-up-client.html#up-client-get-devices" title="up_client_get_devices ()">up_client_get_devices</a>               (<span class="returnvalue">UpClient</span> *client);
-const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="UPower-up-client.html#up-client-get-daemon-version" title="up_client_get_daemon_version ()">up_client_get_daemon_version</a>        (<span class="returnvalue">UpClient</span> *client);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-can-hibernate" title="up_client_get_can_hibernate ()">up_client_get_can_hibernate</a>         (<span class="returnvalue">UpClient</span> *client);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-lid-is-closed" title="up_client_get_lid_is_closed ()">up_client_get_lid_is_closed</a>         (<span class="returnvalue">UpClient</span> *client);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-can-suspend" title="up_client_get_can_suspend ()">up_client_get_can_suspend</a>           (<span class="returnvalue">UpClient</span> *client);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-on-battery" title="up_client_get_on_battery ()">up_client_get_on_battery</a>            (<span class="returnvalue">UpClient</span> *client);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-on-low-battery" title="up_client_get_on_low_battery ()">up_client_get_on_low_battery</a>        (<span class="returnvalue">UpClient</span> *client);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-properties-sync" title="up_client_get_properties_sync ()">up_client_get_properties_sync</a>       (<span class="returnvalue">UpClient</span> *client,
+                                                         <a href="/usr/share/gtk-doc/html/gio/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
+                                                         <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-enumerate-devices-sync" title="up_client_enumerate_devices_sync ()">up_client_enumerate_devices_sync</a>    (<span class="returnvalue">UpClient</span> *client,
+                                                         <a href="/usr/share/gtk-doc/html/gio/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
+                                                         <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-suspend-sync" title="up_client_suspend_sync ()">up_client_suspend_sync</a>              (<span class="returnvalue">UpClient</span> *client,
+                                                         <a href="/usr/share/gtk-doc/html/gio/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
+                                                         <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-about-to-sleep-sync" title="up_client_about_to_sleep_sync ()">up_client_about_to_sleep_sync</a>       (<span class="returnvalue">UpClient</span> *client,
+                                                         <a href="/usr/share/gtk-doc/html/gio/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
+                                                         <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-hibernate-sync" title="up_client_hibernate_sync ()">up_client_hibernate_sync</a>            (<span class="returnvalue">UpClient</span> *client,
+                                                         <a href="/usr/share/gtk-doc/html/gio/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
+                                                         <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);
+<a href="/usr/share/gtk-doc/html/glib/glib-Pointer-Arrays.html#GPtrArray"><span class="returnvalue">GPtrArray</span></a> *         <a class="link" href="UPower-up-client.html#up-client-get-devices" title="up_client_get_devices ()">up_client_get_devices</a>               (<span class="returnvalue">UpClient</span> *client);
+const <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="UPower-up-client.html#up-client-get-daemon-version" title="up_client_get_daemon_version ()">up_client_get_daemon_version</a>        (<span class="returnvalue">UpClient</span> *client);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-can-hibernate" title="up_client_get_can_hibernate ()">up_client_get_can_hibernate</a>         (<span class="returnvalue">UpClient</span> *client);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-lid-is-closed" title="up_client_get_lid_is_closed ()">up_client_get_lid_is_closed</a>         (<span class="returnvalue">UpClient</span> *client);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-can-suspend" title="up_client_get_can_suspend ()">up_client_get_can_suspend</a>           (<span class="returnvalue">UpClient</span> *client);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-on-battery" title="up_client_get_on_battery ()">up_client_get_on_battery</a>            (<span class="returnvalue">UpClient</span> *client);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-on-low-battery" title="up_client_get_on_low_battery ()">up_client_get_on_low_battery</a>        (<span class="returnvalue">UpClient</span> *client);
 </pre>
 </div>
 <div class="refsect1" title="Description">
@@ -144,9 +144,9 @@ Creates a new <span class="type">UpClient</span> object.</p>
 <hr>
 <div class="refsect2" title="up_client_get_properties_sync ()">
 <a name="up-client-get-properties-sync"></a><h3>up_client_get_properties_sync ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_properties_sync       (<span class="returnvalue">UpClient</span> *client,
-                                                         <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
-                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_properties_sync       (<span class="returnvalue">UpClient</span> *client,
+                                                         <a href="/usr/share/gtk-doc/html/gio/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
+                                                         <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);</pre>
 <p>
 Get all the properties from UPower daemon.</p>
 <div class="variablelist"><table border="0">
@@ -159,17 +159,17 @@ Get all the properties from UPower daemon.</p>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>cancellable</code></em> :</span></p></td>
-<td> a <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+<td> a <a href="/usr/share/gtk-doc/html/gio/GCancellable.html"><span class="type">GCancellable</span></a> or <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td> a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+<td> a <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> for success, else <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>.
+<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> for success, else <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>.
 
 </td>
 </tr>
@@ -180,9 +180,9 @@ Get all the properties from UPower daemon.</p>
 <hr>
 <div class="refsect2" title="up_client_enumerate_devices_sync ()">
 <a name="up-client-enumerate-devices-sync"></a><h3>up_client_enumerate_devices_sync ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_enumerate_devices_sync    (<span class="returnvalue">UpClient</span> *client,
-                                                         <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
-                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_enumerate_devices_sync    (<span class="returnvalue">UpClient</span> *client,
+                                                         <a href="/usr/share/gtk-doc/html/gio/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
+                                                         <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);</pre>
 <p>
 Enumerates all the devices from the daemon.</p>
 <div class="variablelist"><table border="0">
@@ -195,12 +195,12 @@ Enumerates all the devices from the daemon.</p>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td> a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+<td> a <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> for success, else <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>.
+<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> for success, else <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>.
 
 </td>
 </tr>
@@ -211,9 +211,9 @@ Enumerates all the devices from the daemon.</p>
 <hr>
 <div class="refsect2" title="up_client_suspend_sync ()">
 <a name="up-client-suspend-sync"></a><h3>up_client_suspend_sync ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_suspend_sync              (<span class="returnvalue">UpClient</span> *client,
-                                                         <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
-                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_suspend_sync              (<span class="returnvalue">UpClient</span> *client,
+                                                         <a href="/usr/share/gtk-doc/html/gio/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
+                                                         <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);</pre>
 <p>
 Puts the computer into a low power state, but state is not preserved if the
 power is lost.
@@ -230,12 +230,12 @@ NOTE: The system is still consuming a small amount of power</p>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>cancellable</code></em> :</span></p></td>
-<td> a <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+<td> a <a href="/usr/share/gtk-doc/html/gio/GCancellable.html"><span class="type">GCancellable</span></a> or <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td> a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+<td> a <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
 </td>
 </tr>
 <tr>
@@ -251,9 +251,9 @@ NOTE: The system is still consuming a small amount of power</p>
 <hr>
 <div class="refsect2" title="up_client_about_to_sleep_sync ()">
 <a name="up-client-about-to-sleep-sync"></a><h3>up_client_about_to_sleep_sync ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_about_to_sleep_sync       (<span class="returnvalue">UpClient</span> *client,
-                                                         <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
-                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_about_to_sleep_sync       (<span class="returnvalue">UpClient</span> *client,
+                                                         <a href="/usr/share/gtk-doc/html/gio/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
+                                                         <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);</pre>
 <p>
 Tells UPower that we are soon to reqest either <code class="function">Suspend()</code> or <code class="function">Hibernate()</code>
 and that session and system components should be notified of this.</p>
@@ -267,12 +267,12 @@ and that session and system components should be notified of this.</p>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>cancellable</code></em> :</span></p></td>
-<td> a <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+<td> a <a href="/usr/share/gtk-doc/html/gio/GCancellable.html"><span class="type">GCancellable</span></a> or <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td> a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+<td> a <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
 </td>
 </tr>
 <tr>
@@ -288,9 +288,9 @@ and that session and system components should be notified of this.</p>
 <hr>
 <div class="refsect2" title="up_client_hibernate_sync ()">
 <a name="up-client-hibernate-sync"></a><h3>up_client_hibernate_sync ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_hibernate_sync            (<span class="returnvalue">UpClient</span> *client,
-                                                         <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
-                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_hibernate_sync            (<span class="returnvalue">UpClient</span> *client,
+                                                         <a href="/usr/share/gtk-doc/html/gio/GCancellable.html"><span class="returnvalue">GCancellable</span></a> *cancellable,
+                                                         <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> **error);</pre>
 <p>
 Puts the computer into a low power state, where state is preserved if the
 power is lost.</p>
@@ -304,12 +304,12 @@ power is lost.</p>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>cancellable</code></em> :</span></p></td>
-<td> a <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+<td> a <a href="/usr/share/gtk-doc/html/gio/GCancellable.html"><span class="type">GCancellable</span></a> or <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td> a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>.
+<td> a <a href="/usr/share/gtk-doc/html/glib/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>.
 </td>
 </tr>
 <tr>
@@ -325,7 +325,7 @@ power is lost.</p>
 <hr>
 <div class="refsect2" title="up_client_get_devices ()">
 <a name="up-client-get-devices"></a><h3>up_client_get_devices ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Pointer-Arrays.html#GPtrArray"><span class="returnvalue">GPtrArray</span></a> *         up_client_get_devices               (<span class="returnvalue">UpClient</span> *client);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Pointer-Arrays.html#GPtrArray"><span class="returnvalue">GPtrArray</span></a> *         up_client_get_devices               (<span class="returnvalue">UpClient</span> *client);</pre>
 <p>
 Get a copy of the device objects.</p>
 <div class="variablelist"><table border="0">
@@ -338,7 +338,7 @@ Get a copy of the device objects.</p>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> an array of <span class="type">UpDevice</span> objects, free with <a href="http://library.gnome.org/devel/glib/unstable/glib-Pointer-Arrays.html#g-ptr-array-unref"><code class="function">g_ptr_array_unref()</code></a>
+<td> an array of <span class="type">UpDevice</span> objects, free with <a href="/usr/share/gtk-doc/html/glib/glib-Pointer-Arrays.html#g-ptr-array-unref"><code class="function">g_ptr_array_unref()</code></a>
 
 </td>
 </tr>
@@ -349,7 +349,7 @@ Get a copy of the device objects.</p>
 <hr>
 <div class="refsect2" title="up_client_get_daemon_version ()">
 <a name="up-client-get-daemon-version"></a><h3>up_client_get_daemon_version ()</h3>
-<pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       up_client_get_daemon_version        (<span class="returnvalue">UpClient</span> *client);</pre>
+<pre class="programlisting">const <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       up_client_get_daemon_version        (<span class="returnvalue">UpClient</span> *client);</pre>
 <p>
 Get UPower daemon version.</p>
 <div class="variablelist"><table border="0">
@@ -373,7 +373,7 @@ Get UPower daemon version.</p>
 <hr>
 <div class="refsect2" title="up_client_get_can_hibernate ()">
 <a name="up-client-get-can-hibernate"></a><h3>up_client_get_can_hibernate ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_can_hibernate         (<span class="returnvalue">UpClient</span> *client);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_can_hibernate         (<span class="returnvalue">UpClient</span> *client);</pre>
 <p>
 Get whether the system is able to hibernate.</p>
 <div class="variablelist"><table border="0">
@@ -397,7 +397,7 @@ Get whether the system is able to hibernate.</p>
 <hr>
 <div class="refsect2" title="up_client_get_lid_is_closed ()">
 <a name="up-client-get-lid-is-closed"></a><h3>up_client_get_lid_is_closed ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_lid_is_closed         (<span class="returnvalue">UpClient</span> *client);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_lid_is_closed         (<span class="returnvalue">UpClient</span> *client);</pre>
 <p>
 Get whether the laptop lid is closed.</p>
 <div class="variablelist"><table border="0">
@@ -410,7 +410,7 @@ Get whether the laptop lid is closed.</p>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if lid is closed or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise.
+<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if lid is closed or <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise.
 </td>
 </tr>
 </tbody>
@@ -419,7 +419,7 @@ Get whether the laptop lid is closed.</p>
 <hr>
 <div class="refsect2" title="up_client_get_can_suspend ()">
 <a name="up-client-get-can-suspend"></a><h3>up_client_get_can_suspend ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_can_suspend           (<span class="returnvalue">UpClient</span> *client);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_can_suspend           (<span class="returnvalue">UpClient</span> *client);</pre>
 <p>
 Get whether the system is able to suspend.</p>
 <div class="variablelist"><table border="0">
@@ -443,7 +443,7 @@ Get whether the system is able to suspend.</p>
 <hr>
 <div class="refsect2" title="up_client_get_on_battery ()">
 <a name="up-client-get-on-battery"></a><h3>up_client_get_on_battery ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_on_battery            (<span class="returnvalue">UpClient</span> *client);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_on_battery            (<span class="returnvalue">UpClient</span> *client);</pre>
 <p>
 Get whether the system is running on battery power.</p>
 <div class="variablelist"><table border="0">
@@ -467,7 +467,7 @@ Get whether the system is running on battery power.</p>
 <hr>
 <div class="refsect2" title="up_client_get_on_low_battery ()">
 <a name="up-client-get-on-low-battery"></a><h3>up_client_get_on_low_battery ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_on_low_battery        (<span class="returnvalue">UpClient</span> *client);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_on_low_battery        (<span class="returnvalue">UpClient</span> *client);</pre>
 <p>
 Get whether the system is running on low battery power.</p>
 <div class="variablelist"><table border="0">
