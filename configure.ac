@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 m4_define([up_major_version], [0])
 m4_define([up_minor_version], [9])
-m4_define([up_micro_version], [2])
+m4_define([up_micro_version], [3])
 m4_define([up_version],
           [up_major_version.up_minor_version.up_micro_version])
 
@@ -208,7 +208,7 @@ if test "x$GCC" = "xyes"; then
 fi
 
 IT_PROG_INTLTOOL([0.40.0])
-GETTEXT_PACKAGE=UPower
+GETTEXT_PACKAGE=upower
 AC_SUBST([GETTEXT_PACKAGE])
 AM_GLIB_GNU_GETTEXT
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[gettext domain])
@@ -217,6 +217,7 @@ AC_CONFIG_FILES([
 Makefile
 devkit-power-gobject.pc
 upower-glib.pc
+etc/Makefile
 src/Makefile
 src/dummy/Makefile
 src/freebsd/Makefile

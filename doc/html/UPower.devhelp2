@@ -7,7 +7,7 @@
       <sub name="org.freedesktop.UPower.Device" link="Device.html"/>
       <sub name="org.freedesktop.UPower.QoS" link="QoS.html"/>
     </sub>
-    <sub name="libpackagekit GObjects" link="libupower-glib.html">
+    <sub name="libupower-glib GObjects" link="libupower-glib.html">
       <sub name="up-client" link="UPower-up-client.html"/>
       <sub name="up-device" link="UPower-up-device.html"/>
       <sub name="up-history-item" link="UPower-up-history-item.html"/>

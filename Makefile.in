@@ -101,7 +101,7 @@ AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
 	distdir dist dist-all distcheck
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = devkit-power-gobject libupower-glib src doc tools \
+DIST_SUBDIRS = etc devkit-power-gobject libupower-glib src doc tools \
 	policy po rules
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
@@ -310,8 +310,8 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = devkit-power-gobject libupower-glib src doc tools policy po \
-	$(am__append_1)
+SUBDIRS = etc devkit-power-gobject libupower-glib src doc tools policy \
+	po $(am__append_1)
 EXTRA_DIST = \
 	HACKING 		\
 	ChangeLog
