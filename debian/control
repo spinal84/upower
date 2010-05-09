@@ -75,7 +75,7 @@ Description: abstraction for power management - development files
 Package: devicekit-power-doc
 Architecture: all
 Section: oldlibs
-Depends: upower-doc
+Depends: ${misc:Depends}, upower-doc
 Description: transitional package to upower-doc
  This is a transitional package to faciliate the upgrade to the new name
  upower-doc. It can be safely removed after the upgrade.
