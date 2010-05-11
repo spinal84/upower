@@ -1,3 +1,10 @@
+upower (0.9.3-2) UNRELEASED; urgency=low
+
+  * Add 00git-fix-notifications.patch: Fix notifications for property changes
+    such as "lid closed". Taken from upstream git head. (Closes: #580983)
+
+ -- Martin Pitt <mpitt@debian.org>  Tue, 11 May 2010 16:33:50 +0200
+
 upower (0.9.3-1) unstable; urgency=low
 
   * New upstream release.
