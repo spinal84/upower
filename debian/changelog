@@ -1,6 +1,7 @@
 upower (0.9.4-1) UNRELEASED; urgency=low
 
   * New upstream bug fix release.
+  * Drop 00git-fix-notifications.patch, upstream now.
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 12 May 2010 17:37:34 +0200
 
