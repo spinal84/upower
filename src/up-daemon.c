@@ -85,6 +85,7 @@ struct UpDaemonPrivate
 	gboolean		 hibernate_has_swap_space;
 	gboolean		 hibernate_has_encrypted_swap;
 	gboolean		 during_coldplug;
+	gboolean		 sent_sleeping_signal;
 	guint			 battery_poll_id;
 	guint			 battery_poll_count;
 	GTimer			*about_to_sleep_timer;
@@ -313,10 +314,6 @@ up_daemon_about_to_sleep (UpDaemon *daemon, DBusGMethodInvocation *context)
 	GError *error;
 	UpDaemonPrivate *priv = daemon->priv;
 
-	egg_debug ("emitting sleeping");
-	g_signal_emit (daemon, signals[SIGNAL_SLEEPING], 0);
-	g_timer_start (priv->about_to_sleep_timer);
-
 	/* already requested */
 	if (priv->about_to_sleep_id != 0) {
 		error = g_error_new (UP_DAEMON_ERROR,
@@ -333,6 +330,12 @@ up_daemon_about_to_sleep (UpDaemon *daemon, DBusGMethodInvocation *context)
 	/* TODO: use another PolicyKit context? */
 	if (!up_polkit_check_auth (priv->polkit, subject, "org.freedesktop.upower.suspend", context))
 		goto out;
+
+	/* we've told the clients we're going down */
+	egg_debug ("emitting sleeping");
+	g_signal_emit (daemon, signals[SIGNAL_SLEEPING], 0);
+	g_timer_start (priv->about_to_sleep_timer);
+	daemon->priv->sent_sleeping_signal = TRUE;
 
 	dbus_g_method_return (context, NULL);
 out:
@@ -387,6 +390,7 @@ up_daemon_deferred_sleep_cb (UpDaemonDeferredSleep *sleep)
 out:
 	/* clear timer */
 	priv->about_to_sleep_id = 0;
+	priv->sent_sleeping_signal = FALSE;
 
 	g_free (stdout);
 	g_free (stderr);
@@ -415,13 +419,22 @@ up_daemon_deferred_sleep (UpDaemon *daemon, const gchar *command, DBusGMethodInv
 	sleep->context = context;
 	sleep->command = g_strdup (command);
 
+	/* we didn't use AboutToSleep() so send the signal for clients now */
+	if (!priv->sent_sleeping_signal) {
+		egg_debug ("no AboutToSleep(), so emitting ::Sleeping()");
+		g_signal_emit (daemon, signals[SIGNAL_SLEEPING], 0);
+		priv->about_to_sleep_id = g_timeout_add (priv->conf_sleep_timeout,
+							 (GSourceFunc) up_daemon_deferred_sleep_cb, sleep);
+		return;
+	}
+
 	/* about to sleep */
 	elapsed = 1000.0f * g_timer_elapsed (priv->about_to_sleep_timer, NULL);
 	egg_debug ("between AboutToSleep() and %s was %fms", sleep->command, elapsed);
 	if (elapsed < priv->conf_sleep_timeout) {
-		/* we have to wait for a little bit */
+		/* we have to wait for the difference in time */
 		priv->about_to_sleep_id = g_timeout_add (priv->conf_sleep_timeout - elapsed,
-								 (GSourceFunc) up_daemon_deferred_sleep_cb, sleep);
+							 (GSourceFunc) up_daemon_deferred_sleep_cb, sleep);
 	} else {
 		/* we can do this straight away */
 		priv->about_to_sleep_id = g_idle_add ((GSourceFunc) up_daemon_deferred_sleep_cb, sleep);
@@ -683,8 +696,9 @@ void
 up_daemon_set_lid_is_closed (UpDaemon *daemon, gboolean lid_is_closed)
 {
 	UpDaemonPrivate *priv = daemon->priv;
-	egg_debug ("lid_is_closed = %s", priv->lid_is_closed ? "yes" : "no");
+	egg_debug ("lid_is_closed = %s", lid_is_closed ? "yes" : "no");
 	priv->lid_is_closed = lid_is_closed;
+	g_object_notify (G_OBJECT (daemon), "lid-is-closed");
 }
 
 /**
@@ -694,8 +708,9 @@ void
 up_daemon_set_lid_is_present (UpDaemon *daemon, gboolean lid_is_present)
 {
 	UpDaemonPrivate *priv = daemon->priv;
-	egg_debug ("lid_is_present = %s", priv->lid_is_present ? "yes" : "no");
+	egg_debug ("lid_is_present = %s", lid_is_present ? "yes" : "no");
 	priv->lid_is_present = lid_is_present;
+	g_object_notify (G_OBJECT (daemon), "lid-is-present");
 }
 
 /**
@@ -705,8 +720,9 @@ void
 up_daemon_set_on_battery (UpDaemon *daemon, gboolean on_battery)
 {
 	UpDaemonPrivate *priv = daemon->priv;
-	egg_debug ("on_battery = %s", priv->on_battery ? "yes" : "no");
+	egg_debug ("on_battery = %s", on_battery ? "yes" : "no");
 	priv->on_battery = on_battery;
+	g_object_notify (G_OBJECT (daemon), "on-battery");
 }
 
 /**
@@ -716,8 +732,9 @@ void
 up_daemon_set_on_low_battery (UpDaemon *daemon, gboolean on_low_battery)
 {
 	UpDaemonPrivate *priv = daemon->priv;
-	egg_debug ("on_low_battery = %s", priv->on_low_battery ? "yes" : "no");
+	egg_debug ("on_low_battery = %s", on_low_battery ? "yes" : "no");
 	priv->on_low_battery = on_low_battery;
+	g_object_notify (G_OBJECT (daemon), "on-low-battery");
 }
 
 /**
@@ -930,6 +947,7 @@ up_daemon_init (UpDaemon *daemon)
 	daemon->priv->on_battery = FALSE;
 	daemon->priv->on_low_battery = FALSE;
 	daemon->priv->during_coldplug = FALSE;
+	daemon->priv->sent_sleeping_signal = FALSE;
 	daemon->priv->battery_poll_id = 0;
 	daemon->priv->battery_poll_count = 0;
 	daemon->priv->about_to_sleep_id = 0;
