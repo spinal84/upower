@@ -2,6 +2,8 @@ upower (0.9.4-2) UNRELEASED; urgency=low
 
   * debian/upower.install
     - Install UPower.conf config file to the correct path. (Closes: #583353)
+  * debian/upower.{preinst,postinst}
+    - Move the config file on upgrades without triggering a dpkg prompt.
 
  -- Michael Biebl <biebl@debian.org>  Sat, 29 May 2010 17:28:47 +0200
 

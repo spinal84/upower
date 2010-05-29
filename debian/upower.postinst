@@ -1,6 +1,18 @@
 #!/bin/sh
 set -e
 
+# Move a conffile without triggering a dpkg question
+mv_conffile() {
+    local OLDCONFFILE="$1"
+    local NEWCONFFILE="$2"
+
+    [ -e "$OLDCONFFILE" ] || return 0
+
+    echo "Preserving user changes to $NEWCONFFILE ..."
+    mv -f "$NEWCONFFILE" "$NEWCONFFILE".dpkg-new
+    mv -f "$OLDCONFFILE" "$NEWCONFFILE"
+}
+
 if [ "$1" = "configure" ]; then
     # migrate power history from DeviceKit-power
     if dpkg --compare-versions "$2" lt-nl "0.9.1-1" && [ -d /var/lib/DeviceKit-power/ ]; then
@@ -8,6 +20,10 @@ if [ "$1" = "configure" ]; then
 	    echo "Migrating old DeviceKit-power history.."
 	    mv /var/lib/DeviceKit-power/ /var/lib/upower
 	fi
+    fi
+
+    if dpkg --compare-versions "$2" lt "0.9.4-2"; then
+        mv_conffile "/etc/UPower.conf" "/etc/UPower/UPower.conf"
     fi
 
     # restart upowerd
