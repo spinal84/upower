@@ -5,5 +5,5 @@ usr/share/polkit-1/
 usr/share/locale/
 usr/share/man/
 etc/dbus-1/system.d/
-etc/UPower.conf
+etc/UPower/UPower.conf
 var/lib/
