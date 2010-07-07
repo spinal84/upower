@@ -14,6 +14,9 @@ DEB_DH_GENCONTROL_ARGS_libdevkit-power-gobject1 = -- -v1:$(DEB_VERSION)
 DEB_DH_MAKESHLIBS_ARGS_libdevkit-power-gobject1 = -- -v1:$(DEB_VERSION)
 DEB_DH_GENCONTROL_ARGS_libdevkit-power-gobject-dev = -- -v1:$(DEB_VERSION)
 
+common-post-build-arch::
+	make -C po upower.pot
+
 binary-install/upower::
 	# Only install udev rules on Linux architectures. The
 	# directory doesn't even exist on e.g. GNU/kFreeBSD
