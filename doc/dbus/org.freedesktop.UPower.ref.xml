@@ -51,7 +51,7 @@
     <para>
       
         <para>
-          The DeviceKit-power service is available via the system message
+          The UPower service is available via the system message
           bus. To access the service, use
           the <literal>org.freedesktop.UPower</literal> interface on
           the <literal>/org/freedesktop/UPower</literal> object on

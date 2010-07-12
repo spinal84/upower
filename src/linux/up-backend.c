@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <sys/wait.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <gudev/gudev.h>
@@ -40,6 +41,9 @@
 #include "up-device-wup.h"
 #include "up-device-hid.h"
 #include "up-input.h"
+#ifdef HAVE_IDEVICE
+#include "up-device-idevice.h"
+#endif /* HAVE_IDEVICE */
 
 static void	up_backend_class_init	(UpBackendClass	*klass);
 static void	up_backend_init	(UpBackend		*backend);
@@ -68,8 +72,10 @@ G_DEFINE_TYPE (UpBackend, up_backend, G_TYPE_OBJECT)
 static gboolean up_backend_device_add (UpBackend *backend, GUdevDevice *native);
 static void up_backend_device_remove (UpBackend *backend, GUdevDevice *native);
 
-#define UP_BACKEND_SUSPEND_COMMAND	"/usr/sbin/pm-suspend"
-#define UP_BACKEND_HIBERNATE_COMMAND	"/usr/sbin/pm-hibernate"
+#define UP_BACKEND_SUSPEND_COMMAND		"/usr/sbin/pm-suspend"
+#define UP_BACKEND_HIBERNATE_COMMAND		"/usr/sbin/pm-hibernate"
+#define UP_BACKEND_POWERSAVE_TRUE_COMMAND	"/usr/sbin/pm-powersave true"
+#define UP_BACKEND_POWERSAVE_FALSE_COMMAND	"/usr/sbin/pm-powersave false"
 
 /**
  * up_backend_device_new:
@@ -109,6 +115,15 @@ up_backend_device_new (UpBackend *backend, GUdevDevice *native)
 		device = NULL;
 
 	} else if (g_strcmp0 (subsys, "usb") == 0) {
+
+#ifdef HAVE_IDEVICE
+		/* see if this is an iDevice */
+		device = UP_DEVICE (up_device_idevice_new ());
+		ret = up_device_coldplug (device, backend->priv->daemon, G_OBJECT (native));
+		if (ret)
+			goto out;
+		g_object_unref (device);
+#endif /* HAVE_IDEVICE */
 
 		/* see if this is a CSR mouse or keyboard */
 		device = UP_DEVICE (up_device_csr_new ());
@@ -310,30 +325,32 @@ up_backend_coldplug (UpBackend *backend, UpDaemon *daemon)
 
 /**
  * up_backend_supports_sleep_state:
+ *
+ * use pm-is-supported to test for supported sleep states
  **/
 static gboolean
 up_backend_supports_sleep_state (const gchar *state)
 {
-	gchar *contents = NULL;
+	gboolean ret = FALSE;
+	gchar *command;
 	GError *error = NULL;
-	gboolean ret;
-	const gchar *filename = "/sys/power/state";
+	gint exit_status;
 
-	/* see what kernel can do */
-	ret = g_file_get_contents (filename, &contents, NULL, &error);
+	/* run script from pm-utils */
+	command = g_strdup_printf ("/usr/bin/pm-is-supported --%s", state);
+	egg_debug ("excuting command: %s", command);
+	ret = g_spawn_command_line_sync (command, NULL, NULL, &exit_status, &error);
 	if (!ret) {
-		egg_warning ("failed to open %s: %s", filename, error->message);
+		egg_warning ("failed to run script: %s", error->message);
 		g_error_free (error);
 		goto out;
 	}
-
-	/* does the kernel advertise this */
-	ret = (g_strstr_len (contents, -1, state) != NULL);
+	if (WIFEXITED(exit_status) && (WEXITSTATUS(exit_status) == EXIT_SUCCESS))
+		ret = TRUE;
 out:
-	g_free (contents);
+	g_free (command);
 	return ret;
 }
-
 
 /**
  * up_backend_kernel_can_suspend:
@@ -341,7 +358,7 @@ out:
 gboolean
 up_backend_kernel_can_suspend (UpBackend *backend)
 {
-	return up_backend_supports_sleep_state ("mem");
+	return up_backend_supports_sleep_state ("suspend");
 }
 
 /**
@@ -350,7 +367,7 @@ up_backend_kernel_can_suspend (UpBackend *backend)
 gboolean
 up_backend_kernel_can_hibernate (UpBackend *backend)
 {
-	return up_backend_supports_sleep_state ("disk");
+	return up_backend_supports_sleep_state ("hibernate");
 }
 
 /**
@@ -463,7 +480,8 @@ out:
 /**
  * up_backend_get_used_swap:
  *
- * Return value: a percentage value
+ * Return value: a percentage value how much of the available swap memory would
+ * be taken by currently active memory
  **/
 gfloat
 up_backend_get_used_swap (UpBackend *backend)
@@ -499,7 +517,7 @@ up_backend_get_used_swap (UpBackend *backend)
 				swap_free = atoi (tokens[len-2]);
 			if (g_strcmp0 (tokens[0], "SwapTotal") == 0)
 				swap_total = atoi (tokens[len-2]);
-			else if (g_strcmp0 (tokens[0], "Active") == 0)
+			else if (g_strcmp0 (tokens[0], "Active(anon)") == 0)
 				active = atoi (tokens[len-2]);
 		}
 		g_strfreev (tokens);
@@ -538,6 +556,17 @@ const gchar *
 up_backend_get_hibernate_command (UpBackend *backend)
 {
 	return UP_BACKEND_HIBERNATE_COMMAND;
+}
+
+/**
+ * up_backend_get_powersave_command:
+ **/
+const gchar *
+up_backend_get_powersave_command (UpBackend *backend, gboolean powersave)
+{
+	if (powersave)
+		return UP_BACKEND_POWERSAVE_TRUE_COMMAND;
+	return UP_BACKEND_POWERSAVE_FALSE_COMMAND;
 }
 
 /**

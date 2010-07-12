@@ -88,6 +88,7 @@ static gboolean
 up_backend_add_cb (UpBackend *backend)
 {
 	gboolean ret;
+	guint timer_id;
 
 	/* coldplug */
 	ret = up_device_coldplug (backend->priv->device, backend->priv->daemon, backend->priv->native);
@@ -100,7 +101,10 @@ up_backend_add_cb (UpBackend *backend)
 	g_signal_emit (backend, signals[SIGNAL_DEVICE_ADDED], 0, backend->priv->native, backend->priv->device);
 
 	/* setup poll */
-	g_timeout_add_seconds (2, (GSourceFunc) up_backend_changed_time_cb, backend);
+	timer_id = g_timeout_add_seconds (2, (GSourceFunc) up_backend_changed_time_cb, backend);
+#if GLIB_CHECK_VERSION(2,25,8)
+	g_source_set_name_by_id (timer_id, "[UpBackend] changed");
+#endif
 out:
 	return FALSE;
 }
@@ -287,30 +291,11 @@ up_backend_get_hibernate_command (UpBackend *backend)
 	return "/bin/true";
 }
 
-/***************************************************************************
- ***                          MAKE CHECK TESTS                           ***
- ***************************************************************************/
-#ifdef EGG_TEST
-#include "egg-test.h"
-
-void
-up_backend_test (gpointer user_data)
+/**
+ * up_backend_get_powersave_command:
+ **/
+const gchar *
+up_backend_get_powersave_command (UpBackend *backend, gboolean powersave)
 {
-	EggTest *test = (EggTest *) user_data;
-	UpBackend *backend;
-
-	if (!egg_test_start (test, "UpBackend"))
-		return;
-
-	/************************************************************/
-	egg_test_title (test, "get instance");
-	backend = up_backend_new ();
-	egg_test_assert (test, backend != NULL);
-
-	/* unref */
-	g_object_unref (backend);
-
-	egg_test_end (test);
+	return "/bin/true";
 }
-#endif
-

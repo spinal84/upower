@@ -44,10 +44,12 @@ libexec_PROGRAMS = upowerd$(EXEEXT)
 
 @BACKEND_TYPE_LINUX_TRUE@am__append_3 = \
 @BACKEND_TYPE_LINUX_TRUE@	linux/libupshared.la					\
-@BACKEND_TYPE_LINUX_TRUE@	$(GUDEV_LIBS)
+@BACKEND_TYPE_LINUX_TRUE@	$(USB_LIBS)						\
+@BACKEND_TYPE_LINUX_TRUE@	$(GUDEV_LIBS)						\
+@BACKEND_TYPE_LINUX_TRUE@	$(IDEVICE_LIBS)
 
-@EGG_BUILD_TESTS_TRUE@check_PROGRAMS = up-self-test$(EXEEXT)
-@EGG_BUILD_TESTS_TRUE@TESTS = up-self-test$(EXEEXT)
+@UP_BUILD_TESTS_TRUE@check_PROGRAMS = up-self-test$(EXEEXT)
+@UP_BUILD_TESTS_TRUE@TESTS = up-self-test$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -65,33 +67,31 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(libexecdir)" "$(DESTDIR)$(dbusconfdir)" \
 	"$(DESTDIR)$(dbusifdir)" "$(DESTDIR)$(servicedir)"
 PROGRAMS = $(libexec_PROGRAMS)
-am__up_self_test_SOURCES_DIST = egg-test.h egg-test.c egg-debug.c \
-	egg-debug.h up-self-test.c up-polkit.h up-polkit.c up-daemon.h \
-	up-daemon.c up-device.h up-device.c up-device-list.h \
-	up-device-list.c up-qos.h up-qos.c up-wakeups.h up-wakeups.c \
-	up-history.h up-history.c up-backend.h up-native.h \
-	up-daemon-glue.h up-device-glue.h up-qos-glue.h \
-	up-wakeups-glue.h up-marshal.h up-marshal.c
+am__up_self_test_SOURCES_DIST = egg-debug.c egg-debug.h up-self-test.c \
+	up-polkit.h up-polkit.c up-daemon.h up-daemon.c up-device.h \
+	up-device.c up-device-list.h up-device-list.c up-qos.h \
+	up-qos.c up-wakeups.h up-wakeups.c up-history.h up-history.c \
+	up-backend.h up-native.h up-daemon-glue.h up-device-glue.h \
+	up-qos-glue.h up-wakeups-glue.h up-marshal.h up-marshal.c
 am__objects_1 = up_self_test-up-marshal.$(OBJEXT)
-@EGG_BUILD_TESTS_TRUE@am_up_self_test_OBJECTS =  \
-@EGG_BUILD_TESTS_TRUE@	up_self_test-egg-test.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	up_self_test-egg-debug.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	up_self_test-up-self-test.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	up_self_test-up-polkit.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	up_self_test-up-daemon.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	up_self_test-up-device.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	up_self_test-up-device-list.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	up_self_test-up-qos.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	up_self_test-up-wakeups.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	up_self_test-up-history.$(OBJEXT) \
-@EGG_BUILD_TESTS_TRUE@	$(am__objects_1)
+@UP_BUILD_TESTS_TRUE@am_up_self_test_OBJECTS =  \
+@UP_BUILD_TESTS_TRUE@	up_self_test-egg-debug.$(OBJEXT) \
+@UP_BUILD_TESTS_TRUE@	up_self_test-up-self-test.$(OBJEXT) \
+@UP_BUILD_TESTS_TRUE@	up_self_test-up-polkit.$(OBJEXT) \
+@UP_BUILD_TESTS_TRUE@	up_self_test-up-daemon.$(OBJEXT) \
+@UP_BUILD_TESTS_TRUE@	up_self_test-up-device.$(OBJEXT) \
+@UP_BUILD_TESTS_TRUE@	up_self_test-up-device-list.$(OBJEXT) \
+@UP_BUILD_TESTS_TRUE@	up_self_test-up-qos.$(OBJEXT) \
+@UP_BUILD_TESTS_TRUE@	up_self_test-up-wakeups.$(OBJEXT) \
+@UP_BUILD_TESTS_TRUE@	up_self_test-up-history.$(OBJEXT) \
+@UP_BUILD_TESTS_TRUE@	$(am__objects_1)
 up_self_test_OBJECTS = $(am_up_self_test_OBJECTS)
 am__DEPENDENCIES_1 =
-@EGG_BUILD_TESTS_TRUE@up_self_test_DEPENDENCIES = dummy/libuptest.la \
-@EGG_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
-@EGG_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
-@EGG_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
-@EGG_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) $(UPOWER_LIBS)
+@UP_BUILD_TESTS_TRUE@up_self_test_DEPENDENCIES = dummy/libuptest.la \
+@UP_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
+@UP_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
+@UP_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
+@UP_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) $(UPOWER_LIBS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
@@ -107,10 +107,12 @@ am_upowerd_OBJECTS = upowerd-egg-debug.$(OBJEXT) \
 	$(am__objects_2)
 upowerd_OBJECTS = $(am_upowerd_OBJECTS)
 @BACKEND_TYPE_LINUX_TRUE@am__DEPENDENCIES_2 = linux/libupshared.la \
+@BACKEND_TYPE_LINUX_TRUE@	$(am__DEPENDENCIES_1) \
+@BACKEND_TYPE_LINUX_TRUE@	$(am__DEPENDENCIES_1) \
 @BACKEND_TYPE_LINUX_TRUE@	$(am__DEPENDENCIES_1)
 upowerd_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(UPOWER_LIBS) $(am__append_1) \
-	$(am__append_2) $(am__DEPENDENCIES_2)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) $(UPOWER_LIBS) \
+	$(am__append_1) $(am__append_2) $(am__DEPENDENCIES_2)
 upowerd_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(upowerd_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
@@ -254,6 +256,8 @@ GTKDOC_REBASE = @GTKDOC_REBASE@
 GUDEV_CFLAGS = @GUDEV_CFLAGS@
 GUDEV_LIBS = @GUDEV_LIBS@
 HTML_DIR = @HTML_DIR@
+IDEVICE_CFLAGS = @IDEVICE_CFLAGS@
+IDEVICE_LIBS = @IDEVICE_LIBS@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -305,6 +309,8 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POFILES = @POFILES@
 POLKIT_CFLAGS = @POLKIT_CFLAGS@
 POLKIT_LIBS = @POLKIT_LIBS@
@@ -319,6 +325,8 @@ STRIP = @STRIP@
 UP_MAJOR_VERSION = @UP_MAJOR_VERSION@
 UP_MICRO_VERSION = @UP_MICRO_VERSION@
 UP_MINOR_VERSION = @UP_MINOR_VERSION@
+USB_CFLAGS = @USB_CFLAGS@
+USB_LIBS = @USB_LIBS@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 WARNINGFLAGS_C = @WARNINGFLAGS_C@
@@ -360,7 +368,6 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -449,40 +456,38 @@ upowerd_CFLAGS = \
 	$(WARNINGFLAGS_C)					\
 	$(NULL)
 
-@EGG_BUILD_TESTS_TRUE@up_self_test_SOURCES = \
-@EGG_BUILD_TESTS_TRUE@	egg-test.h						\
-@EGG_BUILD_TESTS_TRUE@	egg-test.c						\
-@EGG_BUILD_TESTS_TRUE@	egg-debug.c						\
-@EGG_BUILD_TESTS_TRUE@	egg-debug.h						\
-@EGG_BUILD_TESTS_TRUE@	up-self-test.c						\
-@EGG_BUILD_TESTS_TRUE@	up-polkit.h						\
-@EGG_BUILD_TESTS_TRUE@	up-polkit.c						\
-@EGG_BUILD_TESTS_TRUE@	up-daemon.h						\
-@EGG_BUILD_TESTS_TRUE@	up-daemon.c						\
-@EGG_BUILD_TESTS_TRUE@	up-device.h						\
-@EGG_BUILD_TESTS_TRUE@	up-device.c						\
-@EGG_BUILD_TESTS_TRUE@	up-device-list.h					\
-@EGG_BUILD_TESTS_TRUE@	up-device-list.c					\
-@EGG_BUILD_TESTS_TRUE@	up-qos.h						\
-@EGG_BUILD_TESTS_TRUE@	up-qos.c						\
-@EGG_BUILD_TESTS_TRUE@	up-wakeups.h						\
-@EGG_BUILD_TESTS_TRUE@	up-wakeups.c						\
-@EGG_BUILD_TESTS_TRUE@	up-history.h						\
-@EGG_BUILD_TESTS_TRUE@	up-history.c						\
-@EGG_BUILD_TESTS_TRUE@	up-backend.h						\
-@EGG_BUILD_TESTS_TRUE@	up-native.h						\
-@EGG_BUILD_TESTS_TRUE@	$(BUILT_SOURCES)
+@UP_BUILD_TESTS_TRUE@up_self_test_SOURCES = \
+@UP_BUILD_TESTS_TRUE@	egg-debug.c						\
+@UP_BUILD_TESTS_TRUE@	egg-debug.h						\
+@UP_BUILD_TESTS_TRUE@	up-self-test.c						\
+@UP_BUILD_TESTS_TRUE@	up-polkit.h						\
+@UP_BUILD_TESTS_TRUE@	up-polkit.c						\
+@UP_BUILD_TESTS_TRUE@	up-daemon.h						\
+@UP_BUILD_TESTS_TRUE@	up-daemon.c						\
+@UP_BUILD_TESTS_TRUE@	up-device.h						\
+@UP_BUILD_TESTS_TRUE@	up-device.c						\
+@UP_BUILD_TESTS_TRUE@	up-device-list.h					\
+@UP_BUILD_TESTS_TRUE@	up-device-list.c					\
+@UP_BUILD_TESTS_TRUE@	up-qos.h						\
+@UP_BUILD_TESTS_TRUE@	up-qos.c						\
+@UP_BUILD_TESTS_TRUE@	up-wakeups.h						\
+@UP_BUILD_TESTS_TRUE@	up-wakeups.c						\
+@UP_BUILD_TESTS_TRUE@	up-history.h						\
+@UP_BUILD_TESTS_TRUE@	up-history.c						\
+@UP_BUILD_TESTS_TRUE@	up-backend.h						\
+@UP_BUILD_TESTS_TRUE@	up-native.h						\
+@UP_BUILD_TESTS_TRUE@	$(BUILT_SOURCES)
 
-@EGG_BUILD_TESTS_TRUE@up_self_test_LDADD = \
-@EGG_BUILD_TESTS_TRUE@	-lm							\
-@EGG_BUILD_TESTS_TRUE@	dummy/libuptest.la					\
-@EGG_BUILD_TESTS_TRUE@	$(GLIB_LIBS)						\
-@EGG_BUILD_TESTS_TRUE@	$(GIO_CFLAGS)						\
-@EGG_BUILD_TESTS_TRUE@	$(DBUS_GLIB_LIBS)					\
-@EGG_BUILD_TESTS_TRUE@	$(POLKIT_LIBS)						\
-@EGG_BUILD_TESTS_TRUE@	$(UPOWER_LIBS)
+@UP_BUILD_TESTS_TRUE@up_self_test_LDADD = \
+@UP_BUILD_TESTS_TRUE@	-lm							\
+@UP_BUILD_TESTS_TRUE@	dummy/libuptest.la					\
+@UP_BUILD_TESTS_TRUE@	$(GLIB_LIBS)						\
+@UP_BUILD_TESTS_TRUE@	$(GIO_CFLAGS)						\
+@UP_BUILD_TESTS_TRUE@	$(DBUS_GLIB_LIBS)					\
+@UP_BUILD_TESTS_TRUE@	$(POLKIT_LIBS)						\
+@UP_BUILD_TESTS_TRUE@	$(UPOWER_LIBS)
 
-@EGG_BUILD_TESTS_TRUE@up_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS_C)
+@UP_BUILD_TESTS_TRUE@up_self_test_CFLAGS = $(AM_CFLAGS) $(WARNINGFLAGS_C)
 servicedir = $(datadir)/dbus-1/system-services
 service_in_files = org.freedesktop.UPower.service.in
 service_DATA = $(service_in_files:.service.in=.service)
@@ -600,7 +605,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-egg-debug.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-egg-test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-daemon.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-device-list.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-device.Po@am__quote@
@@ -644,22 +648,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
-
-up_self_test-egg-test.o: egg-test.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-egg-test.o -MD -MP -MF $(DEPDIR)/up_self_test-egg-test.Tpo -c -o up_self_test-egg-test.o `test -f 'egg-test.c' || echo '$(srcdir)/'`egg-test.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-egg-test.Tpo $(DEPDIR)/up_self_test-egg-test.Po
-@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-test.c' object='up_self_test-egg-test.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-egg-test.o `test -f 'egg-test.c' || echo '$(srcdir)/'`egg-test.c
-
-up_self_test-egg-test.obj: egg-test.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-egg-test.obj -MD -MP -MF $(DEPDIR)/up_self_test-egg-test.Tpo -c -o up_self_test-egg-test.obj `if test -f 'egg-test.c'; then $(CYGPATH_W) 'egg-test.c'; else $(CYGPATH_W) '$(srcdir)/egg-test.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-egg-test.Tpo $(DEPDIR)/up_self_test-egg-test.Po
-@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-test.c' object='up_self_test-egg-test.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-egg-test.obj `if test -f 'egg-test.c'; then $(CYGPATH_W) 'egg-test.c'; else $(CYGPATH_W) '$(srcdir)/egg-test.c'; fi`
 
 up_self_test-egg-debug.o: egg-debug.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-egg-debug.o -MD -MP -MF $(DEPDIR)/up_self_test-egg-debug.Tpo -c -o up_self_test-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c

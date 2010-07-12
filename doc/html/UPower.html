@@ -8,7 +8,7 @@
 <link rel="up" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="prev" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="next" href="Device.html" title="org.freedesktop.UPower.Device">
-<meta name="generator" content="GTK-Doc V1.14 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.15 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -52,7 +52,7 @@
 </pre>
 </div>
 <div class="refsect1" title="Signals">
-<a name="id3032142"></a><h2>Signals</h2>
+<a name="id3108303"></a><h2>Signals</h2>
 <pre class="synopsis"><a class="link" href="UPower.html#UPower::DeviceAdded">DeviceAdded</a>   ('o' device)
 <a class="link" href="UPower.html#UPower::DeviceRemoved">DeviceRemoved</a> ('o' device)
 <a class="link" href="UPower.html#UPower::DeviceChanged">DeviceChanged</a> ('o' device)
@@ -62,7 +62,7 @@
 </pre>
 </div>
 <div class="refsect1" title="Implemented Interfaces">
-<a name="id2959230"></a><h2>Implemented Interfaces</h2>
+<a name="id3034490"></a><h2>Implemented Interfaces</h2>
 <p>
     Objects implementing org.freedesktop.UPower also implements
     org.freedesktop.DBus.Introspectable,
@@ -70,7 +70,7 @@
     </p>
 </div>
 <div class="refsect1" title="Properties">
-<a name="id2959248"></a><h2>Properties</h2>
+<a name="id3034507"></a><h2>Properties</h2>
 <pre class="synopsis"><a class="link" href="UPower.html#UPower:DaemonVersion">'DaemonVersion'</a> read      's'
 <a class="link" href="UPower.html#UPower:CanSuspend">'CanSuspend'</a>    read      'b'
 <a class="link" href="UPower.html#UPower:CanHibernate">'CanHibernate'</a>  read      'b'
@@ -81,12 +81,12 @@
 </pre>
 </div>
 <div class="refsect1" title="Description">
-<a name="id2959309"></a><h2>Description</h2>
+<a name="id3074321"></a><h2>Description</h2>
 <p>
       
         </p>
 <p>
-          The DeviceKit-power service is available via the system message
+          The UPower service is available via the system message
           bus. To access the service, use
           the <code class="literal">org.freedesktop.UPower</code> interface on
           the <code class="literal">/org/freedesktop/UPower</code> object on
@@ -118,10 +118,10 @@
 <span class="normal">            </span><span class="symbol">/</span><span class="normal">org</span><span class="symbol">/</span><span class="normal">freedesktop</span><span class="symbol">/</span><span class="normal"><a href="UPower.html">UPower</a> </span><span class="symbol">\</span>
 <span class="normal">            org</span><span class="symbol">.</span><span class="normal">freedesktop</span><span class="symbol">.</span><span class="normal"><a href="UPower.html">UPower</a></span><span class="symbol">.</span><span class="normal">EnumerateDevices</span>
 
-<span class="normal">method </span><span class="keyword">return</span><span class="normal"> sender</span><span class="symbol">=:</span><span class="number">1.386</span><span class="normal"> </span><span class="symbol">-&gt;</span><span class="normal"> dest</span><span class="symbol">=:</span><span class="number">1.451</span><span class="normal"> reply_serial</span><span class="symbol">=</span><span class="number">2</span>
+<span class="normal">method </span><span class="usertype">return</span><span class="normal"> sender</span><span class="symbol">=:</span><span class="number">1.386</span><span class="normal"> </span><span class="symbol">-&gt;</span><span class="normal"> dest</span><span class="symbol">=:</span><span class="number">1.451</span><span class="normal"> reply_serial</span><span class="symbol">=</span><span class="number">2</span>
 <span class="normal">   array </span><span class="symbol">[</span>
-<span class="normal">      object path </span><span class="string">"/org/freedesktop/UPower/devices/line_power_AC"</span>
-<span class="normal">      object path </span><span class="string">"/org/freedesktop/UPower/devices/battery_BAT0"</span>
+<span class="normal">      </span><span class="usertype">object</span><span class="normal"> path </span><span class="string">"/org/freedesktop/UPower/devices/line_power_AC"</span>
+<span class="normal">      </span><span class="usertype">object</span><span class="normal"> path </span><span class="string">"/org/freedesktop/UPower/devices/battery_BAT0"</span>
 <span class="normal">   </span><span class="symbol">]</span></pre></td>
       </tr>
     </tbody>
@@ -135,9 +135,9 @@
     </p>
 </div>
 <div class="refsect1" title="Details">
-<a name="id2959014"></a><h2>Details</h2>
+<a name="id3074381"></a><h2>Details</h2>
 <div class="refsect2" title="EnumerateDevices ()">
-<a name="id2959022"></a><h3>
+<a name="id3074389"></a><h3>
 <a name="UPower.EnumerateDevices"></a>EnumerateDevices ()</h3>
 <pre class="programlisting">EnumerateDevices (out 'ao' devices)</pre>
 </div>
@@ -153,7 +153,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title="AboutToSleep ()">
-<a name="id2959064"></a><h3>
+<a name="id3035353"></a><h3>
 <a name="UPower.AboutToSleep"></a>AboutToSleep ()</h3>
 <pre class="programlisting">AboutToSleep ()</pre>
 </div>
@@ -181,7 +181,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title="Suspend ()">
-<a name="id2959116"></a><h3>
+<a name="id3035405"></a><h3>
 <a name="UPower.Suspend"></a>Suspend ()</h3>
 <pre class="programlisting">Suspend ()</pre>
 </div>
@@ -204,7 +204,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title="SuspendAllowed ()">
-<a name="id2963550"></a><h3>
+<a name="id3035451"></a><h3>
 <a name="UPower.SuspendAllowed"></a>SuspendAllowed ()</h3>
 <pre class="programlisting">SuspendAllowed (out 'b' allowed)</pre>
 </div>
@@ -221,7 +221,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title="Hibernate ()">
-<a name="id2963604"></a><h3>
+<a name="id3035504"></a><h3>
 <a name="UPower.Hibernate"></a>Hibernate ()</h3>
 <pre class="programlisting">Hibernate ()</pre>
 </div>
@@ -244,7 +244,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title="HibernateAllowed ()">
-<a name="id2963650"></a><h3>
+<a name="id3035550"></a><h3>
 <a name="UPower.HibernateAllowed"></a>HibernateAllowed ()</h3>
 <pre class="programlisting">HibernateAllowed (out 'b' allowed)</pre>
 </div>
@@ -261,9 +261,9 @@
 </table></div>
 </div>
 <div class="refsect1" title="Signal Details">
-<a name="id2963706"></a><h2>Signal Details</h2>
+<a name="id3034880"></a><h2>Signal Details</h2>
 <div class="refsect2" title="The DeviceAdded signal">
-<a name="id2963714"></a><h3>
+<a name="id3034888"></a><h3>
 <a name="UPower::DeviceAdded"></a>The DeviceAdded signal</h3>
 <pre class="programlisting">DeviceAdded ('o' device)</pre>
 </div>
@@ -279,7 +279,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title="The DeviceRemoved signal">
-<a name="id2963756"></a><h3>
+<a name="id3034931"></a><h3>
 <a name="UPower::DeviceRemoved"></a>The DeviceRemoved signal</h3>
 <pre class="programlisting">DeviceRemoved ('o' device)</pre>
 </div>
@@ -295,7 +295,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title="The DeviceChanged signal">
-<a name="id2963798"></a><h3>
+<a name="id3034973"></a><h3>
 <a name="UPower::DeviceChanged"></a>The DeviceChanged signal</h3>
 <pre class="programlisting">DeviceChanged ('o' device)</pre>
 </div>
@@ -311,7 +311,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title="The Changed signal">
-<a name="id3023974"></a><h3>
+<a name="id3035015"></a><h3>
 <a name="UPower::Changed"></a>The Changed signal</h3>
 <pre class="programlisting">Changed ()</pre>
 </div>
@@ -324,7 +324,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title="The Sleeping signal">
-<a name="id3024007"></a><h3>
+<a name="id3035047"></a><h3>
 <a name="UPower::Sleeping"></a>The Sleeping signal</h3>
 <pre class="programlisting">Sleeping ()</pre>
 </div>
@@ -341,7 +341,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title="The Resuming signal">
-<a name="id3024042"></a><h3>
+<a name="id3035083"></a><h3>
 <a name="UPower::Resuming"></a>The Resuming signal</h3>
 <pre class="programlisting">Resuming ()</pre>
 </div>
@@ -357,9 +357,9 @@
 </table></div>
 </div>
 <div class="refsect1" title="Property Details">
-<a name="id3024079"></a><h2>Property Details</h2>
+<a name="id3035119"></a><h2>Property Details</h2>
 <div class="refsect2" title='The "DaemonVersion" property'>
-<a name="id3024087"></a><h3>
+<a name="id3035127"></a><h3>
 <a name="UPower:DaemonVersion"></a>The "DaemonVersion" property</h3>
 <pre class="programlisting">'DaemonVersion'  read      's'
 </pre>
@@ -373,7 +373,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "CanSuspend" property'>
-<a name="id3024122"></a><h3>
+<a name="id3100233"></a><h3>
 <a name="UPower:CanSuspend"></a>The "CanSuspend" property</h3>
 <pre class="programlisting">'CanSuspend'  read      'b'
 </pre>
@@ -387,7 +387,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "CanHibernate" property'>
-<a name="id3024151"></a><h3>
+<a name="id3100262"></a><h3>
 <a name="UPower:CanHibernate"></a>The "CanHibernate" property</h3>
 <pre class="programlisting">'CanHibernate'  read      'b'
 </pre>
@@ -401,7 +401,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "OnBattery" property'>
-<a name="id3024181"></a><h3>
+<a name="id3100291"></a><h3>
 <a name="UPower:OnBattery"></a>The "OnBattery" property</h3>
 <pre class="programlisting">'OnBattery'  read      'b'
 </pre>
@@ -416,7 +416,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "OnLowBattery" property'>
-<a name="id3024210"></a><h3>
+<a name="id3100321"></a><h3>
 <a name="UPower:OnLowBattery"></a>The "OnLowBattery" property</h3>
 <pre class="programlisting">'OnLowBattery'  read      'b'
 </pre>
@@ -431,7 +431,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "LidIsClosed" property'>
-<a name="id3024242"></a><h3>
+<a name="id3100352"></a><h3>
 <a name="UPower:LidIsClosed"></a>The "LidIsClosed" property</h3>
 <pre class="programlisting">'LidIsClosed'  read      'b'
 </pre>
@@ -445,7 +445,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "LidIsPresent" property'>
-<a name="id3024274"></a><h3>
+<a name="id3100385"></a><h3>
 <a name="UPower:LidIsPresent"></a>The "LidIsPresent" property</h3>
 <pre class="programlisting">'LidIsPresent'  read      'b'
 </pre>
@@ -461,6 +461,6 @@
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.14</div>
+          Generated by GTK-Doc V1.15</div>
 </body>
 </html>

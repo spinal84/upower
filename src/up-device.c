@@ -542,7 +542,6 @@ up_device_coldplug (UpDevice *device, UpDaemon *daemon, GObject *native)
 	device->priv->native_path = g_strdup (native_path);
 
 	/* stop signals and callbacks */
-	egg_debug ("device now coldplug");
 	g_object_freeze_notify (G_OBJECT(device));
 	device->priv->during_coldplug = TRUE;
 
@@ -582,7 +581,6 @@ out:
 	/* start signals and callbacks */
 	g_object_thaw_notify (G_OBJECT(device));
 	device->priv->during_coldplug = FALSE;
-	egg_debug ("device now not coldplug");
 	g_free (id);
 	return ret;
 }
@@ -1198,31 +1196,4 @@ up_device_new (void)
 	device = UP_DEVICE (g_object_new (UP_TYPE_DEVICE, NULL));
 	return device;
 }
-
-/***************************************************************************
- ***                          MAKE CHECK TESTS                           ***
- ***************************************************************************/
-#ifdef EGG_TEST
-#include "egg-test.h"
-
-void
-up_device_test (gpointer user_data)
-{
-	EggTest *test = (EggTest *) user_data;
-	UpDevice *device;
-
-	if (!egg_test_start (test, "UpDevice"))
-		return;
-
-	/************************************************************/
-	egg_test_title (test, "get instance");
-	device = up_device_new ();
-	egg_test_assert (test, device != NULL);
-
-	/* unref */
-	g_object_unref (device);
-
-	egg_test_end (test);
-}
-#endif
 
