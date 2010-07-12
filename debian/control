@@ -73,14 +73,6 @@ Description: abstraction for power management - development files
  .
  This package contains files that are needed to build applications.
 
-Package: devicekit-power-doc
-Architecture: all
-Section: oldlibs
-Depends: ${misc:Depends}, upower-doc
-Description: transitional package to upower-doc
- This is a transitional package to faciliate the upgrade to the new name
- upower-doc. It can be safely removed after the upgrade.
-
 Package: libdevkit-power-gobject1
 Architecture: any
 Section: oldlibs
