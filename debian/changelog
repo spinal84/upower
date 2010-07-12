@@ -5,6 +5,8 @@ upower (0.9.5-1) UNRELEASED; urgency=low
     - Port UPower to libusb1 to avoid unfixable crashes. (LP: #522827)
   * debian/rules: Build a PO template during package build, for translation
     systems. (LP: #538321)
+  * debian/control: Switch libusb-dev build dependency to libusb-1.0-0-dev,
+    and add libimobiledevice-dev to support the new backend.
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 07 Jul 2010 11:53:16 +0200
 
