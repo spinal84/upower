@@ -601,7 +601,9 @@ up_history_schedule_save (UpHistory *history)
 	egg_debug ("saving in %i seconds", UP_HISTORY_SAVE_INTERVAL);
 	history->priv->save_id = g_timeout_add_seconds (UP_HISTORY_SAVE_INTERVAL,
 							(GSourceFunc) up_history_schedule_save_cb, history);
-
+#if GLIB_CHECK_VERSION(2,25,8)
+	g_source_set_name_by_id (history->priv->save_id, "[UpHistory] save");
+#endif
 	return TRUE;
 }
 
@@ -885,31 +887,4 @@ up_history_new (void)
 	history = g_object_new (UP_TYPE_HISTORY, NULL);
 	return UP_HISTORY (history);
 }
-
-/***************************************************************************
- ***                          MAKE CHECK TESTS                           ***
- ***************************************************************************/
-#ifdef EGG_TEST
-#include "egg-test.h"
-
-void
-up_history_test (gpointer user_data)
-{
-	EggTest *test = (EggTest *) user_data;
-	UpHistory *history;
-
-	if (!egg_test_start (test, "UpHistory"))
-		return;
-
-	/************************************************************/
-	egg_test_title (test, "get instance");
-	history = up_history_new ();
-	egg_test_assert (test, history != NULL);
-
-	/* unref */
-	g_object_unref (history);
-
-	egg_test_end (test);
-}
-#endif
 

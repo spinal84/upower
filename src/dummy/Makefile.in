@@ -35,7 +35,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @BACKEND_TYPE_DUMMY_TRUE@am__append_1 = libupshared.la
-@EGG_BUILD_TESTS_TRUE@am__append_2 = libuptest.la
+@UP_BUILD_TESTS_TRUE@am__append_2 = libuptest.la
 subdir = src/dummy
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -61,12 +61,12 @@ am__v_lt_0 = --silent
 libuptest_la_LIBADD =
 am__libuptest_la_SOURCES_DIST = up-backend.c up-native.c
 am__objects_1 = libuptest_la-up-backend.lo libuptest_la-up-native.lo
-@EGG_BUILD_TESTS_TRUE@am_libuptest_la_OBJECTS = $(am__objects_1)
+@UP_BUILD_TESTS_TRUE@am_libuptest_la_OBJECTS = $(am__objects_1)
 libuptest_la_OBJECTS = $(am_libuptest_la_OBJECTS)
 libuptest_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libuptest_la_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-@EGG_BUILD_TESTS_TRUE@am_libuptest_la_rpath =
+@UP_BUILD_TESTS_TRUE@am_libuptest_la_rpath =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -146,6 +146,8 @@ GTKDOC_REBASE = @GTKDOC_REBASE@
 GUDEV_CFLAGS = @GUDEV_CFLAGS@
 GUDEV_LIBS = @GUDEV_LIBS@
 HTML_DIR = @HTML_DIR@
+IDEVICE_CFLAGS = @IDEVICE_CFLAGS@
+IDEVICE_LIBS = @IDEVICE_LIBS@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -197,6 +199,8 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POFILES = @POFILES@
 POLKIT_CFLAGS = @POLKIT_CFLAGS@
 POLKIT_LIBS = @POLKIT_LIBS@
@@ -211,6 +215,8 @@ STRIP = @STRIP@
 UP_MAJOR_VERSION = @UP_MAJOR_VERSION@
 UP_MICRO_VERSION = @UP_MICRO_VERSION@
 UP_MINOR_VERSION = @UP_MINOR_VERSION@
+USB_CFLAGS = @USB_CFLAGS@
+USB_LIBS = @USB_LIBS@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 WARNINGFLAGS_C = @WARNINGFLAGS_C@
@@ -252,7 +258,6 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -283,8 +288,8 @@ libupshared_la_SOURCES = \
 	up-native.c						\
 	$(BUILT_SOURCES)
 
-@EGG_BUILD_TESTS_TRUE@libuptest_la_CFLAGS = -DEGG_TEST
-@EGG_BUILD_TESTS_TRUE@libuptest_la_SOURCES = $(libupshared_la_SOURCES)
+@UP_BUILD_TESTS_TRUE@libuptest_la_CFLAGS = -DEGG_TEST
+@UP_BUILD_TESTS_TRUE@libuptest_la_SOURCES = $(libupshared_la_SOURCES)
 all: all-am
 
 .SUFFIXES:

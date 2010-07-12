@@ -2,11 +2,11 @@ dnl Process this file with autoconf to produce a configure script.
 
 m4_define([up_major_version], [0])
 m4_define([up_minor_version], [9])
-m4_define([up_micro_version], [4])
+m4_define([up_micro_version], [5])
 m4_define([up_version],
           [up_major_version.up_minor_version.up_micro_version])
 
-AC_PREREQ(2.65)
+AC_PREREQ(2.63)
 AC_INIT([upower],[up_version],[richard@hughsie.com],[upower])
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE([1.9 tar-ustar dist-bzip2])
@@ -178,15 +178,17 @@ AC_DEFINE_UNQUOTED(BACKEND, "$with_backend", [backend])
 AC_SUBST(BACKEND, "$with_backend")
 
 # only need GUdev on linux
+with_idevice=no
 if test x$with_backend = xlinux; then
 	PKG_CHECK_MODULES(GUDEV, [gudev-1.0 >= 001])
-	AC_SUBST(GUDEV_CFLAGS)
-	AC_SUBST(GUDEV_LIBS)
-
-	dnl Check libusb also
-	AC_CHECK_HEADERS(usb.h, , [AC_MSG_ERROR([Can't find usb.h. Please install libusb.])])
-	AC_CHECK_LIB([usb], [usb_find_devices], [], [AC_MSG_ERROR([Can't use libusb.])])
+	PKG_CHECK_MODULES(USB, [libusb-1.0 >= 1.0.0])
+	PKG_CHECK_MODULES(IDEVICE, libimobiledevice-1.0 >= 0.9.7, with_idevice=yes, with_idevice=no)
+	if test x$with_idevice = xyes; then
+		AC_DEFINE(HAVE_IDEVICE, 1, [Define to 1 if AFC is going to be built])
+	fi
 fi
+
+AM_CONDITIONAL(HAVE_IDEVICE, [test x$with_idevice = xyes])
 
 # export to Makefile.am
 AM_CONDITIONAL(BACKEND_TYPE_DUMMY, [test x$with_backend = xdummy])
@@ -198,10 +200,7 @@ dnl - Build self tests
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(tests, AS_HELP_STRING([--enable-tests],[enable unit test code]),
 	      enable_tests=$enableval,enable_tests=yes)
-AM_CONDITIONAL(EGG_BUILD_TESTS, test x$enable_tests = xyes)
-if test x$enable_tests = xyes; then
-	AC_DEFINE(EGG_BUILD_TESTS,1,[Build test code])
-fi
+AM_CONDITIONAL(UP_BUILD_TESTS, test x$enable_tests = xyes)
 
 if test "x$GCC" = "xyes"; then
   LDFLAGS="-Wl,--as-needed $LDFLAGS"
@@ -258,6 +257,7 @@ echo "
         xsltproc:                   ${XSLTPROC}
 
         Backend:                    ${with_backend}
+        libimobiledevice support:   ${with_idevice}
         Maintainer mode:            ${USE_MAINTAINER_MODE}
         Building api docs:          ${enable_gtk_doc}
         Building man pages:         ${enable_man_pages}

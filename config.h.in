@@ -3,9 +3,6 @@
 /* backend */
 #undef BACKEND
 
-/* Build test code */
-#undef EGG_BUILD_TESTS
-
 /* always defined to indicate that i18n is enabled */
 #undef ENABLE_NLS
 
@@ -24,14 +21,14 @@
 /* Define if the GNU gettext() function is already present or preinstalled. */
 #undef HAVE_GETTEXT
 
+/* Define to 1 if AFC is going to be built */
+#undef HAVE_IDEVICE
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
 /* Define if your <locale.h> file defines LC_MESSAGES. */
 #undef HAVE_LC_MESSAGES
-
-/* Define to 1 if you have the `usb' library (-lusb). */
-#undef HAVE_LIBUSB
 
 /* Define to 1 if you have the <locale.h> header file. */
 #undef HAVE_LOCALE_H
@@ -59,9 +56,6 @@
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
-
-/* Define to 1 if you have the <usb.h> header file. */
-#undef HAVE_USB_H
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */

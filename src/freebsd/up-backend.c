@@ -293,6 +293,9 @@ up_backend_coldplug (UpBackend *backend, UpDaemon *daemon)
 		g_timeout_add_seconds (UP_BACKEND_REFRESH_TIMEOUT,
 			       (GSourceFunc) up_backend_refresh_devices,
 			       backend);
+#if GLIB_CHECK_VERSION(2,25,8)
+	g_source_set_name_by_id (backend->priv->poll_timer_id, "[FreeBSD:UpBackend] poll");
+#endif
 
 	return TRUE;
 }
@@ -480,31 +483,4 @@ up_backend_new (void)
 	backend = g_object_new (UP_TYPE_BACKEND, NULL);
 	return UP_BACKEND (backend);
 }
-
-/***************************************************************************
- ***                          MAKE CHECK TESTS                           ***
- ***************************************************************************/
-#ifdef EGG_TEST
-#include "egg-test.h"
-
-void
-up_backend_test (gpointer user_data)
-{
-	EggTest *test = (EggTest *) user_data;
-	UpBackend *backend;
-
-	if (!egg_test_start (test, "UpBackend"))
-		return;
-
-	/************************************************************/
-	egg_test_title (test, "get instance");
-	backend = up_backend_new ();
-	egg_test_assert (test, backend != NULL);
-
-	/* unref */
-	g_object_unref (backend);
-
-	egg_test_end (test);
-}
-#endif
 

@@ -104,25 +104,25 @@ up_device_supply_reset_values (UpDeviceSupply *supply)
 		      "vendor", NULL,
 		      "model", NULL,
 		      "serial", NULL,
-		      "update-time", 0,
+		      "update-time", (guint64) 0,
 		      "power-supply", FALSE,
 		      "online", FALSE,
-		      "energy", 0.0,
+		      "energy", (gdouble) 0.0,
 		      "is-present", FALSE,
 		      "is-rechargeable", FALSE,
 		      "has-history", FALSE,
 		      "has-statistics", FALSE,
-		      "state", NULL,
-		      "capacity", 0.0,
-		      "energy-empty", 0.0,
-		      "energy-full", 0.0,
-		      "energy-full-design", 0.0,
-		      "energy-rate", 0.0,
-		      "voltage", 0.0,
-		      "time-to-empty", 0,
-		      "time-to-full", 0,
-		      "percentage", 0,
-		      "technology", NULL,
+		      "state", UP_DEVICE_STATE_UNKNOWN,
+		      "capacity", (gdouble) 0.0,
+		      "energy-empty", (gdouble) 0.0,
+		      "energy-full", (gdouble) 0.0,
+		      "energy-full-design", (gdouble) 0.0,
+		      "energy-rate", (gdouble) 0.0,
+		      "voltage", (gdouble) 0.0,
+		      "time-to-empty", (gint64) 0,
+		      "time-to-full", (gint64) 0,
+		      "percentage", (gdouble) 0.0,
+		      "technology", UP_DEVICE_TECHNOLOGY_UNKNOWN,
 		      NULL);
 }
 
@@ -412,11 +412,11 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 	gdouble energy_full;
 	gdouble energy_full_design;
 	gdouble energy_rate;
-	gdouble capacity;
+	gdouble capacity = 100.0f;
 	gdouble percentage = 0.0f;
 	gdouble voltage;
-	guint64 time_to_empty;
-	guint64 time_to_full;
+	gint64 time_to_empty;
+	gint64 time_to_full;
 	gchar *manufacturer = NULL;
 	gchar *model_name = NULL;
 	gchar *serial_number = NULL;
@@ -804,6 +804,9 @@ up_device_supply_setup_poll (UpDevice *device)
 		supply->priv->poll_timer_id =
 			g_timeout_add_seconds (UP_DEVICE_SUPPLY_UNKNOWN_TIMEOUT,
 					       (GSourceFunc) up_device_supply_poll_battery, supply);
+#if GLIB_CHECK_VERSION(2,25,8)
+		g_source_set_name_by_id (supply->priv->poll_timer_id, "[UpDeviceSupply] unknown poll");
+#endif
 		/* increase count, we don't want to poll at 0.5Hz forever */
 		supply->priv->unknown_retries++;
 		goto out;
@@ -813,6 +816,9 @@ up_device_supply_setup_poll (UpDevice *device)
 	supply->priv->poll_timer_id =
 		g_timeout_add_seconds (UP_DEVICE_SUPPLY_REFRESH_TIMEOUT,
 				       (GSourceFunc) up_device_supply_poll_battery, supply);
+#if GLIB_CHECK_VERSION(2,25,8)
+	g_source_set_name_by_id (supply->priv->poll_timer_id, "[UpDeviceSupply] normal poll");
+#endif
 out:
 	return (supply->priv->poll_timer_id != 0);
 }

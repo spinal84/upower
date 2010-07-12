@@ -100,7 +100,7 @@
     <keyword type="function" name="up_client_get_devices ()" link="UPower-up-client.html#up-client-get-devices" since="0.9.0"/>
     <keyword type="function" name="up_client_get_daemon_version ()" link="UPower-up-client.html#up-client-get-daemon-version" since="0.9.0"/>
     <keyword type="function" name="up_client_get_can_hibernate ()" link="UPower-up-client.html#up-client-get-can-hibernate" since="0.9.0"/>
-    <keyword type="function" name="up_client_get_lid_is_closed ()" link="UPower-up-client.html#up-client-get-lid-is-closed"/>
+    <keyword type="function" name="up_client_get_lid_is_closed ()" link="UPower-up-client.html#up-client-get-lid-is-closed" since="0.9.0"/>
     <keyword type="function" name="up_client_get_can_suspend ()" link="UPower-up-client.html#up-client-get-can-suspend" since="0.9.0"/>
     <keyword type="function" name="up_client_get_on_battery ()" link="UPower-up-client.html#up-client-get-on-battery" since="0.9.0"/>
     <keyword type="function" name="up_client_get_on_low_battery ()" link="UPower-up-client.html#up-client-get-on-low-battery" since="0.9.0"/>

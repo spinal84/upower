@@ -82,7 +82,6 @@ struct UpDaemonPrivate
 	gboolean		 lid_is_present;
 	gboolean		 kernel_can_suspend;
 	gboolean		 kernel_can_hibernate;
-	gboolean		 hibernate_has_swap_space;
 	gboolean		 hibernate_has_encrypted_swap;
 	gboolean		 during_coldplug;
 	gboolean		 sent_sleeping_signal;
@@ -104,7 +103,10 @@ G_DEFINE_TYPE (UpDaemon, up_daemon, G_TYPE_OBJECT)
 #define UP_DAEMON_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), UP_TYPE_DAEMON, UpDaemonPrivate))
 
 /* if using more memory compared to usable swap, disable hibernate */
-#define UP_DAEMON_SWAP_WATERLINE 			80.0f /* % */
+/* Native Linux suspend-to-disk does not use compression, and needs 2 KB of
+ * page meta information for each MB of active memory. Add some error margin
+ * here, though. */
+#define UP_DAEMON_SWAP_WATERLINE 			98.f /* % */
 
 /* refresh all the devices after this much time when on-battery has changed */
 #define UP_DAEMON_ON_BATTERY_REFRESH_DEVICES_DELAY	1 /* seconds */
@@ -224,19 +226,21 @@ up_daemon_get_on_ac_local (UpDaemon *daemon)
 }
 
 /**
- * up_daemon_set_pmutils_powersave:
- *
- * Uses pm-utils to run scripts in power.d
+ * up_daemon_set_powersave:
  **/
 static gboolean
-up_daemon_set_pmutils_powersave (UpDaemon *daemon, gboolean powersave)
+up_daemon_set_powersave (UpDaemon *daemon, gboolean powersave)
 {
-	gboolean ret;
-	gchar *command;
+	gboolean ret = FALSE;
+	const gchar *command;
 	GError *error = NULL;
 
-	/* run script from pm-utils */
-	command = g_strdup_printf ("/usr/sbin/pm-powersave %s", powersave ? "true" : "false");
+	/* run script */
+	command = up_backend_get_powersave_command (daemon->priv->backend, powersave);
+	if (command == NULL) {
+		egg_warning ("no powersave command set");
+		goto out;
+	}
 	egg_debug ("excuting command: %s", command);
 	ret = g_spawn_command_line_async (command, &error);
 	if (!ret) {
@@ -245,7 +249,6 @@ up_daemon_set_pmutils_powersave (UpDaemon *daemon, gboolean powersave)
 		goto out;
 	}
 out:
-	g_free (command);
 	return ret;
 }
 
@@ -425,6 +428,9 @@ up_daemon_deferred_sleep (UpDaemon *daemon, const gchar *command, DBusGMethodInv
 		g_signal_emit (daemon, signals[SIGNAL_SLEEPING], 0);
 		priv->about_to_sleep_id = g_timeout_add (priv->conf_sleep_timeout,
 							 (GSourceFunc) up_daemon_deferred_sleep_cb, sleep);
+#if GLIB_CHECK_VERSION(2,25,8)
+		g_source_set_name_by_id (priv->about_to_sleep_id, "[UpDaemon] about-to-sleep no signal");
+#endif
 		return;
 	}
 
@@ -435,9 +441,15 @@ up_daemon_deferred_sleep (UpDaemon *daemon, const gchar *command, DBusGMethodInv
 		/* we have to wait for the difference in time */
 		priv->about_to_sleep_id = g_timeout_add (priv->conf_sleep_timeout - elapsed,
 							 (GSourceFunc) up_daemon_deferred_sleep_cb, sleep);
+#if GLIB_CHECK_VERSION(2,25,8)
+		g_source_set_name_by_id (priv->about_to_sleep_id, "[UpDaemon] about-to-sleep less");
+#endif
 	} else {
 		/* we can do this straight away */
 		priv->about_to_sleep_id = g_idle_add ((GSourceFunc) up_daemon_deferred_sleep_cb, sleep);
+#if GLIB_CHECK_VERSION(2,25,8)
+		g_source_set_name_by_id (priv->about_to_sleep_id, "[UpDaemon] about-to-sleep more");
+#endif
 	}
 }
 
@@ -509,6 +521,31 @@ out:
 	return TRUE;
 }
 
+/** 
+ * up_daemon_check_hibernate_swap:
+ *
+ * Check current memory usage whether we have enough swap space for
+ * hibernate.
+ **/
+static gboolean
+up_daemon_check_hibernate_swap (UpDaemon *daemon)
+{
+	gfloat waterline;
+
+	if (daemon->priv->kernel_can_hibernate) {
+		waterline = up_backend_get_used_swap (daemon->priv->backend);
+		if (waterline < UP_DAEMON_SWAP_WATERLINE) {
+			egg_debug ("enough swap to for hibernate");
+			return TRUE;
+		} else {
+			egg_debug ("not enough swap to hibernate");
+			return FALSE;
+		}
+	}
+
+	return FALSE;
+}
+
 /**
  * up_daemon_hibernate:
  **/
@@ -530,7 +567,7 @@ up_daemon_hibernate (UpDaemon *daemon, DBusGMethodInvocation *context)
 	}
 
 	/* enough swap? */
-	if (!priv->hibernate_has_swap_space) {
+	if (!up_daemon_check_hibernate_swap (daemon)) {
 		error = g_error_new (UP_DAEMON_ERROR,
 				     UP_DAEMON_ERROR_GENERAL,
 				     "Not enough swap space");
@@ -674,8 +711,8 @@ up_daemon_startup (UpDaemon *daemon)
 	priv->during_coldplug = FALSE;
 	egg_debug ("daemon now not coldplug");
 
-	/* set pm-utils power policy */
-	up_daemon_set_pmutils_powersave (daemon, priv->on_battery);
+	/* set power policy */
+	up_daemon_set_powersave (daemon, priv->on_battery);
 out:
 	return ret;
 }
@@ -774,6 +811,9 @@ up_daemon_poll_battery_devices_for_a_little_bit (UpDaemon *daemon)
 	priv->battery_poll_id =
 		g_timeout_add_seconds (UP_DAEMON_ON_BATTERY_REFRESH_DEVICES_DELAY,
 				       (GSourceFunc) up_daemon_refresh_battery_devices_cb, daemon);
+#if GLIB_CHECK_VERSION(2,25,8)
+	g_source_set_name_by_id (priv->battery_poll_id, "[UpDaemon] poll batteries for AC event");
+#endif
 }
 
 /**
@@ -805,8 +845,8 @@ up_daemon_device_changed_cb (UpDevice *device, UpDaemon *daemon)
 	if (ret != priv->on_battery) {
 		up_daemon_set_on_battery (daemon, ret);
 
-		/* set pm-utils power policy */
-		up_daemon_set_pmutils_powersave (daemon, ret);
+		/* set power policy */
+		up_daemon_set_powersave (daemon, ret);
 	}
 	ret = up_daemon_get_on_low_battery_local (daemon);
 	if (ret != priv->on_low_battery)
@@ -930,7 +970,6 @@ up_daemon_properties_changed_cb (GObject *object, GParamSpec *pspec, UpDaemon *d
 static void
 up_daemon_init (UpDaemon *daemon)
 {
-	gfloat waterline;
 	gboolean ret;
 	GError *error = NULL;
 	GKeyFile *file;
@@ -941,7 +980,6 @@ up_daemon_init (UpDaemon *daemon)
 	daemon->priv->lid_is_closed = FALSE;
 	daemon->priv->kernel_can_suspend = FALSE;
 	daemon->priv->kernel_can_hibernate = FALSE;
-	daemon->priv->hibernate_has_swap_space = FALSE;
 	daemon->priv->hibernate_has_encrypted_swap = FALSE;
 	daemon->priv->power_devices = up_device_list_new ();
 	daemon->priv->on_battery = FALSE;
@@ -991,15 +1029,6 @@ up_daemon_init (UpDaemon *daemon)
 	/* check if we have support */
 	daemon->priv->kernel_can_suspend = up_backend_kernel_can_suspend (daemon->priv->backend);
 	daemon->priv->kernel_can_hibernate = up_backend_kernel_can_hibernate (daemon->priv->backend);
-
-	/* do we have enough swap? */
-	if (daemon->priv->kernel_can_hibernate) {
-		waterline = up_backend_get_used_swap (daemon->priv->backend);
-		if (waterline < UP_DAEMON_SWAP_WATERLINE)
-			daemon->priv->hibernate_has_swap_space = TRUE;
-		else
-			egg_debug ("not enough swap to enable hibernate");
-	}
 
 	/* is the swap usable? */
 	if (daemon->priv->kernel_can_hibernate)
@@ -1058,7 +1087,7 @@ up_daemon_get_property (GObject *object, guint prop_id, GValue *value, GParamSpe
 		break;
 	case PROP_CAN_HIBERNATE:
 		g_value_set_boolean (value, (priv->kernel_can_hibernate &&
-					     priv->hibernate_has_swap_space &&
+					     up_daemon_check_hibernate_swap (daemon) &&
 					     (!priv->hibernate_has_encrypted_swap ||
 					      priv->conf_allow_hibernate_encrypted_swap)));
 		break;
@@ -1249,31 +1278,4 @@ up_daemon_new (void)
 	daemon = UP_DAEMON (g_object_new (UP_TYPE_DAEMON, NULL));
 	return daemon;
 }
-
-/***************************************************************************
- ***                          MAKE CHECK TESTS                           ***
- ***************************************************************************/
-#ifdef EGG_TEST
-#include "egg-test.h"
-
-void
-up_daemon_test (gpointer user_data)
-{
-	EggTest *test = (EggTest *) user_data;
-	UpDaemon *daemon;
-
-	if (!egg_test_start (test, "UpDaemon"))
-		return;
-
-	/************************************************************/
-	egg_test_title (test, "get instance");
-	daemon = up_daemon_new ();
-	egg_test_assert (test, daemon != NULL);
-
-	/* unref */
-	g_object_unref (daemon);
-
-	egg_test_end (test);
-}
-#endif
 
