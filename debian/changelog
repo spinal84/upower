@@ -1,5 +1,8 @@
-upower (0.9.4-3) UNRELEASED; urgency=low
+upower (0.9.5-1) UNRELEASED; urgency=low
 
+  * New upstream release:
+    - Dynamic testing for enough hibernate swap. (LP: #599352)
+    - Port UPower to libusb1 to avoid unfixable crashes. (LP: #522827)
   * debian/rules: Build a PO template during package build, for translation
     systems. (LP: #538321)
 
