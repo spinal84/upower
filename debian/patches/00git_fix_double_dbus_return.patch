@@ -1,0 +1,107 @@
+commit 3967e062ef5a58c4f3f283f34d591c6e8a5d8788
+Author: Matthias Clasen <matthias.clasen@gmail.com>
+Date:   Thu Aug 19 13:04:38 2010 +0200
+
+    Fix double D-BUS return in up_daemon_*_allowed
+    
+    Do not send a D-BUS return message any more in up_polkit_is_allowed(), since
+    this makes it hard for callers to ensure that they return exactly one result to
+    the D-BUS caller. Instead, just pass a GError to the caller.
+    
+    Update up_daemon_suspend_allowed() and up_daemon_hibernate_allowed()
+    accordingly, to always return either a result or an error.
+    
+    Signed-off-by: Martin Pitt <martin.pitt@ubuntu.com>
+
+Index: upower/src/up-daemon.c
+===================================================================
+--- upower.orig/src/up-daemon.c	2010-09-24 17:51:00.000000000 +0200
++++ upower/src/up-daemon.c	2010-09-24 17:51:25.363744999 +0200
+@@ -507,13 +507,21 @@
+ 	gboolean ret;
+ 	PolkitSubject *subject = NULL;
+ 	UpDaemonPrivate *priv = daemon->priv;
++	GError *error;
+ 
+ 	subject = up_polkit_get_subject (priv->polkit, context);
+ 	if (subject == NULL)
+ 		goto out;
+ 
+-	ret = up_polkit_is_allowed (priv->polkit, subject, "org.freedesktop.upower.suspend", context);
+-	dbus_g_method_return (context, ret);
++	error = NULL;
++	ret = up_polkit_is_allowed (priv->polkit, subject, "org.freedesktop.upower.suspend", &error);
++	if (error) {
++		dbus_g_method_return_error (context, error);
++		g_error_free (error);
++	}
++	else {
++		dbus_g_method_return (context, ret);
++	}
+ 
+ out:
+ 	if (subject != NULL)
+@@ -619,13 +627,21 @@
+ 	gboolean ret;
+ 	PolkitSubject *subject = NULL;
+ 	UpDaemonPrivate *priv = daemon->priv;
++	GError *error;
+ 
+ 	subject = up_polkit_get_subject (priv->polkit, context);
+ 	if (subject == NULL)
+ 		goto out;
+ 
+-	ret = up_polkit_is_allowed (priv->polkit, subject, "org.freedesktop.upower.hibernate", context);
+-	dbus_g_method_return (context, ret);
++	error = NULL;
++	ret = up_polkit_is_allowed (priv->polkit, subject, "org.freedesktop.upower.hibernate", &error);
++	if (error) {
++		dbus_g_method_return_error (context, error);
++		g_error_free (error);
++	}
++	else {
++		dbus_g_method_return (context, ret);
++	}
+ 
+ out:
+ 	if (subject != NULL)
+Index: upower/src/up-polkit.c
+===================================================================
+--- upower.orig/src/up-polkit.c	2010-09-24 17:51:00.000000000 +0200
++++ upower/src/up-polkit.c	2010-09-24 17:52:05.783745000 +0200
+@@ -100,20 +100,17 @@
+  * up_polkit_is_allowed:
+  **/
+ gboolean
+-up_polkit_is_allowed (UpPolkit *polkit, PolkitSubject *subject, const gchar *action_id, DBusGMethodInvocation *context)
++up_polkit_is_allowed (UpPolkit *polkit, PolkitSubject *subject, const gchar *action_id, GError **error)
+ {
+ 	gboolean ret = FALSE;
+-	GError *error;
+ 	GError *error_local;
+ 	PolkitAuthorizationResult *result;
+ 
+ 	/* check auth */
+ 	result = polkit_authority_check_authorization_sync (polkit->priv->authority, subject, action_id, NULL, POLKIT_CHECK_AUTHORIZATION_FLAGS_NONE, NULL, &error_local);
+ 	if (result == NULL) {
+-		error = g_error_new (UP_DAEMON_ERROR, UP_DAEMON_ERROR_GENERAL, "failed to check authorisation: %s", error_local->message);
+-		dbus_g_method_return_error (context, error);
++		g_set_error (error, UP_DAEMON_ERROR, UP_DAEMON_ERROR_GENERAL, "failed to check authorisation: %s", error_local->message);
+ 		g_error_free (error_local);
+-		g_error_free (error);
+ 		goto out;
+ 	}
+ 
+Index: upower/src/up-polkit.h
+===================================================================
+--- upower.orig/src/up-polkit.h	2010-09-24 17:51:00.000000000 +0200
++++ upower/src/up-polkit.h	2010-09-24 17:51:25.363744999 +0200
+@@ -60,7 +60,7 @@
+ gboolean	 up_polkit_is_allowed		(UpPolkit		*polkit,
+ 						 PolkitSubject		*subject,
+ 						 const gchar		*action_id,
+-						 DBusGMethodInvocation	*context);
++						 GError		 	**error);
+ gboolean         up_polkit_get_uid		(UpPolkit              *polkit,
+                                                  PolkitSubject          *subject,
+                                                  uid_t                  *uid);
