@@ -13,11 +13,11 @@ Date:   Thu Aug 19 13:04:38 2010 +0200
     
     Signed-off-by: Martin Pitt <martin.pitt@ubuntu.com>
 
-Index: upower/src/up-daemon.c
-===================================================================
---- upower.orig/src/up-daemon.c	2010-09-24 17:51:00.000000000 +0200
-+++ upower/src/up-daemon.c	2010-09-24 17:51:25.363744999 +0200
-@@ -507,13 +507,21 @@
+diff --git a/src/up-daemon.c b/src/up-daemon.c
+index 40bab80..532ebe8 100644
+--- a/src/up-daemon.c
++++ b/src/up-daemon.c
+@@ -511,13 +511,21 @@ up_daemon_suspend_allowed (UpDaemon *daemon, DBusGMethodInvocation *context)
  	gboolean ret;
  	PolkitSubject *subject = NULL;
  	UpDaemonPrivate *priv = daemon->priv;
@@ -41,7 +41,7 @@ Index: upower/src/up-daemon.c
  
  out:
  	if (subject != NULL)
-@@ -619,13 +627,21 @@
+@@ -627,13 +635,21 @@ up_daemon_hibernate_allowed (UpDaemon *daemon, DBusGMethodInvocation *context)
  	gboolean ret;
  	PolkitSubject *subject = NULL;
  	UpDaemonPrivate *priv = daemon->priv;
@@ -65,11 +65,11 @@ Index: upower/src/up-daemon.c
  
  out:
  	if (subject != NULL)
-Index: upower/src/up-polkit.c
-===================================================================
---- upower.orig/src/up-polkit.c	2010-09-24 17:51:00.000000000 +0200
-+++ upower/src/up-polkit.c	2010-09-24 17:52:05.783745000 +0200
-@@ -100,20 +100,17 @@
+diff --git a/src/up-polkit.c b/src/up-polkit.c
+index 9b86394..ab2c66d 100644
+--- a/src/up-polkit.c
++++ b/src/up-polkit.c
+@@ -103,10 +103,9 @@ out:
   * up_polkit_is_allowed:
   **/
  gboolean
@@ -78,11 +78,12 @@ Index: upower/src/up-polkit.c
  {
  	gboolean ret = FALSE;
 -	GError *error;
- 	GError *error_local;
+ 	GError *error_local = NULL;
  	PolkitAuthorizationResult *result;
  
- 	/* check auth */
- 	result = polkit_authority_check_authorization_sync (polkit->priv->authority, subject, action_id, NULL, POLKIT_CHECK_AUTHORIZATION_FLAGS_NONE, NULL, &error_local);
+@@ -116,10 +115,8 @@ up_polkit_is_allowed (UpPolkit *polkit, PolkitSubject *subject, const gchar *act
+ 							    POLKIT_CHECK_AUTHORIZATION_FLAGS_NONE,
+ 							    NULL, &error_local);
  	if (result == NULL) {
 -		error = g_error_new (UP_DAEMON_ERROR, UP_DAEMON_ERROR_GENERAL, "failed to check authorisation: %s", error_local->message);
 -		dbus_g_method_return_error (context, error);
@@ -92,11 +93,11 @@ Index: upower/src/up-polkit.c
  		goto out;
  	}
  
-Index: upower/src/up-polkit.h
-===================================================================
---- upower.orig/src/up-polkit.h	2010-09-24 17:51:00.000000000 +0200
-+++ upower/src/up-polkit.h	2010-09-24 17:51:25.363744999 +0200
-@@ -60,7 +60,7 @@
+diff --git a/src/up-polkit.h b/src/up-polkit.h
+index acee70e..1ddac58 100644
+--- a/src/up-polkit.h
++++ b/src/up-polkit.h
+@@ -60,7 +60,7 @@ gboolean	 up_polkit_check_auth		(UpPolkit		*polkit,
  gboolean	 up_polkit_is_allowed		(UpPolkit		*polkit,
  						 PolkitSubject		*subject,
  						 const gchar		*action_id,
