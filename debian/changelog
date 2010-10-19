@@ -3,6 +3,9 @@ upower (0.9.5-5) UNRELEASED; urgency=low
   * debian/patches/00git_dont_poll_serial_port_if_no_wup_adaptor.patch
     - Do not continue to poll the serial port if there is no Watts Up Pro
       adaptor. Patch cherry-picked from upstream Git. (Closes: #586751)
+  * Drop libdevkit-power-gobject library packages as all reverse dependencies
+    have been updated to use the new API provided by libupower-glib.
+    (Closes: #595083)
 
  -- Michael Biebl <biebl@debian.org>  Wed, 20 Oct 2010 00:15:28 +0200
 

@@ -73,32 +73,3 @@ Description: abstraction for power management - development files
  .
  This package contains files that are needed to build applications.
 
-Package: libdevkit-power-gobject1
-Architecture: any
-Section: oldlibs
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Conflicts: devicekit-power
-Description: abstraction for power management - shared library (old ABI)
- upower provides an interface to enumerate power sources on the system
- and control system-wide power management. Any application can access the
- org.freedesktop.UPower service on the system message bus. Some
- operations (such as suspending the system) are restricted using PolicyKit.
- .
- This package contains an old version of the shared library to be used by
- applications. It provides the same ABI as the old DeviceKit-power library, but
- works with upower.
-
-Package: libdevkit-power-gobject-dev
-Architecture: any
-Section: oldlibs
-Depends: ${shlibs:Depends}, ${misc:Depends}, libglib2.0-dev, libdevkit-power-gobject1 (= ${binary:Version})
-Description: abstraction for power management - development files (old API)
- upower provides an interface to enumerate power sources on the system
- and control system-wide power management. Any application can access the
- org.freedesktop.UPower service on the system message bus. Some
- operations (such as suspending the system) are restricted using PolicyKit.
- .
- This package contains development files for the  old version of the shared
- library. It provides the same API as the old DeviceKit-power library, but
- works with upower.
-
