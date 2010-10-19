@@ -6,11 +6,11 @@ Date:   Thu Aug 19 12:49:06 2010 +0200
     
     Signed-off-by: Martin Pitt <martin.pitt@ubuntu.com>
 
-diff --git a/src/up-qos.c b/src/up-qos.c
-index 70f1690..f08c439 100644
---- a/src/up-qos.c
-+++ b/src/up-qos.c
-@@ -395,6 +395,8 @@ up_qos_cancel_request (UpQos *qos, guint cookie, DBusGMethodInvocation *context)
+Index: upower/src/up-qos.c
+===================================================================
+--- upower.orig/src/up-qos.c	2010-07-15 01:11:54.462878054 +0200
++++ upower/src/up-qos.c	2010-10-20 00:14:19.350142439 +0200
+@@ -388,6 +388,8 @@
  	/* TODO: if persistent remove from datadase */
  
  	g_signal_emit (qos, signals [REQUESTS_CHANGED], 0);
