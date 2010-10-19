@@ -3,3 +3,4 @@
 00git_fix_missing_qos_dbus_return.patch
 00git_fix_double_dbus_return.patch
 00git_fix_missing_polkit_dbus_return.patch
+00git_dont_poll_serial_port_if_no_wup_adaptor.patch

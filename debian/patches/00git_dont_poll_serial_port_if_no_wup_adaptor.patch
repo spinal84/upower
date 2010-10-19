@@ -1,0 +1,29 @@
+From 163d5fc355670722ce45893e5af60ea4bde06a82 Mon Sep 17 00:00:00 2001
+From: Richard Hughes <richard@hughsie.com>
+Date: Mon, 20 Sep 2010 16:22:45 +0100
+Subject: [PATCH 1/9] Do not continue to poll the serial port if there is no Watts Up Pro adaptor
+
+---
+ src/linux/up-device-wup.c |    6 +-----
+ 1 files changed, 1 insertions(+), 5 deletions(-)
+
+diff --git a/src/linux/up-device-wup.c b/src/linux/up-device-wup.c
+index 73bb8e5..bf5dbb8 100644
+--- a/src/linux/up-device-wup.c
++++ b/src/linux/up-device-wup.c
+@@ -376,11 +376,7 @@ up_device_wup_coldplug (UpDevice *device)
+ 
+ 	/* coldplug */
+ 	egg_debug ("coldplug");
+-	up_device_wup_refresh (device);
+-
+-	/* hardcode true, as we'll retry later if busy */
+-	ret = TRUE;
+-
++	ret = up_device_wup_refresh (device);
+ out:
+ 	return ret;
+ }
+-- 
+1.7.2.3
+
