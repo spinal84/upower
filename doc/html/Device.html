@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>org.freedesktop.UPower.Device</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.0">
 <link rel="home" href="index.html" title="UPower Reference Manual">
 <link rel="up" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="prev" href="UPower.html" title="org.freedesktop.UPower">
@@ -53,12 +53,12 @@
 </pre>
 </div>
 <div class="refsect1" title="Signals">
-<a name="id3117501"></a><h2>Signals</h2>
+<a name="id410578"></a><h2>Signals</h2>
 <pre class="synopsis"><a class="link" href="Device.html#Device::Changed">Changed</a> ()
 </pre>
 </div>
 <div class="refsect1" title="Implemented Interfaces">
-<a name="id3092279"></a><h2>Implemented Interfaces</h2>
+<a name="id388602"></a><h2>Implemented Interfaces</h2>
 <p>
     Objects implementing org.freedesktop.UPower.Device also implements
     org.freedesktop.DBus.Introspectable,
@@ -66,7 +66,7 @@
     </p>
 </div>
 <div class="refsect1" title="Properties">
-<a name="id3103054"></a><h2>Properties</h2>
+<a name="id392461"></a><h2>Properties</h2>
 <pre class="synopsis"><a class="link" href="Device.html#Device:NativePath">'NativePath'</a>       read      's'
 <a class="link" href="Device.html#Device:Vendor">'Vendor'</a>           read      's'
 <a class="link" href="Device.html#Device:Model">'Model'</a>            read      's'
@@ -97,7 +97,7 @@
 </pre>
 </div>
 <div class="refsect1" title="Description">
-<a name="id3058781"></a><h2>Description</h2>
+<a name="id394062"></a><h2>Description</h2>
 <p>
       
         </p>
@@ -349,9 +349,9 @@
     </p>
 </div>
 <div class="refsect1" title="Details">
-<a name="id3116966"></a><h2>Details</h2>
+<a name="id416641"></a><h2>Details</h2>
 <div class="refsect2" title="Refresh ()">
-<a name="id3116974"></a><h3>
+<a name="id416649"></a><h3>
 <a name="Device.Refresh"></a>Refresh ()</h3>
 <pre class="programlisting">Refresh ()</pre>
 </div>
@@ -363,7 +363,7 @@
 <tbody></tbody>
 </table></div>
 <div class="refsect3" title="Errors">
-<a name="id3117006"></a><h4>Errors</h4>
+<a name="id416679"></a><h4>Errors</h4>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
@@ -373,12 +373,12 @@
 </table></div>
 </div>
 <div class="refsect3" title="Permissions">
-<a name="id3117024"></a><h4>Permissions</h4>
+<a name="id416698"></a><h4>Permissions</h4>
 <p class="permission">Callers need the org.freedesktop.upower.refresh-power-source authorization</p>
 </div>
 <hr>
 <div class="refsect2" title="GetHistory ()">
-<a name="id3117033"></a><h3>
+<a name="id416706"></a><h3>
 <a name="Device.GetHistory"></a>GetHistory ()</h3>
 <pre class="programlisting">GetHistory (in  's'      type,
             in  'u'      timespan,
@@ -434,7 +434,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title="GetStatistics ()">
-<a name="id3096068"></a><h3>
+<a name="id380297"></a><h3>
 <a name="Device.GetStatistics"></a>GetStatistics ()</h3>
 <pre class="programlisting">GetStatistics (in  's'     type,
                out 'a(dd)' data)</pre>
@@ -472,9 +472,9 @@
 </table></div>
 </div>
 <div class="refsect1" title="Signal Details">
-<a name="id3096160"></a><h2>Signal Details</h2>
+<a name="id380383"></a><h2>Signal Details</h2>
 <div class="refsect2" title="The Changed signal">
-<a name="id3096169"></a><h3>
+<a name="id380391"></a><h3>
 <a name="Device::Changed"></a>The Changed signal</h3>
 <pre class="programlisting">Changed ()</pre>
 </div>
@@ -487,9 +487,9 @@
 </table></div>
 </div>
 <div class="refsect1" title="Property Details">
-<a name="id3096202"></a><h2>Property Details</h2>
+<a name="id380423"></a><h2>Property Details</h2>
 <div class="refsect2" title='The "NativePath" property'>
-<a name="id3096210"></a><h3>
+<a name="id380431"></a><h3>
 <a name="Device:NativePath"></a>The "NativePath" property</h3>
 <pre class="programlisting">'NativePath'  read      's'
 </pre>
@@ -507,7 +507,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "Vendor" property'>
-<a name="id3083786"></a><h3>
+<a name="id380469"></a><h3>
 <a name="Device:Vendor"></a>The "Vendor" property</h3>
 <pre class="programlisting">'Vendor'  read      's'
 </pre>
@@ -521,7 +521,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "Model" property'>
-<a name="id3083817"></a><h3>
+<a name="id380500"></a><h3>
 <a name="Device:Model"></a>The "Model" property</h3>
 <pre class="programlisting">'Model'  read      's'
 </pre>
@@ -535,7 +535,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "Serial" property'>
-<a name="id3083848"></a><h3>
+<a name="id380531"></a><h3>
 <a name="Device:Serial"></a>The "Serial" property</h3>
 <pre class="programlisting">'Serial'  read      's'
 </pre>
@@ -549,7 +549,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "UpdateTime" property'>
-<a name="id3083880"></a><h3>
+<a name="id380562"></a><h3>
 <a name="Device:UpdateTime"></a>The "UpdateTime" property</h3>
 <pre class="programlisting">'UpdateTime'  read      't'
 </pre>
@@ -564,7 +564,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "Type" property'>
-<a name="id3083913"></a><h3>
+<a name="id380594"></a><h3>
 <a name="Device:Type"></a>The "Type" property</h3>
 <pre class="programlisting">'Type'  read      'u'
 </pre>
@@ -598,7 +598,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "PowerSupply" property'>
-<a name="id3084011"></a><h3>
+<a name="id380691"></a><h3>
 <a name="Device:PowerSupply"></a>The "PowerSupply" property</h3>
 <pre class="programlisting">'PowerSupply'  read      'b'
 </pre>
@@ -614,7 +614,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "HasHistory" property'>
-<a name="id3084045"></a><h3>
+<a name="id380723"></a><h3>
 <a name="Device:HasHistory"></a>The "HasHistory" property</h3>
 <pre class="programlisting">'HasHistory'  read      'b'
 </pre>
@@ -628,7 +628,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "HasStatistics" property'>
-<a name="id3084077"></a><h3>
+<a name="id380754"></a><h3>
 <a name="Device:HasStatistics"></a>The "HasStatistics" property</h3>
 <pre class="programlisting">'HasStatistics'  read      'b'
 </pre>
@@ -642,7 +642,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "Online" property'>
-<a name="id3084109"></a><h3>
+<a name="id380786"></a><h3>
 <a name="Device:Online"></a>The "Online" property</h3>
 <pre class="programlisting">'Online'  read      'b'
 </pre>
@@ -659,7 +659,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "Energy" property'>
-<a name="id3084152"></a><h3>
+<a name="id380826"></a><h3>
 <a name="Device:Energy"></a>The "Energy" property</h3>
 <pre class="programlisting">'Energy'  read      'd'
 </pre>
@@ -679,7 +679,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "EnergyEmpty" property'>
-<a name="id3084197"></a><h3>
+<a name="id380870"></a><h3>
 <a name="Device:EnergyEmpty"></a>The "EnergyEmpty" property</h3>
 <pre class="programlisting">'EnergyEmpty'  read      'd'
 </pre>
@@ -699,7 +699,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "EnergyFull" property'>
-<a name="id3084244"></a><h3>
+<a name="id380913"></a><h3>
 <a name="Device:EnergyFull"></a>The "EnergyFull" property</h3>
 <pre class="programlisting">'EnergyFull'  read      'd'
 </pre>
@@ -719,7 +719,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "EnergyFullDesign" property'>
-<a name="id3084290"></a><h3>
+<a name="id380957"></a><h3>
 <a name="Device:EnergyFullDesign"></a>The "EnergyFullDesign" property</h3>
 <pre class="programlisting">'EnergyFullDesign'  read      'd'
 </pre>
@@ -739,7 +739,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "EnergyRate" property'>
-<a name="id3084337"></a><h3>
+<a name="id381000"></a><h3>
 <a name="Device:EnergyRate"></a>The "EnergyRate" property</h3>
 <pre class="programlisting">'EnergyRate'  read      'd'
 </pre>
@@ -760,7 +760,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "Voltage" property'>
-<a name="id3084384"></a><h3>
+<a name="id381045"></a><h3>
 <a name="Device:Voltage"></a>The "Voltage" property</h3>
 <pre class="programlisting">'Voltage'  read      'd'
 </pre>
@@ -774,7 +774,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "TimeToEmpty" property'>
-<a name="id3084416"></a><h3>
+<a name="id381075"></a><h3>
 <a name="Device:TimeToEmpty"></a>The "TimeToEmpty" property</h3>
 <pre class="programlisting">'TimeToEmpty'  read      'x'
 </pre>
@@ -794,7 +794,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "TimeToFull" property'>
-<a name="id3084462"></a><h3>
+<a name="id381119"></a><h3>
 <a name="Device:TimeToFull"></a>The "TimeToFull" property</h3>
 <pre class="programlisting">'TimeToFull'  read      'x'
 </pre>
@@ -814,7 +814,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "Percentage" property'>
-<a name="id3084509"></a><h3>
+<a name="id381162"></a><h3>
 <a name="Device:Percentage"></a>The "Percentage" property</h3>
 <pre class="programlisting">'Percentage'  read      'd'
 </pre>
@@ -841,7 +841,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "IsPresent" property'>
-<a name="id3084598"></a><h3>
+<a name="id381245"></a><h3>
 <a name="Device:IsPresent"></a>The "IsPresent" property</h3>
 <pre class="programlisting">'IsPresent'  read      'b'
 </pre>
@@ -862,7 +862,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "State" property'>
-<a name="id3084645"></a><h3>
+<a name="id381289"></a><h3>
 <a name="Device:State"></a>The "State" property</h3>
 <pre class="programlisting">'State'  read      'u'
 </pre>
@@ -897,7 +897,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "IsRechargeable" property'>
-<a name="id3084744"></a><h3>
+<a name="id381386"></a><h3>
 <a name="Device:IsRechargeable"></a>The "IsRechargeable" property</h3>
 <pre class="programlisting">'IsRechargeable'  read      'b'
 </pre>
@@ -916,7 +916,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "Capacity" property'>
-<a name="id3084789"></a><h3>
+<a name="id381429"></a><h3>
 <a name="Device:Capacity"></a>The "Capacity" property</h3>
 <pre class="programlisting">'Capacity'  read      'd'
 </pre>
@@ -942,7 +942,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "Technology" property'>
-<a name="id3084860"></a><h3>
+<a name="id381494"></a><h3>
 <a name="Device:Technology"></a>The "Technology" property</h3>
 <pre class="programlisting">'Technology'  read      'u'
 </pre>
@@ -977,7 +977,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "RecallNotice" property'>
-<a name="id3084959"></a><h3>
+<a name="id381590"></a><h3>
 <a name="Device:RecallNotice"></a>The "RecallNotice" property</h3>
 <pre class="programlisting">'RecallNotice'  read      'b'
 </pre>
@@ -994,7 +994,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "RecallVendor" property'>
-<a name="id3084995"></a><h3>
+<a name="id381623"></a><h3>
 <a name="Device:RecallVendor"></a>The "RecallVendor" property</h3>
 <pre class="programlisting">'RecallVendor'  read      's'
 </pre>
@@ -1011,7 +1011,7 @@
 </table></div>
 <hr>
 <div class="refsect2" title='The "RecallUrl" property'>
-<a name="id3085032"></a><h3>
+<a name="id381658"></a><h3>
 <a name="Device:RecallUrl"></a>The "RecallUrl" property</h3>
 <pre class="programlisting">'RecallUrl'  read      's'
 </pre>

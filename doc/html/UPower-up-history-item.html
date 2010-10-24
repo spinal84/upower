@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>up-history-item</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.0">
 <link rel="home" href="index.html" title="UPower Reference Manual">
 <link rel="up" href="libupower-glib.html" title="libupower-glib GObjects">
 <link rel="prev" href="UPower-up-device.html" title="up-device">
@@ -45,9 +45,13 @@
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               <a class="link" href="UPower-up-history-item.html#up-history-item-get-time" title="up_history_item_get_time ()">up_history_item_get_time</a>            (<em class="parameter"><code><span class="type">UpHistoryItem</span> *history_item</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="UPower-up-history-item.html#up-history-item-set-time" title="up_history_item_set_time ()">up_history_item_set_time</a>            (<em class="parameter"><code><span class="type">UpHistoryItem</span> *history_item</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> time</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="UPower-up-history-item.html#up-history-item-set-time-to-present" title="up_history_item_set_time_to_present ()">up_history_item_set_time_to_present</a> (<em class="parameter"><code><span class="type">UpHistoryItem</span> *history_item</code></em>);
 <a class="link" href="UPower-up-types.html#UpDeviceState" title="enum UpDeviceState"><span class="returnvalue">UpDeviceState</span></a>       <a class="link" href="UPower-up-history-item.html#up-history-item-get-state" title="up_history_item_get_state ()">up_history_item_get_state</a>           (<em class="parameter"><code><span class="type">UpHistoryItem</span> *history_item</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="UPower-up-history-item.html#up-history-item-set-state" title="up_history_item_set_state ()">up_history_item_set_state</a>           (<em class="parameter"><code><span class="type">UpHistoryItem</span> *history_item</code></em>,
                                                          <em class="parameter"><code><a class="link" href="UPower-up-types.html#UpDeviceState" title="enum UpDeviceState"><span class="type">UpDeviceState</span></a> state</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="UPower-up-history-item.html#up-history-item-to-string" title="up_history_item_to_string ()">up_history_item_to_string</a>           (<em class="parameter"><code><span class="type">UpHistoryItem</span> *history_item</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-history-item.html#up-history-item-set-from-string" title="up_history_item_set_from_string ()">up_history_item_set_from_string</a>     (<em class="parameter"><code><span class="type">UpHistoryItem</span> *history_item</code></em>,
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *text</code></em>);
 </pre>
 </div>
 <div class="refsect1" title="Description">
@@ -171,6 +175,24 @@ Sets the item time.
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
+<div class="refsect2" title="up_history_item_set_time_to_present ()">
+<a name="up-history-item-set-time-to-present"></a><h3>up_history_item_set_time_to_present ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                up_history_item_set_time_to_present (<em class="parameter"><code><span class="type">UpHistoryItem</span> *history_item</code></em>);</pre>
+<p>
+Sets the item time to the present value.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>history_item</code></em> :</span></p></td>
+<td>
+<span class="type">UpHistoryItem</span>
+</td>
+</tr></tbody>
+</table></div>
+<p class="since">Since 0.9.1</p>
+</div>
+<hr>
 <div class="refsect2" title="up_history_item_get_state ()">
 <a name="up-history-item-get-state"></a><h3>up_history_item_get_state ()</h3>
 <pre class="programlisting"><a class="link" href="UPower-up-types.html#UpDeviceState" title="enum UpDeviceState"><span class="returnvalue">UpDeviceState</span></a>       up_history_item_get_state           (<em class="parameter"><code><span class="type">UpHistoryItem</span> *history_item</code></em>);</pre>
@@ -213,6 +235,43 @@ Sets the item state.
 </tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2" title="up_history_item_to_string ()">
+<a name="up-history-item-to-string"></a><h3>up_history_item_to_string ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             up_history_item_to_string           (<em class="parameter"><code><span class="type">UpHistoryItem</span> *history_item</code></em>);</pre>
+<p>
+Converts the history item to a string representation.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>history_item</code></em> :</span></p></td>
+<td>
+<span class="type">UpHistoryItem</span>
+</td>
+</tr></tbody>
+</table></div>
+<p class="since">Since 0.9.1</p>
+</div>
+<hr>
+<div class="refsect2" title="up_history_item_set_from_string ()">
+<a name="up-history-item-set-from-string"></a><h3>up_history_item_set_from_string ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_history_item_set_from_string     (<em class="parameter"><code><span class="type">UpHistoryItem</span> *history_item</code></em>,
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *text</code></em>);</pre>
+<p>
+Converts the history item to a string representation.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>history_item</code></em> :</span></p></td>
+<td>
+<span class="type">UpHistoryItem</span>
+</td>
+</tr></tbody>
+</table></div>
+<p class="since">Since 0.9.1</p>
 </div>
 </div>
 </div>

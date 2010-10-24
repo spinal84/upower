@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 m4_define([up_major_version], [0])
 m4_define([up_minor_version], [9])
-m4_define([up_micro_version], [5])
+m4_define([up_micro_version], [6])
 m4_define([up_version],
           [up_major_version.up_minor_version.up_micro_version])
 
@@ -150,9 +150,20 @@ PKG_CHECK_MODULES(DBUS_GLIB, [dbus-glib-1 >= 0.76])
 AC_SUBST(DBUS_GLIB_CFLAGS)
 AC_SUBST(DBUS_GLIB_LIBS)
 
-PKG_CHECK_MODULES(POLKIT, [polkit-gobject-1 >= 0.91])
-AC_SUBST(POLKIT_CFLAGS)
-AC_SUBST(POLKIT_LIBS)
+# polkit >= 0.97 uses polkit_authority_get_sync() rather than
+# polkit_authority_get
+PKG_CHECK_MODULES(POLKIT, \
+		  polkit-gobject-1 >= 0.97,
+		  has_new_polkit=yes,
+		  has_new_polkit=no)
+if test x$has_new_polkit = xno; then
+	PKG_CHECK_MODULES(POLKIT, \
+			  polkit-backend-1 \
+			  polkit-gobject-1 >= 0.91)
+else
+	AC_DEFINE(USE_SECURITY_POLKIT_NEW, 1, [if we should use PolicyKit's new API])
+fi
+
 
 PKG_CHECK_MODULES(GIO, [gio-2.0 >= 2.16.1])
 AC_SUBST(GIO_CFLAGS)
@@ -178,17 +189,20 @@ AC_DEFINE_UNQUOTED(BACKEND, "$with_backend", [backend])
 AC_SUBST(BACKEND, "$with_backend")
 
 # only need GUdev on linux
-with_idevice=no
+have_idevice=no
 if test x$with_backend = xlinux; then
 	PKG_CHECK_MODULES(GUDEV, [gudev-1.0 >= 001])
 	PKG_CHECK_MODULES(USB, [libusb-1.0 >= 1.0.0])
-	PKG_CHECK_MODULES(IDEVICE, libimobiledevice-1.0 >= 0.9.7, with_idevice=yes, with_idevice=no)
-	if test x$with_idevice = xyes; then
-		AC_DEFINE(HAVE_IDEVICE, 1, [Define to 1 if AFC is going to be built])
-	fi
+	AC_ARG_WITH(idevice, AS_HELP_STRING([--without-idevice],[Build without libimobiledevice]),
+		    with_idevice=$withval,with_idevice=yes)
+	AS_IF([test "x$with_idevice" != "xno"],
+	      [PKG_CHECK_MODULES(IDEVICE, libimobiledevice-1.0 >= 0.9.7, have_idevice=yes, have_idevice=no)],
+	      [have_idevice=no])
+	AS_IF([test "x$have_idevice" = "xyes"],
+	      [AC_DEFINE(HAVE_IDEVICE, 1, [Define to 1 if AFC is going to be built])])
 fi
 
-AM_CONDITIONAL(HAVE_IDEVICE, [test x$with_idevice = xyes])
+AM_CONDITIONAL(HAVE_IDEVICE, [test x$have_idevice = xyes])
 
 # export to Makefile.am
 AM_CONDITIONAL(BACKEND_TYPE_DUMMY, [test x$with_backend = xdummy])
@@ -214,7 +228,6 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[gettext domain])
 
 AC_CONFIG_FILES([
 Makefile
-devkit-power-gobject.pc
 upower-glib.pc
 etc/Makefile
 src/Makefile
@@ -228,8 +241,6 @@ doc/man/Makefile
 doc/dbus/Makefile
 policy/Makefile
 rules/Makefile
-devkit-power-gobject/Makefile
-devkit-power-gobject/dkp-version.h
 libupower-glib/Makefile
 libupower-glib/up-version.h
 po/Makefile.in
@@ -257,7 +268,7 @@ echo "
         xsltproc:                   ${XSLTPROC}
 
         Backend:                    ${with_backend}
-        libimobiledevice support:   ${with_idevice}
+        libimobiledevice support:   ${have_idevice}
         Maintainer mode:            ${USE_MAINTAINER_MODE}
         Building api docs:          ${enable_gtk_doc}
         Building man pages:         ${enable_man_pages}

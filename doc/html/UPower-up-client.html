@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>up-client</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.0">
 <link rel="home" href="index.html" title="UPower Reference Manual">
 <link rel="up" href="libupower-glib.html" title="libupower-glib GObjects">
 <link rel="prev" href="libupower-glib.html" title="libupower-glib GObjects">
@@ -46,7 +46,16 @@
                                                          <em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);
 <span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#device-removed" title="device_removed ()">*device_removed</a>)                   (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
                                                          <em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);
-<span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#changed" title="changed ()">*changed</a>)                          (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#changed" title="changed ()">*changed</a>)                          (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> *obj</code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#up-client-reserved1" title="_up_client_reserved1 ()">*_up_client_reserved1</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#up-client-reserved2" title="_up_client_reserved2 ()">*_up_client_reserved2</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#up-client-reserved3" title="_up_client_reserved3 ()">*_up_client_reserved3</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#up-client-reserved4" title="_up_client_reserved4 ()">*_up_client_reserved4</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#up-client-reserved5" title="_up_client_reserved5 ()">*_up_client_reserved5</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#up-client-reserved6" title="_up_client_reserved6 ()">*_up_client_reserved6</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#up-client-reserved7" title="_up_client_reserved7 ()">*_up_client_reserved7</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#up-client-reserved8" title="_up_client_reserved8 ()">*_up_client_reserved8</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
 <span class="returnvalue">UpClient</span> *          <a class="link" href="UPower-up-client.html#up-client-new" title="up_client_new ()">up_client_new</a>                       (<em class="parameter"><code><span class="type">void</span></code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-properties-sync" title="up_client_get_properties_sync ()">up_client_get_properties_sync</a>       (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
@@ -67,6 +76,7 @@
 const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="UPower-up-client.html#up-client-get-daemon-version" title="up_client_get_daemon_version ()">up_client_get_daemon_version</a>        (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-can-hibernate" title="up_client_get_can_hibernate ()">up_client_get_can_hibernate</a>         (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-lid-is-closed" title="up_client_get_lid_is_closed ()">up_client_get_lid_is_closed</a>         (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-lid-is-present" title="up_client_get_lid_is_present ()">up_client_get_lid_is_present</a>        (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-can-suspend" title="up_client_get_can_suspend ()">up_client_get_can_suspend</a>           (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-on-battery" title="up_client_get_on_battery ()">up_client_get_on_battery</a>            (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-on-low-battery" title="up_client_get_on_low_battery ()">up_client_get_on_low_battery</a>        (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
@@ -124,7 +134,48 @@ Private <span class="type">UpClient</span> data
 <hr>
 <div class="refsect2" title="changed ()">
 <a name="changed"></a><h3>changed ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                (*changed)                          (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*changed)                          (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> *obj</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2" title="_up_client_reserved1 ()">
+<a name="up-client-reserved1"></a><h3>_up_client_reserved1 ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved1)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2" title="_up_client_reserved2 ()">
+<a name="up-client-reserved2"></a><h3>_up_client_reserved2 ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved2)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2" title="_up_client_reserved3 ()">
+<a name="up-client-reserved3"></a><h3>_up_client_reserved3 ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved3)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2" title="_up_client_reserved4 ()">
+<a name="up-client-reserved4"></a><h3>_up_client_reserved4 ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved4)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2" title="_up_client_reserved5 ()">
+<a name="up-client-reserved5"></a><h3>_up_client_reserved5 ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved5)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2" title="_up_client_reserved6 ()">
+<a name="up-client-reserved6"></a><h3>_up_client_reserved6 ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved6)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2" title="_up_client_reserved7 ()">
+<a name="up-client-reserved7"></a><h3>_up_client_reserved7 ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved7)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2" title="_up_client_reserved8 ()">
+<a name="up-client-reserved8"></a><h3>_up_client_reserved8 ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved8)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 </div>
 <hr>
 <div class="refsect2" title="up_client_new ()">
@@ -431,6 +482,31 @@ Get whether the laptop lid is closed.
 </tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2" title="up_client_get_lid_is_present ()">
+<a name="up-client-get-lid-is-present"></a><h3>up_client_get_lid_is_present ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_lid_is_present        (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
+<p>
+Get whether a laptop lid is present on this machine.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
+<td>a <span class="type">UpClient</span> instance.
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the machine has a laptop lid
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.9.2</p>
 </div>
 <hr>
 <div class="refsect2" title="up_client_get_can_suspend ()">
