@@ -323,6 +323,7 @@ up_daemon_about_to_sleep (UpDaemon *daemon, DBusGMethodInvocation *context)
 				     UP_DAEMON_ERROR_GENERAL,
 				     "Sleep has already been requested and is pending");
 		dbus_g_method_return_error (context, error);
+		g_error_free (error);
 		goto out;
 	}
 
@@ -376,6 +377,7 @@ up_daemon_deferred_sleep_cb (UpDaemonDeferredSleep *sleep)
 				     "Failed to spawn: %s, stdout:%s, stderr:%s", error_local->message, stdout, stderr);
 		g_error_free (error_local);
 		dbus_g_method_return_error (sleep->context, error);
+		g_error_free (error);
 		goto out;
 	}
 
@@ -470,6 +472,7 @@ up_daemon_suspend (UpDaemon *daemon, DBusGMethodInvocation *context)
 				     UP_DAEMON_ERROR_GENERAL,
 				     "No kernel support");
 		dbus_g_method_return_error (context, error);
+		g_error_free (error);
 		goto out;
 	}
 
@@ -486,6 +489,7 @@ up_daemon_suspend (UpDaemon *daemon, DBusGMethodInvocation *context)
 				     UP_DAEMON_ERROR_GENERAL,
 				     "Sleep has already been requested and is pending");
 		dbus_g_method_return_error (context, error);
+		g_error_free (error);
 		goto out;
 	}
 
@@ -507,13 +511,21 @@ up_daemon_suspend_allowed (UpDaemon *daemon, DBusGMethodInvocation *context)
 	gboolean ret;
 	PolkitSubject *subject = NULL;
 	UpDaemonPrivate *priv = daemon->priv;
+	GError *error;
 
 	subject = up_polkit_get_subject (priv->polkit, context);
 	if (subject == NULL)
 		goto out;
 
-	ret = up_polkit_is_allowed (priv->polkit, subject, "org.freedesktop.upower.suspend", context);
-	dbus_g_method_return (context, ret);
+	error = NULL;
+	ret = up_polkit_is_allowed (priv->polkit, subject, "org.freedesktop.upower.suspend", &error);
+	if (error) {
+		dbus_g_method_return_error (context, error);
+		g_error_free (error);
+	}
+	else {
+		dbus_g_method_return (context, ret);
+	}
 
 out:
 	if (subject != NULL)
@@ -563,6 +575,7 @@ up_daemon_hibernate (UpDaemon *daemon, DBusGMethodInvocation *context)
 				     UP_DAEMON_ERROR_GENERAL,
 				     "No kernel support");
 		dbus_g_method_return_error (context, error);
+		g_error_free (error);
 		goto out;
 	}
 
@@ -572,6 +585,7 @@ up_daemon_hibernate (UpDaemon *daemon, DBusGMethodInvocation *context)
 				     UP_DAEMON_ERROR_GENERAL,
 				     "Not enough swap space");
 		dbus_g_method_return_error (context, error);
+		g_error_free (error);
 		goto out;
 	}
 
@@ -582,6 +596,7 @@ up_daemon_hibernate (UpDaemon *daemon, DBusGMethodInvocation *context)
 				     UP_DAEMON_ERROR_GENERAL,
 				     "Swap space is encrypted, use AllowHibernateEncryptedSwap to override");
 		dbus_g_method_return_error (context, error);
+		g_error_free (error);
 		goto out;
 	}
 
@@ -598,6 +613,7 @@ up_daemon_hibernate (UpDaemon *daemon, DBusGMethodInvocation *context)
 				     UP_DAEMON_ERROR_GENERAL,
 				     "Sleep has already been requested and is pending");
 		dbus_g_method_return_error (context, error);
+		g_error_free (error);
 		goto out;
 	}
 
@@ -619,13 +635,21 @@ up_daemon_hibernate_allowed (UpDaemon *daemon, DBusGMethodInvocation *context)
 	gboolean ret;
 	PolkitSubject *subject = NULL;
 	UpDaemonPrivate *priv = daemon->priv;
+	GError *error;
 
 	subject = up_polkit_get_subject (priv->polkit, context);
 	if (subject == NULL)
 		goto out;
 
-	ret = up_polkit_is_allowed (priv->polkit, subject, "org.freedesktop.upower.hibernate", context);
-	dbus_g_method_return (context, ret);
+	error = NULL;
+	ret = up_polkit_is_allowed (priv->polkit, subject, "org.freedesktop.upower.hibernate", &error);
+	if (error) {
+		dbus_g_method_return_error (context, error);
+		g_error_free (error);
+	}
+	else {
+		dbus_g_method_return (context, ret);
+	}
 
 out:
 	if (subject != NULL)

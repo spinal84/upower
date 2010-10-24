@@ -88,6 +88,9 @@
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
+/* if we should use PolicyKit's new API */
+#undef USE_SECURITY_POLKIT_NEW
+
 /* Version number of package */
 #undef VERSION
 

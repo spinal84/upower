@@ -38,7 +38,6 @@ host_triplet = @host@
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
-	$(srcdir)/devkit-power-gobject.pc.in \
 	$(srcdir)/upower-glib.pc.in $(top_srcdir)/configure AUTHORS \
 	COPYING ChangeLog INSTALL NEWS compile config.guess config.sub \
 	depcomp install-sh ltmain.sh missing
@@ -54,7 +53,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES = devkit-power-gobject.pc upower-glib.pc
+CONFIG_CLEAN_FILES = upower-glib.pc
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
@@ -101,8 +100,7 @@ AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
 	distdir dist dist-all distcheck
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = etc devkit-power-gobject libupower-glib src doc tools \
-	policy po rules
+DIST_SUBDIRS = etc libupower-glib src doc tools policy po rules
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -315,14 +313,13 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = etc devkit-power-gobject libupower-glib src doc tools policy \
-	po $(am__append_1)
+SUBDIRS = etc libupower-glib src doc tools policy po $(am__append_1)
 EXTRA_DIST = \
 	HACKING 		\
 	ChangeLog
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = devkit-power-gobject.pc upower-glib.pc
+pkgconfig_DATA = upower-glib.pc
 
 # xsltproc barfs on 'make distcheck'; disable for now
 DISTCHECK_CONFIGURE_FLAGS = --disable-man-pages --enable-gtk-doc --enable-introspection
@@ -381,8 +378,6 @@ $(srcdir)/config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f config.h stamp-h1
-devkit-power-gobject.pc: $(top_builddir)/config.status $(srcdir)/devkit-power-gobject.pc.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 upower-glib.pc: $(top_builddir)/config.status $(srcdir)/upower-glib.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
