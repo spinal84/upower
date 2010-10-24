@@ -1,3 +1,9 @@
+upower (0.9.6-1) UNRELEASED; urgency=low
+
+  * New upstream release.
+
+ -- Michael Biebl <biebl@debian.org>  Sun, 24 Oct 2010 15:41:34 +0200
+
 upower (0.9.5-5) unstable; urgency=low
 
   * debian/patches/00git_dont_poll_serial_port_if_no_wup_adaptor.patch
