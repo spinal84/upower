@@ -1,6 +1,12 @@
 upower (0.9.6-1) UNRELEASED; urgency=low
 
   * New upstream release.
+  * Remove patches that have been merged upstream
+    - debian/patches/00git_dont_poll_serial_port_if_no_wup_adaptor.patch
+    - debian/patches/00git_fix_double_dbus_return.patch
+    - debian/patches/00git_fix_missing_polkit_dbus_return.patch
+    - debian/patches/00git_fix_missing_qos_dbus_return.patch
+    - debian/patches/00git_initialize_polkit_gerror.patch
 
  -- Michael Biebl <biebl@debian.org>  Sun, 24 Oct 2010 15:41:34 +0200
 
