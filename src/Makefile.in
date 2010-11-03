@@ -67,21 +67,23 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(libexecdir)" "$(DESTDIR)$(dbusconfdir)" \
 	"$(DESTDIR)$(dbusifdir)" "$(DESTDIR)$(servicedir)"
 PROGRAMS = $(libexec_PROGRAMS)
-am__up_self_test_SOURCES_DIST = egg-debug.c egg-debug.h up-self-test.c \
-	up-polkit.h up-polkit.c up-daemon.h up-daemon.c up-device.h \
-	up-device.c up-device-list.h up-device-list.c up-qos.h \
-	up-qos.c up-wakeups.h up-wakeups.c up-history.h up-history.c \
-	up-backend.h up-native.h up-daemon-glue.h up-device-glue.h \
-	up-qos-glue.h up-wakeups-glue.h up-marshal.h up-marshal.c
+am__up_self_test_SOURCES_DIST = up-self-test.c up-polkit.h up-polkit.c \
+	up-daemon.h up-daemon.c up-device.h up-device.c \
+	up-device-list.h up-device-list.c up-qos.h up-qos.c \
+	up-kbd-backlight.h up-kbd-backlight.c up-wakeups.h \
+	up-wakeups.c up-history.h up-history.c up-backend.h \
+	up-native.h up-daemon-glue.h up-device-glue.h up-qos-glue.h \
+	up-kbd-backlight-glue.h up-wakeups-glue.h up-marshal.h \
+	up-marshal.c
 am__objects_1 = up_self_test-up-marshal.$(OBJEXT)
 @UP_BUILD_TESTS_TRUE@am_up_self_test_OBJECTS =  \
-@UP_BUILD_TESTS_TRUE@	up_self_test-egg-debug.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-self-test.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-polkit.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-daemon.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-device.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-device-list.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-qos.$(OBJEXT) \
+@UP_BUILD_TESTS_TRUE@	up_self_test-up-kbd-backlight.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-wakeups.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-history.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	$(am__objects_1)
@@ -99,12 +101,12 @@ up_self_test_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(up_self_test_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 am__objects_2 = upowerd-up-marshal.$(OBJEXT)
-am_upowerd_OBJECTS = upowerd-egg-debug.$(OBJEXT) \
-	upowerd-up-polkit.$(OBJEXT) upowerd-up-daemon.$(OBJEXT) \
-	upowerd-up-device.$(OBJEXT) upowerd-up-device-list.$(OBJEXT) \
-	upowerd-up-qos.$(OBJEXT) upowerd-up-wakeups.$(OBJEXT) \
-	upowerd-up-history.$(OBJEXT) upowerd-up-main.$(OBJEXT) \
-	$(am__objects_2)
+am_upowerd_OBJECTS = upowerd-up-polkit.$(OBJEXT) \
+	upowerd-up-daemon.$(OBJEXT) upowerd-up-device.$(OBJEXT) \
+	upowerd-up-device-list.$(OBJEXT) upowerd-up-qos.$(OBJEXT) \
+	upowerd-up-kbd-backlight.$(OBJEXT) \
+	upowerd-up-wakeups.$(OBJEXT) upowerd-up-history.$(OBJEXT) \
+	upowerd-up-main.$(OBJEXT) $(am__objects_2)
 upowerd_OBJECTS = $(am_upowerd_OBJECTS)
 @BACKEND_TYPE_LINUX_TRUE@am__DEPENDENCIES_2 = linux/libupshared.la \
 @BACKEND_TYPE_LINUX_TRUE@	$(am__DEPENDENCIES_1) \
@@ -398,6 +400,7 @@ INCLUDES = \
 	-DG_UDEV_API_IS_SUBJECT_TO_CHANGE			\
 	-DUP_COMPILATION					\
 	-DUP_DISABLE_DEPRECATED					\
+	-DG_LOG_DOMAIN=\"UPower\"				\
 	-I$(top_srcdir)/libupower-glib				\
 	-I$(top_srcdir)						\
 	$(GIO_CFLAGS)						\
@@ -411,6 +414,7 @@ BUILT_SOURCES = \
 	up-daemon-glue.h					\
 	up-device-glue.h					\
 	up-qos-glue.h						\
+	up-kbd-backlight-glue.h					\
 	up-wakeups-glue.h					\
 	up-marshal.h						\
 	up-marshal.c
@@ -420,11 +424,10 @@ dbusif_DATA = \
 	org.freedesktop.UPower.xml				\
 	org.freedesktop.UPower.Device.xml			\
 	org.freedesktop.UPower.QoS.xml				\
+	org.freedesktop.UPower.KbdBacklight.xml			\
 	org.freedesktop.UPower.Wakeups.xml
 
 upowerd_SOURCES = \
-	egg-debug.c						\
-	egg-debug.h						\
 	up-polkit.h						\
 	up-polkit.c						\
 	up-daemon.h						\
@@ -435,6 +438,8 @@ upowerd_SOURCES = \
 	up-device-list.c					\
 	up-qos.h						\
 	up-qos.c						\
+	up-kbd-backlight.h					\
+	up-kbd-backlight.c					\
 	up-wakeups.h						\
 	up-wakeups.c						\
 	up-history.h						\
@@ -446,7 +451,6 @@ upowerd_SOURCES = \
 
 upowerd_CPPFLAGS = \
 	-I$(top_srcdir)/src					\
-	-DG_LOG_DOMAIN=\"up-daemon\"				\
 	$(AM_CPPFLAGS)
 
 upowerd_LDADD = -lm $(USB_LIBS) $(GIO_LIBS) $(DBUS_GLIB_LIBS) \
@@ -457,8 +461,6 @@ upowerd_CFLAGS = \
 	$(NULL)
 
 @UP_BUILD_TESTS_TRUE@up_self_test_SOURCES = \
-@UP_BUILD_TESTS_TRUE@	egg-debug.c						\
-@UP_BUILD_TESTS_TRUE@	egg-debug.h						\
 @UP_BUILD_TESTS_TRUE@	up-self-test.c						\
 @UP_BUILD_TESTS_TRUE@	up-polkit.h						\
 @UP_BUILD_TESTS_TRUE@	up-polkit.c						\
@@ -470,6 +472,8 @@ upowerd_CFLAGS = \
 @UP_BUILD_TESTS_TRUE@	up-device-list.c					\
 @UP_BUILD_TESTS_TRUE@	up-qos.h						\
 @UP_BUILD_TESTS_TRUE@	up-qos.c						\
+@UP_BUILD_TESTS_TRUE@	up-kbd-backlight.h					\
+@UP_BUILD_TESTS_TRUE@	up-kbd-backlight.c					\
 @UP_BUILD_TESTS_TRUE@	up-wakeups.h						\
 @UP_BUILD_TESTS_TRUE@	up-wakeups.c						\
 @UP_BUILD_TESTS_TRUE@	up-history.h						\
@@ -499,6 +503,7 @@ EXTRA_DIST = \
 	org.freedesktop.UPower.xml				\
 	org.freedesktop.UPower.Device.xml			\
 	org.freedesktop.UPower.QoS.xml				\
+	org.freedesktop.UPower.KbdBacklight.xml			\
 	org.freedesktop.UPower.Wakeups.xml			\
 	up-marshal.list						\
 	$(service_in_files)					\
@@ -604,21 +609,21 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-egg-debug.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-daemon.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-device-list.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-device.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-history.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-kbd-backlight.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-marshal.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-polkit.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-qos.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-self-test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-wakeups.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-egg-debug.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-daemon.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-device-list.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-device.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-history.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-kbd-backlight.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-marshal.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-polkit.Po@am__quote@
@@ -648,22 +653,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
-
-up_self_test-egg-debug.o: egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-egg-debug.o -MD -MP -MF $(DEPDIR)/up_self_test-egg-debug.Tpo -c -o up_self_test-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-egg-debug.Tpo $(DEPDIR)/up_self_test-egg-debug.Po
-@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='up_self_test-egg-debug.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
-
-up_self_test-egg-debug.obj: egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-egg-debug.obj -MD -MP -MF $(DEPDIR)/up_self_test-egg-debug.Tpo -c -o up_self_test-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-egg-debug.Tpo $(DEPDIR)/up_self_test-egg-debug.Po
-@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='up_self_test-egg-debug.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
 
 up_self_test-up-self-test.o: up-self-test.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-self-test.o -MD -MP -MF $(DEPDIR)/up_self_test-up-self-test.Tpo -c -o up_self_test-up-self-test.o `test -f 'up-self-test.c' || echo '$(srcdir)/'`up-self-test.c
@@ -761,6 +750,22 @@ up_self_test-up-qos.obj: up-qos.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-qos.obj `if test -f 'up-qos.c'; then $(CYGPATH_W) 'up-qos.c'; else $(CYGPATH_W) '$(srcdir)/up-qos.c'; fi`
 
+up_self_test-up-kbd-backlight.o: up-kbd-backlight.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-kbd-backlight.o -MD -MP -MF $(DEPDIR)/up_self_test-up-kbd-backlight.Tpo -c -o up_self_test-up-kbd-backlight.o `test -f 'up-kbd-backlight.c' || echo '$(srcdir)/'`up-kbd-backlight.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-kbd-backlight.Tpo $(DEPDIR)/up_self_test-up-kbd-backlight.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-kbd-backlight.c' object='up_self_test-up-kbd-backlight.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-kbd-backlight.o `test -f 'up-kbd-backlight.c' || echo '$(srcdir)/'`up-kbd-backlight.c
+
+up_self_test-up-kbd-backlight.obj: up-kbd-backlight.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-kbd-backlight.obj -MD -MP -MF $(DEPDIR)/up_self_test-up-kbd-backlight.Tpo -c -o up_self_test-up-kbd-backlight.obj `if test -f 'up-kbd-backlight.c'; then $(CYGPATH_W) 'up-kbd-backlight.c'; else $(CYGPATH_W) '$(srcdir)/up-kbd-backlight.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-kbd-backlight.Tpo $(DEPDIR)/up_self_test-up-kbd-backlight.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-kbd-backlight.c' object='up_self_test-up-kbd-backlight.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-kbd-backlight.obj `if test -f 'up-kbd-backlight.c'; then $(CYGPATH_W) 'up-kbd-backlight.c'; else $(CYGPATH_W) '$(srcdir)/up-kbd-backlight.c'; fi`
+
 up_self_test-up-wakeups.o: up-wakeups.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-wakeups.o -MD -MP -MF $(DEPDIR)/up_self_test-up-wakeups.Tpo -c -o up_self_test-up-wakeups.o `test -f 'up-wakeups.c' || echo '$(srcdir)/'`up-wakeups.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-wakeups.Tpo $(DEPDIR)/up_self_test-up-wakeups.Po
@@ -808,22 +813,6 @@ up_self_test-up-marshal.obj: up-marshal.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-marshal.c' object='up_self_test-up-marshal.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-marshal.obj `if test -f 'up-marshal.c'; then $(CYGPATH_W) 'up-marshal.c'; else $(CYGPATH_W) '$(srcdir)/up-marshal.c'; fi`
-
-upowerd-egg-debug.o: egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-egg-debug.o -MD -MP -MF $(DEPDIR)/upowerd-egg-debug.Tpo -c -o upowerd-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-egg-debug.Tpo $(DEPDIR)/upowerd-egg-debug.Po
-@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='upowerd-egg-debug.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
-
-upowerd-egg-debug.obj: egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-egg-debug.obj -MD -MP -MF $(DEPDIR)/upowerd-egg-debug.Tpo -c -o upowerd-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-egg-debug.Tpo $(DEPDIR)/upowerd-egg-debug.Po
-@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='upowerd-egg-debug.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
 
 upowerd-up-polkit.o: up-polkit.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-polkit.o -MD -MP -MF $(DEPDIR)/upowerd-up-polkit.Tpo -c -o upowerd-up-polkit.o `test -f 'up-polkit.c' || echo '$(srcdir)/'`up-polkit.c
@@ -904,6 +893,22 @@ upowerd-up-qos.obj: up-qos.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-qos.c' object='upowerd-up-qos.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-qos.obj `if test -f 'up-qos.c'; then $(CYGPATH_W) 'up-qos.c'; else $(CYGPATH_W) '$(srcdir)/up-qos.c'; fi`
+
+upowerd-up-kbd-backlight.o: up-kbd-backlight.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-kbd-backlight.o -MD -MP -MF $(DEPDIR)/upowerd-up-kbd-backlight.Tpo -c -o upowerd-up-kbd-backlight.o `test -f 'up-kbd-backlight.c' || echo '$(srcdir)/'`up-kbd-backlight.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-kbd-backlight.Tpo $(DEPDIR)/upowerd-up-kbd-backlight.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-kbd-backlight.c' object='upowerd-up-kbd-backlight.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-kbd-backlight.o `test -f 'up-kbd-backlight.c' || echo '$(srcdir)/'`up-kbd-backlight.c
+
+upowerd-up-kbd-backlight.obj: up-kbd-backlight.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-kbd-backlight.obj -MD -MP -MF $(DEPDIR)/upowerd-up-kbd-backlight.Tpo -c -o upowerd-up-kbd-backlight.obj `if test -f 'up-kbd-backlight.c'; then $(CYGPATH_W) 'up-kbd-backlight.c'; else $(CYGPATH_W) '$(srcdir)/up-kbd-backlight.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-kbd-backlight.Tpo $(DEPDIR)/upowerd-up-kbd-backlight.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-kbd-backlight.c' object='upowerd-up-kbd-backlight.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-kbd-backlight.obj `if test -f 'up-kbd-backlight.c'; then $(CYGPATH_W) 'up-kbd-backlight.c'; else $(CYGPATH_W) '$(srcdir)/up-kbd-backlight.c'; fi`
 
 upowerd-up-wakeups.o: up-wakeups.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-wakeups.o -MD -MP -MF $(DEPDIR)/upowerd-up-wakeups.Tpo -c -o upowerd-up-wakeups.o `test -f 'up-wakeups.c' || echo '$(srcdir)/'`up-wakeups.c
@@ -1473,6 +1478,9 @@ up-device-glue.h: org.freedesktop.UPower.Device.xml Makefile.am
 
 up-qos-glue.h: org.freedesktop.UPower.QoS.xml Makefile.am
 	dbus-binding-tool --prefix=up_qos --mode=glib-server --output=up-qos-glue.h org.freedesktop.UPower.QoS.xml
+
+up-kbd-backlight-glue.h: org.freedesktop.UPower.KbdBacklight.xml Makefile.am
+	dbus-binding-tool --prefix=up_kbd_backlight --mode=glib-server --output=up-kbd-backlight-glue.h org.freedesktop.UPower.KbdBacklight.xml
 
 up-wakeups-glue.h: org.freedesktop.UPower.Wakeups.xml Makefile.am
 	dbus-binding-tool --prefix=up_wakeups --mode=glib-server --output=up-wakeups-glue.h org.freedesktop.UPower.Wakeups.xml

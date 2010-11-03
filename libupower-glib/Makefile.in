@@ -37,10 +37,9 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @HAVE_INTROSPECTION_TRUE@am__append_1 = UPowerGlib-1.0.gir
-@HAVE_INTROSPECTION_TRUE@am__append_2 = $(dist_gir_DATA) $(typelib_DATA)
+@HAVE_INTROSPECTION_TRUE@am__append_2 = $(gir_DATA) $(typelib_DATA)
 subdir = libupower-glib
-DIST_COMMON = $(am__dist_gir_DATA_DIST) \
-	$(libupower_glib_include_HEADERS) $(srcdir)/Makefile.am \
+DIST_COMMON = $(libupower_glib_include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/up-version.h.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/gtk-doc.m4 \
@@ -125,8 +124,7 @@ am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
 SOURCES = $(libupower_glib_la_SOURCES)
 DIST_SOURCES = $(libupower_glib_la_SOURCES)
-am__dist_gir_DATA_DIST = UPowerGlib-1.0.gir
-DATA = $(dist_gir_DATA) $(typelib_DATA)
+DATA = $(gir_DATA) $(typelib_DATA)
 HEADERS = $(libupower_glib_include_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -364,14 +362,15 @@ EXTRA_DIST = \
 	up-version.h.in
 
 CLEANFILES = $(BUILT_SOURCES) $(am__append_2)
-@HAVE_INTROSPECTION_TRUE@introspection_sources = $(libupower_glib_la_SOURCES)
+@HAVE_INTROSPECTION_TRUE@introspection_sources = $(libupower_glib_include_HEADERS) $(libupower_glib_la_SOURCES)
 @HAVE_INTROSPECTION_TRUE@UPowerGlib_1_0_gir_INCLUDES = GObject-2.0 Gio-2.0
 @HAVE_INTROSPECTION_TRUE@UPowerGlib_1_0_gir_CFLAGS = $(INCLUDES)
-@HAVE_INTROSPECTION_TRUE@PackageKitGlib_1_0_gir_SCANNERFLAGS = --identifier-prefix=Up --warn-all --add-include-path=$(srcdir)
+@HAVE_INTROSPECTION_TRUE@UPowerGlib_1_0_gir_SCANNERFLAGS = --identifier-prefix=Up --symbol-prefix=up_ --warn-all --add-include-path=$(srcdir)
 @HAVE_INTROSPECTION_TRUE@UPowerGlib_1_0_gir_LIBS = libupower-glib.la
 @HAVE_INTROSPECTION_TRUE@UPowerGlib_1_0_gir_FILES = $(introspection_sources)
+@HAVE_INTROSPECTION_TRUE@UPowerGlib_1_0_gir_NAMESPACE = UPowerGlib
 @HAVE_INTROSPECTION_TRUE@girdir = $(datadir)/gir-1.0
-@HAVE_INTROSPECTION_TRUE@dist_gir_DATA = $(INTROSPECTION_GIRS)
+@HAVE_INTROSPECTION_TRUE@gir_DATA = $(INTROSPECTION_GIRS)
 @HAVE_INTROSPECTION_TRUE@typelibdir = $(libdir)/girepository-1.0
 @HAVE_INTROSPECTION_TRUE@typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 all: all-am
@@ -552,10 +551,10 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-dist_girDATA: $(dist_gir_DATA)
+install-girDATA: $(gir_DATA)
 	@$(NORMAL_INSTALL)
 	test -z "$(girdir)" || $(MKDIR_P) "$(DESTDIR)$(girdir)"
-	@list='$(dist_gir_DATA)'; test -n "$(girdir)" || list=; \
+	@list='$(gir_DATA)'; test -n "$(girdir)" || list=; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
@@ -565,9 +564,9 @@ install-dist_girDATA: $(dist_gir_DATA)
 	  $(INSTALL_DATA) $$files "$(DESTDIR)$(girdir)" || exit $$?; \
 	done
 
-uninstall-dist_girDATA:
+uninstall-girDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(dist_gir_DATA)'; test -n "$(girdir)" || list=; \
+	@list='$(gir_DATA)'; test -n "$(girdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	test -n "$$files" || exit 0; \
 	echo " ( cd '$(DESTDIR)$(girdir)' && rm -f" $$files ")"; \
@@ -751,8 +750,8 @@ info: info-am
 
 info-am:
 
-install-data-am: install-dist_girDATA \
-	install-libupower_glib_includeHEADERS install-typelibDATA
+install-data-am: install-girDATA install-libupower_glib_includeHEADERS \
+	install-typelibDATA
 
 install-dvi: install-dvi-am
 
@@ -798,7 +797,7 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-dist_girDATA uninstall-libLTLIBRARIES \
+uninstall-am: uninstall-girDATA uninstall-libLTLIBRARIES \
 	uninstall-libupower_glib_includeHEADERS uninstall-typelibDATA
 
 .MAKE: install-am install-strip
@@ -807,17 +806,17 @@ uninstall-am: uninstall-dist_girDATA uninstall-libLTLIBRARIES \
 	clean-libLTLIBRARIES clean-libtool clean-local ctags distclean \
 	distclean-compile distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am \
-	install-dist_girDATA install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-libLTLIBRARIES \
-	install-libupower_glib_includeHEADERS install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	install-typelibDATA installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-dist_girDATA uninstall-libLTLIBRARIES \
+	install install-am install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-girDATA \
+	install-html install-html-am install-info install-info-am \
+	install-libLTLIBRARIES install-libupower_glib_includeHEADERS \
+	install-man install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip install-typelibDATA installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-girDATA \
+	uninstall-libLTLIBRARIES \
 	uninstall-libupower_glib_includeHEADERS uninstall-typelibDATA
 
 

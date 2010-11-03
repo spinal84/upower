@@ -24,8 +24,6 @@
 #include <glib-object.h>
 #include <glib/gstdio.h>
 #include <up-history-item.h>
-#include "egg-debug.h"
-
 #include "up-backend.h"
 #include "up-daemon.h"
 #include "up-device.h"
@@ -61,6 +59,12 @@ static void
 up_test_daemon_func (void)
 {
 	UpDaemon *daemon;
+
+	/* make check, vs. make distcheck */
+	if (g_file_test ("../etc/UPower.conf", G_FILE_TEST_EXISTS))
+		g_setenv ("UPOWER_CONF_FILE_NAME", "../etc/UPower.conf", TRUE);
+	else
+		g_setenv ("UPOWER_CONF_FILE_NAME", "../../etc/UPower.conf", TRUE);
 
 	daemon = up_daemon_new ();
 	g_assert (daemon != NULL);
@@ -273,7 +277,6 @@ main (int argc, char **argv)
 {
 	g_type_init ();
 	g_test_init (&argc, &argv, NULL);
-	egg_debug_init (&argc, &argv);
 
 	/* tests go here */
 	g_test_add_func ("/power/backend", up_test_backend_func);
