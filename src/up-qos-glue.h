@@ -304,7 +304,8 @@ static const DBusGMethodInfo dbus_glib_up_qos_methods[] = {
   { (GCallback) up_qos_get_latency_requests, dbus_glib_marshal_up_qos_BOOLEAN__POINTER_POINTER, 289 },
 };
 
-const DBusGObjectInfo dbus_glib_up_qos_object_info = {  1,
+const DBusGObjectInfo dbus_glib_up_qos_object_info = {
+  0,
   dbus_glib_up_qos_methods,
   5,
 "org.freedesktop.UPower.QoS\0SetMinimumLatency\0A\0type\0I\0s\0value\0I\0i\0\0org.freedesktop.UPower.QoS\0RequestLatency\0A\0type\0I\0s\0value\0I\0i\0persistent\0I\0b\0cookie\0O\0F\0N\0u\0\0org.freedesktop.UPower.QoS\0CancelRequest\0A\0type\0I\0s\0cookie\0I\0u\0\0org.freedesktop.UPower.QoS\0GetLatency\0S\0type\0I\0s\0value\0O\0F\0N\0i\0\0org.freedesktop.UPower.QoS\0GetLatencyRequests\0S\0requests\0O\0F\0N\0a(uuusxbssi)\0\0\0",

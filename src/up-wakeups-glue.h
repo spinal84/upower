@@ -112,11 +112,12 @@ static const DBusGMethodInfo dbus_glib_up_wakeups_methods[] = {
   { (GCallback) up_wakeups_get_data, dbus_glib_marshal_up_wakeups_BOOLEAN__POINTER_POINTER, 57 },
 };
 
-const DBusGObjectInfo dbus_glib_up_wakeups_object_info = {  1,
+const DBusGObjectInfo dbus_glib_up_wakeups_object_info = {
+  0,
   dbus_glib_up_wakeups_methods,
   2,
 "org.freedesktop.UPower.Wakeups\0GetTotal\0S\0value\0O\0F\0N\0u\0\0org.freedesktop.UPower.Wakeups\0GetData\0S\0data\0O\0F\0N\0a(budss)\0\0\0",
 "org.freedesktop.UPower.Wakeups\0TotalChanged\0org.freedesktop.UPower.Wakeups\0DataChanged\0\0",
-"org.freedesktop.UPower.Wakeups\0HasCapability\0has_capability\0read\0\0"
+"org.freedesktop.UPower.Wakeups\0HasCapability\0\0"
 };
 

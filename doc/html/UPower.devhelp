@@ -6,6 +6,7 @@
       <sub name="org.freedesktop.UPower" link="UPower.html"/>
       <sub name="org.freedesktop.UPower.Device" link="Device.html"/>
       <sub name="org.freedesktop.UPower.QoS" link="QoS.html"/>
+      <sub name="org.freedesktop.UPower.KbdBacklight" link="KbdBacklight.html"/>
     </sub>
     <sub name="libupower-glib GObjects" link="libupower-glib.html">
       <sub name="up-client" link="UPower-up-client.html"/>
@@ -84,6 +85,10 @@
     <function name="GetLatencyRequests ()" link="QoS.html#QoS.GetLatencyRequests"/>
     <function name="The LatencyChanged signal" link="QoS.html#QoS::LatencyChanged"/>
     <function name="The RequestsChanged signal" link="QoS.html#QoS::RequestsChanged"/>
+    <function name="GetMaxBrightness ()" link="KbdBacklight.html#KbdBacklight.GetMaxBrightness"/>
+    <function name="GetBrightness ()" link="KbdBacklight.html#KbdBacklight.GetBrightness"/>
+    <function name="SetBrightness ()" link="KbdBacklight.html#KbdBacklight.SetBrightness"/>
+    <function name="The BrightnessChanged signal" link="KbdBacklight.html#KbdBacklight::BrightnessChanged"/>
     <function name="UP_CLIENT_ERROR" link="UPower-up-client.html#UP-CLIENT-ERROR:CAPS"/>
     <function name="UP_CLIENT_TYPE_ERROR" link="UPower-up-client.html#UP-CLIENT-TYPE-ERROR:CAPS"/>
     <function name="UpClientPrivate" link="UPower-up-client.html#UpClientPrivate"/>

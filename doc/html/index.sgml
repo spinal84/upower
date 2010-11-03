@@ -58,6 +58,11 @@
 <ANCHOR id="QoS.GetLatencyRequests" href="UPower/QoS.html#QoS.GetLatencyRequests">
 <ANCHOR id="QoS::LatencyChanged" href="UPower/QoS.html#QoS::LatencyChanged">
 <ANCHOR id="QoS::RequestsChanged" href="UPower/QoS.html#QoS::RequestsChanged">
+<ANCHOR id="KbdBacklight" href="UPower/KbdBacklight.html">
+<ANCHOR id="KbdBacklight.GetMaxBrightness" href="UPower/KbdBacklight.html#KbdBacklight.GetMaxBrightness">
+<ANCHOR id="KbdBacklight.GetBrightness" href="UPower/KbdBacklight.html#KbdBacklight.GetBrightness">
+<ANCHOR id="KbdBacklight.SetBrightness" href="UPower/KbdBacklight.html#KbdBacklight.SetBrightness">
+<ANCHOR id="KbdBacklight::BrightnessChanged" href="UPower/KbdBacklight.html#KbdBacklight::BrightnessChanged">
 <ANCHOR id="UPower-up-client" href="UPower/UPower-up-client.html">
 <ANCHOR id="UPower-up-client.synopsis" href="UPower/UPower-up-client.html#UPower-up-client.synopsis">
 <ANCHOR id="UPower-up-client.description" href="UPower/UPower-up-client.html#UPower-up-client.description">

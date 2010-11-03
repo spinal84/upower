@@ -34,15 +34,12 @@
 #include <gudev/gudev.h>
 
 #include "sysfs-utils.h"
-#include "egg-debug.h"
-
 #include "up-types.h"
 #include "up-device-supply.h"
 
 #define UP_DEVICE_SUPPLY_REFRESH_TIMEOUT	30	/* seconds */
 #define UP_DEVICE_SUPPLY_UNKNOWN_TIMEOUT	2	/* seconds */
 #define UP_DEVICE_SUPPLY_UNKNOWN_RETRIES	30
-#define UP_DEVICE_SUPPLY_CHARGED_THRESHOLD	90.0f	/* % */
 
 #define UP_DEVICE_SUPPLY_COLDPLUG_UNITS_CHARGE		TRUE
 #define UP_DEVICE_SUPPLY_COLDPLUG_UNITS_ENERGY		FALSE
@@ -315,33 +312,33 @@ up_device_supply_get_design_voltage (const gchar *native_path)
 	/* design maximum */
 	voltage = sysfs_get_double (native_path, "voltage_max_design") / 1000000.0;
 	if (voltage > 1.00f) {
-		egg_debug ("using max design voltage");
+		g_debug ("using max design voltage");
 		goto out;
 	}
 
 	/* design minimum */
 	voltage = sysfs_get_double (native_path, "voltage_min_design") / 1000000.0;
 	if (voltage > 1.00f) {
-		egg_debug ("using min design voltage");
+		g_debug ("using min design voltage");
 		goto out;
 	}
 
 	/* current voltage */
 	voltage = sysfs_get_double (native_path, "voltage_present") / 1000000.0;
 	if (voltage > 1.00f) {
-		egg_debug ("using present voltage");
+		g_debug ("using present voltage");
 		goto out;
 	}
 
 	/* current voltage, alternate form */
 	voltage = sysfs_get_double (native_path, "voltage_now") / 1000000.0;
 	if (voltage > 1.00f) {
-		egg_debug ("using present voltage (alternate)");
+		g_debug ("using present voltage (alternate)");
 		goto out;
 	}
 
 	/* completely guess, to avoid getting zero values */
-	egg_warning ("no voltage values, using 10V as approximation");
+	g_warning ("no voltage values, using 10V as approximation");
 	voltage = 10.0f;
 out:
 	return voltage;
@@ -368,7 +365,7 @@ up_device_supply_make_safe_string (gchar *text)
 				text[idx] = text[i];
 			idx++;
 		} else {
-			egg_debug ("invalid char '%c'", text[i]);
+			g_debug ("invalid char '%c'", text[i]);
 		}
 	}
 
@@ -501,12 +498,12 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 
 		/* the last full should not be bigger than the design */
 		if (energy_full > energy_full_design)
-			egg_warning ("energy_full (%f) is greater than energy_full_design (%f)",
+			g_warning ("energy_full (%f) is greater than energy_full_design (%f)",
 				     energy_full, energy_full_design);
 
 		/* some systems don't have this */
 		if (energy_full < 0.01 && energy_full_design > 0.01) {
-			egg_warning ("correcting energy_full (%f) using energy_full_design (%f)",
+			g_warning ("correcting energy_full (%f) using energy_full_design (%f)",
 				     energy_full, energy_full_design);
 			energy_full = energy_full_design;
 		}
@@ -543,7 +540,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 	else if (g_ascii_strcasecmp (status, "unknown") == 0)
 		state = UP_DEVICE_STATE_UNKNOWN;
 	else {
-		egg_warning ("unknown status string: %s", status);
+		g_warning ("unknown status string: %s", status);
 		state = UP_DEVICE_STATE_UNKNOWN;
 	}
 
@@ -553,7 +550,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 
 	/* reset unknown counter */
 	if (state != UP_DEVICE_STATE_UNKNOWN) {
-		egg_debug ("resetting unknown timeout after %i retries", supply->priv->unknown_retries);
+		g_debug ("resetting unknown timeout after %i retries", supply->priv->unknown_retries);
 		supply->priv->unknown_retries = 0;
 	}
 
@@ -571,7 +568,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 
 	/* some batteries don't update last_full attribute */
 	if (energy > energy_full) {
-		egg_warning ("energy %f bigger than full %f", energy, energy_full);
+		g_warning ("energy %f bigger than full %f", energy, energy_full);
 		energy_full = energy;
 	}
 
@@ -601,13 +598,6 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 			percentage = 0.0f;
 		if (percentage > 100.0f)
 			percentage = 100.0f;
-	}
-
-	/* some batteries stop charging much before 100% */
-	if (state == UP_DEVICE_STATE_UNKNOWN &&
-	    percentage > UP_DEVICE_SUPPLY_CHARGED_THRESHOLD) {
-		egg_debug ("fixing up unknown %f", percentage);
-		state = UP_DEVICE_STATE_FULLY_CHARGED;
 	}
 
 	/* the battery isn't charging or discharging, it's just
@@ -646,7 +636,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 		}
 
 		/* print what we did */
-		egg_debug ("guessing battery state '%s' using global on-battery:%i",
+		g_debug ("guessing battery state '%s' using global on-battery:%i",
 			   up_device_state_to_string (state), on_battery);
 
 		g_object_unref (daemon);
@@ -654,7 +644,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 
 	/* if empty, and BIOS does not know what to do */
 	if (state == UP_DEVICE_STATE_UNKNOWN && energy < 0.01) {
-		egg_warning ("Setting %s state empty as unknown and very low", native_path);
+		g_warning ("Setting %s state empty as unknown and very low", native_path);
 		state = UP_DEVICE_STATE_EMPTY;
 	}
 
@@ -718,7 +708,7 @@ up_device_supply_poll_battery (UpDeviceSupply *supply)
 {
 	UpDevice *device = UP_DEVICE (supply);
 
-	egg_debug ("No updates on supply %s for %i seconds; forcing update", up_device_get_object_path (device), UP_DEVICE_SUPPLY_REFRESH_TIMEOUT);
+	g_debug ("No updates on supply %s for %i seconds; forcing update", up_device_get_object_path (device), UP_DEVICE_SUPPLY_REFRESH_TIMEOUT);
 	supply->priv->poll_timer_id = 0;
 	up_device_supply_refresh (device);
 
@@ -747,7 +737,7 @@ up_device_supply_coldplug (UpDevice *device)
 	native = G_UDEV_DEVICE (up_device_get_native (device));
 	native_path = g_udev_device_get_sysfs_path (native);
 	if (native_path == NULL) {
-		egg_warning ("could not get native path for %p", device);
+		g_warning ("could not get native path for %p", device);
 		goto out;
 	}
 
@@ -759,7 +749,7 @@ up_device_supply_coldplug (UpDevice *device)
 		} else if (g_ascii_strcasecmp (device_type, "battery") == 0) {
 			type = UP_DEVICE_KIND_BATTERY;
 		} else {
-			egg_warning ("did not recognise type %s, please report", device_type);
+			g_warning ("did not recognise type %s, please report", device_type);
 		}
 	}
 

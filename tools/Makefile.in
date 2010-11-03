@@ -51,8 +51,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_upower_OBJECTS = upower-egg-debug.$(OBJEXT) \
-	upower-up-tool.$(OBJEXT)
+am_upower_OBJECTS = upower-up-tool.$(OBJEXT)
 upower_OBJECTS = $(am_upower_OBJECTS)
 am__DEPENDENCIES_1 =
 upower_DEPENDENCIES = $(am__DEPENDENCIES_1) $(UPOWER_LIBS)
@@ -267,6 +266,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 INCLUDES = \
 	-DUP_COMPILATION					\
+	-DG_LOG_DOMAIN=\"UPower\"				\
 	-I$(top_srcdir)						\
 	-I$(top_srcdir)/libupower-glib				\
 	$(DBUS_GLIB_CFLAGS)					\
@@ -275,8 +275,6 @@ INCLUDES = \
 
 UPOWER_LIBS = $(top_builddir)/libupower-glib/libupower-glib.la
 upower_SOURCES = \
-	egg-debug.c					\
-	egg-debug.h					\
 	up-tool.c					\
 	$(BUILT_SOURCES)
 
@@ -376,7 +374,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upower-egg-debug.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upower-up-tool.Po@am__quote@
 
 .c.o:
@@ -402,22 +399,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
-
-upower-egg-debug.o: egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upower_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT upower-egg-debug.o -MD -MP -MF $(DEPDIR)/upower-egg-debug.Tpo -c -o upower-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upower-egg-debug.Tpo $(DEPDIR)/upower-egg-debug.Po
-@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='upower-egg-debug.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upower_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o upower-egg-debug.o `test -f 'egg-debug.c' || echo '$(srcdir)/'`egg-debug.c
-
-upower-egg-debug.obj: egg-debug.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upower_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT upower-egg-debug.obj -MD -MP -MF $(DEPDIR)/upower-egg-debug.Tpo -c -o upower-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upower-egg-debug.Tpo $(DEPDIR)/upower-egg-debug.Po
-@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='egg-debug.c' object='upower-egg-debug.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upower_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o upower-egg-debug.obj `if test -f 'egg-debug.c'; then $(CYGPATH_W) 'egg-debug.c'; else $(CYGPATH_W) '$(srcdir)/egg-debug.c'; fi`
 
 upower-up-tool.o: up-tool.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upower_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT upower-up-tool.o -MD -MP -MF $(DEPDIR)/upower-up-tool.Tpo -c -o upower-up-tool.o `test -f 'up-tool.c' || echo '$(srcdir)/'`up-tool.c

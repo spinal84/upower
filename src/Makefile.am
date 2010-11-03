@@ -15,6 +15,7 @@ INCLUDES = \
 	-DG_UDEV_API_IS_SUBJECT_TO_CHANGE			\
 	-DUP_COMPILATION					\
 	-DUP_DISABLE_DEPRECATED					\
+	-DG_LOG_DOMAIN=\"UPower\"				\
 	-I$(top_srcdir)/libupower-glib				\
 	-I$(top_srcdir)						\
 	$(GIO_CFLAGS)						\
@@ -29,6 +30,7 @@ BUILT_SOURCES =							\
 	up-daemon-glue.h					\
 	up-device-glue.h					\
 	up-qos-glue.h						\
+	up-kbd-backlight-glue.h					\
 	up-wakeups-glue.h					\
 	up-marshal.h						\
 	up-marshal.c
@@ -48,6 +50,9 @@ up-device-glue.h: org.freedesktop.UPower.Device.xml Makefile.am
 up-qos-glue.h: org.freedesktop.UPower.QoS.xml Makefile.am
 	dbus-binding-tool --prefix=up_qos --mode=glib-server --output=up-qos-glue.h org.freedesktop.UPower.QoS.xml
 
+up-kbd-backlight-glue.h: org.freedesktop.UPower.KbdBacklight.xml Makefile.am
+	dbus-binding-tool --prefix=up_kbd_backlight --mode=glib-server --output=up-kbd-backlight-glue.h org.freedesktop.UPower.KbdBacklight.xml
+
 up-wakeups-glue.h: org.freedesktop.UPower.Wakeups.xml Makefile.am
 	dbus-binding-tool --prefix=up_wakeups --mode=glib-server --output=up-wakeups-glue.h org.freedesktop.UPower.Wakeups.xml
 
@@ -58,11 +63,10 @@ dbusif_DATA =							\
 	org.freedesktop.UPower.xml				\
 	org.freedesktop.UPower.Device.xml			\
 	org.freedesktop.UPower.QoS.xml				\
+	org.freedesktop.UPower.KbdBacklight.xml			\
 	org.freedesktop.UPower.Wakeups.xml
 
 upowerd_SOURCES =						\
-	egg-debug.c						\
-	egg-debug.h						\
 	up-polkit.h						\
 	up-polkit.c						\
 	up-daemon.h						\
@@ -73,6 +77,8 @@ upowerd_SOURCES =						\
 	up-device-list.c					\
 	up-qos.h						\
 	up-qos.c						\
+	up-kbd-backlight.h					\
+	up-kbd-backlight.c					\
 	up-wakeups.h						\
 	up-wakeups.c						\
 	up-history.h						\
@@ -84,7 +90,6 @@ upowerd_SOURCES =						\
 
 upowerd_CPPFLAGS =						\
 	-I$(top_srcdir)/src					\
-	-DG_LOG_DOMAIN=\"up-daemon\"				\
 	$(AM_CPPFLAGS)
 
 upowerd_LDADD =							\
@@ -123,8 +128,6 @@ check_PROGRAMS =						\
 	up-self-test
 
 up_self_test_SOURCES =						\
-	egg-debug.c						\
-	egg-debug.h						\
 	up-self-test.c						\
 	up-polkit.h						\
 	up-polkit.c						\
@@ -136,6 +139,8 @@ up_self_test_SOURCES =						\
 	up-device-list.c					\
 	up-qos.h						\
 	up-qos.c						\
+	up-kbd-backlight.h					\
+	up-kbd-backlight.c					\
 	up-wakeups.h						\
 	up-wakeups.c						\
 	up-history.h						\
@@ -187,6 +192,7 @@ EXTRA_DIST =							\
 	org.freedesktop.UPower.xml				\
 	org.freedesktop.UPower.Device.xml			\
 	org.freedesktop.UPower.QoS.xml				\
+	org.freedesktop.UPower.KbdBacklight.xml			\
 	org.freedesktop.UPower.Wakeups.xml			\
 	up-marshal.list						\
 	$(service_in_files)					\
