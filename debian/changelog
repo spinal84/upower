@@ -1,4 +1,4 @@
-upower (0.9.6-1) UNRELEASED; urgency=low
+upower (0.9.7-1) UNRELEASED; urgency=low
 
   * New upstream release.
   * Remove patches that have been merged upstream
