@@ -16,7 +16,6 @@ Build-Depends: debhelper (>= 7),
  libgudev-1.0-dev [linux-any],
  libkvm-dev [kfreebsd-any],
  libpolkit-gobject-1-dev (>= 0.91),
- libpolkit-backend-1-dev (>= 0.91),
  libusb-1.0-0-dev (>= 1.0.0) [linux-any],
  libimobiledevice-dev (>= 0.9.7) [linux-any]
 Standards-Version: 3.9.1
