@@ -160,8 +160,7 @@ static const DBusGMethodInfo dbus_glib_up_kbd_backlight_methods[] = {
   { (GCallback) up_kbd_backlight_set_brightness, dbus_glib_marshal_up_kbd_backlight_BOOLEAN__INT_POINTER, 137 },
 };
 
-const DBusGObjectInfo dbus_glib_up_kbd_backlight_object_info = {
-  0,
+const DBusGObjectInfo dbus_glib_up_kbd_backlight_object_info = {  1,
   dbus_glib_up_kbd_backlight_methods,
   3,
 "org.freedesktop.UPower.KbdBacklight\0GetMaxBrightness\0S\0value\0O\0F\0N\0i\0\0org.freedesktop.UPower.KbdBacklight\0GetBrightness\0S\0value\0O\0F\0N\0i\0\0org.freedesktop.UPower.KbdBacklight\0SetBrightness\0S\0value\0I\0i\0\0\0",

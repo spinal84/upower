@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 m4_define([up_major_version], [0])
 m4_define([up_minor_version], [9])
-m4_define([up_micro_version], [7])
+m4_define([up_micro_version], [8])
 m4_define([up_version],
           [up_major_version.up_minor_version.up_micro_version])
 
@@ -12,6 +12,7 @@ AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE([1.9 tar-ustar dist-bzip2])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
+AM_MAINTAINER_MODE([enable])
 
 GOBJECT_INTROSPECTION_CHECK([0.9.8])
 
@@ -158,10 +159,9 @@ PKG_CHECK_MODULES(POLKIT, \
 		  has_new_polkit=no)
 if test x$has_new_polkit = xno; then
 	PKG_CHECK_MODULES(POLKIT, \
-			  polkit-backend-1 \
 			  polkit-gobject-1 >= 0.91)
 else
-	AC_DEFINE(USE_SECURITY_POLKIT_NEW, 1, [if we should use PolicyKit's new API])
+	AC_DEFINE(USE_SECURITY_POLKIT_NEW, 1, [if we should use PolicyKits new API])
 fi
 
 
@@ -196,7 +196,7 @@ if test x$with_backend = xlinux; then
 	AC_ARG_WITH(idevice, AS_HELP_STRING([--without-idevice],[Build without libimobiledevice]),
 		    with_idevice=$withval,with_idevice=yes)
 	AS_IF([test "x$with_idevice" != "xno"],
-	      [PKG_CHECK_MODULES(IDEVICE, libimobiledevice-1.0 >= 0.9.7, have_idevice=yes, have_idevice=no)],
+	      [PKG_CHECK_MODULES(IDEVICE, libimobiledevice-1.0 >= 0.9.7 libplist >= 0.12, have_idevice=yes, have_idevice=no)],
 	      [have_idevice=no])
 	AS_IF([test "x$have_idevice" = "xyes"],
 	      [AC_DEFINE(HAVE_IDEVICE, 1, [Define to 1 if AFC is going to be built])])
