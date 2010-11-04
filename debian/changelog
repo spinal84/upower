@@ -1,3 +1,12 @@
+upower (0.9.7+git20101104-1) UNRELEASED; urgency=low
+
+  * Upgrade to latest git head:
+    - Fix compilation eror against Linux 2.6.36
+    - Check for and link against libplist. Fixes building with gcc 4.5.
+    - Drop unnecessary check for polkit-backend.
+
+ -- Martin Pitt <mpitt@debian.org>  Thu, 04 Nov 2010 19:18:22 -0400
+
 upower (0.9.7-1) experimental; urgency=low
 
   * New upstream release.
