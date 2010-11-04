@@ -1,4 +1,4 @@
-upower (0.9.7-1) UNRELEASED; urgency=low
+upower (0.9.7-1) experimental; urgency=low
 
   * New upstream release.
   * Remove patches that have been merged upstream
@@ -14,7 +14,7 @@ upower (0.9.7-1) UNRELEASED; urgency=low
     - Drop quilt from Build-Depends.
     - Remove /usr/share/cdbs/1/rules/patchsys-quilt.mk include.
 
- -- Michael Biebl <biebl@debian.org>  Sun, 24 Oct 2010 15:41:34 +0200
+ -- Michael Biebl <biebl@debian.org>  Thu, 04 Nov 2010 11:46:22 -0400
 
 upower (0.9.5-5) unstable; urgency=low
 
