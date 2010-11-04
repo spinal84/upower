@@ -9,6 +9,10 @@ upower (0.9.7-1) UNRELEASED; urgency=low
     - debian/patches/00git_initialize_polkit_gerror.patch
   * Add Build-Depends on libpolkit-backend-1-dev (required if building against
     the old PolicyKit API).
+  * Switch to source format 3.0 (quilt)
+    - Update debian/source/format
+    - Drop quilt from Build-Depends.
+    - Remove /usr/share/cdbs/1/rules/patchsys-quilt.mk include.
 
  -- Michael Biebl <biebl@debian.org>  Sun, 24 Oct 2010 15:41:34 +0200
 
