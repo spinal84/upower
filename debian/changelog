@@ -6,6 +6,8 @@ upower (0.9.7+git20101104-1) UNRELEASED; urgency=low
     - Drop unnecessary check for polkit-backend.
   * debian/control: Remove libpolkit-backend-1-dev build dependency again,
     this was only a workaround.
+  * debian/rules: Move from cdbs to dh. Bump debhelper build dependency to >=
+    7.0.50~, as required for overriding targets.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 04 Nov 2010 19:18:22 -0400
 
