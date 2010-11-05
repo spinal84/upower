@@ -10,6 +10,9 @@ override_dh_auto_build:
 	dh_auto_build
 	make -C po upower.pot
 
+override_dh_auto_test:
+	# test suite needs system D-BUS and thus does not work on buildds
+
 override_dh_install:
 	dh_install
 	# Only install udev rules on Linux architectures. The
