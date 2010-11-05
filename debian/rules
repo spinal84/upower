@@ -10,9 +10,6 @@ override_dh_auto_build:
 	dh_auto_build
 	make -C po upower.pot
 
-override_dh_auto_test:
-	# TODO
-
 override_dh_install:
 	dh_install
 	# Only install udev rules on Linux architectures. The
