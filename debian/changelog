@@ -1,4 +1,4 @@
-upower (0.9.7+git20101104-e38cdd-1) UNRELEASED; urgency=low
+upower (0.9.7+git20101104-e38cdd-1) experimental; urgency=low
 
   * Upgrade to latest git head, up to commit e38cddbb8:
     - Fix compilation eror against Linux 2.6.36
@@ -13,7 +13,7 @@ upower (0.9.7+git20101104-e38cdd-1) UNRELEASED; urgency=low
   * debian/rules: Disable running the upstream tests during package build, as
     they need a running system D-BUS (which we don't have on the buildds).
 
- -- Martin Pitt <mpitt@debian.org>  Thu, 04 Nov 2010 19:18:22 -0400
+ -- Martin Pitt <mpitt@debian.org>  Thu, 04 Nov 2010 23:57:46 -0400
 
 upower (0.9.7-1) experimental; urgency=low
 
