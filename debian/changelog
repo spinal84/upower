@@ -1,3 +1,14 @@
+upower (0.9.7+git20101104-e38cdd-2) UNRELEASED; urgency=low
+
+  * Upgrade to latest git head, up to commit 2af7a6e:
+    - Testsuite: Reduce race condition in history purging check.
+    - Update the list of HID UPS devices
+    - Fix links to git repository in HACKING
+    - Support the power_now sysfs attribute to get time remaining on new
+      kernels
+
+ -- Martin Pitt <mpitt@debian.org>  Tue, 04 Jan 2011 12:03:58 +0100
+
 upower (0.9.7+git20101104-e38cdd-1) experimental; urgency=low
 
   * Upgrade to latest git head, up to commit e38cddbb8:
