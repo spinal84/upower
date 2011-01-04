@@ -55,27 +55,27 @@ G_BEGIN_DECLS
 #endif /* !G_ENABLE_DEBUG */
 
 
-/* NONE:STRING,UINT,POINTER */
-extern void dbus_glib_marshal_up_qos_VOID__STRING_UINT_POINTER (GClosure     *closure,
-                                                                GValue       *return_value,
-                                                                guint         n_param_values,
-                                                                const GValue *param_values,
-                                                                gpointer      invocation_hint,
-                                                                gpointer      marshal_data);
+/* NONE:STRING,INT,POINTER */
+extern void dbus_glib_marshal_up_qos_VOID__STRING_INT_POINTER (GClosure     *closure,
+                                                               GValue       *return_value,
+                                                               guint         n_param_values,
+                                                               const GValue *param_values,
+                                                               gpointer      invocation_hint,
+                                                               gpointer      marshal_data);
 void
-dbus_glib_marshal_up_qos_VOID__STRING_UINT_POINTER (GClosure     *closure,
-                                                    GValue       *return_value G_GNUC_UNUSED,
-                                                    guint         n_param_values,
-                                                    const GValue *param_values,
-                                                    gpointer      invocation_hint G_GNUC_UNUSED,
-                                                    gpointer      marshal_data)
+dbus_glib_marshal_up_qos_VOID__STRING_INT_POINTER (GClosure     *closure,
+                                                   GValue       *return_value G_GNUC_UNUSED,
+                                                   guint         n_param_values,
+                                                   const GValue *param_values,
+                                                   gpointer      invocation_hint G_GNUC_UNUSED,
+                                                   gpointer      marshal_data)
 {
-  typedef void (*GMarshalFunc_VOID__STRING_UINT_POINTER) (gpointer     data1,
-                                                          gpointer     arg_1,
-                                                          guint        arg_2,
-                                                          gpointer     arg_3,
-                                                          gpointer     data2);
-  register GMarshalFunc_VOID__STRING_UINT_POINTER callback;
+  typedef void (*GMarshalFunc_VOID__STRING_INT_POINTER) (gpointer     data1,
+                                                         gpointer     arg_1,
+                                                         gint         arg_2,
+                                                         gpointer     arg_3,
+                                                         gpointer     data2);
+  register GMarshalFunc_VOID__STRING_INT_POINTER callback;
   register GCClosure *cc = (GCClosure*) closure;
   register gpointer data1, data2;
 
@@ -91,15 +91,15 @@ dbus_glib_marshal_up_qos_VOID__STRING_UINT_POINTER (GClosure     *closure,
       data1 = g_value_peek_pointer (param_values + 0);
       data2 = closure->data;
     }
-  callback = (GMarshalFunc_VOID__STRING_UINT_POINTER) (marshal_data ? marshal_data : cc->callback);
+  callback = (GMarshalFunc_VOID__STRING_INT_POINTER) (marshal_data ? marshal_data : cc->callback);
 
   callback (data1,
             g_marshal_value_peek_string (param_values + 1),
-            g_marshal_value_peek_uint (param_values + 2),
+            g_marshal_value_peek_int (param_values + 2),
             g_marshal_value_peek_pointer (param_values + 3),
             data2);
 }
-#define dbus_glib_marshal_up_qos_NONE__STRING_UINT_POINTER	dbus_glib_marshal_up_qos_VOID__STRING_UINT_POINTER
+#define dbus_glib_marshal_up_qos_NONE__STRING_INT_POINTER	dbus_glib_marshal_up_qos_VOID__STRING_INT_POINTER
 
 /* NONE:STRING,INT,BOOLEAN,POINTER */
 extern void dbus_glib_marshal_up_qos_VOID__STRING_INT_BOOLEAN_POINTER (GClosure     *closure,
@@ -149,6 +149,52 @@ dbus_glib_marshal_up_qos_VOID__STRING_INT_BOOLEAN_POINTER (GClosure     *closure
 }
 #define dbus_glib_marshal_up_qos_NONE__STRING_INT_BOOLEAN_POINTER	dbus_glib_marshal_up_qos_VOID__STRING_INT_BOOLEAN_POINTER
 
+/* NONE:STRING,UINT,POINTER */
+extern void dbus_glib_marshal_up_qos_VOID__STRING_UINT_POINTER (GClosure     *closure,
+                                                                GValue       *return_value,
+                                                                guint         n_param_values,
+                                                                const GValue *param_values,
+                                                                gpointer      invocation_hint,
+                                                                gpointer      marshal_data);
+void
+dbus_glib_marshal_up_qos_VOID__STRING_UINT_POINTER (GClosure     *closure,
+                                                    GValue       *return_value G_GNUC_UNUSED,
+                                                    guint         n_param_values,
+                                                    const GValue *param_values,
+                                                    gpointer      invocation_hint G_GNUC_UNUSED,
+                                                    gpointer      marshal_data)
+{
+  typedef void (*GMarshalFunc_VOID__STRING_UINT_POINTER) (gpointer     data1,
+                                                          gpointer     arg_1,
+                                                          guint        arg_2,
+                                                          gpointer     arg_3,
+                                                          gpointer     data2);
+  register GMarshalFunc_VOID__STRING_UINT_POINTER callback;
+  register GCClosure *cc = (GCClosure*) closure;
+  register gpointer data1, data2;
+
+  g_return_if_fail (n_param_values == 4);
+
+  if (G_CCLOSURE_SWAP_DATA (closure))
+    {
+      data1 = closure->data;
+      data2 = g_value_peek_pointer (param_values + 0);
+    }
+  else
+    {
+      data1 = g_value_peek_pointer (param_values + 0);
+      data2 = closure->data;
+    }
+  callback = (GMarshalFunc_VOID__STRING_UINT_POINTER) (marshal_data ? marshal_data : cc->callback);
+
+  callback (data1,
+            g_marshal_value_peek_string (param_values + 1),
+            g_marshal_value_peek_uint (param_values + 2),
+            g_marshal_value_peek_pointer (param_values + 3),
+            data2);
+}
+#define dbus_glib_marshal_up_qos_NONE__STRING_UINT_POINTER	dbus_glib_marshal_up_qos_VOID__STRING_UINT_POINTER
+
 /* BOOLEAN:STRING,POINTER,POINTER */
 extern void dbus_glib_marshal_up_qos_BOOLEAN__STRING_POINTER_POINTER (GClosure     *closure,
                                                                       GValue       *return_value,
@@ -197,52 +243,6 @@ dbus_glib_marshal_up_qos_BOOLEAN__STRING_POINTER_POINTER (GClosure     *closure,
 
   g_value_set_boolean (return_value, v_return);
 }
-
-/* NONE:STRING,INT,POINTER */
-extern void dbus_glib_marshal_up_qos_VOID__STRING_INT_POINTER (GClosure     *closure,
-                                                               GValue       *return_value,
-                                                               guint         n_param_values,
-                                                               const GValue *param_values,
-                                                               gpointer      invocation_hint,
-                                                               gpointer      marshal_data);
-void
-dbus_glib_marshal_up_qos_VOID__STRING_INT_POINTER (GClosure     *closure,
-                                                   GValue       *return_value G_GNUC_UNUSED,
-                                                   guint         n_param_values,
-                                                   const GValue *param_values,
-                                                   gpointer      invocation_hint G_GNUC_UNUSED,
-                                                   gpointer      marshal_data)
-{
-  typedef void (*GMarshalFunc_VOID__STRING_INT_POINTER) (gpointer     data1,
-                                                         gpointer     arg_1,
-                                                         gint         arg_2,
-                                                         gpointer     arg_3,
-                                                         gpointer     data2);
-  register GMarshalFunc_VOID__STRING_INT_POINTER callback;
-  register GCClosure *cc = (GCClosure*) closure;
-  register gpointer data1, data2;
-
-  g_return_if_fail (n_param_values == 4);
-
-  if (G_CCLOSURE_SWAP_DATA (closure))
-    {
-      data1 = closure->data;
-      data2 = g_value_peek_pointer (param_values + 0);
-    }
-  else
-    {
-      data1 = g_value_peek_pointer (param_values + 0);
-      data2 = closure->data;
-    }
-  callback = (GMarshalFunc_VOID__STRING_INT_POINTER) (marshal_data ? marshal_data : cc->callback);
-
-  callback (data1,
-            g_marshal_value_peek_string (param_values + 1),
-            g_marshal_value_peek_int (param_values + 2),
-            g_marshal_value_peek_pointer (param_values + 3),
-            data2);
-}
-#define dbus_glib_marshal_up_qos_NONE__STRING_INT_POINTER	dbus_glib_marshal_up_qos_VOID__STRING_INT_POINTER
 
 /* BOOLEAN:POINTER,POINTER */
 extern void dbus_glib_marshal_up_qos_BOOLEAN__POINTER_POINTER (GClosure     *closure,
