@@ -1,4 +1,4 @@
-upower (0.9.8-1) UNRELEASED; urgency=low
+upower (0.9.8-1) experimental; urgency=low
 
   * New upstream release. Changes since our previous git snapshot:
     - Add an "IsDocked" property.
@@ -9,7 +9,7 @@ upower (0.9.8-1) UNRELEASED; urgency=low
       kernels
   * debian/libupower-glib1.symbols: Add new symbol.
 
- -- Martin Pitt <mpitt@debian.org>  Tue, 04 Jan 2011 12:03:58 +0100
+ -- Martin Pitt <mpitt@debian.org>  Fri, 07 Jan 2011 16:56:11 +0100
 
 upower (0.9.7+git20101104-e38cdd-1) experimental; urgency=low
 
