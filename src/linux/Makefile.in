@@ -53,17 +53,18 @@ libupshared_la_LIBADD =
 am__libupshared_la_SOURCES_DIST = up-device-supply.c \
 	up-device-supply.h up-device-csr.c up-device-csr.h \
 	up-device-hid.c up-device-hid.h up-device-wup.c \
-	up-device-wup.h up-input.c up-input.h up-backend.c up-native.c \
-	sysfs-utils.c sysfs-utils.h up-device-idevice.c \
-	up-device-idevice.h
+	up-device-wup.h up-input.c up-input.h up-dock.c up-dock.h \
+	up-backend.c up-native.c sysfs-utils.c sysfs-utils.h \
+	up-device-idevice.c up-device-idevice.h
 @HAVE_IDEVICE_TRUE@am__objects_1 =  \
 @HAVE_IDEVICE_TRUE@	libupshared_la-up-device-idevice.lo
 am_libupshared_la_OBJECTS = libupshared_la-up-device-supply.lo \
 	libupshared_la-up-device-csr.lo \
 	libupshared_la-up-device-hid.lo \
 	libupshared_la-up-device-wup.lo libupshared_la-up-input.lo \
-	libupshared_la-up-backend.lo libupshared_la-up-native.lo \
-	libupshared_la-sysfs-utils.lo $(am__objects_1)
+	libupshared_la-up-dock.lo libupshared_la-up-backend.lo \
+	libupshared_la-up-native.lo libupshared_la-sysfs-utils.lo \
+	$(am__objects_1)
 libupshared_la_OBJECTS = $(am_libupshared_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -264,7 +265,6 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -309,6 +309,8 @@ libupshared_la_SOURCES = \
 	up-device-wup.h						\
 	up-input.c						\
 	up-input.h						\
+	up-dock.c						\
+	up-dock.h						\
 	up-backend.c						\
 	up-native.c						\
 	sysfs-utils.c						\
@@ -379,6 +381,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-device-idevice.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-device-supply.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-device-wup.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-dock.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-input.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-native.Plo@am__quote@
 
@@ -445,6 +448,14 @@ libupshared_la-up-input.lo: up-input.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-input.c' object='libupshared_la-up-input.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -c -o libupshared_la-up-input.lo `test -f 'up-input.c' || echo '$(srcdir)/'`up-input.c
+
+libupshared_la-up-dock.lo: up-dock.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -MT libupshared_la-up-dock.lo -MD -MP -MF $(DEPDIR)/libupshared_la-up-dock.Tpo -c -o libupshared_la-up-dock.lo `test -f 'up-dock.c' || echo '$(srcdir)/'`up-dock.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupshared_la-up-dock.Tpo $(DEPDIR)/libupshared_la-up-dock.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-dock.c' object='libupshared_la-up-dock.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -c -o libupshared_la-up-dock.lo `test -f 'up-dock.c' || echo '$(srcdir)/'`up-dock.c
 
 libupshared_la-up-backend.lo: up-backend.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -MT libupshared_la-up-backend.lo -MD -MP -MF $(DEPDIR)/libupshared_la-up-backend.Tpo -c -o libupshared_la-up-backend.lo `test -f 'up-backend.c' || echo '$(srcdir)/'`up-backend.c

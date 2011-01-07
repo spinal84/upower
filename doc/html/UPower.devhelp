@@ -47,6 +47,7 @@
     <function name="The &quot;OnLowBattery&quot; property" link="UPower.html#UPower:OnLowBattery"/>
     <function name="The &quot;LidIsClosed&quot; property" link="UPower.html#UPower:LidIsClosed"/>
     <function name="The &quot;LidIsPresent&quot; property" link="UPower.html#UPower:LidIsPresent"/>
+    <function name="The &quot;IsDocked&quot; property" link="UPower.html#UPower:IsDocked"/>
     <function name="Refresh ()" link="Device.html#Device.Refresh"/>
     <function name="GetHistory ()" link="Device.html#Device.GetHistory"/>
     <function name="GetStatistics ()" link="Device.html#Device.GetStatistics"/>

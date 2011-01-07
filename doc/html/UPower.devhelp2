@@ -47,6 +47,7 @@
     <keyword type="" name="The &quot;OnLowBattery&quot; property" link="UPower.html#UPower:OnLowBattery"/>
     <keyword type="" name="The &quot;LidIsClosed&quot; property" link="UPower.html#UPower:LidIsClosed"/>
     <keyword type="" name="The &quot;LidIsPresent&quot; property" link="UPower.html#UPower:LidIsPresent"/>
+    <keyword type="" name="The &quot;IsDocked&quot; property" link="UPower.html#UPower:IsDocked"/>
     <keyword type="" name="Refresh ()" link="Device.html#Device.Refresh"/>
     <keyword type="" name="GetHistory ()" link="Device.html#Device.GetHistory"/>
     <keyword type="" name="GetStatistics ()" link="Device.html#Device.GetStatistics"/>
