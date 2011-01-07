@@ -1,6 +1,7 @@
-upower (0.9.7+git20101104-e38cdd-2) UNRELEASED; urgency=low
+upower (0.9.8-1) UNRELEASED; urgency=low
 
-  * Upgrade to latest git head, up to commit 2af7a6e:
+  * New upstream release. Changes since our previous git snapshot:
+    - Add an "IsDocked" property.
     - Testsuite: Reduce race condition in history purging check.
     - Update the list of HID UPS devices
     - Fix links to git repository in HACKING
