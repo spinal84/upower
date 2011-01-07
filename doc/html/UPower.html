@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>org.freedesktop.UPower</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="index.html" title="UPower Reference Manual">
 <link rel="up" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="prev" href="ref-dbus.html" title="D-Bus API Reference">
@@ -52,7 +52,7 @@
 </pre>
 </div>
 <div class="refsect1" title="Signals">
-<a name="id362643"></a><h2>Signals</h2>
+<a name="id2935293"></a><h2>Signals</h2>
 <pre class="synopsis"><a class="link" href="UPower.html#UPower::DeviceAdded">DeviceAdded</a>   ('o' device)
 <a class="link" href="UPower.html#UPower::DeviceRemoved">DeviceRemoved</a> ('o' device)
 <a class="link" href="UPower.html#UPower::DeviceChanged">DeviceChanged</a> ('o' device)
@@ -62,7 +62,7 @@
 </pre>
 </div>
 <div class="refsect1" title="Implemented Interfaces">
-<a name="id346005"></a><h2>Implemented Interfaces</h2>
+<a name="id2861494"></a><h2>Implemented Interfaces</h2>
 <p>
     Objects implementing org.freedesktop.UPower also implements
     org.freedesktop.DBus.Introspectable,
@@ -70,7 +70,7 @@
     </p>
 </div>
 <div class="refsect1" title="Properties">
-<a name="id297986"></a><h2>Properties</h2>
+<a name="id2861511"></a><h2>Properties</h2>
 <pre class="synopsis"><a class="link" href="UPower.html#UPower:DaemonVersion">'DaemonVersion'</a> read      's'
 <a class="link" href="UPower.html#UPower:CanSuspend">'CanSuspend'</a>    read      'b'
 <a class="link" href="UPower.html#UPower:CanHibernate">'CanHibernate'</a>  read      'b'
@@ -78,10 +78,11 @@
 <a class="link" href="UPower.html#UPower:OnLowBattery">'OnLowBattery'</a>  read      'b'
 <a class="link" href="UPower.html#UPower:LidIsClosed">'LidIsClosed'</a>   read      'b'
 <a class="link" href="UPower.html#UPower:LidIsPresent">'LidIsPresent'</a>  read      'b'
+<a class="link" href="UPower.html#UPower:IsDocked">'IsDocked'</a>      read      'b'
 </pre>
 </div>
 <div class="refsect1" title="Description">
-<a name="id298045"></a><h2>Description</h2>
+<a name="id2861578"></a><h2>Description</h2>
 <p>
       
         </p>
@@ -97,19 +98,37 @@
         </p>
 <p>
           </p>
-<div class="informalexample"><pre class="programlisting">
-$ dbus-send --print-reply \
-            --system \
-            --dest=org.freedesktop.UPower \
-            /org/freedesktop/UPower \
-            org.freedesktop.UPower.EnumerateDevices
+<div class="informalexample">
+  <table class="listing_frame" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td class="listing_lines" align="right"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="normal">$ dbus</span><span class="symbol">-</span><span class="normal">send </span><span class="symbol">--</span><span class="normal">print</span><span class="symbol">-</span><span class="normal">reply </span><span class="symbol">\</span>
+<span class="normal">            </span><span class="symbol">--</span><span class="normal">system </span><span class="symbol">\</span>
+<span class="normal">            </span><span class="symbol">--</span><span class="normal">dest</span><span class="symbol">=</span><span class="normal">org</span><span class="symbol">.</span><span class="normal">freedesktop</span><span class="symbol">.</span><span class="normal"><a href="UPower.html">UPower</a> </span><span class="symbol">\</span>
+<span class="normal">            </span><span class="symbol">/</span><span class="normal">org</span><span class="symbol">/</span><span class="normal">freedesktop</span><span class="symbol">/</span><span class="normal"><a href="UPower.html">UPower</a> </span><span class="symbol">\</span>
+<span class="normal">            org</span><span class="symbol">.</span><span class="normal">freedesktop</span><span class="symbol">.</span><span class="normal"><a href="UPower.html">UPower</a></span><span class="symbol">.</span><span class="normal">EnumerateDevices</span>
 
-method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
-   array [
-      object path "/org/freedesktop/UPower/devices/line_power_AC"
-      object path "/org/freedesktop/UPower/devices/battery_BAT0"
-   ]
-            </pre></div>
+<span class="normal">method </span><span class="usertype">return</span><span class="normal"> sender</span><span class="symbol">=:</span><span class="number">1.386</span><span class="normal"> </span><span class="symbol">-&gt;</span><span class="normal"> dest</span><span class="symbol">=:</span><span class="number">1.451</span><span class="normal"> reply_serial</span><span class="symbol">=</span><span class="number">2</span>
+<span class="normal">   array </span><span class="symbol">[</span>
+<span class="normal">      </span><span class="usertype">object</span><span class="normal"> path </span><span class="string">"/org/freedesktop/UPower/devices/line_power_AC"</span>
+<span class="normal">      </span><span class="usertype">object</span><span class="normal"> path </span><span class="string">"/org/freedesktop/UPower/devices/battery_BAT0"</span>
+<span class="normal">   </span><span class="symbol">]</span></pre></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 <p>
         </p>
 <p>
@@ -117,9 +136,9 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
     </p>
 </div>
 <div class="refsect1" title="Details">
-<a name="id298100"></a><h2>Details</h2>
+<a name="id2900443"></a><h2>Details</h2>
 <div class="refsect2" title="EnumerateDevices ()">
-<a name="id298763"></a><h3>
+<a name="id2900451"></a><h3>
 <a name="UPower.EnumerateDevices"></a>EnumerateDevices ()</h3>
 <pre class="programlisting">EnumerateDevices (out 'ao' devices)</pre>
 </div>
@@ -135,7 +154,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title="AboutToSleep ()">
-<a name="id298804"></a><h3>
+<a name="id2900493"></a><h3>
 <a name="UPower.AboutToSleep"></a>AboutToSleep ()</h3>
 <pre class="programlisting">AboutToSleep ()</pre>
 </div>
@@ -163,7 +182,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title="Suspend ()">
-<a name="id298849"></a><h3>
+<a name="id2900542"></a><h3>
 <a name="UPower.Suspend"></a>Suspend ()</h3>
 <pre class="programlisting">Suspend ()</pre>
 </div>
@@ -186,7 +205,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title="SuspendAllowed ()">
-<a name="id298890"></a><h3>
+<a name="id2861041"></a><h3>
 <a name="UPower.SuspendAllowed"></a>SuspendAllowed ()</h3>
 <pre class="programlisting">SuspendAllowed (out 'b' allowed)</pre>
 </div>
@@ -203,7 +222,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title="Hibernate ()">
-<a name="id355636"></a><h3>
+<a name="id2861093"></a><h3>
 <a name="UPower.Hibernate"></a>Hibernate ()</h3>
 <pre class="programlisting">Hibernate ()</pre>
 </div>
@@ -226,7 +245,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title="HibernateAllowed ()">
-<a name="id355678"></a><h3>
+<a name="id2861140"></a><h3>
 <a name="UPower.HibernateAllowed"></a>HibernateAllowed ()</h3>
 <pre class="programlisting">HibernateAllowed (out 'b' allowed)</pre>
 </div>
@@ -243,9 +262,9 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 </div>
 <div class="refsect1" title="Signal Details">
-<a name="id355732"></a><h2>Signal Details</h2>
+<a name="id2861194"></a><h2>Signal Details</h2>
 <div class="refsect2" title="The DeviceAdded signal">
-<a name="id355740"></a><h3>
+<a name="id2861202"></a><h3>
 <a name="UPower::DeviceAdded"></a>The DeviceAdded signal</h3>
 <pre class="programlisting">DeviceAdded ('o' device)</pre>
 </div>
@@ -261,7 +280,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title="The DeviceRemoved signal">
-<a name="id355782"></a><h3>
+<a name="id2861245"></a><h3>
 <a name="UPower::DeviceRemoved"></a>The DeviceRemoved signal</h3>
 <pre class="programlisting">DeviceRemoved ('o' device)</pre>
 </div>
@@ -277,7 +296,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title="The DeviceChanged signal">
-<a name="id355824"></a><h3>
+<a name="id2861287"></a><h3>
 <a name="UPower::DeviceChanged"></a>The DeviceChanged signal</h3>
 <pre class="programlisting">DeviceChanged ('o' device)</pre>
 </div>
@@ -293,7 +312,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title="The Changed signal">
-<a name="id355866"></a><h3>
+<a name="id2861329"></a><h3>
 <a name="UPower::Changed"></a>The Changed signal</h3>
 <pre class="programlisting">Changed ()</pre>
 </div>
@@ -306,7 +325,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title="The Sleeping signal">
-<a name="id355897"></a><h3>
+<a name="id2861361"></a><h3>
 <a name="UPower::Sleeping"></a>The Sleeping signal</h3>
 <pre class="programlisting">Sleeping ()</pre>
 </div>
@@ -323,7 +342,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title="The Resuming signal">
-<a name="id355930"></a><h3>
+<a name="id2861397"></a><h3>
 <a name="UPower::Resuming"></a>The Resuming signal</h3>
 <pre class="programlisting">Resuming ()</pre>
 </div>
@@ -339,9 +358,9 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 </div>
 <div class="refsect1" title="Property Details">
-<a name="id355963"></a><h2>Property Details</h2>
+<a name="id2926392"></a><h2>Property Details</h2>
 <div class="refsect2" title='The "DaemonVersion" property'>
-<a name="id355971"></a><h3>
+<a name="id2926400"></a><h3>
 <a name="UPower:DaemonVersion"></a>The "DaemonVersion" property</h3>
 <pre class="programlisting">'DaemonVersion'  read      's'
 </pre>
@@ -355,7 +374,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "CanSuspend" property'>
-<a name="id356005"></a><h3>
+<a name="id2926435"></a><h3>
 <a name="UPower:CanSuspend"></a>The "CanSuspend" property</h3>
 <pre class="programlisting">'CanSuspend'  read      'b'
 </pre>
@@ -369,7 +388,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "CanHibernate" property'>
-<a name="id356033"></a><h3>
+<a name="id2926464"></a><h3>
 <a name="UPower:CanHibernate"></a>The "CanHibernate" property</h3>
 <pre class="programlisting">'CanHibernate'  read      'b'
 </pre>
@@ -383,7 +402,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "OnBattery" property'>
-<a name="id356061"></a><h3>
+<a name="id2926494"></a><h3>
 <a name="UPower:OnBattery"></a>The "OnBattery" property</h3>
 <pre class="programlisting">'OnBattery'  read      'b'
 </pre>
@@ -398,7 +417,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "OnLowBattery" property'>
-<a name="id356090"></a><h3>
+<a name="id2926523"></a><h3>
 <a name="UPower:OnLowBattery"></a>The "OnLowBattery" property</h3>
 <pre class="programlisting">'OnLowBattery'  read      'b'
 </pre>
@@ -413,7 +432,7 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "LidIsClosed" property'>
-<a name="id356120"></a><h3>
+<a name="id2926555"></a><h3>
 <a name="UPower:LidIsClosed"></a>The "LidIsClosed" property</h3>
 <pre class="programlisting">'LidIsClosed'  read      'b'
 </pre>
@@ -427,13 +446,29 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </table></div>
 <hr>
 <div class="refsect2" title='The "LidIsPresent" property'>
-<a name="id356151"></a><h3>
+<a name="id2926587"></a><h3>
 <a name="UPower:LidIsPresent"></a>The "LidIsPresent" property</h3>
 <pre class="programlisting">'LidIsPresent'  read      'b'
 </pre>
 </div>
 <p>
             If the system has a lid device.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2" title='The "IsDocked" property'>
+<a name="id2926619"></a><h3>
+<a name="UPower:IsDocked"></a>The "IsDocked" property</h3>
+<pre class="programlisting">'IsDocked'  read      'b'
+</pre>
+</div>
+<p>
+            If the system is currently docked.
+            Note: the "is-docked" value is the result of a heuristic,
+            which may involve testing the display output.
           </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
