@@ -1,3 +1,9 @@
+upower (0.9.8-2) UNRELEASED; urgency=low
+
+  * Upload to unstable.
+
+ -- Michael Biebl <biebl@debian.org>  Sun, 06 Feb 2011 14:36:29 +0100
+
 upower (0.9.8-1) experimental; urgency=low
 
   * New upstream release. Changes since our previous git snapshot:
