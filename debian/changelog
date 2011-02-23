@@ -1,7 +1,7 @@
 upower (0.9.8-3) UNRELEASED; urgency=low
 
   [ Frédéric Péters ]
-  * Enable gobject introspection support.
+  * Enable gobject introspection support. (Closes: #614795)
     - Add Build-Depends on libgirepository1.0-dev (>= 0.9.12),
       gobject-introspection (>= 0.9.12-4~) and gir1.2-glib-2.0.
     - Add package gir1.2-upower-1.0 containing the typelib file.
