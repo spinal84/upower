@@ -1,4 +1,4 @@
-upower (0.9.8-3) UNRELEASED; urgency=low
+upower (0.9.8-3) experimental; urgency=low
 
   [ Frédéric Péters ]
   * Enable gobject introspection support. (Closes: #614795)
@@ -12,7 +12,7 @@ upower (0.9.8-3) UNRELEASED; urgency=low
   * Bump debhelper compatibility level to 8 and update build dependency on
     debhelper accordingly.
 
- -- Michael Biebl <biebl@debian.org>  Wed, 23 Feb 2011 17:17:59 +0100
+ -- Michael Biebl <biebl@debian.org>  Wed, 23 Feb 2011 17:46:34 +0100
 
 upower (0.9.8-2) unstable; urgency=low
 
