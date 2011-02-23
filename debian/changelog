@@ -8,7 +8,11 @@ upower (0.9.8-3) UNRELEASED; urgency=low
     - Install gir file in libupower-glib-dev.install.
     - Call dh_girepository for libupower-glib1 in debian/rules.
 
- -- Michael Biebl <biebl@debian.org>  Wed, 23 Feb 2011 16:31:30 +0100
+  [ Michael Biebl ]
+  * Bump debhelper compatibility level to 8 and update build dependency on
+    debhelper accordingly.
+
+ -- Michael Biebl <biebl@debian.org>  Wed, 23 Feb 2011 17:17:59 +0100
 
 upower (0.9.8-2) unstable; urgency=low
 
