@@ -1,3 +1,15 @@
+upower (0.9.8-3) UNRELEASED; urgency=low
+
+  [ Frédéric Péters ]
+  * Enable gobject introspection support.
+    - Add Build-Depends on libgirepository1.0-dev (>= 0.9.12),
+      gobject-introspection (>= 0.9.12-4~) and gir1.2-glib-2.0.
+    - Add package gir1.2-upower-1.0 containing the typelib file.
+    - Install gir file in libupower-glib-dev.install.
+    - Call dh_girepository for libupower-glib1 in debian/rules.
+
+ -- Michael Biebl <biebl@debian.org>  Wed, 23 Feb 2011 16:31:30 +0100
+
 upower (0.9.8-2) unstable; urgency=low
 
   * Upload to unstable.
