@@ -1,3 +1,12 @@
+upower (0.9.9-1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    - Fix bitmap check in the input code. (Closes: #616474)
+    - Add an option for polling dock devices in UPower.conf, defaulting to
+      false. (Closes: #613745)
+
+ -- Michael Biebl <biebl@debian.org>  Mon, 21 Mar 2011 11:34:59 +0100
+
 upower (0.9.8-3) experimental; urgency=low
 
   [ Frédéric Péters ]
