@@ -8,7 +8,7 @@
 <link rel="up" href="libupower-glib-helpers.html" title="libupower-glib helpers">
 <link rel="prev" href="libupower-glib-helpers.html" title="libupower-glib helpers">
 <link rel="next" href="tools-fileformats.html" title="Manual Pages">
-<meta name="generator" content="GTK-Doc V1.15 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.17 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -26,7 +26,7 @@
                   <a href="#UPower-up-types.description" class="shortcut">Description</a>
 </td></tr>
 </table>
-<div class="refentry" title="up-types">
+<div class="refentry">
 <a name="UPower-up-types"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
@@ -35,7 +35,7 @@
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsynopsisdiv" title="Synopsis">
+<div class="refsynopsisdiv">
 <a name="UPower-up-types.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">enum                <a class="link" href="UPower-up-types.html#UpDeviceKind" title="enum UpDeviceKind">UpDeviceKind</a>;
 enum                <a class="link" href="UPower-up-types.html#UpDeviceState" title="enum UpDeviceState">UpDeviceState</a>;
@@ -51,7 +51,7 @@ const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.htm
 <a class="link" href="UPower-up-types.html#UpQosKind" title="enum UpQosKind"><span class="returnvalue">UpQosKind</span></a>           <a class="link" href="UPower-up-types.html#up-qos-kind-from-string" title="up_qos_kind_from_string ()">up_qos_kind_from_string</a>             (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *type</code></em>);
 </pre>
 </div>
-<div class="refsect1" title="Description">
+<div class="refsect1">
 <a name="UPower-up-types.description"></a><h2>Description</h2>
 <p>
 These helper functions provide a way to marshal enumerated values to
@@ -61,9 +61,9 @@ text and back again.
 See also: <span class="type">UpClient</span>, <span class="type">UpDevice</span>
 </p>
 </div>
-<div class="refsect1" title="Details">
+<div class="refsect1">
 <a name="UPower-up-types.details"></a><h2>Details</h2>
-<div class="refsect2" title="enum UpDeviceKind">
+<div class="refsect2">
 <a name="UpDeviceKind"></a><h3>enum UpDeviceKind</h3>
 <pre class="programlisting">typedef enum {
 	UP_DEVICE_KIND_UNKNOWN,
@@ -86,7 +86,7 @@ The device type.
 </p>
 </div>
 <hr>
-<div class="refsect2" title="enum UpDeviceState">
+<div class="refsect2">
 <a name="UpDeviceState"></a><h3>enum UpDeviceState</h3>
 <pre class="programlisting">typedef enum {
 	UP_DEVICE_STATE_UNKNOWN,
@@ -104,7 +104,7 @@ The device state.
 </p>
 </div>
 <hr>
-<div class="refsect2" title="enum UpDeviceTechnology">
+<div class="refsect2">
 <a name="UpDeviceTechnology"></a><h3>enum UpDeviceTechnology</h3>
 <pre class="programlisting">typedef enum {
 	UP_DEVICE_TECHNOLOGY_UNKNOWN,
@@ -122,7 +122,7 @@ The device technology.
 </p>
 </div>
 <hr>
-<div class="refsect2" title="enum UpQosKind">
+<div class="refsect2">
 <a name="UpQosKind"></a><h3>enum UpQosKind</h3>
 <pre class="programlisting">typedef enum {
 	UP_QOS_KIND_UNKNOWN,
@@ -136,7 +136,7 @@ The type of QOS request.
 </p>
 </div>
 <hr>
-<div class="refsect2" title="up_device_kind_to_string ()">
+<div class="refsect2">
 <a name="up-device-kind-to-string"></a><h3>up_device_kind_to_string ()</h3>
 <pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       up_device_kind_to_string            (<em class="parameter"><code><a class="link" href="UPower-up-types.html#UpDeviceKind" title="enum UpDeviceKind"><span class="type">UpDeviceKind</span></a> type_enum</code></em>);</pre>
 <p>
@@ -146,15 +146,13 @@ Converts a <a class="link" href="UPower-up-types.html#UpDeviceKind" title="enum 
 <col align="left" valign="top">
 <tbody><tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> identifier string
-
-</td>
+<td>identifier string</td>
 </tr></tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_device_state_to_string ()">
+<div class="refsect2">
 <a name="up-device-state-to-string"></a><h3>up_device_state_to_string ()</h3>
 <pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       up_device_state_to_string           (<em class="parameter"><code><a class="link" href="UPower-up-types.html#UpDeviceState" title="enum UpDeviceState"><span class="type">UpDeviceState</span></a> state_enum</code></em>);</pre>
 <p>
@@ -164,15 +162,13 @@ Converts a <a class="link" href="UPower-up-types.html#UpDeviceState" title="enum
 <col align="left" valign="top">
 <tbody><tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> identifier string
-
-</td>
+<td>identifier string</td>
 </tr></tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_device_technology_to_string ()">
+<div class="refsect2">
 <a name="up-device-technology-to-string"></a><h3>up_device_technology_to_string ()</h3>
 <pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       up_device_technology_to_string      (<em class="parameter"><code><a class="link" href="UPower-up-types.html#UpDeviceTechnology" title="enum UpDeviceTechnology"><span class="type">UpDeviceTechnology</span></a> technology_enum</code></em>);</pre>
 <p>
@@ -182,15 +178,13 @@ Converts a <a class="link" href="UPower-up-types.html#UpDeviceTechnology" title=
 <col align="left" valign="top">
 <tbody><tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> identifier string
-
-</td>
+<td>identifier string</td>
 </tr></tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_device_kind_from_string ()">
+<div class="refsect2">
 <a name="up-device-kind-from-string"></a><h3>up_device_kind_from_string ()</h3>
 <pre class="programlisting"><a class="link" href="UPower-up-types.html#UpDeviceKind" title="enum UpDeviceKind"><span class="returnvalue">UpDeviceKind</span></a>        up_device_kind_from_string          (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *type</code></em>);</pre>
 <p>
@@ -200,15 +194,13 @@ Converts a string to a <a class="link" href="UPower-up-types.html#UpDeviceKind" 
 <col align="left" valign="top">
 <tbody><tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> enumerated value
-
-</td>
+<td>enumerated value</td>
 </tr></tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_device_state_from_string ()">
+<div class="refsect2">
 <a name="up-device-state-from-string"></a><h3>up_device_state_from_string ()</h3>
 <pre class="programlisting"><a class="link" href="UPower-up-types.html#UpDeviceState" title="enum UpDeviceState"><span class="returnvalue">UpDeviceState</span></a>       up_device_state_from_string         (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *state</code></em>);</pre>
 <p>
@@ -218,15 +210,13 @@ Converts a string to a <a class="link" href="UPower-up-types.html#UpDeviceState"
 <col align="left" valign="top">
 <tbody><tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> enumerated value
-
-</td>
+<td>enumerated value</td>
 </tr></tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_device_technology_from_string ()">
+<div class="refsect2">
 <a name="up-device-technology-from-string"></a><h3>up_device_technology_from_string ()</h3>
 <pre class="programlisting"><a class="link" href="UPower-up-types.html#UpDeviceTechnology" title="enum UpDeviceTechnology"><span class="returnvalue">UpDeviceTechnology</span></a>  up_device_technology_from_string    (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *technology</code></em>);</pre>
 <p>
@@ -236,15 +226,13 @@ Converts a string to a <a class="link" href="UPower-up-types.html#UpDeviceTechno
 <col align="left" valign="top">
 <tbody><tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> enumerated value
-
-</td>
+<td>enumerated value</td>
 </tr></tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_qos_kind_to_string ()">
+<div class="refsect2">
 <a name="up-qos-kind-to-string"></a><h3>up_qos_kind_to_string ()</h3>
 <pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       up_qos_kind_to_string               (<em class="parameter"><code><a class="link" href="UPower-up-types.html#UpQosKind" title="enum UpQosKind"><span class="type">UpQosKind</span></a> type</code></em>);</pre>
 <p>
@@ -254,15 +242,13 @@ Converts a <a class="link" href="UPower-up-types.html#UpQosKind" title="enum UpQ
 <col align="left" valign="top">
 <tbody><tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> identifier string
-
-</td>
+<td>identifier string</td>
 </tr></tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_qos_kind_from_string ()">
+<div class="refsect2">
 <a name="up-qos-kind-from-string"></a><h3>up_qos_kind_from_string ()</h3>
 <pre class="programlisting"><a class="link" href="UPower-up-types.html#UpQosKind" title="enum UpQosKind"><span class="returnvalue">UpQosKind</span></a>           up_qos_kind_from_string             (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *type</code></em>);</pre>
 <p>
@@ -272,9 +258,7 @@ Converts a string to a <a class="link" href="UPower-up-types.html#UpQosKind" tit
 <col align="left" valign="top">
 <tbody><tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> enumerated value
-
-</td>
+<td>enumerated value</td>
 </tr></tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
@@ -283,6 +267,6 @@ Converts a string to a <a class="link" href="UPower-up-types.html#UpQosKind" tit
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.15</div>
+          Generated by GTK-Doc V1.17</div>
 </body>
 </html>

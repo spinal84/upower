@@ -55,53 +55,6 @@ G_BEGIN_DECLS
 #endif /* !G_ENABLE_DEBUG */
 
 
-/* BOOLEAN:INT,POINTER */
-extern void dbus_glib_marshal_up_kbd_backlight_BOOLEAN__INT_POINTER (GClosure     *closure,
-                                                                     GValue       *return_value,
-                                                                     guint         n_param_values,
-                                                                     const GValue *param_values,
-                                                                     gpointer      invocation_hint,
-                                                                     gpointer      marshal_data);
-void
-dbus_glib_marshal_up_kbd_backlight_BOOLEAN__INT_POINTER (GClosure     *closure,
-                                                         GValue       *return_value G_GNUC_UNUSED,
-                                                         guint         n_param_values,
-                                                         const GValue *param_values,
-                                                         gpointer      invocation_hint G_GNUC_UNUSED,
-                                                         gpointer      marshal_data)
-{
-  typedef gboolean (*GMarshalFunc_BOOLEAN__INT_POINTER) (gpointer     data1,
-                                                         gint         arg_1,
-                                                         gpointer     arg_2,
-                                                         gpointer     data2);
-  register GMarshalFunc_BOOLEAN__INT_POINTER callback;
-  register GCClosure *cc = (GCClosure*) closure;
-  register gpointer data1, data2;
-  gboolean v_return;
-
-  g_return_if_fail (return_value != NULL);
-  g_return_if_fail (n_param_values == 3);
-
-  if (G_CCLOSURE_SWAP_DATA (closure))
-    {
-      data1 = closure->data;
-      data2 = g_value_peek_pointer (param_values + 0);
-    }
-  else
-    {
-      data1 = g_value_peek_pointer (param_values + 0);
-      data2 = closure->data;
-    }
-  callback = (GMarshalFunc_BOOLEAN__INT_POINTER) (marshal_data ? marshal_data : cc->callback);
-
-  v_return = callback (data1,
-                       g_marshal_value_peek_int (param_values + 1),
-                       g_marshal_value_peek_pointer (param_values + 2),
-                       data2);
-
-  g_value_set_boolean (return_value, v_return);
-}
-
 /* BOOLEAN:POINTER,POINTER */
 extern void dbus_glib_marshal_up_kbd_backlight_BOOLEAN__POINTER_POINTER (GClosure     *closure,
                                                                          GValue       *return_value,
@@ -149,6 +102,53 @@ dbus_glib_marshal_up_kbd_backlight_BOOLEAN__POINTER_POINTER (GClosure     *closu
   g_value_set_boolean (return_value, v_return);
 }
 
+/* BOOLEAN:INT,POINTER */
+extern void dbus_glib_marshal_up_kbd_backlight_BOOLEAN__INT_POINTER (GClosure     *closure,
+                                                                     GValue       *return_value,
+                                                                     guint         n_param_values,
+                                                                     const GValue *param_values,
+                                                                     gpointer      invocation_hint,
+                                                                     gpointer      marshal_data);
+void
+dbus_glib_marshal_up_kbd_backlight_BOOLEAN__INT_POINTER (GClosure     *closure,
+                                                         GValue       *return_value G_GNUC_UNUSED,
+                                                         guint         n_param_values,
+                                                         const GValue *param_values,
+                                                         gpointer      invocation_hint G_GNUC_UNUSED,
+                                                         gpointer      marshal_data)
+{
+  typedef gboolean (*GMarshalFunc_BOOLEAN__INT_POINTER) (gpointer     data1,
+                                                         gint         arg_1,
+                                                         gpointer     arg_2,
+                                                         gpointer     data2);
+  register GMarshalFunc_BOOLEAN__INT_POINTER callback;
+  register GCClosure *cc = (GCClosure*) closure;
+  register gpointer data1, data2;
+  gboolean v_return;
+
+  g_return_if_fail (return_value != NULL);
+  g_return_if_fail (n_param_values == 3);
+
+  if (G_CCLOSURE_SWAP_DATA (closure))
+    {
+      data1 = closure->data;
+      data2 = g_value_peek_pointer (param_values + 0);
+    }
+  else
+    {
+      data1 = g_value_peek_pointer (param_values + 0);
+      data2 = closure->data;
+    }
+  callback = (GMarshalFunc_BOOLEAN__INT_POINTER) (marshal_data ? marshal_data : cc->callback);
+
+  v_return = callback (data1,
+                       g_marshal_value_peek_int (param_values + 1),
+                       g_marshal_value_peek_pointer (param_values + 2),
+                       data2);
+
+  g_value_set_boolean (return_value, v_return);
+}
+
 G_END_DECLS
 
 #endif /* __dbus_glib_marshal_up_kbd_backlight_MARSHAL_H__ */
@@ -160,8 +160,7 @@ static const DBusGMethodInfo dbus_glib_up_kbd_backlight_methods[] = {
   { (GCallback) up_kbd_backlight_set_brightness, dbus_glib_marshal_up_kbd_backlight_BOOLEAN__INT_POINTER, 137 },
 };
 
-const DBusGObjectInfo dbus_glib_up_kbd_backlight_object_info = {
-  0,
+const DBusGObjectInfo dbus_glib_up_kbd_backlight_object_info = {  1,
   dbus_glib_up_kbd_backlight_methods,
   3,
 "org.freedesktop.UPower.KbdBacklight\0GetMaxBrightness\0S\0value\0O\0F\0N\0i\0\0org.freedesktop.UPower.KbdBacklight\0GetBrightness\0S\0value\0O\0F\0N\0i\0\0org.freedesktop.UPower.KbdBacklight\0SetBrightness\0S\0value\0I\0i\0\0\0",

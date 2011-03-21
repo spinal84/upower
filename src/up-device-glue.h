@@ -55,6 +55,54 @@ G_BEGIN_DECLS
 #endif /* !G_ENABLE_DEBUG */
 
 
+/* NONE:POINTER */
+#define dbus_glib_marshal_up_device_VOID__POINTER	g_cclosure_marshal_VOID__POINTER
+#define dbus_glib_marshal_up_device_NONE__POINTER	dbus_glib_marshal_up_device_VOID__POINTER
+
+/* NONE:STRING,POINTER */
+extern void dbus_glib_marshal_up_device_VOID__STRING_POINTER (GClosure     *closure,
+                                                              GValue       *return_value,
+                                                              guint         n_param_values,
+                                                              const GValue *param_values,
+                                                              gpointer      invocation_hint,
+                                                              gpointer      marshal_data);
+void
+dbus_glib_marshal_up_device_VOID__STRING_POINTER (GClosure     *closure,
+                                                  GValue       *return_value G_GNUC_UNUSED,
+                                                  guint         n_param_values,
+                                                  const GValue *param_values,
+                                                  gpointer      invocation_hint G_GNUC_UNUSED,
+                                                  gpointer      marshal_data)
+{
+  typedef void (*GMarshalFunc_VOID__STRING_POINTER) (gpointer     data1,
+                                                     gpointer     arg_1,
+                                                     gpointer     arg_2,
+                                                     gpointer     data2);
+  register GMarshalFunc_VOID__STRING_POINTER callback;
+  register GCClosure *cc = (GCClosure*) closure;
+  register gpointer data1, data2;
+
+  g_return_if_fail (n_param_values == 3);
+
+  if (G_CCLOSURE_SWAP_DATA (closure))
+    {
+      data1 = closure->data;
+      data2 = g_value_peek_pointer (param_values + 0);
+    }
+  else
+    {
+      data1 = g_value_peek_pointer (param_values + 0);
+      data2 = closure->data;
+    }
+  callback = (GMarshalFunc_VOID__STRING_POINTER) (marshal_data ? marshal_data : cc->callback);
+
+  callback (data1,
+            g_marshal_value_peek_string (param_values + 1),
+            g_marshal_value_peek_pointer (param_values + 2),
+            data2);
+}
+#define dbus_glib_marshal_up_device_NONE__STRING_POINTER	dbus_glib_marshal_up_device_VOID__STRING_POINTER
+
 /* NONE:STRING,UINT,UINT,POINTER */
 extern void dbus_glib_marshal_up_device_VOID__STRING_UINT_UINT_POINTER (GClosure     *closure,
                                                                         GValue       *return_value,
@@ -103,54 +151,6 @@ dbus_glib_marshal_up_device_VOID__STRING_UINT_UINT_POINTER (GClosure     *closur
 }
 #define dbus_glib_marshal_up_device_NONE__STRING_UINT_UINT_POINTER	dbus_glib_marshal_up_device_VOID__STRING_UINT_UINT_POINTER
 
-/* NONE:STRING,POINTER */
-extern void dbus_glib_marshal_up_device_VOID__STRING_POINTER (GClosure     *closure,
-                                                              GValue       *return_value,
-                                                              guint         n_param_values,
-                                                              const GValue *param_values,
-                                                              gpointer      invocation_hint,
-                                                              gpointer      marshal_data);
-void
-dbus_glib_marshal_up_device_VOID__STRING_POINTER (GClosure     *closure,
-                                                  GValue       *return_value G_GNUC_UNUSED,
-                                                  guint         n_param_values,
-                                                  const GValue *param_values,
-                                                  gpointer      invocation_hint G_GNUC_UNUSED,
-                                                  gpointer      marshal_data)
-{
-  typedef void (*GMarshalFunc_VOID__STRING_POINTER) (gpointer     data1,
-                                                     gpointer     arg_1,
-                                                     gpointer     arg_2,
-                                                     gpointer     data2);
-  register GMarshalFunc_VOID__STRING_POINTER callback;
-  register GCClosure *cc = (GCClosure*) closure;
-  register gpointer data1, data2;
-
-  g_return_if_fail (n_param_values == 3);
-
-  if (G_CCLOSURE_SWAP_DATA (closure))
-    {
-      data1 = closure->data;
-      data2 = g_value_peek_pointer (param_values + 0);
-    }
-  else
-    {
-      data1 = g_value_peek_pointer (param_values + 0);
-      data2 = closure->data;
-    }
-  callback = (GMarshalFunc_VOID__STRING_POINTER) (marshal_data ? marshal_data : cc->callback);
-
-  callback (data1,
-            g_marshal_value_peek_string (param_values + 1),
-            g_marshal_value_peek_pointer (param_values + 2),
-            data2);
-}
-#define dbus_glib_marshal_up_device_NONE__STRING_POINTER	dbus_glib_marshal_up_device_VOID__STRING_POINTER
-
-/* NONE:POINTER */
-#define dbus_glib_marshal_up_device_VOID__POINTER	g_cclosure_marshal_VOID__POINTER
-#define dbus_glib_marshal_up_device_NONE__POINTER	dbus_glib_marshal_up_device_VOID__POINTER
-
 G_END_DECLS
 
 #endif /* __dbus_glib_marshal_up_device_MARSHAL_H__ */
@@ -162,12 +162,11 @@ static const DBusGMethodInfo dbus_glib_up_device_methods[] = {
   { (GCallback) up_device_get_statistics, dbus_glib_marshal_up_device_NONE__STRING_POINTER, 140 },
 };
 
-const DBusGObjectInfo dbus_glib_up_device_object_info = {
-  0,
+const DBusGObjectInfo dbus_glib_up_device_object_info = {  1,
   dbus_glib_up_device_methods,
   3,
 "org.freedesktop.UPower.Device\0Refresh\0A\0\0org.freedesktop.UPower.Device\0GetHistory\0A\0type\0I\0s\0timespan\0I\0u\0resolution\0I\0u\0data\0O\0F\0N\0a(udu)\0\0org.freedesktop.UPower.Device\0GetStatistics\0A\0type\0I\0s\0data\0O\0F\0N\0a(dd)\0\0\0",
 "org.freedesktop.UPower.Device\0Changed\0\0",
-"org.freedesktop.UPower.Device\0NativePath\0org.freedesktop.UPower.Device\0Vendor\0org.freedesktop.UPower.Device\0Model\0org.freedesktop.UPower.Device\0Serial\0org.freedesktop.UPower.Device\0UpdateTime\0org.freedesktop.UPower.Device\0Type\0org.freedesktop.UPower.Device\0PowerSupply\0org.freedesktop.UPower.Device\0HasHistory\0org.freedesktop.UPower.Device\0HasStatistics\0org.freedesktop.UPower.Device\0Online\0org.freedesktop.UPower.Device\0Energy\0org.freedesktop.UPower.Device\0EnergyEmpty\0org.freedesktop.UPower.Device\0EnergyFull\0org.freedesktop.UPower.Device\0EnergyFullDesign\0org.freedesktop.UPower.Device\0EnergyRate\0org.freedesktop.UPower.Device\0Voltage\0org.freedesktop.UPower.Device\0TimeToEmpty\0org.freedesktop.UPower.Device\0TimeToFull\0org.freedesktop.UPower.Device\0Percentage\0org.freedesktop.UPower.Device\0IsPresent\0org.freedesktop.UPower.Device\0State\0org.freedesktop.UPower.Device\0IsRechargeable\0org.freedesktop.UPower.Device\0Capacity\0org.freedesktop.UPower.Device\0Technology\0org.freedesktop.UPower.Device\0RecallNotice\0org.freedesktop.UPower.Device\0RecallVendor\0org.freedesktop.UPower.Device\0RecallUrl\0\0"
+"org.freedesktop.UPower.Device\0NativePath\0native_path\0read\0org.freedesktop.UPower.Device\0Vendor\0vendor\0read\0org.freedesktop.UPower.Device\0Model\0model\0read\0org.freedesktop.UPower.Device\0Serial\0serial\0read\0org.freedesktop.UPower.Device\0UpdateTime\0update_time\0read\0org.freedesktop.UPower.Device\0Type\0type\0read\0org.freedesktop.UPower.Device\0PowerSupply\0power_supply\0read\0org.freedesktop.UPower.Device\0HasHistory\0has_history\0read\0org.freedesktop.UPower.Device\0HasStatistics\0has_statistics\0read\0org.freedesktop.UPower.Device\0Online\0online\0read\0org.freedesktop.UPower.Device\0Energy\0energy\0read\0org.freedesktop.UPower.Device\0EnergyEmpty\0energy_empty\0read\0org.freedesktop.UPower.Device\0EnergyFull\0energy_full\0read\0org.freedesktop.UPower.Device\0EnergyFullDesign\0energy_full_design\0read\0org.freedesktop.UPower.Device\0EnergyRate\0energy_rate\0read\0org.freedesktop.UPower.Device\0Voltage\0voltage\0read\0org.freedesktop.UPower.Device\0TimeToEmpty\0time_to_empty\0read\0org.freedesktop.UPower.Device\0TimeToFull\0time_to_full\0read\0org.freedesktop.UPower.Device\0Percentage\0percentage\0read\0org.freedesktop.UPower.Device\0IsPresent\0is_present\0read\0org.freedesktop.UPower.Device\0State\0state\0read\0org.freedesktop.UPower.Device\0IsRechargeable\0is_rechargeable\0read\0org.freedesktop.UPower.Device\0Capacity\0capacity\0read\0org.freedesktop.UPower.Device\0Technology\0technology\0read\0org.freedesktop.UPower.Device\0RecallNotice\0recall_notice\0read\0org.freedesktop.UPower.Device\0RecallVendor\0recall_vendor\0read\0org.freedesktop.UPower.Device\0RecallUrl\0recall_url\0read\0\0"
 };
 

@@ -40,6 +40,7 @@
 #include "up-device-hid.h"
 #include "up-input.h"
 #include "up-dock.h"
+#include "up-config.h"
 #ifdef HAVE_IDEVICE
 #include "up-device-idevice.h"
 #endif /* HAVE_IDEVICE */
@@ -57,6 +58,7 @@ struct UpBackendPrivate
 	GUdevClient		*gudev_client;
 	UpDeviceList		*managed_devices;
 	UpDock			*dock;
+	UpConfig		*config;
 };
 
 enum {
@@ -105,11 +107,15 @@ up_backend_device_new (UpBackend *backend, GUdevDevice *native)
 	} else if (g_strcmp0 (subsys, "tty") == 0) {
 
 		/* try to detect a Watts Up? Pro monitor */
-		device = UP_DEVICE (up_device_wup_new ());
-		ret = up_device_coldplug (device, backend->priv->daemon, G_OBJECT (native));
-		if (ret)
-			goto out;
-		g_object_unref (device);
+		ret = up_config_get_boolean (backend->priv->config,
+					     "EnableWattsUpPro");
+		if (ret) {
+			device = UP_DEVICE (up_device_wup_new ());
+			ret = up_device_coldplug (device, backend->priv->daemon, G_OBJECT (native));
+			if (ret)
+				goto out;
+			g_object_unref (device);
+		}
 
 		/* no valid TTY object */
 		device = NULL;
@@ -323,6 +329,9 @@ up_backend_coldplug (UpBackend *backend, UpDaemon *daemon)
 
 	/* add dock update object */
 	backend->priv->dock = up_dock_new ();
+	ret = up_config_get_boolean (backend->priv->config, "PollDockDevices");
+	g_debug ("Polling docks: %s", ret ? "YES" : "NO");
+	up_dock_set_should_poll (backend->priv->dock, ret);
 	ret = up_dock_coldplug (backend->priv->dock, daemon);
 	if (!ret)
 		g_warning ("failed to coldplug dock devices");
@@ -609,6 +618,7 @@ static void
 up_backend_init (UpBackend *backend)
 {
 	backend->priv = UP_BACKEND_GET_PRIVATE (backend);
+	backend->priv->config = up_config_new ();
 	backend->priv->daemon = NULL;
 	backend->priv->device_list = NULL;
 	backend->priv->managed_devices = up_device_list_new ();
@@ -626,6 +636,7 @@ up_backend_finalize (GObject *object)
 
 	backend = UP_BACKEND (object);
 
+	g_object_unref (backend->priv->config);
 	if (backend->priv->daemon != NULL)
 		g_object_unref (backend->priv->daemon);
 	if (backend->priv->device_list != NULL)

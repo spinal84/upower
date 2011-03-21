@@ -18,6 +18,7 @@
 <ANCHOR id="UPower:OnLowBattery" href="UPower/UPower.html#UPower:OnLowBattery">
 <ANCHOR id="UPower:LidIsClosed" href="UPower/UPower.html#UPower:LidIsClosed">
 <ANCHOR id="UPower:LidIsPresent" href="UPower/UPower.html#UPower:LidIsPresent">
+<ANCHOR id="UPower:LidForceSleep" href="UPower/UPower.html#UPower:LidForceSleep">
 <ANCHOR id="UPower:IsDocked" href="UPower/UPower.html#UPower:IsDocked">
 <ANCHOR id="Device" href="UPower/Device.html">
 <ANCHOR id="Device.Refresh" href="UPower/Device.html#Device.Refresh">
@@ -70,7 +71,6 @@
 <ANCHOR id="UPower-up-client.details" href="UPower/UPower-up-client.html#UPower-up-client.details">
 <ANCHOR id="UP-CLIENT-ERROR:CAPS" href="UPower/UPower-up-client.html#UP-CLIENT-ERROR:CAPS">
 <ANCHOR id="UP-CLIENT-TYPE-ERROR:CAPS" href="UPower/UPower-up-client.html#UP-CLIENT-TYPE-ERROR:CAPS">
-<ANCHOR id="UpClientPrivate" href="UPower/UPower-up-client.html#UpClientPrivate">
 <ANCHOR id="device-added" href="UPower/UPower-up-client.html#device-added">
 <ANCHOR id="device-changed" href="UPower/UPower-up-client.html#device-changed">
 <ANCHOR id="device-removed" href="UPower/UPower-up-client.html#device-removed">
@@ -94,16 +94,18 @@
 <ANCHOR id="up-client-get-can-hibernate" href="UPower/UPower-up-client.html#up-client-get-can-hibernate">
 <ANCHOR id="up-client-get-lid-is-closed" href="UPower/UPower-up-client.html#up-client-get-lid-is-closed">
 <ANCHOR id="up-client-get-lid-is-present" href="UPower/UPower-up-client.html#up-client-get-lid-is-present">
+<ANCHOR id="up-client-get-lid-force-sleep" href="UPower/UPower-up-client.html#up-client-get-lid-force-sleep">
+<ANCHOR id="up-client-get-is-docked" href="UPower/UPower-up-client.html#up-client-get-is-docked">
 <ANCHOR id="up-client-get-can-suspend" href="UPower/UPower-up-client.html#up-client-get-can-suspend">
 <ANCHOR id="up-client-get-on-battery" href="UPower/UPower-up-client.html#up-client-get-on-battery">
 <ANCHOR id="up-client-get-on-low-battery" href="UPower/UPower-up-client.html#up-client-get-on-low-battery">
+<ANCHOR id="UpClientPrivate" href="UPower/UPower-up-client.html#UpClientPrivate">
 <ANCHOR id="UPower-up-device" href="UPower/UPower-up-device.html">
 <ANCHOR id="UPower-up-device.synopsis" href="UPower/UPower-up-device.html#UPower-up-device.synopsis">
 <ANCHOR id="UPower-up-device.description" href="UPower/UPower-up-device.html#UPower-up-device.description">
 <ANCHOR id="UPower-up-device.details" href="UPower/UPower-up-device.html#UPower-up-device.details">
 <ANCHOR id="UP-DEVICE-ERROR:CAPS" href="UPower/UPower-up-device.html#UP-DEVICE-ERROR:CAPS">
 <ANCHOR id="UP-DEVICE-TYPE-ERROR:CAPS" href="UPower/UPower-up-device.html#UP-DEVICE-TYPE-ERROR:CAPS">
-<ANCHOR id="UpDevicePrivate" href="UPower/UPower-up-device.html#UpDevicePrivate">
 <ANCHOR id="changed" href="UPower/UPower-up-device.html#changed">
 <ANCHOR id="up-device-reserved1" href="UPower/UPower-up-device.html#up-device-reserved1">
 <ANCHOR id="up-device-reserved2" href="UPower/UPower-up-device.html#up-device-reserved2">
@@ -120,6 +122,7 @@
 <ANCHOR id="up-device-get-history-sync" href="UPower/UPower-up-device.html#up-device-get-history-sync">
 <ANCHOR id="up-device-get-statistics-sync" href="UPower/UPower-up-device.html#up-device-get-statistics-sync">
 <ANCHOR id="up-device-get-object-path" href="UPower/UPower-up-device.html#up-device-get-object-path">
+<ANCHOR id="UpDevicePrivate" href="UPower/UPower-up-device.html#UpDevicePrivate">
 <ANCHOR id="UPower-up-history-item" href="UPower/UPower-up-history-item.html">
 <ANCHOR id="UPower-up-history-item.synopsis" href="UPower/UPower-up-history-item.html#UPower-up-history-item.synopsis">
 <ANCHOR id="UPower-up-history-item.description" href="UPower/UPower-up-history-item.html#UPower-up-history-item.description">
