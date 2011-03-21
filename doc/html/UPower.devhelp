@@ -47,6 +47,7 @@
     <function name="The &quot;OnLowBattery&quot; property" link="UPower.html#UPower:OnLowBattery"/>
     <function name="The &quot;LidIsClosed&quot; property" link="UPower.html#UPower:LidIsClosed"/>
     <function name="The &quot;LidIsPresent&quot; property" link="UPower.html#UPower:LidIsPresent"/>
+    <function name="The &quot;LidForceSleep&quot; property" link="UPower.html#UPower:LidForceSleep"/>
     <function name="The &quot;IsDocked&quot; property" link="UPower.html#UPower:IsDocked"/>
     <function name="Refresh ()" link="Device.html#Device.Refresh"/>
     <function name="GetHistory ()" link="Device.html#Device.GetHistory"/>
@@ -92,7 +93,6 @@
     <function name="The BrightnessChanged signal" link="KbdBacklight.html#KbdBacklight::BrightnessChanged"/>
     <function name="UP_CLIENT_ERROR" link="UPower-up-client.html#UP-CLIENT-ERROR:CAPS"/>
     <function name="UP_CLIENT_TYPE_ERROR" link="UPower-up-client.html#UP-CLIENT-TYPE-ERROR:CAPS"/>
-    <function name="UpClientPrivate" link="UPower-up-client.html#UpClientPrivate"/>
     <function name="device_added ()" link="UPower-up-client.html#device-added"/>
     <function name="device_changed ()" link="UPower-up-client.html#device-changed"/>
     <function name="device_removed ()" link="UPower-up-client.html#device-removed"/>
@@ -116,12 +116,14 @@
     <function name="up_client_get_can_hibernate ()" link="UPower-up-client.html#up-client-get-can-hibernate"/>
     <function name="up_client_get_lid_is_closed ()" link="UPower-up-client.html#up-client-get-lid-is-closed"/>
     <function name="up_client_get_lid_is_present ()" link="UPower-up-client.html#up-client-get-lid-is-present"/>
+    <function name="up_client_get_lid_force_sleep ()" link="UPower-up-client.html#up-client-get-lid-force-sleep"/>
+    <function name="up_client_get_is_docked ()" link="UPower-up-client.html#up-client-get-is-docked"/>
     <function name="up_client_get_can_suspend ()" link="UPower-up-client.html#up-client-get-can-suspend"/>
     <function name="up_client_get_on_battery ()" link="UPower-up-client.html#up-client-get-on-battery"/>
     <function name="up_client_get_on_low_battery ()" link="UPower-up-client.html#up-client-get-on-low-battery"/>
+    <function name="UpClientPrivate" link="UPower-up-client.html#UpClientPrivate"/>
     <function name="UP_DEVICE_ERROR" link="UPower-up-device.html#UP-DEVICE-ERROR:CAPS"/>
     <function name="UP_DEVICE_TYPE_ERROR" link="UPower-up-device.html#UP-DEVICE-TYPE-ERROR:CAPS"/>
-    <function name="UpDevicePrivate" link="UPower-up-device.html#UpDevicePrivate"/>
     <function name="changed ()" link="UPower-up-device.html#changed"/>
     <function name="_up_device_reserved1 ()" link="UPower-up-device.html#up-device-reserved1"/>
     <function name="_up_device_reserved2 ()" link="UPower-up-device.html#up-device-reserved2"/>
@@ -138,6 +140,7 @@
     <function name="up_device_get_history_sync ()" link="UPower-up-device.html#up-device-get-history-sync"/>
     <function name="up_device_get_statistics_sync ()" link="UPower-up-device.html#up-device-get-statistics-sync"/>
     <function name="up_device_get_object_path ()" link="UPower-up-device.html#up-device-get-object-path"/>
+    <function name="UpDevicePrivate" link="UPower-up-device.html#UpDevicePrivate"/>
     <function name="UpHistoryItemPrivate" link="UPower-up-history-item.html#UpHistoryItemPrivate"/>
     <function name="up_history_item_new ()" link="UPower-up-history-item.html#up-history-item-new"/>
     <function name="up_history_item_get_value ()" link="UPower-up-history-item.html#up-history-item-get-value"/>

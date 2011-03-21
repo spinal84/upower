@@ -44,6 +44,7 @@
 <link linkend="UPower:OnLowBattery">'OnLowBattery'</link>  read      'b'
 <link linkend="UPower:LidIsClosed">'LidIsClosed'</link>   read      'b'
 <link linkend="UPower:LidIsPresent">'LidIsPresent'</link>  read      'b'
+<link linkend="UPower:LidForceSleep">'LidForceSleep'</link> read      'b'
 <link linkend="UPower:IsDocked">'IsDocked'</link>      read      'b'
 </synopsis>
   </refsect1>
@@ -199,6 +200,19 @@ method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
 </programlisting></refsect2>
           <para>
             If the system has a lid device.
+          </para>
+        <variablelist role="params"/><refsect2><title><anchor role="function" id="UPower:LidForceSleep"/>The "LidForceSleep" property</title><indexterm><primary>LidForceSleep</primary><secondary>UPower</secondary></indexterm><programlisting>'LidForceSleep'  read      'b'
+</programlisting></refsect2>
+          <para>
+            If the system really has to sleep when the lid is closed.
+            Some laptops actually melt (!) if the lid is closed and the
+            computer keeps running. We blacklist those, and do something
+            sane for the other machines.
+          </para>
+          <para>
+            This allows us to set the default session policy to not
+            suspend on lid close if the laptop is docked, and be sure
+            the machine is not going to melt.
           </para>
         <variablelist role="params"/><refsect2><title><anchor role="function" id="UPower:IsDocked"/>The "IsDocked" property</title><indexterm><primary>IsDocked</primary><secondary>UPower</secondary></indexterm><programlisting>'IsDocked'  read      'b'
 </programlisting></refsect2>

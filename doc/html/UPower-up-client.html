@@ -8,7 +8,7 @@
 <link rel="up" href="libupower-glib.html" title="libupower-glib GObjects">
 <link rel="prev" href="libupower-glib.html" title="libupower-glib GObjects">
 <link rel="next" href="UPower-up-device.html" title="up-device">
-<meta name="generator" content="GTK-Doc V1.15 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.17 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -26,7 +26,7 @@
                   <a href="#UPower-up-client.description" class="shortcut">Description</a>
 </td></tr>
 </table>
-<div class="refentry" title="up-client">
+<div class="refentry">
 <a name="UPower-up-client"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
@@ -35,11 +35,10 @@
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsynopsisdiv" title="Synopsis">
+<div class="refsynopsisdiv">
 <a name="UPower-up-client.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">#define             <a class="link" href="UPower-up-client.html#UP-CLIENT-ERROR:CAPS" title="UP_CLIENT_ERROR">UP_CLIENT_ERROR</a>
 #define             <a class="link" href="UPower-up-client.html#UP-CLIENT-TYPE-ERROR:CAPS" title="UP_CLIENT_TYPE_ERROR">UP_CLIENT_TYPE_ERROR</a>
-                    <a class="link" href="UPower-up-client.html#UpClientPrivate" title="UpClientPrivate">UpClientPrivate</a>;
 <span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#device-added" title="device_added ()">*device_added</a>)                     (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
                                                          <em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);
 <span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#device-changed" title="device_changed ()">*device_changed</a>)                   (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
@@ -76,12 +75,15 @@ const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.htm
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-can-hibernate" title="up_client_get_can_hibernate ()">up_client_get_can_hibernate</a>         (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-lid-is-closed" title="up_client_get_lid_is_closed ()">up_client_get_lid_is_closed</a>         (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-lid-is-present" title="up_client_get_lid_is_present ()">up_client_get_lid_is_present</a>        (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-lid-force-sleep" title="up_client_get_lid_force_sleep ()">up_client_get_lid_force_sleep</a>       (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-is-docked" title="up_client_get_is_docked ()">up_client_get_is_docked</a>             (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-can-suspend" title="up_client_get_can_suspend ()">up_client_get_can_suspend</a>           (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-on-battery" title="up_client_get_on_battery ()">up_client_get_on_battery</a>            (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-get-on-low-battery" title="up_client_get_on_low_battery ()">up_client_get_on_low_battery</a>        (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
+                    <a class="link" href="UPower-up-client.html#UpClientPrivate" title="UpClientPrivate">UpClientPrivate</a>;
 </pre>
 </div>
-<div class="refsect1" title="Description">
+<div class="refsect1">
 <a name="UPower-up-client.description"></a><h2>Description</h2>
 <p>
 A helper GObject to use for accessing UPower information, and to be notified
@@ -91,92 +93,84 @@ when it is changed.
 See also: <span class="type">UpDevice</span>
 </p>
 </div>
-<div class="refsect1" title="Details">
+<div class="refsect1">
 <a name="UPower-up-client.details"></a><h2>Details</h2>
-<div class="refsect2" title="UP_CLIENT_ERROR">
+<div class="refsect2">
 <a name="UP-CLIENT-ERROR:CAPS"></a><h3>UP_CLIENT_ERROR</h3>
 <pre class="programlisting">#define UP_CLIENT_ERROR			(up_client_error_quark ())
 </pre>
 </div>
 <hr>
-<div class="refsect2" title="UP_CLIENT_TYPE_ERROR">
+<div class="refsect2">
 <a name="UP-CLIENT-TYPE-ERROR:CAPS"></a><h3>UP_CLIENT_TYPE_ERROR</h3>
 <pre class="programlisting">#define UP_CLIENT_TYPE_ERROR		(up_client_error_get_type ())
 </pre>
 </div>
 <hr>
-<div class="refsect2" title="UpClientPrivate">
-<a name="UpClientPrivate"></a><h3>UpClientPrivate</h3>
-<pre class="programlisting">typedef struct _UpClientPrivate UpClientPrivate;</pre>
-<p>
-Private <span class="type">UpClient</span> data
-</p>
-</div>
-<hr>
-<div class="refsect2" title="device_added ()">
+<div class="refsect2">
 <a name="device-added"></a><h3>device_added ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                (*device_added)                     (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
                                                          <em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);</pre>
 </div>
 <hr>
-<div class="refsect2" title="device_changed ()">
+<div class="refsect2">
 <a name="device-changed"></a><h3>device_changed ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                (*device_changed)                   (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
                                                          <em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);</pre>
 </div>
 <hr>
-<div class="refsect2" title="device_removed ()">
+<div class="refsect2">
 <a name="device-removed"></a><h3>device_removed ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                (*device_removed)                   (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
                                                          <em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);</pre>
 </div>
 <hr>
-<div class="refsect2" title="changed ()">
+<div class="refsect2">
 <a name="changed"></a><h3>changed ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                (*changed)                          (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
 </div>
 <hr>
-<div class="refsect2" title="_up_client_reserved1 ()">
+<div class="refsect2">
 <a name="up-client-reserved1"></a><h3>_up_client_reserved1 ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved1)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 </div>
 <hr>
-<div class="refsect2" title="_up_client_reserved2 ()">
+<div class="refsect2">
 <a name="up-client-reserved2"></a><h3>_up_client_reserved2 ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved2)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 </div>
 <hr>
-<div class="refsect2" title="_up_client_reserved3 ()">
+<div class="refsect2">
 <a name="up-client-reserved3"></a><h3>_up_client_reserved3 ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved3)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 </div>
 <hr>
-<div class="refsect2" title="_up_client_reserved4 ()">
+<div class="refsect2">
 <a name="up-client-reserved4"></a><h3>_up_client_reserved4 ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved4)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 </div>
 <hr>
-<div class="refsect2" title="_up_client_reserved5 ()">
+<div class="refsect2">
 <a name="up-client-reserved5"></a><h3>_up_client_reserved5 ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved5)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 </div>
 <hr>
-<div class="refsect2" title="_up_client_reserved6 ()">
+<div class="refsect2">
 <a name="up-client-reserved6"></a><h3>_up_client_reserved6 ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved6)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 </div>
 <hr>
-<div class="refsect2" title="_up_client_reserved7 ()">
+<div class="refsect2">
 <a name="up-client-reserved7"></a><h3>_up_client_reserved7 ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved7)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 </div>
 <hr>
-<div class="refsect2" title="_up_client_reserved8 ()">
+<div class="refsect2">
 <a name="up-client-reserved8"></a><h3>_up_client_reserved8 ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                (*_up_client_reserved8)             (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 </div>
 <hr>
-<div class="refsect2" title="up_client_new ()">
+<div class="refsect2">
 <a name="up-client-new"></a><h3>up_client_new ()</h3>
 <pre class="programlisting"><span class="returnvalue">UpClient</span> *          up_client_new                       (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 <p>
@@ -186,15 +180,13 @@ Creates a new <span class="type">UpClient</span> object.
 <col align="left" valign="top">
 <tbody><tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> a new UpClient object.
-
-</td>
+<td>a new UpClient object.</td>
 </tr></tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_client_get_properties_sync ()">
+<div class="refsect2">
 <a name="up-client-get-properties-sync"></a><h3>up_client_get_properties_sync ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_properties_sync       (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
@@ -207,8 +199,7 @@ Get all the properties from UPower daemon.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
-<td>a <span class="type">UpClient</span> instance.
-</td>
+<td>a <span class="type">UpClient</span> instance.</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>cancellable</code></em> :</span></p></td>
@@ -217,21 +208,19 @@ Get all the properties from UPower daemon.
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
-</td>
+<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> for success, else <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>.
-
-</td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> for success, else <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>.</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_client_enumerate_devices_sync ()">
+<div class="refsect2">
 <a name="up-client-enumerate-devices-sync"></a><h3>up_client_enumerate_devices_sync ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_enumerate_devices_sync    (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
@@ -244,26 +233,23 @@ Enumerates all the devices from the daemon.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
-<td>a <span class="type">UpClient</span> instance.
-</td>
+<td>a <span class="type">UpClient</span> instance.</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
-</td>
+<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> for success, else <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>.
-
-</td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> for success, else <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>.</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_client_suspend_sync ()">
+<div class="refsect2">
 <a name="up-client-suspend-sync"></a><h3>up_client_suspend_sync ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_suspend_sync              (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
@@ -280,8 +266,7 @@ NOTE: The system is still consuming a small amount of power
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
-<td>a <span class="type">UpClient</span> instance.
-</td>
+<td>a <span class="type">UpClient</span> instance.</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>cancellable</code></em> :</span></p></td>
@@ -290,21 +275,18 @@ NOTE: The system is still consuming a small amount of power
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
-</td>
+<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> TRUE if system suspended okay, FALSE other wise.
-
-</td>
+<td>TRUE if system suspended okay, FALSE other wise.</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_client_about_to_sleep_sync ()">
+<div class="refsect2">
 <a name="up-client-about-to-sleep-sync"></a><h3>up_client_about_to_sleep_sync ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_about_to_sleep_sync       (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
@@ -318,8 +300,7 @@ and that session and system components should be notified of this.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
-<td>a <span class="type">UpClient</span> instance.
-</td>
+<td>a <span class="type">UpClient</span> instance.</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>cancellable</code></em> :</span></p></td>
@@ -328,21 +309,18 @@ and that session and system components should be notified of this.
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
-</td>
+<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> TRUE if system suspended okay, FALSE other wise.
-
-</td>
+<td>TRUE if system suspended okay, FALSE other wise.</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.9.1</p>
 </div>
 <hr>
-<div class="refsect2" title="up_client_hibernate_sync ()">
+<div class="refsect2">
 <a name="up-client-hibernate-sync"></a><h3>up_client_hibernate_sync ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_hibernate_sync            (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
@@ -356,8 +334,7 @@ power is lost.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
-<td>a <span class="type">UpClient</span> instance.
-</td>
+<td>a <span class="type">UpClient</span> instance.</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>cancellable</code></em> :</span></p></td>
@@ -366,21 +343,18 @@ power is lost.
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>.
-</td>
+<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> TRUE if system suspended okay, FALSE other wise.
-
-</td>
+<td>TRUE if system suspended okay, FALSE other wise.</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_client_get_devices ()">
+<div class="refsect2">
 <a name="up-client-get-devices"></a><h3>up_client_get_devices ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Pointer-Arrays.html#GPtrArray"><span class="returnvalue">GPtrArray</span></a> *         up_client_get_devices               (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
 <p>
@@ -393,12 +367,11 @@ function.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
-<td>a <span class="type">UpClient</span> instance.
-</td>
+<td>a <span class="type">UpClient</span> instance.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> an array of <span class="type">UpDevice</span> objects, free with <a href="http://library.gnome.org/devel/glib/unstable/glib-Pointer-Arrays.html#g-ptr-array-unref"><code class="function">g_ptr_array_unref()</code></a>. <span class="annotation">[<a href="http://foldoc.org/transfer%20full"><span class="acronym">transfer full</span></a>]</span>
+<td>an array of <span class="type">UpDevice</span> objects, free with <a href="http://library.gnome.org/devel/glib/unstable/glib-Pointer-Arrays.html#g-ptr-array-unref"><code class="function">g_ptr_array_unref()</code></a>. <span class="annotation">[<a href="http://foldoc.org/transfer%20full"><span class="acronym">transfer full</span></a>]</span>
 </td>
 </tr>
 </tbody>
@@ -406,7 +379,7 @@ function.
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_client_get_daemon_version ()">
+<div class="refsect2">
 <a name="up-client-get-daemon-version"></a><h3>up_client_get_daemon_version ()</h3>
 <pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       up_client_get_daemon_version        (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
 <p>
@@ -417,21 +390,18 @@ Get UPower daemon version.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
-<td>a <span class="type">UpClient</span> instance.
-</td>
+<td>a <span class="type">UpClient</span> instance.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> string containing the daemon version, e.g. 008
-
-</td>
+<td>string containing the daemon version, e.g. 008</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_client_get_can_hibernate ()">
+<div class="refsect2">
 <a name="up-client-get-can-hibernate"></a><h3>up_client_get_can_hibernate ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_can_hibernate         (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
 <p>
@@ -442,21 +412,18 @@ Get whether the system is able to hibernate.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
-<td>a <span class="type">UpClient</span> instance.
-</td>
+<td>a <span class="type">UpClient</span> instance.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> TRUE if system can hibernate, FALSE other wise.
-
-</td>
+<td>TRUE if system can hibernate, FALSE other wise.</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_client_get_lid_is_closed ()">
+<div class="refsect2">
 <a name="up-client-get-lid-is-closed"></a><h3>up_client_get_lid_is_closed ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_lid_is_closed         (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
 <p>
@@ -467,21 +434,19 @@ Get whether the laptop lid is closed.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
-<td>a <span class="type">UpClient</span> instance.
-</td>
+<td>a <span class="type">UpClient</span> instance.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if lid is closed or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise.
-
-</td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if lid is closed or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise.</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_client_get_lid_is_present ()">
+<div class="refsect2">
 <a name="up-client-get-lid-is-present"></a><h3>up_client_get_lid_is_present ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_lid_is_present        (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
 <p>
@@ -492,21 +457,65 @@ Get whether a laptop lid is present on this machine.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
-<td>a <span class="type">UpClient</span> instance.
-</td>
+<td>a <span class="type">UpClient</span> instance.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the machine has a laptop lid
-
-</td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the machine has a laptop lid</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.9.2</p>
 </div>
 <hr>
-<div class="refsect2" title="up_client_get_can_suspend ()">
+<div class="refsect2">
+<a name="up-client-get-lid-force-sleep"></a><h3>up_client_get_lid_force_sleep ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_lid_force_sleep       (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
+<p>
+Get whether the laptop has to sleep when the lid is closed.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
+<td>a <span class="type">UpClient</span> instance.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the session has to suspend</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.9.9</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="up-client-get-is-docked"></a><h3>up_client_get_is_docked ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_is_docked             (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
+<p>
+Get whether the machine is docked into a docking station.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
+<td>a <span class="type">UpClient</span> instance.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the machine is docked</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.9.2</p>
+</div>
+<hr>
+<div class="refsect2">
 <a name="up-client-get-can-suspend"></a><h3>up_client_get_can_suspend ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_can_suspend           (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
 <p>
@@ -517,21 +526,18 @@ Get whether the system is able to suspend.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
-<td>a <span class="type">UpClient</span> instance.
-</td>
+<td>a <span class="type">UpClient</span> instance.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> TRUE if system can suspend, FALSE other wise.
-
-</td>
+<td>TRUE if system can suspend, FALSE other wise.</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_client_get_on_battery ()">
+<div class="refsect2">
 <a name="up-client-get-on-battery"></a><h3>up_client_get_on_battery ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_on_battery            (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
 <p>
@@ -542,21 +548,18 @@ Get whether the system is running on battery power.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
-<td>a <span class="type">UpClient</span> instance.
-</td>
+<td>a <span class="type">UpClient</span> instance.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> TRUE if the system is currently running on battery, FALSE other wise.
-
-</td>
+<td>TRUE if the system is currently running on battery, FALSE other wise.</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
-<div class="refsect2" title="up_client_get_on_low_battery ()">
+<div class="refsect2">
 <a name="up-client-get-on-low-battery"></a><h3>up_client_get_on_low_battery ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_get_on_low_battery        (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
 <p>
@@ -567,23 +570,28 @@ Get whether the system is running on low battery power.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
-<td>a <span class="type">UpClient</span> instance.
-</td>
+<td>a <span class="type">UpClient</span> instance.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> TRUE if the system is currently on low battery power, FALSE other wise.
-
-</td>
+<td>TRUE if the system is currently on low battery power, FALSE other wise.</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
+<hr>
+<div class="refsect2">
+<a name="UpClientPrivate"></a><h3>UpClientPrivate</h3>
+<pre class="programlisting">typedef struct _UpClientPrivate UpClientPrivate;</pre>
+<p>
+Private <span class="type">UpClient</span> data
+</p>
+</div>
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.15</div>
+          Generated by GTK-Doc V1.17</div>
 </body>
 </html>

@@ -8,7 +8,7 @@
 <link rel="up" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="prev" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="next" href="Device.html" title="org.freedesktop.UPower.Device">
-<meta name="generator" content="GTK-Doc V1.15 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.17 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -32,7 +32,7 @@
                   <a href="#UPower.signals" class="shortcut">Signals</a>
 </td></tr>
 </table>
-<div class="refentry" title="org.freedesktop.UPower">
+<div class="refentry">
 <a name="UPower"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
@@ -41,7 +41,7 @@
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsynopsisdiv" title="Methods">
+<div class="refsynopsisdiv">
 <h2>Methods</h2>
 <pre class="synopsis"><a class="link" href="UPower.html#UPower.EnumerateDevices">EnumerateDevices</a> (out 'ao' devices)
 <a class="link" href="UPower.html#UPower.AboutToSleep">AboutToSleep</a>     ()
@@ -51,8 +51,8 @@
 <a class="link" href="UPower.html#UPower.HibernateAllowed">HibernateAllowed</a> (out 'b'  allowed)
 </pre>
 </div>
-<div class="refsect1" title="Signals">
-<a name="id2935293"></a><h2>Signals</h2>
+<div class="refsect1">
+<a name="id431230"></a><h2>Signals</h2>
 <pre class="synopsis"><a class="link" href="UPower.html#UPower::DeviceAdded">DeviceAdded</a>   ('o' device)
 <a class="link" href="UPower.html#UPower::DeviceRemoved">DeviceRemoved</a> ('o' device)
 <a class="link" href="UPower.html#UPower::DeviceChanged">DeviceChanged</a> ('o' device)
@@ -61,16 +61,16 @@
 <a class="link" href="UPower.html#UPower::Resuming">Resuming</a>      ()
 </pre>
 </div>
-<div class="refsect1" title="Implemented Interfaces">
-<a name="id2861494"></a><h2>Implemented Interfaces</h2>
+<div class="refsect1">
+<a name="id366831"></a><h2>Implemented Interfaces</h2>
 <p>
     Objects implementing org.freedesktop.UPower also implements
     org.freedesktop.DBus.Introspectable,
     org.freedesktop.DBus.Properties
     </p>
 </div>
-<div class="refsect1" title="Properties">
-<a name="id2861511"></a><h2>Properties</h2>
+<div class="refsect1">
+<a name="id366900"></a><h2>Properties</h2>
 <pre class="synopsis"><a class="link" href="UPower.html#UPower:DaemonVersion">'DaemonVersion'</a> read      's'
 <a class="link" href="UPower.html#UPower:CanSuspend">'CanSuspend'</a>    read      'b'
 <a class="link" href="UPower.html#UPower:CanHibernate">'CanHibernate'</a>  read      'b'
@@ -78,11 +78,12 @@
 <a class="link" href="UPower.html#UPower:OnLowBattery">'OnLowBattery'</a>  read      'b'
 <a class="link" href="UPower.html#UPower:LidIsClosed">'LidIsClosed'</a>   read      'b'
 <a class="link" href="UPower.html#UPower:LidIsPresent">'LidIsPresent'</a>  read      'b'
+<a class="link" href="UPower.html#UPower:LidForceSleep">'LidForceSleep'</a> read      'b'
 <a class="link" href="UPower.html#UPower:IsDocked">'IsDocked'</a>      read      'b'
 </pre>
 </div>
-<div class="refsect1" title="Description">
-<a name="id2861578"></a><h2>Description</h2>
+<div class="refsect1">
+<a name="id366971"></a><h2>Description</h2>
 <p>
       
         </p>
@@ -135,10 +136,10 @@
       
     </p>
 </div>
-<div class="refsect1" title="Details">
-<a name="id2900443"></a><h2>Details</h2>
-<div class="refsect2" title="EnumerateDevices ()">
-<a name="id2900451"></a><h3>
+<div class="refsect1">
+<a name="id367522"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="id367530"></a><h3>
 <a name="UPower.EnumerateDevices"></a>EnumerateDevices ()</h3>
 <pre class="programlisting">EnumerateDevices (out 'ao' devices)</pre>
 </div>
@@ -153,8 +154,8 @@
 </tr></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title="AboutToSleep ()">
-<a name="id2900493"></a><h3>
+<div class="refsect2">
+<a name="id367572"></a><h3>
 <a name="UPower.AboutToSleep"></a>AboutToSleep ()</h3>
 <pre class="programlisting">AboutToSleep ()</pre>
 </div>
@@ -181,8 +182,8 @@
 <tbody></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title="Suspend ()">
-<a name="id2900542"></a><h3>
+<div class="refsect2">
+<a name="id367616"></a><h3>
 <a name="UPower.Suspend"></a>Suspend ()</h3>
 <pre class="programlisting">Suspend ()</pre>
 </div>
@@ -204,8 +205,8 @@
 <tbody></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title="SuspendAllowed ()">
-<a name="id2861041"></a><h3>
+<div class="refsect2">
+<a name="id367658"></a><h3>
 <a name="UPower.SuspendAllowed"></a>SuspendAllowed ()</h3>
 <pre class="programlisting">SuspendAllowed (out 'b' allowed)</pre>
 </div>
@@ -221,8 +222,8 @@
 </tr></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title="Hibernate ()">
-<a name="id2861093"></a><h3>
+<div class="refsect2">
+<a name="id367710"></a><h3>
 <a name="UPower.Hibernate"></a>Hibernate ()</h3>
 <pre class="programlisting">Hibernate ()</pre>
 </div>
@@ -244,8 +245,8 @@
 <tbody></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title="HibernateAllowed ()">
-<a name="id2861140"></a><h3>
+<div class="refsect2">
+<a name="id423979"></a><h3>
 <a name="UPower.HibernateAllowed"></a>HibernateAllowed ()</h3>
 <pre class="programlisting">HibernateAllowed (out 'b' allowed)</pre>
 </div>
@@ -261,10 +262,10 @@
 </tr></tbody>
 </table></div>
 </div>
-<div class="refsect1" title="Signal Details">
-<a name="id2861194"></a><h2>Signal Details</h2>
-<div class="refsect2" title="The DeviceAdded signal">
-<a name="id2861202"></a><h3>
+<div class="refsect1">
+<a name="id424032"></a><h2>Signal Details</h2>
+<div class="refsect2">
+<a name="id424040"></a><h3>
 <a name="UPower::DeviceAdded"></a>The DeviceAdded signal</h3>
 <pre class="programlisting">DeviceAdded ('o' device)</pre>
 </div>
@@ -279,8 +280,8 @@
 </tr></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title="The DeviceRemoved signal">
-<a name="id2861245"></a><h3>
+<div class="refsect2">
+<a name="id424082"></a><h3>
 <a name="UPower::DeviceRemoved"></a>The DeviceRemoved signal</h3>
 <pre class="programlisting">DeviceRemoved ('o' device)</pre>
 </div>
@@ -295,8 +296,8 @@
 </tr></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title="The DeviceChanged signal">
-<a name="id2861287"></a><h3>
+<div class="refsect2">
+<a name="id424125"></a><h3>
 <a name="UPower::DeviceChanged"></a>The DeviceChanged signal</h3>
 <pre class="programlisting">DeviceChanged ('o' device)</pre>
 </div>
@@ -311,8 +312,8 @@
 </tr></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title="The Changed signal">
-<a name="id2861329"></a><h3>
+<div class="refsect2">
+<a name="id424167"></a><h3>
 <a name="UPower::Changed"></a>The Changed signal</h3>
 <pre class="programlisting">Changed ()</pre>
 </div>
@@ -324,8 +325,8 @@
 <tbody></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title="The Sleeping signal">
-<a name="id2861361"></a><h3>
+<div class="refsect2">
+<a name="id424197"></a><h3>
 <a name="UPower::Sleeping"></a>The Sleeping signal</h3>
 <pre class="programlisting">Sleeping ()</pre>
 </div>
@@ -341,8 +342,8 @@
 <tbody></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title="The Resuming signal">
-<a name="id2861397"></a><h3>
+<div class="refsect2">
+<a name="id424230"></a><h3>
 <a name="UPower::Resuming"></a>The Resuming signal</h3>
 <pre class="programlisting">Resuming ()</pre>
 </div>
@@ -357,10 +358,10 @@
 <tbody></tbody>
 </table></div>
 </div>
-<div class="refsect1" title="Property Details">
-<a name="id2926392"></a><h2>Property Details</h2>
-<div class="refsect2" title='The "DaemonVersion" property'>
-<a name="id2926400"></a><h3>
+<div class="refsect1">
+<a name="id424264"></a><h2>Property Details</h2>
+<div class="refsect2">
+<a name="id424272"></a><h3>
 <a name="UPower:DaemonVersion"></a>The "DaemonVersion" property</h3>
 <pre class="programlisting">'DaemonVersion'  read      's'
 </pre>
@@ -373,8 +374,8 @@
 <tbody></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title='The "CanSuspend" property'>
-<a name="id2926435"></a><h3>
+<div class="refsect2">
+<a name="id424306"></a><h3>
 <a name="UPower:CanSuspend"></a>The "CanSuspend" property</h3>
 <pre class="programlisting">'CanSuspend'  read      'b'
 </pre>
@@ -387,8 +388,8 @@
 <tbody></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title='The "CanHibernate" property'>
-<a name="id2926464"></a><h3>
+<div class="refsect2">
+<a name="id424334"></a><h3>
 <a name="UPower:CanHibernate"></a>The "CanHibernate" property</h3>
 <pre class="programlisting">'CanHibernate'  read      'b'
 </pre>
@@ -401,8 +402,8 @@
 <tbody></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title='The "OnBattery" property'>
-<a name="id2926494"></a><h3>
+<div class="refsect2">
+<a name="id424362"></a><h3>
 <a name="UPower:OnBattery"></a>The "OnBattery" property</h3>
 <pre class="programlisting">'OnBattery'  read      'b'
 </pre>
@@ -416,8 +417,8 @@
 <tbody></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title='The "OnLowBattery" property'>
-<a name="id2926523"></a><h3>
+<div class="refsect2">
+<a name="id424391"></a><h3>
 <a name="UPower:OnLowBattery"></a>The "OnLowBattery" property</h3>
 <pre class="programlisting">'OnLowBattery'  read      'b'
 </pre>
@@ -431,8 +432,8 @@
 <tbody></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title='The "LidIsClosed" property'>
-<a name="id2926555"></a><h3>
+<div class="refsect2">
+<a name="id424420"></a><h3>
 <a name="UPower:LidIsClosed"></a>The "LidIsClosed" property</h3>
 <pre class="programlisting">'LidIsClosed'  read      'b'
 </pre>
@@ -445,8 +446,8 @@
 <tbody></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title='The "LidIsPresent" property'>
-<a name="id2926587"></a><h3>
+<div class="refsect2">
+<a name="id424452"></a><h3>
 <a name="UPower:LidIsPresent"></a>The "LidIsPresent" property</h3>
 <pre class="programlisting">'LidIsPresent'  read      'b'
 </pre>
@@ -459,8 +460,30 @@
 <tbody></tbody>
 </table></div>
 <hr>
-<div class="refsect2" title='The "IsDocked" property'>
-<a name="id2926619"></a><h3>
+<div class="refsect2">
+<a name="id424482"></a><h3>
+<a name="UPower:LidForceSleep"></a>The "LidForceSleep" property</h3>
+<pre class="programlisting">'LidForceSleep'  read      'b'
+</pre>
+</div>
+<p>
+            If the system really has to sleep when the lid is closed.
+            Some laptops actually melt (!) if the lid is closed and the
+            computer keeps running. We blacklist those, and do something
+            sane for the other machines.
+          </p>
+<p>
+            This allows us to set the default session policy to not
+            suspend on lid close if the laptop is docked, and be sure
+            the machine is not going to melt.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2">
+<a name="id424520"></a><h3>
 <a name="UPower:IsDocked"></a>The "IsDocked" property</h3>
 <pre class="programlisting">'IsDocked'  read      'b'
 </pre>
@@ -478,6 +501,6 @@
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.15</div>
+          Generated by GTK-Doc V1.17</div>
 </body>
 </html>

@@ -104,7 +104,7 @@ am__objects_2 = upowerd-up-marshal.$(OBJEXT)
 am_upowerd_OBJECTS = upowerd-up-polkit.$(OBJEXT) \
 	upowerd-up-daemon.$(OBJEXT) upowerd-up-device.$(OBJEXT) \
 	upowerd-up-device-list.$(OBJEXT) upowerd-up-qos.$(OBJEXT) \
-	upowerd-up-kbd-backlight.$(OBJEXT) \
+	upowerd-up-config.$(OBJEXT) upowerd-up-kbd-backlight.$(OBJEXT) \
 	upowerd-up-wakeups.$(OBJEXT) upowerd-up-history.$(OBJEXT) \
 	upowerd-up-main.$(OBJEXT) $(am__objects_2)
 upowerd_OBJECTS = $(am_upowerd_OBJECTS)
@@ -236,6 +236,7 @@ DBUS_GLIB_LIBS = @DBUS_GLIB_LIBS@
 DBUS_LIBS = @DBUS_LIBS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DLLTOOL = @DLLTOOL@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -292,6 +293,7 @@ LT_CURRENT = @LT_CURRENT@
 LT_REVISION = @LT_REVISION@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
+MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
 MKINSTALLDIRS = @MKINSTALLDIRS@
 MSGFMT = @MSGFMT@
@@ -339,6 +341,7 @@ abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
+ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
@@ -398,7 +401,6 @@ INCLUDES = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\"			\
 	-DPACKAGE_LIB_DIR=\""$(libdir)"\"			\
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
-	-DG_UDEV_API_IS_SUBJECT_TO_CHANGE			\
 	-DUP_COMPILATION					\
 	-DUP_DISABLE_DEPRECATED					\
 	-DG_LOG_DOMAIN=\"UPower\"				\
@@ -439,6 +441,8 @@ upowerd_SOURCES = \
 	up-device-list.c					\
 	up-qos.h						\
 	up-qos.c						\
+	up-config.h						\
+	up-config.c						\
 	up-kbd-backlight.h					\
 	up-kbd-backlight.c					\
 	up-wakeups.h						\
@@ -620,6 +624,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-qos.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-self-test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-wakeups.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-config.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-daemon.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-device-list.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-device.Po@am__quote@
@@ -894,6 +899,22 @@ upowerd-up-qos.obj: up-qos.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-qos.c' object='upowerd-up-qos.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-qos.obj `if test -f 'up-qos.c'; then $(CYGPATH_W) 'up-qos.c'; else $(CYGPATH_W) '$(srcdir)/up-qos.c'; fi`
+
+upowerd-up-config.o: up-config.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-config.o -MD -MP -MF $(DEPDIR)/upowerd-up-config.Tpo -c -o upowerd-up-config.o `test -f 'up-config.c' || echo '$(srcdir)/'`up-config.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-config.Tpo $(DEPDIR)/upowerd-up-config.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-config.c' object='upowerd-up-config.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-config.o `test -f 'up-config.c' || echo '$(srcdir)/'`up-config.c
+
+upowerd-up-config.obj: up-config.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-config.obj -MD -MP -MF $(DEPDIR)/upowerd-up-config.Tpo -c -o upowerd-up-config.obj `if test -f 'up-config.c'; then $(CYGPATH_W) 'up-config.c'; else $(CYGPATH_W) '$(srcdir)/up-config.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-config.Tpo $(DEPDIR)/upowerd-up-config.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-config.c' object='upowerd-up-config.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-config.obj `if test -f 'up-config.c'; then $(CYGPATH_W) 'up-config.c'; else $(CYGPATH_W) '$(srcdir)/up-config.c'; fi`
 
 upowerd-up-kbd-backlight.o: up-kbd-backlight.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-kbd-backlight.o -MD -MP -MF $(DEPDIR)/upowerd-up-kbd-backlight.Tpo -c -o upowerd-up-kbd-backlight.o `test -f 'up-kbd-backlight.c' || echo '$(srcdir)/'`up-kbd-backlight.c
@@ -1397,8 +1418,7 @@ install-dvi: install-dvi-recursive
 install-dvi-am:
 
 install-exec-am: install-libexecPROGRAMS
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
+
 install-html: install-html-recursive
 
 install-html-am:
@@ -1442,7 +1462,7 @@ uninstall-am: uninstall-dbusconfDATA uninstall-dbusifDATA \
 
 .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) all check \
 	check-am ctags-recursive install install-am install-data-am \
-	install-exec-am install-strip tags-recursive
+	install-strip tags-recursive
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am check check-TESTS check-am clean \
@@ -1453,14 +1473,13 @@ uninstall-am: uninstall-dbusconfDATA uninstall-dbusifDATA \
 	install install-am install-data install-data-am \
 	install-data-hook install-dbusconfDATA install-dbusifDATA \
 	install-dvi install-dvi-am install-exec install-exec-am \
-	install-exec-hook install-html install-html-am install-info \
-	install-info-am install-libexecPROGRAMS install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-serviceDATA install-strip installcheck installcheck-am \
-	installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags tags-recursive uninstall uninstall-am \
+	install-html install-html-am install-info install-info-am \
+	install-libexecPROGRAMS install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-serviceDATA install-strip \
+	installcheck installcheck-am installdirs installdirs-am \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
 	uninstall-dbusconfDATA uninstall-dbusifDATA \
 	uninstall-libexecPROGRAMS uninstall-serviceDATA
 
@@ -1496,9 +1515,6 @@ install-data-hook:
 	if test -w $(DESTDIR)$(prefix)/; then \
 		mkdir -p $(DESTDIR)$(localstatedir)/lib/upower; \
 	fi
-
-install-exec-hook:
-	cd $(DESTDIR)$(libexecdir) && $(LN_S) -f upowerd devkit-power-daemon
 
 clean-local :
 	rm -f *~ $(service_DATA) $(dbusconf_DATA)

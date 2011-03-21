@@ -12,7 +12,6 @@ INCLUDES = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\"			\
 	-DPACKAGE_LIB_DIR=\""$(libdir)"\"			\
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
-	-DG_UDEV_API_IS_SUBJECT_TO_CHANGE			\
 	-DUP_COMPILATION					\
 	-DUP_DISABLE_DEPRECATED					\
 	-DG_LOG_DOMAIN=\"UPower\"				\
@@ -77,6 +76,8 @@ upowerd_SOURCES =						\
 	up-device-list.c					\
 	up-qos.h						\
 	up-qos.c						\
+	up-config.h						\
+	up-config.c						\
 	up-kbd-backlight.h					\
 	up-kbd-backlight.c					\
 	up-wakeups.h						\
@@ -182,9 +183,6 @@ install-data-hook:
 	if test -w $(DESTDIR)$(prefix)/; then \
 		mkdir -p $(DESTDIR)$(localstatedir)/lib/upower; \
 	fi
-
-install-exec-hook:
-	cd $(DESTDIR)$(libexecdir) && $(LN_S) -f upowerd devkit-power-daemon
 
 CLEANFILES = $(BUILT_SOURCES)
 

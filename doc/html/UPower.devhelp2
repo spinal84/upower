@@ -47,6 +47,7 @@
     <keyword type="" name="The &quot;OnLowBattery&quot; property" link="UPower.html#UPower:OnLowBattery"/>
     <keyword type="" name="The &quot;LidIsClosed&quot; property" link="UPower.html#UPower:LidIsClosed"/>
     <keyword type="" name="The &quot;LidIsPresent&quot; property" link="UPower.html#UPower:LidIsPresent"/>
+    <keyword type="" name="The &quot;LidForceSleep&quot; property" link="UPower.html#UPower:LidForceSleep"/>
     <keyword type="" name="The &quot;IsDocked&quot; property" link="UPower.html#UPower:IsDocked"/>
     <keyword type="" name="Refresh ()" link="Device.html#Device.Refresh"/>
     <keyword type="" name="GetHistory ()" link="Device.html#Device.GetHistory"/>
@@ -92,7 +93,6 @@
     <keyword type="" name="The BrightnessChanged signal" link="KbdBacklight.html#KbdBacklight::BrightnessChanged"/>
     <keyword type="macro" name="UP_CLIENT_ERROR" link="UPower-up-client.html#UP-CLIENT-ERROR:CAPS"/>
     <keyword type="macro" name="UP_CLIENT_TYPE_ERROR" link="UPower-up-client.html#UP-CLIENT-TYPE-ERROR:CAPS"/>
-    <keyword type="struct" name="UpClientPrivate" link="UPower-up-client.html#UpClientPrivate"/>
     <keyword type="function" name="device_added ()" link="UPower-up-client.html#device-added"/>
     <keyword type="function" name="device_changed ()" link="UPower-up-client.html#device-changed"/>
     <keyword type="function" name="device_removed ()" link="UPower-up-client.html#device-removed"/>
@@ -116,12 +116,14 @@
     <keyword type="function" name="up_client_get_can_hibernate ()" link="UPower-up-client.html#up-client-get-can-hibernate" since="0.9.0"/>
     <keyword type="function" name="up_client_get_lid_is_closed ()" link="UPower-up-client.html#up-client-get-lid-is-closed" since="0.9.0"/>
     <keyword type="function" name="up_client_get_lid_is_present ()" link="UPower-up-client.html#up-client-get-lid-is-present" since="0.9.2"/>
+    <keyword type="function" name="up_client_get_lid_force_sleep ()" link="UPower-up-client.html#up-client-get-lid-force-sleep" since="0.9.9"/>
+    <keyword type="function" name="up_client_get_is_docked ()" link="UPower-up-client.html#up-client-get-is-docked" since="0.9.2"/>
     <keyword type="function" name="up_client_get_can_suspend ()" link="UPower-up-client.html#up-client-get-can-suspend" since="0.9.0"/>
     <keyword type="function" name="up_client_get_on_battery ()" link="UPower-up-client.html#up-client-get-on-battery" since="0.9.0"/>
     <keyword type="function" name="up_client_get_on_low_battery ()" link="UPower-up-client.html#up-client-get-on-low-battery" since="0.9.0"/>
+    <keyword type="struct" name="UpClientPrivate" link="UPower-up-client.html#UpClientPrivate"/>
     <keyword type="macro" name="UP_DEVICE_ERROR" link="UPower-up-device.html#UP-DEVICE-ERROR:CAPS"/>
     <keyword type="macro" name="UP_DEVICE_TYPE_ERROR" link="UPower-up-device.html#UP-DEVICE-TYPE-ERROR:CAPS"/>
-    <keyword type="struct" name="UpDevicePrivate" link="UPower-up-device.html#UpDevicePrivate"/>
     <keyword type="function" name="changed ()" link="UPower-up-device.html#changed"/>
     <keyword type="function" name="_up_device_reserved1 ()" link="UPower-up-device.html#up-device-reserved1"/>
     <keyword type="function" name="_up_device_reserved2 ()" link="UPower-up-device.html#up-device-reserved2"/>
@@ -138,6 +140,7 @@
     <keyword type="function" name="up_device_get_history_sync ()" link="UPower-up-device.html#up-device-get-history-sync" since="0.9.0"/>
     <keyword type="function" name="up_device_get_statistics_sync ()" link="UPower-up-device.html#up-device-get-statistics-sync" since="0.9.0"/>
     <keyword type="function" name="up_device_get_object_path ()" link="UPower-up-device.html#up-device-get-object-path" since="0.9.0"/>
+    <keyword type="struct" name="UpDevicePrivate" link="UPower-up-device.html#UpDevicePrivate"/>
     <keyword type="typedef" name="UpHistoryItemPrivate" link="UPower-up-history-item.html#UpHistoryItemPrivate"/>
     <keyword type="function" name="up_history_item_new ()" link="UPower-up-history-item.html#up-history-item-new" since="0.9.0"/>
     <keyword type="function" name="up_history_item_get_value ()" link="UPower-up-history-item.html#up-history-item-get-value" since="0.9.0"/>
