@@ -1,4 +1,4 @@
-upower (0.9.9-1) UNRELEASED; urgency=low
+upower (0.9.9-1) experimental; urgency=low
 
   * New upstream release.
     - Fix bitmap check in the input code. (Closes: #616474)
@@ -9,7 +9,7 @@ upower (0.9.9-1) UNRELEASED; urgency=low
   * debian/libupower-glib1.symbols
     - Add new up_client_get_lid_force_sleep symbol.
 
- -- Michael Biebl <biebl@debian.org>  Mon, 21 Mar 2011 11:45:27 +0100
+ -- Michael Biebl <biebl@debian.org>  Mon, 21 Mar 2011 11:46:20 +0100
 
 upower (0.9.8-3) experimental; urgency=low
 
