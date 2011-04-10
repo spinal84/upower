@@ -5,6 +5,7 @@ upower (0.9.9-3) UNRELEASED; urgency=low
       libupower-glib-dev according to the new GObject introspection policy.
     - Bump pm-utils from Recommends to Depends to avoid accidental removals
       leading to unexpected behaviour. (Closes: #619774)
+    - Bump Standards-Version to 3.9.2. No further changes.
 
  -- Michael Biebl <biebl@debian.org>  Sun, 10 Apr 2011 19:10:42 +0200
 
