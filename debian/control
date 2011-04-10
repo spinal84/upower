@@ -27,8 +27,8 @@ Homepage: http://upower.freedesktop.org/
 
 Package: upower
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, udev [linux-any], dbus
-Recommends: pm-utils, policykit-1
+Depends: ${shlibs:Depends}, ${misc:Depends}, udev [linux-any], dbus, pm-utils
+Recommends: policykit-1
 Conflicts: devicekit-power
 Replaces: devicekit-power
 Description: abstraction for power management
