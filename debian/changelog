@@ -1,8 +1,8 @@
-upower (0.9.9-4) UNRELEASED; urgency=low
+upower (0.9.9-4) unstable; urgency=low
 
   * debian/control: Make pm-utils dependency [linux-any].
 
- -- Michael Biebl <biebl@debian.org>  Tue, 12 Apr 2011 13:09:24 +0200
+ -- Michael Biebl <biebl@debian.org>  Tue, 12 Apr 2011 13:10:19 +0200
 
 upower (0.9.9-3) unstable; urgency=low
 
