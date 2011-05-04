@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 m4_define([up_major_version], [0])
 m4_define([up_minor_version], [9])
-m4_define([up_micro_version], [9])
+m4_define([up_micro_version], [10])
 m4_define([up_version],
           [up_major_version.up_minor_version.up_micro_version])
 
@@ -126,7 +126,7 @@ if test "$GCC" = "yes"; then
 #	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wignored-qualifiers"
 	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wsign-compare"
 #	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wtype-limits"
-	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wuninitialized"
+	WARNINGFLAGS_C="$WARNINGFLAGS_C -O -Wuninitialized"
 	WARNINGFLAGS_C="$WARNINGFLAGS_C -Waggregate-return"
 	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wdeclaration-after-statement"
 #	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wshadow"
@@ -174,13 +174,15 @@ dnl - Compile time default choice of backend
 dnl ---------------------------------------------------------------------------
 AC_ARG_WITH([backend],
 	    AS_HELP_STRING([--with-backend=<option>],
-			   [Default backend to use linux, freebsd, dummy (dummy)]))
+			   [Default backend to use linux, freebsd, openbsd, dummy (dummy)]))
 # default to a sane option
 if test x$with_backend = x; then
 	if test -e /usr/include/gudev-1.0/gudev/gudev.h ; then
 		with_backend=linux
 	elif test -e /usr/include/dev/acpica/acpiio.h ; then
 	    	with_backend=freebsd
+	elif test -e /usr/include/machine/apmvar.h ; then
+	    	with_backend=openbsd
 	else
 		with_backend=dummy
 	fi
@@ -208,6 +210,7 @@ AM_CONDITIONAL(HAVE_IDEVICE, [test x$have_idevice = xyes])
 AM_CONDITIONAL(BACKEND_TYPE_DUMMY, [test x$with_backend = xdummy])
 AM_CONDITIONAL(BACKEND_TYPE_LINUX, [test x$with_backend = xlinux])
 AM_CONDITIONAL(BACKEND_TYPE_FREEBSD, [test x$with_backend = xfreebsd])
+AM_CONDITIONAL(BACKEND_TYPE_OPENBSD, [test x$with_backend = xopenbsd])
 
 dnl ---------------------------------------------------------------------------
 dnl - Build self tests
@@ -233,6 +236,7 @@ etc/Makefile
 src/Makefile
 src/dummy/Makefile
 src/freebsd/Makefile
+src/openbsd/Makefile
 src/linux/Makefile
 tools/Makefile
 doc/Makefile

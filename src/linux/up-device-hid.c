@@ -306,6 +306,7 @@ up_device_hid_coldplug (UpDevice *device)
 	UpDeviceHid *hid = UP_DEVICE_HID (device);
 	GUdevDevice *native;
 	gboolean ret = FALSE;
+	gboolean fake_device;
 	const gchar *device_file;
 	const gchar *type;
 	const gchar *vendor;
@@ -332,10 +333,14 @@ up_device_hid_coldplug (UpDevice *device)
 	}
 
 	/* first check that we are an UPS */
-	ret = up_device_hid_is_ups (hid);
-	if (!ret) {
-		g_debug ("not a HID device: %s", device_file);
-		goto out;
+	fake_device = g_udev_device_has_property (native, "UPOWER_FAKE_DEVICE");
+	if (!fake_device)
+	{
+		ret = up_device_hid_is_ups (hid);
+		if (!ret) {
+			g_debug ("not a HID device: %s", device_file);
+			goto out;
+		}
 	}
 
 	/* prefer UPOWER names */
@@ -355,10 +360,21 @@ up_device_hid_coldplug (UpDevice *device)
 		      NULL);
 
 	/* coldplug everything */
-	ret = up_device_hid_get_all_data (hid);
-	if (!ret) {
-		g_debug ("failed to coldplug: %s", device_file);
-		goto out;
+	if (fake_device)
+	{
+		ret = TRUE;
+		if (g_udev_device_get_property_as_boolean (native, "UPOWER_FAKE_HID_CHARGING"))
+			up_device_hid_set_values (hid, UP_DEVICE_HID_CHARGING, 1);
+		else
+			up_device_hid_set_values (hid, UP_DEVICE_HID_DISCHARGING, 1);
+		up_device_hid_set_values (hid, UP_DEVICE_HID_REMAINING_CAPACITY,
+			g_udev_device_get_property_as_int (native, "UPOWER_FAKE_HID_PERCENTAGE"));
+	} else {
+		ret = up_device_hid_get_all_data (hid);
+		if (!ret) {
+			g_debug ("failed to coldplug: %s", device_file);
+			goto out;
+		}
 	}
 
 	/* fix up device states */
@@ -419,6 +435,67 @@ out:
 }
 
 /**
+ * up_device_hid_get_on_battery:
+ **/
+static gboolean
+up_device_hid_get_on_battery (UpDevice *device, gboolean *on_battery)
+{
+	UpDeviceHid *hid = UP_DEVICE_HID (device);
+	UpDeviceKind type;
+	UpDeviceState state;
+	gboolean is_present;
+	g_return_val_if_fail (UP_IS_DEVICE_HID (hid), FALSE);
+	g_return_val_if_fail (on_battery != NULL, FALSE);
+
+	g_object_get (device,
+		      "type", &type,
+		      "state", &state,
+		      "is-present", &is_present,
+		      NULL);
+
+
+	if (type != UP_DEVICE_KIND_UPS)
+		return FALSE;
+	if (state == UP_DEVICE_STATE_UNKNOWN)
+		return FALSE;
+	if (!is_present)
+		return FALSE;
+
+	*on_battery = (state == UP_DEVICE_STATE_DISCHARGING);
+	return TRUE;
+}
+
+/**
+ * up_device_hid_get_low_battery:
+ **/
+static gboolean
+up_device_hid_get_low_battery (UpDevice *device, gboolean *low_battery)
+{
+	gboolean ret;
+	gboolean on_battery;
+	UpDeviceHid *hid = UP_DEVICE_HID (device);
+	gdouble percentage;
+
+	g_return_val_if_fail (UP_IS_DEVICE_HID (hid), FALSE);
+	g_return_val_if_fail (low_battery != NULL, FALSE);
+
+	/* reuse the common checks */
+	ret = up_device_hid_get_on_battery (device, &on_battery);
+	if (!ret)
+		return FALSE;
+
+	/* shortcut */
+	if (!on_battery) {
+		*low_battery = FALSE;
+		return TRUE;
+	}
+
+	g_object_get (device, "percentage", &percentage, NULL);
+	*low_battery = (percentage < 10.0f);
+	return TRUE;
+}
+
+/**
  * up_device_hid_init:
  **/
 static void
@@ -466,6 +543,8 @@ up_device_hid_class_init (UpDeviceHidClass *klass)
 
 	object_class->finalize = up_device_hid_finalize;
 	device_class->coldplug = up_device_hid_coldplug;
+	device_class->get_on_battery = up_device_hid_get_on_battery;
+	device_class->get_low_battery = up_device_hid_get_low_battery;
 	device_class->refresh = up_device_hid_refresh;
 
 	g_type_class_add_private (klass, sizeof (UpDeviceHidPrivate));
