@@ -2,6 +2,7 @@ upower (0.9.10-1) UNRELEASED; urgency=low
 
   * New upstream release:
     - Fix "unknown" battery status guessing to not be recursive. (LP: #384304)
+  * debian/control: Drop obsolete devicekit-power-* Conflicts/Replaces.
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 04 May 2011 08:03:29 +0200
 
