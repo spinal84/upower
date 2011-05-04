@@ -42,7 +42,10 @@ libexec_PROGRAMS = upowerd$(EXEEXT)
 @BACKEND_TYPE_FREEBSD_TRUE@am__append_2 = \
 @BACKEND_TYPE_FREEBSD_TRUE@	freebsd/libupshared.la
 
-@BACKEND_TYPE_LINUX_TRUE@am__append_3 = \
+@BACKEND_TYPE_OPENBSD_TRUE@am__append_3 = \
+@BACKEND_TYPE_OPENBSD_TRUE@	openbsd/libupshared.la
+
+@BACKEND_TYPE_LINUX_TRUE@am__append_4 = \
 @BACKEND_TYPE_LINUX_TRUE@	linux/libupshared.la					\
 @BACKEND_TYPE_LINUX_TRUE@	$(USB_LIBS)						\
 @BACKEND_TYPE_LINUX_TRUE@	$(GUDEV_LIBS)						\
@@ -68,9 +71,9 @@ am__installdirs = "$(DESTDIR)$(libexecdir)" "$(DESTDIR)$(dbusconfdir)" \
 	"$(DESTDIR)$(dbusifdir)" "$(DESTDIR)$(servicedir)"
 PROGRAMS = $(libexec_PROGRAMS)
 am__up_self_test_SOURCES_DIST = up-self-test.c up-polkit.h up-polkit.c \
-	up-daemon.h up-daemon.c up-device.h up-device.c \
-	up-device-list.h up-device-list.c up-qos.h up-qos.c \
-	up-kbd-backlight.h up-kbd-backlight.c up-wakeups.h \
+	up-config.h up-config.c up-daemon.h up-daemon.c up-device.h \
+	up-device.c up-device-list.h up-device-list.c up-qos.h \
+	up-qos.c up-kbd-backlight.h up-kbd-backlight.c up-wakeups.h \
 	up-wakeups.c up-history.h up-history.c up-backend.h \
 	up-native.h up-daemon-glue.h up-device-glue.h up-qos-glue.h \
 	up-kbd-backlight-glue.h up-wakeups-glue.h up-marshal.h \
@@ -79,6 +82,7 @@ am__objects_1 = up_self_test-up-marshal.$(OBJEXT)
 @UP_BUILD_TESTS_TRUE@am_up_self_test_OBJECTS =  \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-self-test.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-polkit.$(OBJEXT) \
+@UP_BUILD_TESTS_TRUE@	up_self_test-up-config.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-daemon.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-device.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-device-list.$(OBJEXT) \
@@ -114,7 +118,8 @@ upowerd_OBJECTS = $(am_upowerd_OBJECTS)
 @BACKEND_TYPE_LINUX_TRUE@	$(am__DEPENDENCIES_1)
 upowerd_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) $(UPOWER_LIBS) \
-	$(am__append_1) $(am__append_2) $(am__DEPENDENCIES_2)
+	$(am__append_1) $(am__append_2) $(am__append_3) \
+	$(am__DEPENDENCIES_2)
 upowerd_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(upowerd_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
@@ -390,7 +395,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = dummy freebsd linux
+SUBDIRS = dummy freebsd linux openbsd
 INCLUDES = \
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\"		\
@@ -460,7 +465,8 @@ upowerd_CPPFLAGS = \
 
 upowerd_LDADD = -lm $(USB_LIBS) $(GIO_LIBS) $(DBUS_GLIB_LIBS) \
 	$(POLKIT_LIBS) $(UPOWER_LIBS) $(am__append_1) $(am__append_2) \
-	$(am__append_3)
+	$(am__append_3) $(am__append_4)
+@BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@DBUS_LAUNCH = $(shell which dbus-launch)
 upowerd_CFLAGS = \
 	$(WARNINGFLAGS_C)					\
 	$(NULL)
@@ -469,6 +475,8 @@ upowerd_CFLAGS = \
 @UP_BUILD_TESTS_TRUE@	up-self-test.c						\
 @UP_BUILD_TESTS_TRUE@	up-polkit.h						\
 @UP_BUILD_TESTS_TRUE@	up-polkit.c						\
+@UP_BUILD_TESTS_TRUE@	up-config.h						\
+@UP_BUILD_TESTS_TRUE@	up-config.c						\
 @UP_BUILD_TESTS_TRUE@	up-daemon.h						\
 @UP_BUILD_TESTS_TRUE@	up-daemon.c						\
 @UP_BUILD_TESTS_TRUE@	up-device.h						\
@@ -614,6 +622,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-config.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-daemon.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-device-list.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-device.Po@am__quote@
@@ -691,6 +700,22 @@ up_self_test-up-polkit.obj: up-polkit.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-polkit.c' object='up_self_test-up-polkit.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-polkit.obj `if test -f 'up-polkit.c'; then $(CYGPATH_W) 'up-polkit.c'; else $(CYGPATH_W) '$(srcdir)/up-polkit.c'; fi`
+
+up_self_test-up-config.o: up-config.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-config.o -MD -MP -MF $(DEPDIR)/up_self_test-up-config.Tpo -c -o up_self_test-up-config.o `test -f 'up-config.c' || echo '$(srcdir)/'`up-config.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-config.Tpo $(DEPDIR)/up_self_test-up-config.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-config.c' object='up_self_test-up-config.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-config.o `test -f 'up-config.c' || echo '$(srcdir)/'`up-config.c
+
+up_self_test-up-config.obj: up-config.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-config.obj -MD -MP -MF $(DEPDIR)/up_self_test-up-config.Tpo -c -o up_self_test-up-config.obj `if test -f 'up-config.c'; then $(CYGPATH_W) 'up-config.c'; else $(CYGPATH_W) '$(srcdir)/up-config.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-config.Tpo $(DEPDIR)/up_self_test-up-config.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='up-config.c' object='up_self_test-up-config.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-config.obj `if test -f 'up-config.c'; then $(CYGPATH_W) 'up-config.c'; else $(CYGPATH_W) '$(srcdir)/up-config.c'; fi`
 
 up_self_test-up-daemon.o: up-daemon.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-daemon.o -MD -MP -MF $(DEPDIR)/up_self_test-up-daemon.Tpo -c -o up_self_test-up-daemon.o `test -f 'up-daemon.c' || echo '$(srcdir)/'`up-daemon.c
@@ -1347,9 +1372,11 @@ distdir: $(DISTFILES)
 	      || exit 1; \
 	  fi; \
 	done
+@BACKEND_TYPE_LINUX_FALSE@check-local:
+@UP_BUILD_TESTS_FALSE@check-local:
 check-am: all-am
 	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
-	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
+	$(MAKE) $(AM_MAKEFLAGS) check-TESTS check-local
 check: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) check-recursive
 all-am: Makefile $(PROGRAMS) $(DATA)
@@ -1465,7 +1492,7 @@ uninstall-am: uninstall-dbusconfDATA uninstall-dbusifDATA \
 	install-strip tags-recursive
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
-	all all-am check check-TESTS check-am clean \
+	all all-am check check-TESTS check-am check-local clean \
 	clean-checkPROGRAMS clean-generic clean-libexecPROGRAMS \
 	clean-libtool clean-local ctags ctags-recursive distclean \
 	distclean-compile distclean-generic distclean-libtool \
@@ -1504,6 +1531,9 @@ up-kbd-backlight-glue.h: org.freedesktop.UPower.KbdBacklight.xml Makefile.am
 
 up-wakeups-glue.h: org.freedesktop.UPower.Wakeups.xml Makefile.am
 	dbus-binding-tool --prefix=up_wakeups --mode=glib-server --output=up-wakeups-glue.h org.freedesktop.UPower.Wakeups.xml
+
+@BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@check-local: upowerd
+@BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@	env top_builddir=$(top_builddir) $(DBUS_LAUNCH) $(srcdir)/linux/integration-test -v
 
 $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@

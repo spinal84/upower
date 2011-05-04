@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = dummy freebsd linux
+SUBDIRS = dummy freebsd linux openbsd
 
 INCLUDES = \
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
@@ -111,12 +111,25 @@ upowerd_LDADD +=						\
 	freebsd/libupshared.la
 endif
 
+if BACKEND_TYPE_OPENBSD
+upowerd_LDADD +=						\
+	openbsd/libupshared.la
+endif
+
 if BACKEND_TYPE_LINUX
 upowerd_LDADD += 						\
 	linux/libupshared.la					\
 	$(USB_LIBS)						\
 	$(GUDEV_LIBS)						\
 	$(IDEVICE_LIBS)
+
+if UP_BUILD_TESTS
+DBUS_LAUNCH=$(shell which dbus-launch)
+
+check-local: upowerd
+	env top_builddir=$(top_builddir) $(DBUS_LAUNCH) $(srcdir)/linux/integration-test -v
+endif
+
 endif
 
 upowerd_CFLAGS =						\
@@ -132,6 +145,8 @@ up_self_test_SOURCES =						\
 	up-self-test.c						\
 	up-polkit.h						\
 	up-polkit.c						\
+	up-config.h						\
+	up-config.c						\
 	up-daemon.h						\
 	up-daemon.c						\
 	up-device.h						\

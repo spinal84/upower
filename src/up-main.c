@@ -41,6 +41,10 @@
 #include "up-kbd-backlight.h"
 #include "up-wakeups.h"
 
+#if GLIB_CHECK_VERSION(2,28,7)
+ #include <glib-unix.h>
+#endif
+
 #define DEVKIT_POWER_SERVICE_NAME "org.freedesktop.UPower"
 static GMainLoop *loop = NULL;
 
@@ -88,6 +92,21 @@ out:
 	return ret;
 }
 
+#if GLIB_CHECK_VERSION(2,28,7)
+
+/**
+ * up_main_sigint_cb:
+ **/
+static gboolean
+up_main_sigint_cb (gpointer user_data)
+{
+	g_debug ("Handling SIGINT");
+	g_main_loop_quit (loop);
+	return FALSE;
+}
+
+#else
+
 /**
  * up_main_sigint_handler:
  **/
@@ -102,6 +121,8 @@ up_main_sigint_handler (gint sig)
 	/* cleanup */
 	g_main_loop_quit (loop);
 }
+
+#endif
 
 /**
  * up_main_timed_exit_cb:
@@ -133,6 +154,7 @@ main (gint argc, gchar **argv)
 	gint retval = 1;
 	gboolean timed_exit = FALSE;
 	gboolean immediate_exit = FALSE;
+	gboolean session_bus = FALSE;
 	guint timer_id = 0;
 
 	const GOptionEntry options[] = {
@@ -142,6 +164,8 @@ main (gint argc, gchar **argv)
 		{ "immediate-exit", '\0', 0, G_OPTION_ARG_NONE, &immediate_exit,
 		  /* TRANSLATORS: exit straight away, used for automatic profiling */
 		  _("Exit after the engine has loaded"), NULL },
+		{ "test", '\0', 0, G_OPTION_ARG_NONE, &session_bus,
+		  _("Run on the session bus (only for testing)"), NULL },
 		{ NULL}
 	};
 
@@ -153,7 +177,9 @@ main (gint argc, gchar **argv)
 	g_option_context_free (context);
 
 	/* get bus connection */
-	bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+	if (session_bus)
+		up_daemon_set_bus_type (DBUS_BUS_SESSION);
+	bus = dbus_g_bus_get (up_daemon_get_bus_type (), &error);
 	if (bus == NULL) {
 		g_warning ("Couldn't connect to system bus: %s", error->message);
 		g_error_free (error);
@@ -175,8 +201,16 @@ main (gint argc, gchar **argv)
 		goto out;
 	}
 
+#if GLIB_CHECK_VERSION(2,28,7)
 	/* do stuff on ctrl-c */
+	g_unix_signal_add_watch_full (SIGINT,
+				      G_PRIORITY_DEFAULT,
+				      up_main_sigint_cb,
+				      loop,
+				      NULL);
+#else
 	signal (SIGINT, up_main_sigint_handler);
+#endif
 
 	g_debug ("Starting upowerd version %s", PACKAGE_VERSION);
 

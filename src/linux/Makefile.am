@@ -44,7 +44,8 @@ libupshared_la_SOURCES =					\
 	$(idevice_files)					\
 	$(BUILT_SOURCES)
 
-EXTRA_DIST = $(libupshared_la_SOURCES)
+EXTRA_DIST = $(libupshared_la_SOURCES) 			\
+	     integration-test
 
 libupshared_la_CFLAGS =					\
 	$(WARNINGFLAGS_C)
