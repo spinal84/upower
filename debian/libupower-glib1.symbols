@@ -63,6 +63,8 @@ libupower-glib.so.1 libupower-glib1 #MINVER#
  up_qos_item_set_value@Base 0.9.0
  up_qos_kind_from_string@Base 0.9.0
  up_qos_kind_to_string@Base 0.9.0
+ up_sleep_kind_from_string@Base 0.9.11
+ up_sleep_kind_to_string@Base 0.9.11
  up_stats_item_get_accuracy@Base 0.9.0
  up_stats_item_get_type@Base 0.9.0
  up_stats_item_get_value@Base 0.9.0
