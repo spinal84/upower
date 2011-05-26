@@ -1,3 +1,9 @@
+upower (0.9.11-1) UNRELEASED; urgency=low
+
+  * New upstream bug fix release.
+
+ -- Martin Pitt <mpitt@debian.org>  Thu, 26 May 2011 15:52:05 +0200
+
 upower (0.9.10-1) unstable; urgency=low
 
   * New upstream release:
