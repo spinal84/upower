@@ -1,11 +1,11 @@
-upower (0.9.11-1) UNRELEASED; urgency=low
+upower (0.9.11-1) unstable; urgency=low
 
   * New upstream bug fix release.
   * debian/rules: Call dpkg-gensymbols in -c4 mode, to ensure that our
     symbols files are up to date.
   * debian/libupower-glib1.symbols: Add new symbols from this version.
 
- -- Martin Pitt <mpitt@debian.org>  Thu, 26 May 2011 15:52:05 +0200
+ -- Martin Pitt <mpitt@debian.org>  Thu, 26 May 2011 16:27:43 +0200
 
 upower (0.9.10-1) unstable; urgency=low
 
