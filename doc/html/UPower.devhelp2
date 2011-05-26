@@ -39,7 +39,9 @@
     <keyword type="" name="The DeviceChanged signal" link="UPower.html#UPower::DeviceChanged"/>
     <keyword type="" name="The Changed signal" link="UPower.html#UPower::Changed"/>
     <keyword type="" name="The Sleeping signal" link="UPower.html#UPower::Sleeping"/>
+    <keyword type="" name="The NotifySleep signal" link="UPower.html#UPower::NotifySleep"/>
     <keyword type="" name="The Resuming signal" link="UPower.html#UPower::Resuming"/>
+    <keyword type="" name="The NotifyResume signal" link="UPower.html#UPower::NotifyResume"/>
     <keyword type="" name="The &quot;DaemonVersion&quot; property" link="UPower.html#UPower:DaemonVersion"/>
     <keyword type="" name="The &quot;CanSuspend&quot; property" link="UPower.html#UPower:CanSuspend"/>
     <keyword type="" name="The &quot;CanHibernate&quot; property" link="UPower.html#UPower:CanHibernate"/>
@@ -97,6 +99,8 @@
     <keyword type="function" name="device_changed ()" link="UPower-up-client.html#device-changed"/>
     <keyword type="function" name="device_removed ()" link="UPower-up-client.html#device-removed"/>
     <keyword type="function" name="changed ()" link="UPower-up-client.html#changed"/>
+    <keyword type="function" name="notify_sleep ()" link="UPower-up-client.html#notify-sleep"/>
+    <keyword type="function" name="notify_resume ()" link="UPower-up-client.html#notify-resume"/>
     <keyword type="function" name="_up_client_reserved1 ()" link="UPower-up-client.html#up-client-reserved1"/>
     <keyword type="function" name="_up_client_reserved2 ()" link="UPower-up-client.html#up-client-reserved2"/>
     <keyword type="function" name="_up_client_reserved3 ()" link="UPower-up-client.html#up-client-reserved3"/>
@@ -109,7 +113,7 @@
     <keyword type="function" name="up_client_get_properties_sync ()" link="UPower-up-client.html#up-client-get-properties-sync" since="0.9.0"/>
     <keyword type="function" name="up_client_enumerate_devices_sync ()" link="UPower-up-client.html#up-client-enumerate-devices-sync" since="0.9.0"/>
     <keyword type="function" name="up_client_suspend_sync ()" link="UPower-up-client.html#up-client-suspend-sync" since="0.9.0"/>
-    <keyword type="function" name="up_client_about_to_sleep_sync ()" link="UPower-up-client.html#up-client-about-to-sleep-sync" since="0.9.1"/>
+    <keyword type="function" name="up_client_about_to_sleep_sync ()" link="UPower-up-client.html#up-client-about-to-sleep-sync" since="0.9.11"/>
     <keyword type="function" name="up_client_hibernate_sync ()" link="UPower-up-client.html#up-client-hibernate-sync" since="0.9.0"/>
     <keyword type="function" name="up_client_get_devices ()" link="UPower-up-client.html#up-client-get-devices" since="0.9.0"/>
     <keyword type="function" name="up_client_get_daemon_version ()" link="UPower-up-client.html#up-client-get-daemon-version" since="0.9.0"/>
@@ -196,6 +200,7 @@
     <keyword type="enum" name="enum UpDeviceState" link="UPower-up-types.html#UpDeviceState"/>
     <keyword type="enum" name="enum UpDeviceTechnology" link="UPower-up-types.html#UpDeviceTechnology"/>
     <keyword type="enum" name="enum UpQosKind" link="UPower-up-types.html#UpQosKind"/>
+    <keyword type="enum" name="enum UpSleepKind" link="UPower-up-types.html#UpSleepKind"/>
     <keyword type="function" name="up_device_kind_to_string ()" link="UPower-up-types.html#up-device-kind-to-string" since="0.9.0"/>
     <keyword type="function" name="up_device_state_to_string ()" link="UPower-up-types.html#up-device-state-to-string" since="0.9.0"/>
     <keyword type="function" name="up_device_technology_to_string ()" link="UPower-up-types.html#up-device-technology-to-string" since="0.9.0"/>
@@ -204,5 +209,7 @@
     <keyword type="function" name="up_device_technology_from_string ()" link="UPower-up-types.html#up-device-technology-from-string" since="0.9.0"/>
     <keyword type="function" name="up_qos_kind_to_string ()" link="UPower-up-types.html#up-qos-kind-to-string" since="0.9.0"/>
     <keyword type="function" name="up_qos_kind_from_string ()" link="UPower-up-types.html#up-qos-kind-from-string" since="0.9.0"/>
+    <keyword type="function" name="up_sleep_kind_to_string ()" link="UPower-up-types.html#up-sleep-kind-to-string" since="0.9.10"/>
+    <keyword type="function" name="up_sleep_kind_from_string ()" link="UPower-up-types.html#up-sleep-kind-from-string" since="0.9.10"/>
   </functions>
 </book>

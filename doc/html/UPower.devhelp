@@ -39,7 +39,9 @@
     <function name="The DeviceChanged signal" link="UPower.html#UPower::DeviceChanged"/>
     <function name="The Changed signal" link="UPower.html#UPower::Changed"/>
     <function name="The Sleeping signal" link="UPower.html#UPower::Sleeping"/>
+    <function name="The NotifySleep signal" link="UPower.html#UPower::NotifySleep"/>
     <function name="The Resuming signal" link="UPower.html#UPower::Resuming"/>
+    <function name="The NotifyResume signal" link="UPower.html#UPower::NotifyResume"/>
     <function name="The &quot;DaemonVersion&quot; property" link="UPower.html#UPower:DaemonVersion"/>
     <function name="The &quot;CanSuspend&quot; property" link="UPower.html#UPower:CanSuspend"/>
     <function name="The &quot;CanHibernate&quot; property" link="UPower.html#UPower:CanHibernate"/>
@@ -97,6 +99,8 @@
     <function name="device_changed ()" link="UPower-up-client.html#device-changed"/>
     <function name="device_removed ()" link="UPower-up-client.html#device-removed"/>
     <function name="changed ()" link="UPower-up-client.html#changed"/>
+    <function name="notify_sleep ()" link="UPower-up-client.html#notify-sleep"/>
+    <function name="notify_resume ()" link="UPower-up-client.html#notify-resume"/>
     <function name="_up_client_reserved1 ()" link="UPower-up-client.html#up-client-reserved1"/>
     <function name="_up_client_reserved2 ()" link="UPower-up-client.html#up-client-reserved2"/>
     <function name="_up_client_reserved3 ()" link="UPower-up-client.html#up-client-reserved3"/>
@@ -196,6 +200,7 @@
     <function name="enum UpDeviceState" link="UPower-up-types.html#UpDeviceState"/>
     <function name="enum UpDeviceTechnology" link="UPower-up-types.html#UpDeviceTechnology"/>
     <function name="enum UpQosKind" link="UPower-up-types.html#UpQosKind"/>
+    <function name="enum UpSleepKind" link="UPower-up-types.html#UpSleepKind"/>
     <function name="up_device_kind_to_string ()" link="UPower-up-types.html#up-device-kind-to-string"/>
     <function name="up_device_state_to_string ()" link="UPower-up-types.html#up-device-state-to-string"/>
     <function name="up_device_technology_to_string ()" link="UPower-up-types.html#up-device-technology-to-string"/>
@@ -204,5 +209,7 @@
     <function name="up_device_technology_from_string ()" link="UPower-up-types.html#up-device-technology-from-string"/>
     <function name="up_qos_kind_to_string ()" link="UPower-up-types.html#up-qos-kind-to-string"/>
     <function name="up_qos_kind_from_string ()" link="UPower-up-types.html#up-qos-kind-from-string"/>
+    <function name="up_sleep_kind_to_string ()" link="UPower-up-types.html#up-sleep-kind-to-string"/>
+    <function name="up_sleep_kind_from_string ()" link="UPower-up-types.html#up-sleep-kind-from-string"/>
   </functions>
 </book>

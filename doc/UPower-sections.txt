@@ -60,6 +60,8 @@ device_added
 device_changed
 device_removed
 changed
+notify_sleep
+notify_resume
 _up_client_reserved1
 _up_client_reserved2
 _up_client_reserved3
@@ -207,6 +209,7 @@ UpDeviceKind
 UpDeviceState
 UpDeviceTechnology
 UpQosKind
+UpSleepKind
 up_device_kind_to_string
 up_device_state_to_string
 up_device_technology_to_string
@@ -215,5 +218,7 @@ up_device_state_from_string
 up_device_technology_from_string
 up_qos_kind_to_string
 up_qos_kind_from_string
+up_sleep_kind_to_string
+up_sleep_kind_from_string
 </SECTION>
 

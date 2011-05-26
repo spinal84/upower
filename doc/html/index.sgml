@@ -10,7 +10,9 @@
 <ANCHOR id="UPower::DeviceChanged" href="UPower/UPower.html#UPower::DeviceChanged">
 <ANCHOR id="UPower::Changed" href="UPower/UPower.html#UPower::Changed">
 <ANCHOR id="UPower::Sleeping" href="UPower/UPower.html#UPower::Sleeping">
+<ANCHOR id="UPower::NotifySleep" href="UPower/UPower.html#UPower::NotifySleep">
 <ANCHOR id="UPower::Resuming" href="UPower/UPower.html#UPower::Resuming">
+<ANCHOR id="UPower::NotifyResume" href="UPower/UPower.html#UPower::NotifyResume">
 <ANCHOR id="UPower:DaemonVersion" href="UPower/UPower.html#UPower:DaemonVersion">
 <ANCHOR id="UPower:CanSuspend" href="UPower/UPower.html#UPower:CanSuspend">
 <ANCHOR id="UPower:CanHibernate" href="UPower/UPower.html#UPower:CanHibernate">
@@ -75,6 +77,8 @@
 <ANCHOR id="device-changed" href="UPower/UPower-up-client.html#device-changed">
 <ANCHOR id="device-removed" href="UPower/UPower-up-client.html#device-removed">
 <ANCHOR id="changed" href="UPower/UPower-up-client.html#changed">
+<ANCHOR id="notify-sleep" href="UPower/UPower-up-client.html#notify-sleep">
+<ANCHOR id="notify-resume" href="UPower/UPower-up-client.html#notify-resume">
 <ANCHOR id="up-client-reserved1" href="UPower/UPower-up-client.html#up-client-reserved1">
 <ANCHOR id="up-client-reserved2" href="UPower/UPower-up-client.html#up-client-reserved2">
 <ANCHOR id="up-client-reserved3" href="UPower/UPower-up-client.html#up-client-reserved3">
@@ -198,6 +202,7 @@
 <ANCHOR id="UpDeviceState" href="UPower/UPower-up-types.html#UpDeviceState">
 <ANCHOR id="UpDeviceTechnology" href="UPower/UPower-up-types.html#UpDeviceTechnology">
 <ANCHOR id="UpQosKind" href="UPower/UPower-up-types.html#UpQosKind">
+<ANCHOR id="UpSleepKind" href="UPower/UPower-up-types.html#UpSleepKind">
 <ANCHOR id="up-device-kind-to-string" href="UPower/UPower-up-types.html#up-device-kind-to-string">
 <ANCHOR id="up-device-state-to-string" href="UPower/UPower-up-types.html#up-device-state-to-string">
 <ANCHOR id="up-device-technology-to-string" href="UPower/UPower-up-types.html#up-device-technology-to-string">
@@ -206,6 +211,8 @@
 <ANCHOR id="up-device-technology-from-string" href="UPower/UPower-up-types.html#up-device-technology-from-string">
 <ANCHOR id="up-qos-kind-to-string" href="UPower/UPower-up-types.html#up-qos-kind-to-string">
 <ANCHOR id="up-qos-kind-from-string" href="UPower/UPower-up-types.html#up-qos-kind-from-string">
+<ANCHOR id="up-sleep-kind-to-string" href="UPower/UPower-up-types.html#up-sleep-kind-to-string">
+<ANCHOR id="up-sleep-kind-from-string" href="UPower/UPower-up-types.html#up-sleep-kind-from-string">
 <ANCHOR id="UPower.7" href="UPower/UPower.7.html">
 <ANCHOR id="upowerd.8" href="UPower/upowerd.8.html">
 <ANCHOR id="upower.1" href="UPower/upower.1.html">
