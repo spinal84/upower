@@ -44,7 +44,7 @@
 <div class="refsynopsisdiv">
 <h2>Methods</h2>
 <pre class="synopsis"><a class="link" href="UPower.html#UPower.EnumerateDevices">EnumerateDevices</a> (out 'ao' devices)
-<a class="link" href="UPower.html#UPower.AboutToSleep">AboutToSleep</a>     ()
+<a class="link" href="UPower.html#UPower.AboutToSleep">AboutToSleep</a>     (in  's'  action)
 <a class="link" href="UPower.html#UPower.Suspend">Suspend</a>          ()
 <a class="link" href="UPower.html#UPower.SuspendAllowed">SuspendAllowed</a>   (out 'b'  allowed)
 <a class="link" href="UPower.html#UPower.Hibernate">Hibernate</a>        ()
@@ -52,17 +52,19 @@
 </pre>
 </div>
 <div class="refsect1">
-<a name="id585407"></a><h2>Signals</h2>
+<a name="id381836"></a><h2>Signals</h2>
 <pre class="synopsis"><a class="link" href="UPower.html#UPower::DeviceAdded">DeviceAdded</a>   ('o' device)
 <a class="link" href="UPower.html#UPower::DeviceRemoved">DeviceRemoved</a> ('o' device)
 <a class="link" href="UPower.html#UPower::DeviceChanged">DeviceChanged</a> ('o' device)
 <a class="link" href="UPower.html#UPower::Changed">Changed</a>       ()
 <a class="link" href="UPower.html#UPower::Sleeping">Sleeping</a>      ()
+<a class="link" href="UPower.html#UPower::NotifySleep">NotifySleep</a>   ('s' action)
 <a class="link" href="UPower.html#UPower::Resuming">Resuming</a>      ()
+<a class="link" href="UPower.html#UPower::NotifyResume">NotifyResume</a>  ('s' action)
 </pre>
 </div>
 <div class="refsect1">
-<a name="id521248"></a><h2>Implemented Interfaces</h2>
+<a name="id319061"></a><h2>Implemented Interfaces</h2>
 <p>
     Objects implementing org.freedesktop.UPower also implements
     org.freedesktop.DBus.Introspectable,
@@ -70,7 +72,7 @@
     </p>
 </div>
 <div class="refsect1">
-<a name="id522637"></a><h2>Properties</h2>
+<a name="id319078"></a><h2>Properties</h2>
 <pre class="synopsis"><a class="link" href="UPower.html#UPower:DaemonVersion">'DaemonVersion'</a> read      's'
 <a class="link" href="UPower.html#UPower:CanSuspend">'CanSuspend'</a>    read      'b'
 <a class="link" href="UPower.html#UPower:CanHibernate">'CanHibernate'</a>  read      'b'
@@ -83,7 +85,7 @@
 </pre>
 </div>
 <div class="refsect1">
-<a name="id521326"></a><h2>Description</h2>
+<a name="id317767"></a><h2>Description</h2>
 <p>
       
         </p>
@@ -137,9 +139,9 @@
     </p>
 </div>
 <div class="refsect1">
-<a name="id521381"></a><h2>Details</h2>
+<a name="id317821"></a><h2>Details</h2>
 <div class="refsect2">
-<a name="id521389"></a><h3>
+<a name="id317829"></a><h3>
 <a name="UPower.EnumerateDevices"></a>EnumerateDevices ()</h3>
 <pre class="programlisting">EnumerateDevices (out 'ao' devices)</pre>
 </div>
@@ -155,9 +157,9 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id521431"></a><h3>
+<a name="id318364"></a><h3>
 <a name="UPower.AboutToSleep"></a>AboutToSleep ()</h3>
-<pre class="programlisting">AboutToSleep ()</pre>
+<pre class="programlisting">AboutToSleep (in  's' action)</pre>
 </div>
 <p>
             This method tells UPower that the Suspend() or Hibernate() method
@@ -179,11 +181,17 @@
           </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
-<tbody></tbody>
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>action</code></em>:</span></p></td>
+<td>
+            The sleep action type, e.g. <code class="literal">suspend</code> or
+            <code class="literal">hibernate</code>.
+          </td>
+</tr></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id521967"></a><h3>
+<a name="id318432"></a><h3>
 <a name="UPower.Suspend"></a>Suspend ()</h3>
 <pre class="programlisting">Suspend ()</pre>
 </div>
@@ -206,7 +214,7 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id522009"></a><h3>
+<a name="id318474"></a><h3>
 <a name="UPower.SuspendAllowed"></a>SuspendAllowed ()</h3>
 <pre class="programlisting">SuspendAllowed (out 'b' allowed)</pre>
 </div>
@@ -223,7 +231,7 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id522061"></a><h3>
+<a name="id374814"></a><h3>
 <a name="UPower.Hibernate"></a>Hibernate ()</h3>
 <pre class="programlisting">Hibernate ()</pre>
 </div>
@@ -246,7 +254,7 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id578391"></a><h3>
+<a name="id374856"></a><h3>
 <a name="UPower.HibernateAllowed"></a>HibernateAllowed ()</h3>
 <pre class="programlisting">HibernateAllowed (out 'b' allowed)</pre>
 </div>
@@ -263,9 +271,9 @@
 </table></div>
 </div>
 <div class="refsect1">
-<a name="id578445"></a><h2>Signal Details</h2>
+<a name="id374909"></a><h2>Signal Details</h2>
 <div class="refsect2">
-<a name="id578453"></a><h3>
+<a name="id374917"></a><h3>
 <a name="UPower::DeviceAdded"></a>The DeviceAdded signal</h3>
 <pre class="programlisting">DeviceAdded ('o' device)</pre>
 </div>
@@ -281,7 +289,7 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id578495"></a><h3>
+<a name="id374960"></a><h3>
 <a name="UPower::DeviceRemoved"></a>The DeviceRemoved signal</h3>
 <pre class="programlisting">DeviceRemoved ('o' device)</pre>
 </div>
@@ -297,7 +305,7 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id578538"></a><h3>
+<a name="id375002"></a><h3>
 <a name="UPower::DeviceChanged"></a>The DeviceChanged signal</h3>
 <pre class="programlisting">DeviceChanged ('o' device)</pre>
 </div>
@@ -313,7 +321,7 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id578580"></a><h3>
+<a name="id375044"></a><h3>
 <a name="UPower::Changed"></a>The Changed signal</h3>
 <pre class="programlisting">Changed ()</pre>
 </div>
@@ -326,9 +334,26 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id578610"></a><h3>
+<a name="id375074"></a><h3>
 <a name="UPower::Sleeping"></a>The Sleeping signal</h3>
 <pre class="programlisting">Sleeping ()</pre>
+</div>
+<p>
+            This signal is sent when the session is about to be suspended or
+            hibernated.
+          </p>
+<p>
+            This signal is DEPRECATED. Use NotifySleep() instead.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2">
+<a name="id375109"></a><h3>
+<a name="UPower::NotifySleep"></a>The NotifySleep signal</h3>
+<pre class="programlisting">NotifySleep ('s' action)</pre>
 </div>
 <p>
             This signal is sent when the session is about to be suspended or
@@ -339,13 +364,36 @@
           </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>action</code></em>:</span></p></td>
+<td>
+            The sleep action type, e.g. suspend,
+            hibernate or hybrid.
+          </td>
+</tr></tbody>
+</table></div>
+<hr>
+<div class="refsect2">
+<a name="id375154"></a><h3>
+<a name="UPower::Resuming"></a>The Resuming signal</h3>
+<pre class="programlisting">Resuming ()</pre>
+</div>
+<p>
+            This signal is sent when the session has just returned from
+            Suspend() or Hibernate().
+          </p>
+<p>
+            This signal is DEPRECATED. Use NotifyResume() instead.
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id578643"></a><h3>
-<a name="UPower::Resuming"></a>The Resuming signal</h3>
-<pre class="programlisting">Resuming ()</pre>
+<a name="id375189"></a><h3>
+<a name="UPower::NotifyResume"></a>The NotifyResume signal</h3>
+<pre class="programlisting">NotifyResume ('s' action)</pre>
 </div>
 <p>
             This signal is sent when the session has just returned from
@@ -355,13 +403,19 @@
           </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
-<tbody></tbody>
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>action</code></em>:</span></p></td>
+<td>
+            The sleep action type, e.g. suspend,
+            hibernate or hybrid.
+          </td>
+</tr></tbody>
 </table></div>
 </div>
 <div class="refsect1">
-<a name="id578677"></a><h2>Property Details</h2>
+<a name="id375236"></a><h2>Property Details</h2>
 <div class="refsect2">
-<a name="id578685"></a><h3>
+<a name="id375244"></a><h3>
 <a name="UPower:DaemonVersion"></a>The "DaemonVersion" property</h3>
 <pre class="programlisting">'DaemonVersion'  read      's'
 </pre>
@@ -375,7 +429,7 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id578719"></a><h3>
+<a name="id375278"></a><h3>
 <a name="UPower:CanSuspend"></a>The "CanSuspend" property</h3>
 <pre class="programlisting">'CanSuspend'  read      'b'
 </pre>
@@ -389,7 +443,7 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id578747"></a><h3>
+<a name="id375305"></a><h3>
 <a name="UPower:CanHibernate"></a>The "CanHibernate" property</h3>
 <pre class="programlisting">'CanHibernate'  read      'b'
 </pre>
@@ -403,7 +457,7 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id578774"></a><h3>
+<a name="id375333"></a><h3>
 <a name="UPower:OnBattery"></a>The "OnBattery" property</h3>
 <pre class="programlisting">'OnBattery'  read      'b'
 </pre>
@@ -418,7 +472,7 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id578804"></a><h3>
+<a name="id375362"></a><h3>
 <a name="UPower:OnLowBattery"></a>The "OnLowBattery" property</h3>
 <pre class="programlisting">'OnLowBattery'  read      'b'
 </pre>
@@ -433,7 +487,7 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id578833"></a><h3>
+<a name="id375392"></a><h3>
 <a name="UPower:LidIsClosed"></a>The "LidIsClosed" property</h3>
 <pre class="programlisting">'LidIsClosed'  read      'b'
 </pre>
@@ -447,7 +501,7 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id578864"></a><h3>
+<a name="id375423"></a><h3>
 <a name="UPower:LidIsPresent"></a>The "LidIsPresent" property</h3>
 <pre class="programlisting">'LidIsPresent'  read      'b'
 </pre>
@@ -461,7 +515,7 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id578895"></a><h3>
+<a name="id375454"></a><h3>
 <a name="UPower:LidForceSleep"></a>The "LidForceSleep" property</h3>
 <pre class="programlisting">'LidForceSleep'  read      'b'
 </pre>
@@ -483,7 +537,7 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id578933"></a><h3>
+<a name="id375492"></a><h3>
 <a name="UPower:IsDocked"></a>The "IsDocked" property</h3>
 <pre class="programlisting">'IsDocked'  read      'b'
 </pre>

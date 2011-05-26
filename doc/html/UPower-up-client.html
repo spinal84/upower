@@ -46,6 +46,10 @@
 <span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#device-removed" title="device_removed ()">*device_removed</a>)                   (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
                                                          <em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);
 <span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#changed" title="changed ()">*changed</a>)                          (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#notify-sleep" title="notify_sleep ()">*notify_sleep</a>)                     (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="UPower-up-types.html#UpSleepKind" title="enum UpSleepKind"><span class="type">UpSleepKind</span></a> sleep_kind</code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#notify-resume" title="notify_resume ()">*notify_resume</a>)                    (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="UPower-up-types.html#UpSleepKind" title="enum UpSleepKind"><span class="type">UpSleepKind</span></a> sleep_kind</code></em>);
 <span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#up-client-reserved1" title="_up_client_reserved1 ()">*_up_client_reserved1</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
 <span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#up-client-reserved2" title="_up_client_reserved2 ()">*_up_client_reserved2</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
 <span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#up-client-reserved3" title="_up_client_reserved3 ()">*_up_client_reserved3</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
@@ -65,6 +69,7 @@
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-about-to-sleep-sync" title="up_client_about_to_sleep_sync ()">up_client_about_to_sleep_sync</a>       (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="UPower-up-types.html#UpSleepKind" title="enum UpSleepKind"><span class="type">UpSleepKind</span></a> sleep_kind</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-client.html#up-client-hibernate-sync" title="up_client_hibernate_sync ()">up_client_hibernate_sync</a>            (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
@@ -128,6 +133,18 @@ See also: <span class="type">UpDevice</span>
 <div class="refsect2">
 <a name="changed"></a><h3>changed ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                (*changed)                          (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="notify-sleep"></a><h3>notify_sleep ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*notify_sleep)                     (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="UPower-up-types.html#UpSleepKind" title="enum UpSleepKind"><span class="type">UpSleepKind</span></a> sleep_kind</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="notify-resume"></a><h3>notify_resume ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*notify_resume)                    (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="UPower-up-types.html#UpSleepKind" title="enum UpSleepKind"><span class="type">UpSleepKind</span></a> sleep_kind</code></em>);</pre>
 </div>
 <hr>
 <div class="refsect2">
@@ -289,6 +306,7 @@ NOTE: The system is still consuming a small amount of power
 <div class="refsect2">
 <a name="up-client-about-to-sleep-sync"></a><h3>up_client_about_to_sleep_sync ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_client_about_to_sleep_sync       (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="UPower-up-types.html#UpSleepKind" title="enum UpSleepKind"><span class="type">UpSleepKind</span></a> sleep_kind</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
 <p>
@@ -301,6 +319,11 @@ and that session and system components should be notified of this.
 <tr>
 <td><p><span class="term"><em class="parameter"><code>client</code></em> :</span></p></td>
 <td>a <span class="type">UpClient</span> instance.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>sleep_kind</code></em> :</span></p></td>
+<td>a sleep type, e.g. <code class="literal">UP_SLEEP_KIND_SUSPEND</code>
+</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>cancellable</code></em> :</span></p></td>
@@ -317,7 +340,7 @@ and that session and system components should be notified of this.
 </tr>
 </tbody>
 </table></div>
-<p class="since">Since 0.9.1</p>
+<p class="since">Since 0.9.11</p>
 </div>
 <hr>
 <div class="refsect2">

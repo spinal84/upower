@@ -505,6 +505,7 @@ upowerd_CFLAGS = \
 @UP_BUILD_TESTS_TRUE@	$(UPOWER_LIBS)
 
 @UP_BUILD_TESTS_TRUE@up_self_test_CFLAGS = $(AM_CFLAGS) $(WARNINGFLAGS_C)
+@UP_BUILD_TESTS_TRUE@TESTS_ENVIRONMENT = $(DBUS_LAUNCH)
 servicedir = $(datadir)/dbus-1/system-services
 service_in_files = org.freedesktop.UPower.service.in
 service_DATA = $(service_in_files:.service.in=.service)
@@ -1533,7 +1534,7 @@ up-wakeups-glue.h: org.freedesktop.UPower.Wakeups.xml Makefile.am
 	dbus-binding-tool --prefix=up_wakeups --mode=glib-server --output=up-wakeups-glue.h org.freedesktop.UPower.Wakeups.xml
 
 @BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@check-local: upowerd
-@BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@	env top_builddir=$(top_builddir) $(DBUS_LAUNCH) $(srcdir)/linux/integration-test -v
+@BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@	env top_builddir=$(top_builddir) $(DBUS_LAUNCH) $${PYTHON:-python} $(srcdir)/linux/integration-test -v
 
 $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
