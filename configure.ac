@@ -2,14 +2,14 @@ dnl Process this file with autoconf to produce a configure script.
 
 m4_define([up_major_version], [0])
 m4_define([up_minor_version], [9])
-m4_define([up_micro_version], [11])
+m4_define([up_micro_version], [12])
 m4_define([up_version],
           [up_major_version.up_minor_version.up_micro_version])
 
 AC_PREREQ(2.63)
 AC_INIT([upower],[up_version],[richard@hughsie.com],[upower])
 AC_CONFIG_SRCDIR(src)
-AM_INIT_AUTOMAKE([1.9 tar-ustar dist-bzip2])
+AM_INIT_AUTOMAKE([1.9 no-dist-gzip dist-xz tar-ustar])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AM_MAINTAINER_MODE([enable])
@@ -45,6 +45,7 @@ AC_SUBST(LT_AGE)
 
 AC_SEARCH_LIBS([strerror],[cposix])
 AC_PROG_CC
+AC_PROG_LIBTOOL
 
 AC_HEADER_STDC
 LT_INIT
