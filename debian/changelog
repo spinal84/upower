@@ -1,5 +1,8 @@
-upower (0.9.11-2) UNRELEASED; urgency=low
+upower (0.9.12-2) UNRELEASED; urgency=low
 
+  * New upstream release:
+    - Fix estimation rate for batteries that do not provide this data.
+      (LP: #629258)
   * debian/copyright: Fix headers.
   * debian/watch: Look for *.xz tarballs, upstream only publishes these now.
 
