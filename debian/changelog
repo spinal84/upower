@@ -1,4 +1,4 @@
-upower (0.9.13-1) UNRELEASED; urgency=low
+upower (0.9.13-1) unstable; urgency=low
 
   * New upstream release. 
     - Modernize build system.
@@ -7,7 +7,7 @@ upower (0.9.13-1) UNRELEASED; urgency=low
   * debian/control: Add missing libdbus-1-dev dependency to
     libupower-glib-dev, the pkg-config file requires it. (LP: #829840)
 
- -- Martin Pitt <mpitt@debian.org>  Thu, 08 Sep 2011 12:36:43 +0200
+ -- Martin Pitt <mpitt@debian.org>  Thu, 08 Sep 2011 12:59:57 +0200
 
 upower (0.9.12-1) unstable; urgency=low
 
