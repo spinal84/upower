@@ -61,7 +61,12 @@ Description: abstraction for power management - shared library
 Package: libupower-glib-dev
 Architecture: any
 Section: libdevel
-Depends: ${shlibs:Depends}, ${misc:Depends}, libglib2.0-dev, libupower-glib1 (= ${binary:Version}), gir1.2-upowerglib-1.0 (= ${binary:Version})
+Depends: ${shlibs:Depends},
+ ${misc:Depends},
+ libglib2.0-dev,
+ libdbus-glib-1-dev (>= 0.76),
+ libupower-glib1 (= ${binary:Version}),
+ gir1.2-upowerglib-1.0 (= ${binary:Version})
 Description: abstraction for power management - development files
  upower provides an interface to enumerate power sources on the system
  and control system-wide power management. Any application can access the
