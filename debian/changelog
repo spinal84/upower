@@ -1,3 +1,12 @@
+upower (0.9.13-1) UNRELEASED; urgency=low
+
+  * New upstream release. 
+    - Modernize build system.
+    - Update for the g_unix_signal_add_full() ABI break of glib 2.29.90.
+    - Hardcode wacom battery devices as not power-supply devices.
+
+ -- Martin Pitt <mpitt@debian.org>  Thu, 08 Sep 2011 12:36:43 +0200
+
 upower (0.9.12-1) unstable; urgency=low
 
   * New upstream release:
