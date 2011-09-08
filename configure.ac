@@ -2,22 +2,29 @@ dnl Process this file with autoconf to produce a configure script.
 
 m4_define([up_major_version], [0])
 m4_define([up_minor_version], [9])
-m4_define([up_micro_version], [12])
+m4_define([up_micro_version], [13])
 m4_define([up_version],
           [up_major_version.up_minor_version.up_micro_version])
 
 AC_PREREQ(2.63)
-AC_INIT([upower],[up_version],[richard@hughsie.com],[upower])
-AC_CONFIG_SRCDIR(src)
-AM_INIT_AUTOMAKE([1.9 no-dist-gzip dist-xz tar-ustar])
+AC_INIT([upower],
+        [up_version],
+        [https://bugs.freedesktop.org/enter_bug.cgi?product=upower],
+        [upower],
+        [http://upower.freedesktop.org/])
+
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_SRCDIR([src])
 AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([build-aux])
+
+AM_INIT_AUTOMAKE([1.11 -Wno-portability no-dist-gzip dist-xz tar-ustar])
 AM_MAINTAINER_MODE([enable])
 
-GOBJECT_INTROSPECTION_CHECK([0.9.9])
-
 # enable nice build output on automake1.11
-m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
+AM_SILENT_RULES([yes])
+
+GOBJECT_INTROSPECTION_CHECK([0.9.9])
 
 # use this in up-version.h
 UP_MAJOR_VERSION=up_major_version
@@ -43,16 +50,16 @@ AC_SUBST(LT_CURRENT)
 AC_SUBST(LT_REVISION)
 AC_SUBST(LT_AGE)
 
-AC_SEARCH_LIBS([strerror],[cposix])
+# Check for programs
 AC_PROG_CC
-AC_PROG_LIBTOOL
-
+AM_PROG_CC_C_O
 AC_HEADER_STDC
-LT_INIT
 AC_PROG_MAKE_SET
 AC_PROG_LN_S
 AC_SYS_LARGEFILE
-AM_PROG_CC_C_O
+
+# Initialize libtool
+LT_INIT
 
 # Taken from dbus
 AC_ARG_ENABLE(ansi,             [  --enable-ansi           enable -ansi -pedantic gcc flags],enable_ansi=$enableval,enable_ansi=no)
@@ -70,7 +77,7 @@ AC_PATH_PROG([XSLTPROC], [xsltproc])
 fi
 AM_CONDITIONAL(MAN_PAGES_ENABLED, test x$enable_man_pages = xyes)
 
-GTK_DOC_CHECK([1.9])
+GTK_DOC_CHECK([1.11],[--flavour no-tmpl])
 
 # udev rules go in /lib, not /usr/lib
 if test "$prefix" = "/usr" -o "$prefix" = "/usr/local" ; then
@@ -141,16 +148,8 @@ fi
 AC_SUBST(WARNINGFLAGS_C)
 
 PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.21.5])
-AC_SUBST(GLIB_CFLAGS)
-AC_SUBST(GLIB_LIBS)
-
 PKG_CHECK_MODULES(DBUS, [dbus-1 >= 1.0])
-AC_SUBST(DBUS_CFLAGS)
-AC_SUBST(DBUS_LIBS)
-
 PKG_CHECK_MODULES(DBUS_GLIB, [dbus-glib-1 >= 0.76])
-AC_SUBST(DBUS_GLIB_CFLAGS)
-AC_SUBST(DBUS_GLIB_LIBS)
 
 # polkit >= 0.97 uses polkit_authority_get_sync() rather than
 # polkit_authority_get
@@ -165,10 +164,7 @@ else
 	AC_DEFINE(USE_SECURITY_POLKIT_NEW, 1, [if we should use PolicyKits new API])
 fi
 
-
 PKG_CHECK_MODULES(GIO, [gio-2.0 >= 2.16.1])
-AC_SUBST(GIO_CFLAGS)
-AC_SUBST(GIO_LIBS)
 
 dnl ---------------------------------------------------------------------------
 dnl - Compile time default choice of backend
@@ -177,16 +173,13 @@ AC_ARG_WITH([backend],
 	    AS_HELP_STRING([--with-backend=<option>],
 			   [Default backend to use linux, freebsd, openbsd, dummy (dummy)]))
 # default to a sane option
+AC_CANONICAL_HOST
 if test x$with_backend = x; then
-	if test -e /usr/include/gudev-1.0/gudev/gudev.h ; then
-		with_backend=linux
-	elif test -e /usr/include/dev/acpica/acpiio.h ; then
-	    	with_backend=freebsd
-	elif test -e /usr/include/machine/apmvar.h ; then
-	    	with_backend=openbsd
-	else
-		with_backend=dummy
-	fi
+	AS_CASE([$host],
+		[*-linux*],   [with_backend=linux],
+		[*-freebsd*], [with_backend=freebsd],
+		[*-openbsd*], [with_backend=openbsd],
+		              [with_backend=dummy])
 fi
 AC_DEFINE_UNQUOTED(BACKEND, "$with_backend", [backend])
 AC_SUBST(BACKEND, "$with_backend")
@@ -224,11 +217,15 @@ if test "x$GCC" = "xyes"; then
   LDFLAGS="-Wl,--as-needed $LDFLAGS"
 fi
 
+# i18n support
 IT_PROG_INTLTOOL([0.40.0])
-GETTEXT_PACKAGE=upower
-AC_SUBST([GETTEXT_PACKAGE])
-AM_GLIB_GNU_GETTEXT
-AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[gettext domain])
+
+AM_GNU_GETTEXT_VERSION([0.17])
+AM_GNU_GETTEXT([external])
+
+AC_SUBST([GETTEXT_PACKAGE],[${PACKAGE_TARNAME}])
+AC_DEFINE([GETTEXT_PACKAGE],[PACKAGE_TARNAME],[Define to the gettext package name])
+
 
 AC_CONFIG_FILES([
 Makefile
