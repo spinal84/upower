@@ -1,9 +1,9 @@
-upower (0.9.14-2) UNRELEASED; urgency=low
+upower (0.9.14-2) unstable; urgency=low
 
   * Add debian/tests/control and debian/tests/upstream-system:
     DEP-8/autopkgtest control file for running the upstream tests.
 
- -- Martin Pitt <mpitt@debian.org>  Mon, 07 Nov 2011 10:27:04 +0100
+ -- Martin Pitt <mpitt@debian.org>  Mon, 07 Nov 2011 10:59:32 +0100
 
 upower (0.9.14-1) unstable; urgency=low
 
