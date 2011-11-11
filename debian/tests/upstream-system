@@ -1,11 +1,5 @@
 #!/bin/sh
 set -e
-OUT=${TMPDIR:-/tmp}/upower-test-out
 
 # succeeding test must not write anything to stderr, as per DEP-8
-if src/linux/integration-test -v > $OUT 2>&1; then
-    cat "$OUT"
-else
-    cat "$OUT" >&2
-    exit 1
-fi
+src/linux/integration-test -v 2>&1

@@ -1,7 +1,12 @@
 upower (0.9.14-3) UNRELEASED; urgency=low
 
+  [ Michael Biebl ]
   * debian/control: Add Build-Depends on libglib2.0-doc for proper
     cross-references in the gtk-doc API documentation.
+
+  [ Martin Pitt ]
+  * debian/tests/upstream-system: Just redirect integration-test's stderr to
+    stdout, this is easier to test and still fulfills DEP-8.
 
  -- Michael Biebl <biebl@debian.org>  Mon, 07 Nov 2011 16:06:49 +0100
 
