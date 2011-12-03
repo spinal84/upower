@@ -1,3 +1,10 @@
+upower (0.9.14-4) UNRELEASED; urgency=low
+
+  * debian/control: Fix the versioned Build-Depends on dpkg-dev.
+    The buildflags.mk snippet as added in version 1.16.1, not 1.6.1.
+
+ -- Michael Biebl <biebl@debian.org>  Sat, 03 Dec 2011 05:05:17 +0100
+
 upower (0.9.14-3) unstable; urgency=low
 
   [ Michael Biebl ]
