@@ -631,7 +631,7 @@ up_history_schedule_save (UpHistory *history)
 	/* if low power, then don't batch up save requests */
 	ret = up_history_is_low_power (history);
 	if (ret) {
-		g_warning ("saving directly to disk as low power");
+		g_debug ("saving directly to disk as low power");
 		up_history_save_data (history);
 		return TRUE;
 	}
@@ -888,7 +888,7 @@ up_history_init (UpHistory *history)
 	history->priv->data_time_empty = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 	history->priv->save_id = 0;
 	history->priv->max_data_age = UP_HISTORY_DEFAULT_MAX_DATA_AGE;
-	history->priv->dir = g_build_filename (PACKAGE_LOCALSTATE_DIR, "lib", "upower", NULL);
+	history->priv->dir = g_build_filename (HISTORY_DIR, NULL);
 }
 
 /**

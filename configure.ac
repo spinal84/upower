@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 m4_define([up_major_version], [0])
 m4_define([up_minor_version], [9])
-m4_define([up_micro_version], [14])
+m4_define([up_micro_version], [15])
 m4_define([up_version],
           [up_major_version.up_minor_version.up_micro_version])
 
@@ -86,6 +86,16 @@ else
   slashlibdir=$prefix/lib
 fi
 AC_SUBST(slashlibdir)
+
+# History/Db dir
+AC_ARG_WITH([historydir],
+	AS_HELP_STRING([--with-historydir=<dir>], [directory where the upower history files will be stored]))
+if test "$with_historydir" != "no" -a "$with_historydir" != "" ; then
+	historydir=$withval
+else
+	historydir=${localstatedir}/lib/upower
+fi
+AC_SUBST(historydir)
 
 #### gcc warning flags
 

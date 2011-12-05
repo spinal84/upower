@@ -40,51 +40,32 @@
 #define UP_DEVICE_SUPPLY_REFRESH_TIMEOUT	30	/* seconds */
 #define UP_DEVICE_SUPPLY_UNKNOWN_TIMEOUT	2	/* seconds */
 #define UP_DEVICE_SUPPLY_UNKNOWN_RETRIES	30
-#define UP_DEVICE_SUPPLY_CHARGED_THRESHOLD  90.0f	/* % */
+#define UP_DEVICE_SUPPLY_CHARGED_THRESHOLD	90.0f	/* % */
 
 #define UP_DEVICE_SUPPLY_COLDPLUG_UNITS_CHARGE		TRUE
 #define UP_DEVICE_SUPPLY_COLDPLUG_UNITS_ENERGY		FALSE
+
+/* number of old energy values to keep cached */
+#define UP_DEVICE_SUPPLY_ENERGY_OLD_LENGTH		4
 
 struct UpDeviceSupplyPrivate
 {
 	guint			 poll_timer_id;
 	gboolean		 has_coldplug_values;
 	gboolean		 coldplug_units;
-	gdouble			 energy_old;
-	GTimeVal		 energy_old_timespec;
+	gdouble			*energy_old;
+	GTimeVal		*energy_old_timespec;
+	guint			 energy_old_first;
 	gdouble			 rate_old;
 	guint			 unknown_retries;
 	gboolean		 enable_poll;
+	gboolean		 is_power_supply;
 };
 
 G_DEFINE_TYPE (UpDeviceSupply, up_device_supply, UP_TYPE_DEVICE)
 #define UP_DEVICE_SUPPLY_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), UP_TYPE_DEVICE_SUPPLY, UpDeviceSupplyPrivate))
 
 static gboolean		 up_device_supply_refresh	 	(UpDevice *device);
-
-/**
- * up_device_supply_is_power_supply:
- *
- * Blacklist wacom tablets until we get a sysfs interface that
- * doesn't suck...
- **/
-static gboolean
-up_device_supply_is_power_supply (UpDeviceSupply *supply)
-{
-	gchar *native_path;
-	gboolean is_power_supply = TRUE;
-
-	g_object_get (supply,
-		      "native-path", &native_path,
-		      NULL);
-	if (g_strstr_len (native_path, -1, "wacom_battery") != NULL ||
-	    g_strstr_len (native_path, -1, "wacom_ac") != NULL) {
-		g_debug ("found a wacom tablet");
-		is_power_supply = FALSE;
-	}
-	g_free (native_path);
-	return is_power_supply;
-}
 
 /**
  * up_device_supply_refresh_line_power:
@@ -100,7 +81,7 @@ up_device_supply_refresh_line_power (UpDeviceSupply *supply)
 
 	/* is providing power to computer? */
 	g_object_set (device,
-		      "power-supply", up_device_supply_is_power_supply (supply),
+		      "power-supply", supply->priv->is_power_supply,
 		      NULL);
 
 	/* get new AC value */
@@ -118,12 +99,17 @@ static void
 up_device_supply_reset_values (UpDeviceSupply *supply)
 {
 	UpDevice *device = UP_DEVICE (supply);
+	guint i;
 
 	supply->priv->has_coldplug_values = FALSE;
 	supply->priv->coldplug_units = UP_DEVICE_SUPPLY_COLDPLUG_UNITS_ENERGY;
 	supply->priv->rate_old = 0;
-	supply->priv->energy_old = 0;
-	supply->priv->energy_old_timespec.tv_sec = 0;
+
+	for (i = 0; i < UP_DEVICE_SUPPLY_ENERGY_OLD_LENGTH; ++i) {
+		supply->priv->energy_old[i] = 0.0f;
+		supply->priv->energy_old_timespec[i].tv_sec = 0;
+	}
+	supply->priv->energy_old_first = 0;
 
 	/* reset to default */
 	g_object_set (device,
@@ -240,36 +226,90 @@ up_device_supply_get_online (UpDevice *device, gboolean *online)
 }
 
 /**
+ * up_device_supply_push_new_energy:
+ *
+ * Store the new energy in the list of old energies of the supply, so
+ * it can be used to determine the energy rate.
+ */
+static gboolean
+up_device_supply_push_new_energy (UpDeviceSupply *supply, gdouble energy)
+{
+	guint first = supply->priv->energy_old_first;
+	guint new_position = (first + UP_DEVICE_SUPPLY_ENERGY_OLD_LENGTH - 1) %
+		UP_DEVICE_SUPPLY_ENERGY_OLD_LENGTH;
+
+	/* check if the energy value has changed and, if that's the case,
+	 * store the new values in the buffer. */
+	if (supply->priv->energy_old[first] != energy) {
+		supply->priv->energy_old[new_position] = energy;
+		g_get_current_time (&supply->priv->energy_old_timespec[new_position]);
+		supply->priv->energy_old_first = new_position;
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+/**
  * up_device_supply_calculate_rate:
  **/
 static gdouble
 up_device_supply_calculate_rate (UpDeviceSupply *supply, gdouble energy)
 {
-	guint time_s;
+	gdouble rate = 0.0f;
+	gdouble sum_x = 0.0f; /* sum of the squared times difference */
 	GTimeVal now;
+	guint i;
+	guint valid_values = 0;
 
-	if (energy < 0.1f)
-		return 0.0f;
-
-	if (supply->priv->energy_old < 0.1f)
-		return 0.0f;
-
-	if (supply->priv->energy_old - energy < 0.01)
-		return supply->priv->rate_old;
-
-	/* get the time difference */
+	/* get the time difference from now and use linear regression to determine
+	 * the discharge rate of the battery. */
 	g_get_current_time (&now);
-	time_s = now.tv_sec - supply->priv->energy_old_timespec.tv_sec;
-	if (time_s == 0)
-		return supply->priv->rate_old;
 
-	/* get the difference in charge */
-	energy = fabs (supply->priv->energy_old - energy);
+	/* store the data on the new energy received */
+	up_device_supply_push_new_energy (supply, energy);
+
 	if (energy < 0.1f)
+		return 0.0f;
+
+	if (supply->priv->energy_old[supply->priv->energy_old_first] < 0.1f)
+		return 0.0f;
+
+	/* don't use the new point obtained since it may cause instability in
+	 * the estimate */
+	i = supply->priv->energy_old_first;
+	now = supply->priv->energy_old_timespec[i];
+	do {
+		/* only use this value if it seems valid */
+		if (supply->priv->energy_old_timespec[i].tv_sec && supply->priv->energy_old[i]) {
+			/* This is the square of t_i^2 */
+			sum_x += (now.tv_sec - supply->priv->energy_old_timespec[i].tv_sec) *
+				(now.tv_sec - supply->priv->energy_old_timespec[i].tv_sec);
+
+			/* Sum the module of the energy difference */
+			rate += fabs ((supply->priv->energy_old_timespec[i].tv_sec - now.tv_sec) *
+				      (energy - supply->priv->energy_old[i]));
+			valid_values++;
+		}
+
+		/* get the next element in the circular buffer */
+		i = (i + 1) % UP_DEVICE_SUPPLY_ENERGY_OLD_LENGTH;
+	} while (i != supply->priv->energy_old_first);
+
+	/* Check that at least 3 points were involved in computation */
+	if (sum_x == 0.0f || valid_values < 3)
 		return supply->priv->rate_old;
 
-	/* probably okay */
-	return energy * 3600.0 / time_s;
+	/* Compute the discharge per hour, and not per second */
+	rate /= sum_x / 3600.0f;
+
+	/* if the rate is zero, use the old rate. It will usually happens if no
+	 * data is in the buffer yet. If the rate is too high, i.e. more than,
+	 * 100W don't use it. */
+	if (rate == 0.0f || rate > 100.0f)
+		return supply->priv->rate_old;
+
+	return rate;
 }
 
 /**
@@ -330,6 +370,7 @@ static gdouble
 up_device_supply_get_design_voltage (const gchar *native_path)
 {
 	gdouble voltage;
+	const gchar *device_type;
 
 	/* design maximum */
 	voltage = sysfs_get_double (native_path, "voltage_max_design") / 1000000.0;
@@ -356,6 +397,14 @@ up_device_supply_get_design_voltage (const gchar *native_path)
 	voltage = sysfs_get_double (native_path, "voltage_now") / 1000000.0;
 	if (voltage > 1.00f) {
 		g_debug ("using present voltage (alternate)");
+		goto out;
+	}
+
+	/* is this a USB device? */
+	device_type = up_device_supply_get_string (native_path, "type");
+	if (g_ascii_strcasecmp (device_type, "USB") == 0) {
+		g_debug ("USB device, so assuming 5v");
+		voltage = 5.0f;
 		goto out;
 	}
 
@@ -453,7 +502,12 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 	native_path = g_udev_device_get_sysfs_path (native);
 
 	/* have we just been removed? */
-	is_present = sysfs_get_bool (native_path, "present");
+	if (sysfs_file_exists (native_path, "present")) {
+		is_present = sysfs_get_bool (native_path, "present");
+	} else {
+		/* when no present property exists, handle as present */
+		is_present = TRUE;
+	}
 	g_object_set (device, "is-present", is_present, NULL);
 	if (!is_present) {
 		up_device_supply_reset_values (supply);
@@ -474,7 +528,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 
 		/* when we add via sysfs power_supply class then we know this is true */
 		g_object_set (device,
-			      "power-supply", up_device_supply_is_power_supply (supply),
+			      "power-supply", supply->priv->is_power_supply,
 			      NULL);
 
 		/* the ACPI spec is bad at defining battery type constants */
@@ -640,6 +694,13 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 			percentage = 100.0f;
 	}
 
+	/* device is a peripheral and not providing power to the computer */
+	if (energy < 0.01f &&
+	    energy_rate < 0.01f &&
+	    energy_full < 0.01f) {
+		percentage = sysfs_get_double (native_path, "capacity");
+	}
+
 	/* the battery isn't charging or discharging, it's just
 	 * sitting there half full doing nothing: try to guess a state */
 	if (state == UP_DEVICE_STATE_UNKNOWN) {
@@ -719,17 +780,21 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 	if (time_to_full > (20 * 60 * 60))
 		time_to_full = 0;
 
-	/* set the old status if it hasn't changed */
-	if (supply->priv->energy_old != energy) {
-		supply->priv->energy_old = energy;
+	/* check if the energy value has changed and, if that's the case,
+	 * store the new values in the buffer. */
+	if (up_device_supply_push_new_energy (supply, energy))
 		supply->priv->rate_old = energy_rate;
-		g_get_current_time (&supply->priv->energy_old_timespec);
-	}
 
 	/* we changed state */
 	g_object_get (device, "state", &old_state, NULL);
-	if (old_state != state)
-		supply->priv->energy_old = 0;
+	if (old_state != state) {
+		for (i = 0; i < UP_DEVICE_SUPPLY_ENERGY_OLD_LENGTH; ++i) {
+			supply->priv->energy_old[i] = 0.0f;
+			supply->priv->energy_old_timespec[i].tv_sec = 0;
+
+		}
+		supply->priv->energy_old_first = 0;
+	}
 
 	g_object_set (device,
 		      "energy", energy,
@@ -798,8 +863,22 @@ up_device_supply_coldplug (UpDevice *device)
 	if (device_type != NULL) {
 		if (g_ascii_strcasecmp (device_type, "mains") == 0) {
 			type = UP_DEVICE_KIND_LINE_POWER;
+			supply->priv->is_power_supply = TRUE;
 		} else if (g_ascii_strcasecmp (device_type, "battery") == 0) {
 			type = UP_DEVICE_KIND_BATTERY;
+			supply->priv->is_power_supply = TRUE;
+		} else if (g_ascii_strcasecmp (device_type, "USB") == 0) {
+
+			/* use a heuristic to find the device type */
+			if (g_strstr_len (native_path, -1, "wacom_") != NULL ||
+			    g_strstr_len (native_path, -1, "wacom_") != NULL) {
+				type = UP_DEVICE_KIND_TABLET;
+			} else if (g_strstr_len (native_path, -1, "magicmouse_") != NULL) {
+				type = UP_DEVICE_KIND_MOUSE;
+			} else {
+				g_warning ("did not recognise USB path %s, please report",
+					   native_path);
+			}
 		} else {
 			g_warning ("did not recognise type %s, please report", device_type);
 		}
@@ -888,15 +967,12 @@ up_device_supply_refresh (UpDevice *device)
 	case UP_DEVICE_KIND_LINE_POWER:
 		ret = up_device_supply_refresh_line_power (supply);
 		break;
-	case UP_DEVICE_KIND_BATTERY:
+	default:
 		ret = up_device_supply_refresh_battery (supply);
 
 		/* Seems that we don't get change uevents from the
 		 * kernel on some BIOS types */
 		up_device_supply_setup_poll (device);
-		break;
-	default:
-		g_assert_not_reached ();
 		break;
 	}
 
@@ -919,6 +995,11 @@ up_device_supply_init (UpDeviceSupply *supply)
 	supply->priv->unknown_retries = 0;
 	supply->priv->poll_timer_id = 0;
 	supply->priv->enable_poll = TRUE;
+
+	/* allocate the stats for the battery charging & discharging */
+	supply->priv->energy_old = g_new (gdouble, UP_DEVICE_SUPPLY_ENERGY_OLD_LENGTH);
+	supply->priv->energy_old_timespec = g_new (GTimeVal, UP_DEVICE_SUPPLY_ENERGY_OLD_LENGTH);
+	supply->priv->energy_old_first = 0;
 }
 
 /**
@@ -937,6 +1018,9 @@ up_device_supply_finalize (GObject *object)
 
 	if (supply->priv->poll_timer_id > 0)
 		g_source_remove (supply->priv->poll_timer_id);
+
+	g_free (supply->priv->energy_old);
+	g_free (supply->priv->energy_old_timespec);
 
 	G_OBJECT_CLASS (up_device_supply_parent_class)->finalize (object);
 }

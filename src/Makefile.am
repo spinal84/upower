@@ -11,6 +11,7 @@ INCLUDES = \
 	-DPACKAGE_LOCALSTATE_DIR=\""$(localstatedir)"\"		\
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\"			\
 	-DPACKAGE_LIB_DIR=\""$(libdir)"\"			\
+	-DHISTORY_DIR=\""$(historydir)"\"			\
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
 	-DUP_COMPILATION					\
 	-DUP_DISABLE_DEPRECATED					\
@@ -127,7 +128,7 @@ if UP_BUILD_TESTS
 DBUS_LAUNCH=$(shell which dbus-launch)
 
 check-local: upowerd
-	env top_builddir=$(top_builddir) $(DBUS_LAUNCH) $${PYTHON:-python} $(srcdir)/linux/integration-test -v
+	env top_builddir=$(top_builddir) $(DBUS_LAUNCH) $(srcdir)/linux/integration-test -v
 endif
 
 endif
@@ -197,7 +198,7 @@ $(dbusconf_DATA): $(dbusconf_in_files) Makefile
 
 install-data-hook:
 	if test -w $(DESTDIR)$(prefix)/; then \
-		mkdir -p $(DESTDIR)$(localstatedir)/lib/upower; \
+		mkdir -p $(DESTDIR)$(historydir); \
 	fi
 
 CLEANFILES = $(BUILT_SOURCES)
