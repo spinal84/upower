@@ -373,6 +373,7 @@ datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
+historydir = @historydir@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -412,6 +413,7 @@ INCLUDES = \
 	-DPACKAGE_LOCALSTATE_DIR=\""$(localstatedir)"\"		\
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\"			\
 	-DPACKAGE_LIB_DIR=\""$(libdir)"\"			\
+	-DHISTORY_DIR=\""$(historydir)"\"			\
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
 	-DUP_COMPILATION					\
 	-DUP_DISABLE_DEPRECATED					\
@@ -1546,7 +1548,7 @@ up-wakeups-glue.h: org.freedesktop.UPower.Wakeups.xml Makefile.am
 	dbus-binding-tool --prefix=up_wakeups --mode=glib-server --output=up-wakeups-glue.h org.freedesktop.UPower.Wakeups.xml
 
 @BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@check-local: upowerd
-@BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@	env top_builddir=$(top_builddir) $(DBUS_LAUNCH) $${PYTHON:-python} $(srcdir)/linux/integration-test -v
+@BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@	env top_builddir=$(top_builddir) $(DBUS_LAUNCH) $(srcdir)/linux/integration-test -v
 
 $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
@@ -1556,7 +1558,7 @@ $(dbusconf_DATA): $(dbusconf_in_files) Makefile
 
 install-data-hook:
 	if test -w $(DESTDIR)$(prefix)/; then \
-		mkdir -p $(DESTDIR)$(localstatedir)/lib/upower; \
+		mkdir -p $(DESTDIR)$(historydir); \
 	fi
 
 clean-local :
