@@ -1,9 +1,9 @@
-upower (0.9.15-2) UNRELEASED; urgency=low
+upower (0.9.15-2) unstable; urgency=low
 
   * debian/control: Change section of gir1.2-upowerglib-1.0 to introspection.
   * Install systemd service file for upowerd.
 
- -- Michael Biebl <biebl@debian.org>  Sat, 11 Feb 2012 17:00:07 +0100
+ -- Michael Biebl <biebl@debian.org>  Sat, 11 Feb 2012 17:06:06 +0100
 
 upower (0.9.15-1) unstable; urgency=low
 
