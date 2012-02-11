@@ -1,1 +1,2 @@
 # Debian patches for upower
+01-systemd-service.patch
