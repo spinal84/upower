@@ -2,6 +2,8 @@ upower (0.9.15-3) UNRELEASED; urgency=low
 
   * debian/tests/control: Add missing python3 and python3-gi test
     dependencies.
+  * Add 00git_fix_libusb_crash.patch: Fix crash in up_device_csr_finalize().
+    Patch also committed to upstream git. (LP: #972300)
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 03 Apr 2012 12:11:52 +0200
 

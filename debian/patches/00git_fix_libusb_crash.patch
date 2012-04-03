@@ -1,0 +1,28 @@
+From 1bb2b11b24b8538275705533c15160afee0176e2 Mon Sep 17 00:00:00 2001
+From: Martin Pitt <martinpitt@gnome.org>
+Date: Tue, 3 Apr 2012 12:28:27 +0200
+Subject: [PATCH] Fix crash in up_device_csr_finalize()
+
+Commit 46f1c7f0283 has a typo which prevents the fix from actually working.
+
+https://launchpad.net/bugs/972300
+---
+ src/linux/up-device-csr.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/src/linux/up-device-csr.c b/src/linux/up-device-csr.c
+index b4b007f..b39243e 100644
+--- a/src/linux/up-device-csr.c
++++ b/src/linux/up-device-csr.c
+@@ -323,7 +323,7 @@ up_device_csr_finalize (GObject *object)
+ 	csr = UP_DEVICE_CSR (object);
+ 	g_return_if_fail (csr->priv != NULL);
+ 
+-	if (csr->priv->ctx != NULL);
++	if (csr->priv->ctx != NULL)
+ 		libusb_exit (csr->priv->ctx);
+ 	if (csr->priv->poll_timer_id > 0)
+ 		g_source_remove (csr->priv->poll_timer_id);
+-- 
+1.7.9.1
+
