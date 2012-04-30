@@ -1,3 +1,2 @@
 # Debian patches for upower
 00git_fix_libusb_crash.patch
-01-systemd-service.patch
