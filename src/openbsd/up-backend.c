@@ -28,12 +28,14 @@
 #include <string.h> /* strcmp() */
 
 #define UP_BACKEND_SUSPEND_COMMAND	"/usr/sbin/zzz"
+#define UP_BACKEND_POWERSAVE_TRUE_COMMAND	"/usr/sbin/apm -C"
+#define UP_BACKEND_POWERSAVE_FALSE_COMMAND	"/usr/sbin/apm -A"
 
 static void	up_backend_class_init	(UpBackendClass	*klass);
 static void	up_backend_init	(UpBackend		*backend);
 static void	up_backend_finalize	(GObject		*object);
 
-static gboolean	up_backend_apm_get_power_info(int, struct apm_power_info*);
+static gboolean	up_backend_apm_get_power_info(struct apm_power_info*);
 UpDeviceState up_backend_apm_get_battery_state_value(u_char battery_state);
 static void	up_backend_update_acpibat_state(UpDevice*, struct sensordev);
 
@@ -51,7 +53,6 @@ struct UpBackendPrivate
 	UpDevice		*battery;
 	GThread			*apm_thread;
 	gboolean		is_laptop;
-	int			apm_fd;
 };
 
 enum {
@@ -61,8 +62,6 @@ enum {
 };
 
 static guint signals [SIGNAL_LAST] = { 0 };
-
-int apm_fd; /* ugly global.. needs to move to a device native object */
 
 G_DEFINE_TYPE (UpBackend, up_backend, G_TYPE_OBJECT)
 
@@ -183,7 +182,9 @@ up_backend_coldplug (UpBackend *backend, UpDaemon *daemon)
 const gchar *
 up_backend_get_powersave_command (UpBackend *backend, gboolean powersave)
 {
-	return NULL;
+	if (powersave)
+		return UP_BACKEND_POWERSAVE_TRUE_COMMAND;
+	return UP_BACKEND_POWERSAVE_FALSE_COMMAND;
 }
 
 /**
@@ -240,16 +241,14 @@ up_backend_get_used_swap (UpBackend *backend)
  **/
 
 static gboolean
-up_backend_apm_get_power_info(int fd, struct apm_power_info *bstate) {
+up_backend_apm_get_power_info(struct apm_power_info *bstate) {
 	bstate->battery_state = 255;
 	bstate->ac_state = 255;
 	bstate->battery_life = 0;
 	bstate->minutes_left = -1;
 
-	if (fd == 0)
-		return TRUE; /* cheat, defaulting values */
-	if (-1 == ioctl(fd, APM_IOC_GETPOWER, bstate)) {
-		g_warning("ioctl on fd %d failed : %s", fd, g_strerror(errno));
+	if (-1 == ioctl(up_apm_get_fd(), APM_IOC_GETPOWER, bstate)) {
+		g_error("ioctl on apm fd failed : %s", g_strerror(errno));
 		return FALSE;
 	}
 	return TRUE;
@@ -279,7 +278,7 @@ up_backend_update_ac_state(UpDevice* device)
 	gboolean ret, new_is_online, cur_is_online;
 	struct apm_power_info a;
 
-	ret = up_backend_apm_get_power_info(apm_fd, &a);
+	ret = up_backend_apm_get_power_info(&a);
 	if (!ret)
 		return ret;
 
@@ -306,7 +305,7 @@ up_backend_update_battery_state(UpDevice* device)
 	gint64 cur_time_to_empty, new_time_to_empty;
 	struct apm_power_info a;
 
-	ret = up_backend_apm_get_power_info(apm_fd, &a);
+	ret = up_backend_apm_get_power_info(&a);
 	if (!ret)
 		return ret;
 
@@ -324,8 +323,8 @@ up_backend_update_battery_state(UpDevice* device)
 	if (a.ac_state == APM_AC_ON)
 		new_state = UP_DEVICE_STATE_CHARGING;
 
-	// zero out new_time_to empty if we're not discharging
-	new_time_to_empty = (new_state == UP_DEVICE_STATE_DISCHARGING ? a.minutes_left : 0);
+	// zero out new_time_to empty if we're not discharging or minutes_left is negative
+	new_time_to_empty = (new_state == UP_DEVICE_STATE_DISCHARGING && a.minutes_left > 0 ? a.minutes_left : 0);
 
 	if (cur_state != new_state ||
 		percentage != (gdouble) a.battery_life ||
@@ -347,7 +346,7 @@ up_backend_update_battery_state(UpDevice* device)
 static void
 up_backend_update_acpibat_state(UpDevice* device, struct sensordev s)
 {
-	enum sensor_type type, typev = SENSOR_INTEGER;
+	enum sensor_type type;
 	int numt;
 	gdouble bst_volt, bst_rate, bif_lastfullcap, bst_cap, bif_lowcap;
 	/* gdouble bif_dvolt, bif_dcap, capacity; */
@@ -366,19 +365,17 @@ up_backend_update_acpibat_state(UpDevice* device, struct sensordev s)
 				if (sens.type == SENSOR_VOLTS_DC && !strcmp(sens.desc, "current voltage"))
 					bst_volt = sens.value / 1000000.0f;
 				if ((sens.type == SENSOR_AMPHOUR || sens.type == SENSOR_WATTHOUR) && !strcmp(sens.desc, "last full capacity")) {
-					typev = sens.type;
-					bif_lastfullcap = sens.value / 1000000.0f;
+					bif_lastfullcap = (sens.type == SENSOR_AMPHOUR ? bst_volt : 1) * sens.value / 1000000.0f;
 				}
 				if ((sens.type == SENSOR_AMPHOUR || sens.type == SENSOR_WATTHOUR) && !strcmp(sens.desc, "low capacity")) {
-					typev = sens.type;
-					bif_lowcap = sens.value / 1000000.0f;
+					bif_lowcap = (sens.type == SENSOR_AMPHOUR ? bst_volt : 1) * sens.value / 1000000.0f;
 				}
 				if ((sens.type == SENSOR_AMPHOUR || sens.type == SENSOR_WATTHOUR) && !strcmp(sens.desc, "remaining capacity")) {
-					typev = sens.type;
-					bst_cap = sens.value / 1000000.0f;
+					bst_cap = (sens.type == SENSOR_AMPHOUR ? bst_volt : 1) * sens.value / 1000000.0f;
 				}
-				if (sens.type == SENSOR_INTEGER && !strcmp(sens.desc, "rate"))
-					bst_rate = sens.value / 1000.0f;
+				if ((sens.type == SENSOR_AMPS || sens.type == SENSOR_WATTS) && !strcmp(sens.desc, "rate")) {
+					bst_rate = (sens.type == SENSOR_AMPS ? bst_volt : 1) * sens.value / 1000000.0f;
+				}
 				/*
 				bif_dvolt = "voltage" = unused ?
 				capacity = lastfull/dcap * 100 ?
@@ -387,12 +384,6 @@ up_backend_update_acpibat_state(UpDevice* device, struct sensordev s)
 				*/
 			}
 		}
-	}
-	if (typev == SENSOR_AMPHOUR) {
-		bst_cap *= bst_volt;
-		bif_lowcap *= bst_volt;
-		bif_lastfullcap *= bst_volt;
-		bst_rate *= bst_volt;
 	}
 	g_object_set (device,
 		"energy", bst_cap,
@@ -423,7 +414,6 @@ up_apm_device_refresh(UpDevice* device)
 	UpDeviceKind type;
 	GTimeVal timeval;
 	gboolean ret;
-
 	g_object_get (device, "type", &type, NULL);
 
 	switch (type) {
@@ -461,15 +451,10 @@ up_backend_apm_event_thread(gpointer object)
 
 	g_debug("setting up apm thread");
 
-	/* open /dev/apm */
-	if ((apm_fd = open("/dev/apm", O_RDONLY)) == -1) {
-		if (errno != ENXIO && errno != ENOENT)
-			g_error("cannot open device file");
-	}
 	kq = kqueue();
 	if (kq <= 0)
 		g_error("kqueue");
-	EV_SET(&ev, apm_fd, EVFILT_READ, EV_ADD | EV_ENABLE | EV_CLEAR,
+	EV_SET(&ev, up_apm_get_fd(), EVFILT_READ, EV_ADD | EV_ENABLE | EV_CLEAR,
 	    0, 0, NULL);
 	nevents = 1;
 	if (kevent(kq, &ev, nevents, NULL, 0, &sts) < 0)
@@ -485,7 +470,7 @@ up_backend_apm_event_thread(gpointer object)
 			break;
 		if (!rv)
 			continue;
-		if (ev.ident == (guint) apm_fd && APM_EVENT_TYPE(ev.data) == APM_POWER_CHANGE ) {
+		if (ev.ident == (guint) up_apm_get_fd() && APM_EVENT_TYPE(ev.data) == APM_POWER_CHANGE ) {
 			/* g_idle_add the callback */
 			g_idle_add((GSourceFunc) up_backend_apm_powerchange_event_cb, backend);
 		}
