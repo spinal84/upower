@@ -1,3 +1,9 @@
+upower (0.9.16-1) UNRELEASED; urgency=low
+
+  * New upstream release.
+
+ -- Michael Biebl <biebl@debian.org>  Mon, 30 Apr 2012 21:23:01 +0200
+
 upower (0.9.15-3) unstable; urgency=low
 
   * debian/tests/control: Add missing python3 and python3-gi test
