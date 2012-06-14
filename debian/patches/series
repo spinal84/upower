@@ -1,1 +1,2 @@
 # Debian patches for upower
+00git_powersupply_property.patch

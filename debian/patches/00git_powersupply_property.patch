@@ -1,0 +1,37 @@
+From 48edf2f1a8df125794a452034ccf9b48d9c8eead Mon Sep 17 00:00:00 2001
+From: Martin Pitt <martinpitt@gnome.org>
+Date: Thu, 14 Jun 2012 13:12:04 +0200
+Subject: [PATCH] Fix wrong PowerSupply property for devices without a scope
+ sysfs attribute
+
+Fix NULL pointer comparison in up_device_supply_coldplug(). This caused
+
+  (lt-upowerd:5754): GLib-CRITICAL **: g_ascii_strcasecmp: assertion `s1 != NULL' failed
+
+when a device does not have a "scope" sysfs attribute, and erroneously
+considering that device to not power the system.
+
+Bug-Ubuntu: https://launchpad.net/bugs/1012578
+---
+ src/linux/up-device-supply.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/linux/up-device-supply.c b/src/linux/up-device-supply.c
+index 48f5156..ec2514a 100644
+--- a/src/linux/up-device-supply.c
++++ b/src/linux/up-device-supply.c
+@@ -863,9 +863,9 @@ up_device_supply_coldplug (UpDevice *device)
+ 
+ 	/* try to work out if the device is powering the system */
+ 	scope = g_udev_device_get_sysfs_attr (native, "scope");
+-	if (g_ascii_strcasecmp (scope, "device") == 0) {
++	if (scope != NULL && g_ascii_strcasecmp (scope, "device") == 0) {
+ 		supply->priv->is_power_supply = FALSE;
+-	} else if (g_ascii_strcasecmp (scope, "system") == 0) {
++	} else if (scope != NULL && g_ascii_strcasecmp (scope, "system") == 0) {
+ 		supply->priv->is_power_supply = TRUE;
+ 	} else {
+ 		g_debug ("taking a guess for power supply scope");
+-- 
+1.7.10.4
+

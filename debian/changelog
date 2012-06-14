@@ -1,3 +1,11 @@
+upower (0.9.16-3) UNRELEASED; urgency=low
+
+  * Add 00git_powersupply_property.patch: Fix wrong PowerSupply property for
+    devices without a scope sysfs attribute. Also committed to upstream git.
+    (LP: #1012578)
+
+ -- Martin Pitt <mpitt@debian.org>  Thu, 14 Jun 2012 13:27:04 +0200
+
 upower (0.9.16-2) unstable; urgency=low
 
   * Fix changelog. The one uploaded in 0.9.16-1 was incomplete due to a
