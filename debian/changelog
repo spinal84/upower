@@ -1,3 +1,9 @@
+upower (0.9.16-4) UNRELEASED; urgency=low
+
+  * debian/control: Add XS-Testsuite: header as per current DEP-8 spec.
+
+ -- Martin Pitt <mpitt@debian.org>  Wed, 20 Jun 2012 11:55:03 +0200
+
 upower (0.9.16-3) unstable; urgency=low
 
   * Add 00git_powersupply_property.patch: Fix wrong PowerSupply property for
