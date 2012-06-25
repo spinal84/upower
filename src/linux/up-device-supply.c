@@ -147,6 +147,7 @@ up_device_supply_get_on_battery (UpDevice *device, gboolean *on_battery)
 	UpDeviceSupply *supply = UP_DEVICE_SUPPLY (device);
 	UpDeviceKind type;
 	UpDeviceState state;
+	gboolean is_power_supply;
 	gboolean is_present;
 
 	g_return_val_if_fail (UP_IS_DEVICE_SUPPLY (supply), FALSE);
@@ -156,8 +157,11 @@ up_device_supply_get_on_battery (UpDevice *device, gboolean *on_battery)
 		      "type", &type,
 		      "state", &state,
 		      "is-present", &is_present,
+		      "power-supply", &is_power_supply,
 		      NULL);
 
+	if (!is_power_supply)
+		return FALSE;
 	if (type != UP_DEVICE_KIND_BATTERY)
 		return FALSE;
 	if (state == UP_DEVICE_STATE_UNKNOWN)
@@ -620,6 +624,8 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 		state = UP_DEVICE_STATE_EMPTY;
 	else if (g_ascii_strcasecmp (status, "unknown") == 0)
 		state = UP_DEVICE_STATE_UNKNOWN;
+	else if (g_ascii_strcasecmp (status, "not charging") == 0)
+		state = UP_DEVICE_STATE_PENDING_CHARGE;
 	else {
 		g_warning ("unknown status string: %s", status);
 		state = UP_DEVICE_STATE_UNKNOWN;
@@ -861,9 +867,9 @@ up_device_supply_coldplug (UpDevice *device)
 
 	/* try to work out if the device is powering the system */
 	scope = g_udev_device_get_sysfs_attr (native, "scope");
-	if (g_ascii_strcasecmp (scope, "device") == 0) {
+	if (scope != NULL && g_ascii_strcasecmp (scope, "device") == 0) {
 		supply->priv->is_power_supply = FALSE;
-	} else if (g_ascii_strcasecmp (scope, "system") == 0) {
+	} else if (scope != NULL && g_ascii_strcasecmp (scope, "system") == 0) {
 		supply->priv->is_power_supply = TRUE;
 	} else {
 		g_debug ("taking a guess for power supply scope");
@@ -880,11 +886,8 @@ up_device_supply_coldplug (UpDevice *device)
 		} else if (g_ascii_strcasecmp (device_type, "USB") == 0) {
 
 			/* use a heuristic to find the device type */
-			if (g_strstr_len (native_path, -1, "wacom_") != NULL ||
-			    g_strstr_len (native_path, -1, "wacom_") != NULL) {
+			if (g_strstr_len (native_path, -1, "wacom_") != NULL) {
 				type = UP_DEVICE_KIND_TABLET;
-			} else if (g_strstr_len (native_path, -1, "magicmouse_") != NULL) {
-				type = UP_DEVICE_KIND_MOUSE;
 			} else {
 				g_warning ("did not recognise USB path %s, please report",
 					   native_path);

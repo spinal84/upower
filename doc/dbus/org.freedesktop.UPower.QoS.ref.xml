@@ -15,8 +15,7 @@
                     in  'i'            value,
                     in  'b'            persistent,
                     out 'u'            cookie)
-<link linkend="QoS.CancelRequest">CancelRequest</link>      (in  's'            type,
-                    in  'u'            cookie)
+<link linkend="QoS.CancelRequest">CancelRequest</link>      (in  'u'            cookie)
 <link linkend="QoS.GetLatency">GetLatency</link>         (in  's'            type,
                     out 'i'            value)
 <link linkend="QoS.GetLatencyRequests">GetLatencyRequests</link> (out 'a(uuusxbssi)' requests)
@@ -145,15 +144,11 @@
           <literal>org.freedesktop.upower.qos.request-latency-persistent</literal>
           authorization if <literal>persistent</literal> is TRUE, or
           <literal>org.freedesktop.upower.qos.request-latency</literal> otherwise.
-        </para></refsect3><refsect2><title><anchor role="function" id="QoS.CancelRequest"/>CancelRequest ()</title><indexterm><primary>CancelRequest</primary><secondary>QoS</secondary></indexterm><programlisting>CancelRequest (in  's' type,
-               in  'u' cookie)</programlisting></refsect2>
+        </para></refsect3><refsect2><title><anchor role="function" id="QoS.CancelRequest"/>CancelRequest ()</title><indexterm><primary>CancelRequest</primary><secondary>QoS</secondary></indexterm><programlisting>CancelRequest (in  'u' cookie)</programlisting></refsect2>
           <para>
             Cancel the latency request from the application or service.
           </para>
-        <variablelist role="params"><varlistentry><term><parameter>type</parameter>:</term><listitem><simpara>
-            The type of latency to control, <literal>cpu_dma</literal> or
-            <literal>network</literal>.
-          </simpara></listitem></varlistentry><varlistentry><term><parameter>cookie</parameter>:</term><listitem><simpara>
+        <variablelist role="params"><varlistentry><term><parameter>cookie</parameter>:</term><listitem><simpara>
             A cookie that identifies the request. This allows an application or
             serivice to request multiple latency settings from one process.
           </simpara></listitem></varlistentry></variablelist><refsect3><title>Errors</title><variablelist role="errors"><varlistentry><term><parameter>org.freedesktop.UPower.GeneralError</parameter>:</term><listitem><simpara>if an error occured while clearing the latency</simpara></listitem></varlistentry></variablelist></refsect3><refsect3><title>Permissions</title><para role="permission">
