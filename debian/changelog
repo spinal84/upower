@@ -1,6 +1,8 @@
 upower (0.9.16-4) UNRELEASED; urgency=low
 
   * debian/control: Add XS-Testsuite: header as per current DEP-8 spec.
+  * debian/tests/control: Depend on @, to also include our gir package and
+    other packages we might have forgotten.
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 20 Jun 2012 11:55:03 +0200
 
