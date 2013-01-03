@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>up-qos-item</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="index.html" title="UPower Reference Manual">
 <link rel="up" href="libupower-glib.html" title="libupower-glib GObjects">
 <link rel="prev" href="UPower-up-history-item.html" title="up-history-item">
@@ -37,33 +37,32 @@
 </tr></table></div>
 <div class="refsynopsisdiv">
 <a name="UPower-up-qos-item.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">typedef             <a class="link" href="UPower-up-qos-item.html#UpQosItemPrivate" title="UpQosItemPrivate">UpQosItemPrivate</a>;
-<span class="returnvalue">UpQosItem</span> *         <a class="link" href="UPower-up-qos-item.html#up-qos-item-new" title="up_qos_item_new ()">up_qos_item_new</a>                     (<em class="parameter"><code><span class="type">void</span></code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-uid" title="up_qos_item_get_uid ()">up_qos_item_get_uid</a>                 (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-set-uid" title="up_qos_item_set_uid ()">up_qos_item_set_uid</a>                 (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> uid</code></em>);
+<pre class="synopsis">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-cmdline" title="up_qos_item_get_cmdline ()">up_qos_item_get_cmdline</a>             (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-cookie" title="up_qos_item_get_cookie ()">up_qos_item_get_cookie</a>              (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
+<a class="link" href="UPower-up-types.html#UpQosKind" title="enum UpQosKind"><span class="returnvalue">UpQosKind</span></a>           <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-kind" title="up_qos_item_get_kind ()">up_qos_item_get_kind</a>                (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-persistent" title="up_qos_item_get_persistent ()">up_qos_item_get_persistent</a>          (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-pid" title="up_qos_item_get_pid ()">up_qos_item_get_pid</a>                 (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-set-pid" title="up_qos_item_set_pid ()">up_qos_item_set_pid</a>                 (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> pid</code></em>);
 const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-sender" title="up_qos_item_get_sender ()">up_qos_item_get_sender</a>              (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-set-sender" title="up_qos_item_set_sender ()">up_qos_item_set_sender</a>              (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *sender</code></em>);
-const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-cmdline" title="up_qos_item_get_cmdline ()">up_qos_item_get_cmdline</a>             (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint64"><span class="returnvalue">guint64</span></a>             <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-timespec" title="up_qos_item_get_timespec ()">up_qos_item_get_timespec</a>            (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-uid" title="up_qos_item_get_uid ()">up_qos_item_get_uid</a>                 (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-value" title="up_qos_item_get_value ()">up_qos_item_get_value</a>               (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
+<span class="returnvalue">UpQosItem</span> *         <a class="link" href="UPower-up-qos-item.html#up-qos-item-new" title="up_qos_item_new ()">up_qos_item_new</a>                     (<em class="parameter"><code><span class="type">void</span></code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-set-cmdline" title="up_qos_item_set_cmdline ()">up_qos_item_set_cmdline</a>             (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
                                                          <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *cmdline</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-cookie" title="up_qos_item_get_cookie ()">up_qos_item_get_cookie</a>              (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-set-cookie" title="up_qos_item_set_cookie ()">up_qos_item_set_cookie</a>              (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> cookie</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint64"><span class="returnvalue">guint64</span></a>             <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-timespec" title="up_qos_item_get_timespec ()">up_qos_item_get_timespec</a>            (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-set-timespec" title="up_qos_item_set_timespec ()">up_qos_item_set_timespec</a>            (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a> timespec</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-persistent" title="up_qos_item_get_persistent ()">up_qos_item_get_persistent</a>          (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-set-persistent" title="up_qos_item_set_persistent ()">up_qos_item_set_persistent</a>          (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> persistent</code></em>);
-<a class="link" href="UPower-up-types.html#UpQosKind" title="enum UpQosKind"><span class="returnvalue">UpQosKind</span></a>           <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-kind" title="up_qos_item_get_kind ()">up_qos_item_get_kind</a>                (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-set-kind" title="up_qos_item_set_kind ()">up_qos_item_set_kind</a>                (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
                                                          <em class="parameter"><code><a class="link" href="UPower-up-types.html#UpQosKind" title="enum UpQosKind"><span class="type">UpQosKind</span></a> type</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-get-value" title="up_qos_item_get_value ()">up_qos_item_get_value</a>               (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-set-persistent" title="up_qos_item_set_persistent ()">up_qos_item_set_persistent</a>          (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> persistent</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-set-pid" title="up_qos_item_set_pid ()">up_qos_item_set_pid</a>                 (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> pid</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-set-sender" title="up_qos_item_set_sender ()">up_qos_item_set_sender</a>              (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *sender</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-set-timespec" title="up_qos_item_set_timespec ()">up_qos_item_set_timespec</a>            (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a> timespec</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-set-uid" title="up_qos_item_set_uid ()">up_qos_item_set_uid</a>                 (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> uid</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="UPower-up-qos-item.html#up-qos-item-set-value" title="up_qos_item_set_value ()">up_qos_item_set_value</a>               (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> value</code></em>);
 </pre>
@@ -81,32 +80,16 @@ See also: <span class="type">UpDevice</span>, <span class="type">UpClient</span>
 <div class="refsect1">
 <a name="UPower-up-qos-item.details"></a><h2>Details</h2>
 <div class="refsect2">
-<a name="UpQosItemPrivate"></a><h3>UpQosItemPrivate</h3>
-<pre class="programlisting">typedef struct UpQosItemPrivate UpQosItemPrivate;
-</pre>
-</div>
-<hr>
-<div class="refsect2">
-<a name="up-qos-item-new"></a><h3>up_qos_item_new ()</h3>
-<pre class="programlisting"><span class="returnvalue">UpQosItem</span> *         up_qos_item_new                     (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>a new UpQosItem object.</td>
-</tr></tbody>
-</table></div>
-<p class="since">Since 0.9.0</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="up-qos-item-get-uid"></a><h3>up_qos_item_get_uid ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               up_qos_item_get_uid                 (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);</pre>
+<a name="up-qos-item-get-cmdline"></a><h3>up_qos_item_get_cmdline ()</h3>
+<pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       up_qos_item_get_cmdline             (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);</pre>
 <p>
-Gets the item uid.
+Gets the item cmdline.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
@@ -122,22 +105,74 @@ Gets the item uid.
 </div>
 <hr>
 <div class="refsect2">
-<a name="up-qos-item-set-uid"></a><h3>up_qos_item_set_uid ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                up_qos_item_set_uid                 (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> uid</code></em>);</pre>
+<a name="up-qos-item-get-cookie"></a><h3>up_qos_item_get_cookie ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               up_qos_item_get_cookie              (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);</pre>
 <p>
-Sets the item uid.
+Gets the item cookie.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
 <td><span class="type">UpQosItem</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>uid</code></em> :</span></p></td>
-<td>the new value</td>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>the value</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="up-qos-item-get-kind"></a><h3>up_qos_item_get_kind ()</h3>
+<pre class="programlisting"><a class="link" href="UPower-up-types.html#UpQosKind" title="enum UpQosKind"><span class="returnvalue">UpQosKind</span></a>           up_qos_item_get_kind                (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);</pre>
+<p>
+Gets the item type.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
+<td><span class="type">UpQosItem</span></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>the value</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="up-qos-item-get-persistent"></a><h3>up_qos_item_get_persistent ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_qos_item_get_persistent          (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);</pre>
+<p>
+Gets the item persistent.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
+<td><span class="type">UpQosItem</span></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>the value</td>
 </tr>
 </tbody>
 </table></div>
@@ -150,8 +185,11 @@ Sets the item uid.
 <p>
 Gets the item pid.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
@@ -160,29 +198,6 @@ Gets the item pid.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>the value</td>
-</tr>
-</tbody>
-</table></div>
-<p class="since">Since 0.9.0</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="up-qos-item-set-pid"></a><h3>up_qos_item_set_pid ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                up_qos_item_set_pid                 (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> pid</code></em>);</pre>
-<p>
-Sets the item pid.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
-<td><span class="type">UpQosItem</span></td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>pid</code></em> :</span></p></td>
-<td>the new value</td>
 </tr>
 </tbody>
 </table></div>
@@ -195,8 +210,11 @@ Sets the item pid.
 <p>
 Gets the item sender.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
@@ -212,36 +230,16 @@ Gets the item sender.
 </div>
 <hr>
 <div class="refsect2">
-<a name="up-qos-item-set-sender"></a><h3>up_qos_item_set_sender ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                up_qos_item_set_sender              (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *sender</code></em>);</pre>
+<a name="up-qos-item-get-timespec"></a><h3>up_qos_item_get_timespec ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint64"><span class="returnvalue">guint64</span></a>             up_qos_item_get_timespec            (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);</pre>
 <p>
-Sets the item sender.
+Gets the item timespec.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
-<td><span class="type">UpQosItem</span></td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>sender</code></em> :</span></p></td>
-<td>the new value</td>
-</tr>
-</tbody>
-</table></div>
-<p class="since">Since 0.9.0</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="up-qos-item-get-cmdline"></a><h3>up_qos_item_get_cmdline ()</h3>
-<pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       up_qos_item_get_cmdline             (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);</pre>
-<p>
-Gets the item cmdline.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
@@ -252,6 +250,72 @@ Gets the item cmdline.
 <td>the value</td>
 </tr>
 </tbody>
+</table></div>
+<p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="up-qos-item-get-uid"></a><h3>up_qos_item_get_uid ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               up_qos_item_get_uid                 (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);</pre>
+<p>
+Gets the item uid.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
+<td><span class="type">UpQosItem</span></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>the value</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="up-qos-item-get-value"></a><h3>up_qos_item_get_value ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                up_qos_item_get_value               (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);</pre>
+<p>
+Gets the item value.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
+<td><span class="type">UpQosItem</span></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>the value</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="up-qos-item-new"></a><h3>up_qos_item_new ()</h3>
+<pre class="programlisting"><span class="returnvalue">UpQosItem</span> *         up_qos_item_new                     (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>a new UpQosItem object.</td>
+</tr></tbody>
 </table></div>
 <p class="since">Since 0.9.0</p>
 </div>
@@ -263,8 +327,11 @@ Gets the item cmdline.
 <p>
 Sets the item cmdline.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
@@ -280,36 +347,17 @@ Sets the item cmdline.
 </div>
 <hr>
 <div class="refsect2">
-<a name="up-qos-item-get-cookie"></a><h3>up_qos_item_get_cookie ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               up_qos_item_get_cookie              (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);</pre>
-<p>
-Gets the item cookie.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
-<td><span class="type">UpQosItem</span></td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the value</td>
-</tr>
-</tbody>
-</table></div>
-<p class="since">Since 0.9.0</p>
-</div>
-<hr>
-<div class="refsect2">
 <a name="up-qos-item-set-cookie"></a><h3>up_qos_item_set_cookie ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                up_qos_item_set_cookie              (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> cookie</code></em>);</pre>
 <p>
 Sets the item cookie.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
@@ -325,126 +373,17 @@ Sets the item cookie.
 </div>
 <hr>
 <div class="refsect2">
-<a name="up-qos-item-get-timespec"></a><h3>up_qos_item_get_timespec ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint64"><span class="returnvalue">guint64</span></a>             up_qos_item_get_timespec            (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);</pre>
-<p>
-Gets the item timespec.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
-<td><span class="type">UpQosItem</span></td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the value</td>
-</tr>
-</tbody>
-</table></div>
-<p class="since">Since 0.9.0</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="up-qos-item-set-timespec"></a><h3>up_qos_item_set_timespec ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                up_qos_item_set_timespec            (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a> timespec</code></em>);</pre>
-<p>
-Sets the item timespec.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
-<td><span class="type">UpQosItem</span></td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>timespec</code></em> :</span></p></td>
-<td>the new value</td>
-</tr>
-</tbody>
-</table></div>
-<p class="since">Since 0.9.0</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="up-qos-item-get-persistent"></a><h3>up_qos_item_get_persistent ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_qos_item_get_persistent          (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);</pre>
-<p>
-Gets the item persistent.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
-<td><span class="type">UpQosItem</span></td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the value</td>
-</tr>
-</tbody>
-</table></div>
-<p class="since">Since 0.9.0</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="up-qos-item-set-persistent"></a><h3>up_qos_item_set_persistent ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                up_qos_item_set_persistent          (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> persistent</code></em>);</pre>
-<p>
-Sets the item persistent.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
-<td><span class="type">UpQosItem</span></td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>persistent</code></em> :</span></p></td>
-<td>the new value</td>
-</tr>
-</tbody>
-</table></div>
-<p class="since">Since 0.9.0</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="up-qos-item-get-kind"></a><h3>up_qos_item_get_kind ()</h3>
-<pre class="programlisting"><a class="link" href="UPower-up-types.html#UpQosKind" title="enum UpQosKind"><span class="returnvalue">UpQosKind</span></a>           up_qos_item_get_kind                (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);</pre>
-<p>
-Gets the item type.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
-<td><span class="type">UpQosItem</span></td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the value</td>
-</tr>
-</tbody>
-</table></div>
-<p class="since">Since 0.9.0</p>
-</div>
-<hr>
-<div class="refsect2">
 <a name="up-qos-item-set-kind"></a><h3>up_qos_item_set_kind ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                up_qos_item_set_kind                (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
                                                          <em class="parameter"><code><a class="link" href="UPower-up-types.html#UpQosKind" title="enum UpQosKind"><span class="type">UpQosKind</span></a> type</code></em>);</pre>
 <p>
 Sets the item type.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
@@ -460,21 +399,129 @@ Sets the item type.
 </div>
 <hr>
 <div class="refsect2">
-<a name="up-qos-item-get-value"></a><h3>up_qos_item_get_value ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                up_qos_item_get_value               (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>);</pre>
+<a name="up-qos-item-set-persistent"></a><h3>up_qos_item_set_persistent ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                up_qos_item_set_persistent          (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> persistent</code></em>);</pre>
 <p>
-Gets the item value.
+Sets the item persistent.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
 <td><span class="type">UpQosItem</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the value</td>
+<td><p><span class="term"><em class="parameter"><code>persistent</code></em> :</span></p></td>
+<td>the new value</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="up-qos-item-set-pid"></a><h3>up_qos_item_set_pid ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                up_qos_item_set_pid                 (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> pid</code></em>);</pre>
+<p>
+Sets the item pid.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
+<td><span class="type">UpQosItem</span></td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pid</code></em> :</span></p></td>
+<td>the new value</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="up-qos-item-set-sender"></a><h3>up_qos_item_set_sender ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                up_qos_item_set_sender              (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *sender</code></em>);</pre>
+<p>
+Sets the item sender.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
+<td><span class="type">UpQosItem</span></td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>sender</code></em> :</span></p></td>
+<td>the new value</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="up-qos-item-set-timespec"></a><h3>up_qos_item_set_timespec ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                up_qos_item_set_timespec            (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a> timespec</code></em>);</pre>
+<p>
+Sets the item timespec.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
+<td><span class="type">UpQosItem</span></td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>timespec</code></em> :</span></p></td>
+<td>the new value</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="up-qos-item-set-uid"></a><h3>up_qos_item_set_uid ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                up_qos_item_set_uid                 (<em class="parameter"><code><span class="type">UpQosItem</span> *qos_item</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> uid</code></em>);</pre>
+<p>
+Sets the item uid.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>
+<td><span class="type">UpQosItem</span></td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>uid</code></em> :</span></p></td>
+<td>the new value</td>
 </tr>
 </tbody>
 </table></div>
@@ -488,8 +535,11 @@ Gets the item value.
 <p>
 Sets the item value.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>qos_item</code></em> :</span></p></td>

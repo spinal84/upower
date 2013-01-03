@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>org.freedesktop.UPower.QoS</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="index.html" title="UPower Reference Manual">
 <link rel="up" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="prev" href="Device.html" title="org.freedesktop.UPower.Device">
@@ -41,27 +41,27 @@
 </tr></table></div>
 <div class="refsynopsisdiv">
 <h2>Methods</h2>
-<pre class="synopsis"><a class="link" href="QoS.html#QoS.SetMinimumLatency">SetMinimumLatency</a>  (in  's'            type,
-                    in  'i'            value)
-<a class="link" href="QoS.html#QoS.RequestLatency">RequestLatency</a>     (in  's'            type,
-                    in  'i'            value,
-                    in  'b'            persistent,
-                    out 'u'            cookie)
-<a class="link" href="QoS.html#QoS.CancelRequest">CancelRequest</a>      (in  'u'            cookie)
-<a class="link" href="QoS.html#QoS.GetLatency">GetLatency</a>         (in  's'            type,
-                    out 'i'            value)
-<a class="link" href="QoS.html#QoS.GetLatencyRequests">GetLatencyRequests</a> (out 'a(uuusxbssi)' requests)
+<pre class="synopsis"><a class="link" href="QoS.html#QoS.SetMinimumLatency">SetMinimumLatency</a>(in's'type,
+in'i'value)
+<a class="link" href="QoS.html#QoS.RequestLatency">RequestLatency</a>(in's'type,
+in'i'value,
+in'b'persistent,
+out'u'cookie)
+<a class="link" href="QoS.html#QoS.CancelRequest">CancelRequest</a>(in'u'cookie)
+<a class="link" href="QoS.html#QoS.GetLatency">GetLatency</a>(in's'type,
+out'i'value)
+<a class="link" href="QoS.html#QoS.GetLatencyRequests">GetLatencyRequests</a>(out'a(uuusxbssi)'requests)
 </pre>
 </div>
 <div class="refsect1">
-<a name="id428111"></a><h2>Signals</h2>
-<pre class="synopsis"><a class="link" href="QoS.html#QoS::LatencyChanged">LatencyChanged</a>  ('s' type,
-                 'i' value)
-<a class="link" href="QoS.html#QoS::RequestsChanged">RequestsChanged</a> ()
+<a name="idp7712864"></a><h2>Signals</h2>
+<pre class="synopsis"><a class="link" href="QoS.html#QoS::LatencyChanged">LatencyChanged</a>('s'type,
+'i'value)
+<a class="link" href="QoS.html#QoS::RequestsChanged">RequestsChanged</a>()
 </pre>
 </div>
 <div class="refsect1">
-<a name="id446911"></a><h2>Implemented Interfaces</h2>
+<a name="idp9255856"></a><h2>Implemented Interfaces</h2>
 <p>
     Objects implementing org.freedesktop.UPower.QoS also implements
     org.freedesktop.DBus.Introspectable,
@@ -69,12 +69,12 @@
     </p>
 </div>
 <div class="refsect1">
-<a name="id447098"></a><h2>Description</h2>
+<a name="idp6710272"></a><h2>Description</h2>
 <p>
       
         </p>
 <p>
-          org.freedesktop.UPower.QoS is a DBus interface implimented
+          org.freedesktop.UPower.QoS is a DBus interface implemented
           by UPower.
           It allows applications to request latencies, for example a couple of seconds
           for an IM application, or a few hundred microseconds for a multiplayer game.
@@ -156,12 +156,12 @@
     </p>
 </div>
 <div class="refsect1">
-<a name="id433891"></a><h2>Details</h2>
+<a name="idp4996064"></a><h2>Details</h2>
 <div class="refsect2">
-<a name="id433899"></a><h3>
+<a name="idp4997024"></a><h3>
 <a name="QoS.SetMinimumLatency"></a>SetMinimumLatency ()</h3>
-<pre class="programlisting">SetMinimumLatency (in  's' type,
-                   in  'i' value)</pre>
+<pre class="programlisting">SetMinimumLatency (in's'type,
+in'i'value)</pre>
 </div>
 <p>
             Set the minimum acceptable latency of the system.
@@ -172,8 +172,11 @@
             or power envelope, and an override is required.
             You do not have to use this method during normal operation.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>type</code></em>:</span></p></td>
@@ -192,9 +195,12 @@
 </tbody>
 </table></div>
 <div class="refsect3">
-<a name="id450470"></a><h4>Errors</h4>
-<div class="variablelist"><table border="0">
+<a name="idp6176160"></a><h4>Errors</h4>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><em class="parameter"><code>org.freedesktop.UPower.GeneralError</code></em>:</span></p></td>
 <td>if an error occured while setting the latency</td>
@@ -202,23 +208,26 @@
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id450488"></a><h4>Permissions</h4>
+<a name="idp6178304"></a><h4>Permissions</h4>
 <p class="permission">Callers need the <code class="literal">org.freedesktop.upower.qos.set-minimum-latency</code> authorization</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="id450502"></a><h3>
+<a name="idp6179968"></a><h3>
 <a name="QoS.RequestLatency"></a>RequestLatency ()</h3>
-<pre class="programlisting">RequestLatency (in  's' type,
-                in  'i' value,
-                in  'b' persistent,
-                out 'u' cookie)</pre>
+<pre class="programlisting">RequestLatency (in's'type,
+in'i'value,
+in'b'persistent,
+out'u'cookie)</pre>
 </div>
 <p>
             Set the required latency of an application or service.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>type</code></em>:</span></p></td>
@@ -255,9 +264,12 @@
 </tbody>
 </table></div>
 <div class="refsect3">
-<a name="id420328"></a><h4>Errors</h4>
-<div class="variablelist"><table border="0">
+<a name="idp8009696"></a><h4>Errors</h4>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><em class="parameter"><code>org.freedesktop.UPower.GeneralError</code></em>:</span></p></td>
 <td>if an error occured while setting the latency</td>
@@ -265,7 +277,7 @@
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id420346"></a><h4>Permissions</h4>
+<a name="idp8011888"></a><h4>Permissions</h4>
 <p class="permission">
           Callers need the
           <code class="literal">org.freedesktop.upower.qos.request-latency-persistent</code>
@@ -275,15 +287,18 @@
 </div>
 <hr>
 <div class="refsect2">
-<a name="id420372"></a><h3>
+<a name="idp8014992"></a><h3>
 <a name="QoS.CancelRequest"></a>CancelRequest ()</h3>
-<pre class="programlisting">CancelRequest (in  'u' cookie)</pre>
+<pre class="programlisting">CancelRequest (in'u'cookie)</pre>
 </div>
 <p>
             Cancel the latency request from the application or service.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><em class="parameter"><code>cookie</code></em>:</span></p></td>
 <td>
@@ -293,9 +308,12 @@
 </tr></tbody>
 </table></div>
 <div class="refsect3">
-<a name="id431297"></a><h4>Errors</h4>
-<div class="variablelist"><table border="0">
+<a name="idp8957856"></a><h4>Errors</h4>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><em class="parameter"><code>org.freedesktop.UPower.GeneralError</code></em>:</span></p></td>
 <td>if an error occured while clearing the latency</td>
@@ -303,7 +321,7 @@
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id431315"></a><h4>Permissions</h4>
+<a name="idp8960048"></a><h4>Permissions</h4>
 <p class="permission">
           Callers need the
           <code class="literal">org.freedesktop.upower.qos.cancel-request</code>
@@ -312,16 +330,19 @@
 </div>
 <hr>
 <div class="refsect2">
-<a name="id431329"></a><h3>
+<a name="idp8961696"></a><h3>
 <a name="QoS.GetLatency"></a>GetLatency ()</h3>
-<pre class="programlisting">GetLatency (in  's' type,
-            out 'i' value)</pre>
+<pre class="programlisting">GetLatency (in's'type,
+out'i'value)</pre>
 </div>
 <p>
             Get the lowest latency state on the system at the current time.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>type</code></em>:</span></p></td>
@@ -340,9 +361,12 @@
 </tbody>
 </table></div>
 <div class="refsect3">
-<a name="id431401"></a><h4>Errors</h4>
-<div class="variablelist"><table border="0">
+<a name="idp8970192"></a><h4>Errors</h4>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><em class="parameter"><code>org.freedesktop.UPower.GeneralError</code></em>:</span></p></td>
 <td>if an error occured while getting the latency</td>
@@ -351,21 +375,24 @@
 </div>
 <hr>
 <div class="refsect2">
-<a name="id431419"></a><h3>
+<a name="idp8972384"></a><h3>
 <a name="QoS.GetLatencyRequests"></a>GetLatencyRequests ()</h3>
-<pre class="programlisting">GetLatencyRequests (out 'a(uuusxbssi)' requests)</pre>
+<pre class="programlisting">GetLatencyRequests (out'a(uuusxbssi)'requests)</pre>
 </div>
 <p>
             Gets all the system requests from all services and applications.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><em class="parameter"><code>requests</code></em>:</span></p></td>
 <td>
             The request lists, where each application can request different
             latency types.
-            <div class="itemizedlist"><ul class="itemizedlist" type="disc">
+            <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <span class="bold"><strong>cookie: </strong></span>
                   The random cookie that identifies the request.
@@ -405,18 +432,21 @@
 </table></div>
 </div>
 <div class="refsect1">
-<a name="id431538"></a><h2>Signal Details</h2>
+<a name="idp8986240"></a><h2>Signal Details</h2>
 <div class="refsect2">
-<a name="id431546"></a><h3>
+<a name="idp8987200"></a><h3>
 <a name="QoS::LatencyChanged"></a>The LatencyChanged signal</h3>
-<pre class="programlisting">LatencyChanged ('s' type,
-                'i' value)</pre>
+<pre class="programlisting">LatencyChanged ('s'type,
+'i'value)</pre>
 </div>
 <p>
             Some latency value has changed.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>type</code></em>:</span></p></td>
@@ -436,15 +466,18 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id431601"></a><h3>
+<a name="idp8993840"></a><h3>
 <a name="QoS::RequestsChanged"></a>The RequestsChanged signal</h3>
 <pre class="programlisting">RequestsChanged ()</pre>
 </div>
 <p>
             The latency requests on the system have changed.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 </div>
