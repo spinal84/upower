@@ -1,8 +1,8 @@
-upower (0.9.19-1) UNRELEASED; urgency=low
+upower (0.9.19-1) experimental; urgency=low
 
   * New upstream release.
 
- -- Martin Pitt <mpitt@debian.org>  Thu, 03 Jan 2013 09:32:59 +0100
+ -- Martin Pitt <mpitt@debian.org>  Thu, 03 Jan 2013 10:38:45 +0100
 
 upower (0.9.17-1) unstable; urgency=low
 
