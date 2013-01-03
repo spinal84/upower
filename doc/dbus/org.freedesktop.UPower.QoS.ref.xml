@@ -9,23 +9,23 @@
   </refnamediv>
   <refsynopsisdiv role="synopsis">
     <title role="synopsis.title">Methods</title>
-    <synopsis><link linkend="QoS.SetMinimumLatency">SetMinimumLatency</link>  (in  's'            type,
-                    in  'i'            value)
-<link linkend="QoS.RequestLatency">RequestLatency</link>     (in  's'            type,
-                    in  'i'            value,
-                    in  'b'            persistent,
-                    out 'u'            cookie)
-<link linkend="QoS.CancelRequest">CancelRequest</link>      (in  'u'            cookie)
-<link linkend="QoS.GetLatency">GetLatency</link>         (in  's'            type,
-                    out 'i'            value)
-<link linkend="QoS.GetLatencyRequests">GetLatencyRequests</link> (out 'a(uuusxbssi)' requests)
+    <synopsis><link linkend="QoS.SetMinimumLatency">SetMinimumLatency</link>(in's'type,
+in'i'value)
+<link linkend="QoS.RequestLatency">RequestLatency</link>(in's'type,
+in'i'value,
+in'b'persistent,
+out'u'cookie)
+<link linkend="QoS.CancelRequest">CancelRequest</link>(in'u'cookie)
+<link linkend="QoS.GetLatency">GetLatency</link>(in's'type,
+out'i'value)
+<link linkend="QoS.GetLatencyRequests">GetLatencyRequests</link>(out'a(uuusxbssi)'requests)
 </synopsis>
   </refsynopsisdiv>
   <refsect1 role="signal_proto">
     <title role="signal_proto.title">Signals</title>
-    <synopsis><link linkend="QoS::LatencyChanged">LatencyChanged</link>  ('s' type,
-                 'i' value)
-<link linkend="QoS::RequestsChanged">RequestsChanged</link> ()
+    <synopsis><link linkend="QoS::LatencyChanged">LatencyChanged</link>('s'type,
+'i'value)
+<link linkend="QoS::RequestsChanged">RequestsChanged</link>()
 </synopsis>
   </refsect1>
   <refsect1 role="impl_interfaces">
@@ -41,7 +41,7 @@
     <para>
       
         <para>
-          org.freedesktop.UPower.QoS is a DBus interface implimented
+          org.freedesktop.UPower.QoS is a DBus interface implemented
           by UPower.
           It allows applications to request latencies, for example a couple of seconds
           for an IM application, or a few hundred microseconds for a multiplayer game.
@@ -99,8 +99,8 @@
       
     </para>
   </refsect1>
-  <refsect1 role="details"><title role="details.title">Details</title><refsect2><title><anchor role="function" id="QoS.SetMinimumLatency"/>SetMinimumLatency ()</title><indexterm><primary>SetMinimumLatency</primary><secondary>QoS</secondary></indexterm><programlisting>SetMinimumLatency (in  's' type,
-                   in  'i' value)</programlisting></refsect2>
+  <refsect1 role="details"><title role="details.title">Details</title><refsect2><title><anchor role="function" id="QoS.SetMinimumLatency"/>SetMinimumLatency ()</title><indexterm><primary>SetMinimumLatency</primary><secondary>QoS</secondary></indexterm><programlisting>SetMinimumLatency (in's'type,
+in'i'value)</programlisting></refsect2>
           <para>
             Set the minimum acceptable latency of the system.
             Setting this value tells the system to not attempt latencies below this setting.
@@ -116,10 +116,10 @@
           </simpara></listitem></varlistentry><varlistentry><term><parameter>value</parameter>:</term><listitem><simpara>
             The value, in microseconds or kilobits per second.
             The value <literal>-1</literal> means unset and the default is used.
-          </simpara></listitem></varlistentry></variablelist><refsect3><title>Errors</title><variablelist role="errors"><varlistentry><term><parameter>org.freedesktop.UPower.GeneralError</parameter>:</term><listitem><simpara>if an error occured while setting the latency</simpara></listitem></varlistentry></variablelist></refsect3><refsect3><title>Permissions</title><para role="permission">Callers need the <literal>org.freedesktop.upower.qos.set-minimum-latency</literal> authorization</para></refsect3><refsect2><title><anchor role="function" id="QoS.RequestLatency"/>RequestLatency ()</title><indexterm><primary>RequestLatency</primary><secondary>QoS</secondary></indexterm><programlisting>RequestLatency (in  's' type,
-                in  'i' value,
-                in  'b' persistent,
-                out 'u' cookie)</programlisting></refsect2>
+          </simpara></listitem></varlistentry></variablelist><refsect3><title>Errors</title><variablelist role="errors"><varlistentry><term><parameter>org.freedesktop.UPower.GeneralError</parameter>:</term><listitem><simpara>if an error occured while setting the latency</simpara></listitem></varlistentry></variablelist></refsect3><refsect3><title>Permissions</title><para role="permission">Callers need the <literal>org.freedesktop.upower.qos.set-minimum-latency</literal> authorization</para></refsect3><refsect2><title><anchor role="function" id="QoS.RequestLatency"/>RequestLatency ()</title><indexterm><primary>RequestLatency</primary><secondary>QoS</secondary></indexterm><programlisting>RequestLatency (in's'type,
+in'i'value,
+in'b'persistent,
+out'u'cookie)</programlisting></refsect2>
           <para>
             Set the required latency of an application or service.
           </para>
@@ -144,7 +144,7 @@
           <literal>org.freedesktop.upower.qos.request-latency-persistent</literal>
           authorization if <literal>persistent</literal> is TRUE, or
           <literal>org.freedesktop.upower.qos.request-latency</literal> otherwise.
-        </para></refsect3><refsect2><title><anchor role="function" id="QoS.CancelRequest"/>CancelRequest ()</title><indexterm><primary>CancelRequest</primary><secondary>QoS</secondary></indexterm><programlisting>CancelRequest (in  'u' cookie)</programlisting></refsect2>
+        </para></refsect3><refsect2><title><anchor role="function" id="QoS.CancelRequest"/>CancelRequest ()</title><indexterm><primary>CancelRequest</primary><secondary>QoS</secondary></indexterm><programlisting>CancelRequest (in'u'cookie)</programlisting></refsect2>
           <para>
             Cancel the latency request from the application or service.
           </para>
@@ -155,8 +155,8 @@
           Callers need the
           <literal>org.freedesktop.upower.qos.cancel-request</literal>
           authorization if they were not the one issuing the request.
-        </para></refsect3><refsect2><title><anchor role="function" id="QoS.GetLatency"/>GetLatency ()</title><indexterm><primary>GetLatency</primary><secondary>QoS</secondary></indexterm><programlisting>GetLatency (in  's' type,
-            out 'i' value)</programlisting></refsect2>
+        </para></refsect3><refsect2><title><anchor role="function" id="QoS.GetLatency"/>GetLatency ()</title><indexterm><primary>GetLatency</primary><secondary>QoS</secondary></indexterm><programlisting>GetLatency (in's'type,
+out'i'value)</programlisting></refsect2>
           <para>
             Get the lowest latency state on the system at the current time.
           </para>
@@ -166,7 +166,7 @@
           </simpara></listitem></varlistentry><varlistentry><term><parameter>value</parameter>:</term><listitem><simpara>
             The value, in microseconds or kilobits per second.
             The value <literal>-1</literal> means not set or unavailable.
-          </simpara></listitem></varlistentry></variablelist><refsect3><title>Errors</title><variablelist role="errors"><varlistentry><term><parameter>org.freedesktop.UPower.GeneralError</parameter>:</term><listitem><simpara>if an error occured while getting the latency</simpara></listitem></varlistentry></variablelist></refsect3><refsect2><title><anchor role="function" id="QoS.GetLatencyRequests"/>GetLatencyRequests ()</title><indexterm><primary>GetLatencyRequests</primary><secondary>QoS</secondary></indexterm><programlisting>GetLatencyRequests (out 'a(uuusxbssi)' requests)</programlisting></refsect2>
+          </simpara></listitem></varlistentry></variablelist><refsect3><title>Errors</title><variablelist role="errors"><varlistentry><term><parameter>org.freedesktop.UPower.GeneralError</parameter>:</term><listitem><simpara>if an error occured while getting the latency</simpara></listitem></varlistentry></variablelist></refsect3><refsect2><title><anchor role="function" id="QoS.GetLatencyRequests"/>GetLatencyRequests ()</title><indexterm><primary>GetLatencyRequests</primary><secondary>QoS</secondary></indexterm><programlisting>GetLatencyRequests (out'a(uuusxbssi)'requests)</programlisting></refsect2>
           <para>
             Gets all the system requests from all services and applications.
           </para>
@@ -192,8 +192,8 @@
                   The value, in microseconds or kilobits per second.
                 </listitem></itemizedlist></para>
         </simpara></listitem></varlistentry></variablelist></refsect1>
-  <refsect1 role="signals"><title role="signals.title">Signal Details</title><refsect2><title><anchor role="function" id="QoS::LatencyChanged"/>The LatencyChanged signal</title><indexterm><primary>LatencyChanged</primary><secondary>QoS</secondary></indexterm><programlisting>LatencyChanged ('s' type,
-                'i' value)</programlisting></refsect2>
+  <refsect1 role="signals"><title role="signals.title">Signal Details</title><refsect2><title><anchor role="function" id="QoS::LatencyChanged"/>The LatencyChanged signal</title><indexterm><primary>LatencyChanged</primary><secondary>QoS</secondary></indexterm><programlisting>LatencyChanged ('s'type,
+'i'value)</programlisting></refsect2>
           <para>
             Some latency value has changed.
           </para>

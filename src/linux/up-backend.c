@@ -36,6 +36,7 @@
 
 #include "up-device-supply.h"
 #include "up-device-csr.h"
+#include "up-device-lg-unifying.h"
 #include "up-device-wup.h"
 #include "up-device-hid.h"
 #include "up-input.h"
@@ -44,6 +45,17 @@
 #ifdef HAVE_IDEVICE
 #include "up-device-idevice.h"
 #endif /* HAVE_IDEVICE */
+
+#include <dbus/dbus-glib.h>
+#include <dbus/dbus-glib-lowlevel.h>
+
+#ifdef HAVE_SYSTEMD
+#include <systemd/sd-daemon.h>
+
+#define SD_HIBERNATE_COMMAND	"gdbus call --system --dest org.freedesktop.login1 --object-path /org/freedesktop/login1 --method org.freedesktop.login1.Manager.Hibernate 'true'"
+#define SD_SUSPEND_COMMAND	"gdbus call --system --dest org.freedesktop.login1 --object-path /org/freedesktop/login1 --method org.freedesktop.login1.Manager.Suspend 'true'"
+
+#endif
 
 static void	up_backend_class_init	(UpBackendClass	*klass);
 static void	up_backend_init	(UpBackend		*backend);
@@ -59,11 +71,13 @@ struct UpBackendPrivate
 	UpDeviceList		*managed_devices;
 	UpDock			*dock;
 	UpConfig		*config;
+	DBusConnection		*connection;
 };
 
 enum {
 	SIGNAL_DEVICE_ADDED,
 	SIGNAL_DEVICE_REMOVED,
+	SIGNAL_RESUMING,
 	SIGNAL_LAST
 };
 
@@ -120,7 +134,7 @@ up_backend_device_new (UpBackend *backend, GUdevDevice *native)
 		/* no valid TTY object */
 		device = NULL;
 
-	} else if (g_strcmp0 (subsys, "usb") == 0) {
+	} else if (g_strcmp0 (subsys, "usb") == 0 || g_strcmp0 (subsys, "usbmisc") == 0) {
 
 #ifdef HAVE_IDEVICE
 		/* see if this is an iDevice */
@@ -153,20 +167,27 @@ up_backend_device_new (UpBackend *backend, GUdevDevice *native)
 		/* check input device */
 		input = up_input_new ();
 		ret = up_input_coldplug (input, backend->priv->daemon, native);
-		if (!ret) {
+		if (ret) {
+			/* we now have a lid */
+			up_daemon_set_lid_is_present (backend->priv->daemon, TRUE);
+
+			/* not a power device */
+			up_device_list_insert (backend->priv->managed_devices, G_OBJECT (native), G_OBJECT (input));
+
+			/* no valid input object */
+			device = NULL;
+		} else {
 			g_object_unref (input);
-			goto out;
+
+			/* see if this is a Unifying mouse or keyboard */
+			device = UP_DEVICE (up_device_unifying_new ());
+			ret = up_device_coldplug (device, backend->priv->daemon, G_OBJECT (native));
+			if (!ret) {
+				g_object_unref (device);
+				/* no valid input object */
+				device = NULL;
+			}
 		}
-
-		/* we now have a lid */
-		up_daemon_set_lid_is_present (backend->priv->daemon, TRUE);
-
-		/* not a power device */
-		up_device_list_insert (backend->priv->managed_devices, G_OBJECT (native), G_OBJECT (input));
-
-		/* no valid input object */
-		device = NULL;
-
 	} else {
 		native_path = g_udev_device_get_sysfs_path (native);
 		g_warning ("native path %s (%s) ignoring", native_path, subsys);
@@ -307,7 +328,7 @@ up_backend_coldplug (UpBackend *backend, UpDaemon *daemon)
 	GList *l;
 	guint i;
 	gboolean ret;
-	const gchar *subsystems[] = {"power_supply", "usb", "tty", "input", NULL};
+	const gchar *subsystems[] = {"power_supply", "usb", "usbmisc", "tty", "input", NULL};
 
 	backend->priv->daemon = g_object_ref (daemon);
 	backend->priv->device_list = up_daemon_get_device_list (daemon);
@@ -564,6 +585,11 @@ out:
 const gchar *
 up_backend_get_suspend_command (UpBackend *backend)
 {
+#ifdef HAVE_SYSTEMD
+	if (sd_booted ())
+		return SD_SUSPEND_COMMAND;
+	else
+#endif
 	return UP_BACKEND_SUSPEND_COMMAND;
 }
 
@@ -573,7 +599,23 @@ up_backend_get_suspend_command (UpBackend *backend)
 const gchar *
 up_backend_get_hibernate_command (UpBackend *backend)
 {
+#ifdef HAVE_SYSTEMD
+	if (sd_booted ())
+		return SD_HIBERNATE_COMMAND;
+	else
+#endif
 	return UP_BACKEND_HIBERNATE_COMMAND;
+}
+
+gboolean
+up_backend_emits_resuming (UpBackend *backend)
+{
+#ifdef HAVE_SYSTEMD
+	if (sd_booted ())
+		return TRUE;
+	else
+#endif
+	return FALSE;
 }
 
 /**
@@ -609,8 +651,30 @@ up_backend_class_init (UpBackendClass *klass)
 			      G_STRUCT_OFFSET (UpBackendClass, device_removed),
 			      NULL, NULL, up_marshal_VOID__POINTER_POINTER,
 			      G_TYPE_NONE, 2, G_TYPE_POINTER, G_TYPE_POINTER);
+	signals [SIGNAL_RESUMING] =
+		g_signal_new ("resuming",
+			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (UpBackendClass, resuming),
+			      NULL, NULL, g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE, 0);
 
 	g_type_class_add_private (klass, sizeof (UpBackendPrivate));
+}
+
+static DBusHandlerResult
+message_filter (DBusConnection *connection,
+		DBusMessage *message,
+		void *user_data)
+{
+	UpBackend *backend = user_data;
+
+	if (dbus_message_is_signal (message, "org.freedesktop.UPower", "Resuming")) {
+		g_debug ("received Resuming signal");
+		g_signal_emit (backend, signals[SIGNAL_RESUMING], 0);
+		return DBUS_HANDLER_RESULT_HANDLED;
+	}
+
+	return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
 
 /**
@@ -624,6 +688,15 @@ up_backend_init (UpBackend *backend)
 	backend->priv->daemon = NULL;
 	backend->priv->device_list = NULL;
 	backend->priv->managed_devices = up_device_list_new ();
+
+#ifdef HAVE_SYSTEMD
+	if (sd_booted ()) {
+		DBusGConnection *bus;
+		bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, NULL);
+		backend->priv->connection = dbus_g_connection_get_connection (bus);
+		dbus_connection_add_filter (backend->priv->connection, message_filter, backend, NULL);
+	}
+#endif
 }
 
 /**
@@ -647,6 +720,9 @@ up_backend_finalize (GObject *object)
 		g_object_unref (backend->priv->gudev_client);
 
 	g_object_unref (backend->priv->managed_devices);
+
+	if (backend->priv->connection)
+		dbus_connection_remove_filter (backend->priv->connection, message_filter, backend);
 
 	G_OBJECT_CLASS (up_backend_parent_class)->finalize (object);
 }

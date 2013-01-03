@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>up-stats-item</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="index.html" title="UPower Reference Manual">
 <link rel="up" href="libupower-glib.html" title="libupower-glib GObjects">
 <link rel="prev" href="UPower-up-qos-item.html" title="up-qos-item">
@@ -37,14 +37,13 @@
 </tr></table></div>
 <div class="refsynopsisdiv">
 <a name="UPower-up-stats-item.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">typedef             <a class="link" href="UPower-up-stats-item.html#UpStatsItemPrivate" title="UpStatsItemPrivate">UpStatsItemPrivate</a>;
-<span class="returnvalue">UpStatsItem</span> *       <a class="link" href="UPower-up-stats-item.html#up-stats-item-new" title="up_stats_item_new ()">up_stats_item_new</a>                   (<em class="parameter"><code><span class="type">void</span></code></em>);
+<pre class="synopsis"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="returnvalue">gdouble</span></a>             <a class="link" href="UPower-up-stats-item.html#up-stats-item-get-accuracy" title="up_stats_item_get_accuracy ()">up_stats_item_get_accuracy</a>          (<em class="parameter"><code><span class="type">UpStatsItem</span> *stats_item</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="returnvalue">gdouble</span></a>             <a class="link" href="UPower-up-stats-item.html#up-stats-item-get-value" title="up_stats_item_get_value ()">up_stats_item_get_value</a>             (<em class="parameter"><code><span class="type">UpStatsItem</span> *stats_item</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="UPower-up-stats-item.html#up-stats-item-set-value" title="up_stats_item_set_value ()">up_stats_item_set_value</a>             (<em class="parameter"><code><span class="type">UpStatsItem</span> *stats_item</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a> value</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="returnvalue">gdouble</span></a>             <a class="link" href="UPower-up-stats-item.html#up-stats-item-get-accuracy" title="up_stats_item_get_accuracy ()">up_stats_item_get_accuracy</a>          (<em class="parameter"><code><span class="type">UpStatsItem</span> *stats_item</code></em>);
+<span class="returnvalue">UpStatsItem</span> *       <a class="link" href="UPower-up-stats-item.html#up-stats-item-new" title="up_stats_item_new ()">up_stats_item_new</a>                   (<em class="parameter"><code><span class="type">void</span></code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="UPower-up-stats-item.html#up-stats-item-set-accuracy" title="up_stats_item_set_accuracy ()">up_stats_item_set_accuracy</a>          (<em class="parameter"><code><span class="type">UpStatsItem</span> *stats_item</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a> accuracy</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="UPower-up-stats-item.html#up-stats-item-set-value" title="up_stats_item_set_value ()">up_stats_item_set_value</a>             (<em class="parameter"><code><span class="type">UpStatsItem</span> *stats_item</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a> value</code></em>);
 </pre>
 </div>
 <div class="refsect1">
@@ -60,21 +59,11 @@ See also: <span class="type">UpDevice</span>, <span class="type">UpClient</span>
 <div class="refsect1">
 <a name="UPower-up-stats-item.details"></a><h2>Details</h2>
 <div class="refsect2">
-<a name="UpStatsItemPrivate"></a><h3>UpStatsItemPrivate</h3>
-<pre class="programlisting">typedef struct UpStatsItemPrivate UpStatsItemPrivate;
-</pre>
-</div>
-<hr>
-<div class="refsect2">
-<a name="up-stats-item-new"></a><h3>up_stats_item_new ()</h3>
-<pre class="programlisting"><span class="returnvalue">UpStatsItem</span> *       up_stats_item_new                   (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>a new UpStatsItem object.</td>
-</tr></tbody>
-</table></div>
+<a name="up-stats-item-get-accuracy"></a><h3>up_stats_item_get_accuracy ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="returnvalue">gdouble</span></a>             up_stats_item_get_accuracy          (<em class="parameter"><code><span class="type">UpStatsItem</span> *stats_item</code></em>);</pre>
+<p>
+Gets the item accuracy.
+</p>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
@@ -88,21 +77,18 @@ Gets the item value.
 </div>
 <hr>
 <div class="refsect2">
-<a name="up-stats-item-set-value"></a><h3>up_stats_item_set_value ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                up_stats_item_set_value             (<em class="parameter"><code><span class="type">UpStatsItem</span> *stats_item</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a> value</code></em>);</pre>
-<p>
-Sets the item value.
-</p>
-<p class="since">Since 0.9.0</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="up-stats-item-get-accuracy"></a><h3>up_stats_item_get_accuracy ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="returnvalue">gdouble</span></a>             up_stats_item_get_accuracy          (<em class="parameter"><code><span class="type">UpStatsItem</span> *stats_item</code></em>);</pre>
-<p>
-Gets the item accuracy.
-</p>
+<a name="up-stats-item-new"></a><h3>up_stats_item_new ()</h3>
+<pre class="programlisting"><span class="returnvalue">UpStatsItem</span> *       up_stats_item_new                   (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>a new UpStatsItem object.</td>
+</tr></tbody>
+</table></div>
 <p class="since">Since 0.9.0</p>
 </div>
 <hr>
@@ -112,6 +98,16 @@ Gets the item accuracy.
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a> accuracy</code></em>);</pre>
 <p>
 Sets the item accuracy.
+</p>
+<p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="up-stats-item-set-value"></a><h3>up_stats_item_set_value ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                up_stats_item_set_value             (<em class="parameter"><code><span class="type">UpStatsItem</span> *stats_item</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a> value</code></em>);</pre>
+<p>
+Sets the item value.
 </p>
 <p class="since">Since 0.9.0</p>
 </div>

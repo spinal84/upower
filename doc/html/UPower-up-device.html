@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>up-device</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="index.html" title="UPower Reference Manual">
 <link rel="up" href="libupower-glib.html" title="libupower-glib GObjects">
 <link rel="prev" href="UPower-up-client.html" title="up-client">
@@ -39,7 +39,6 @@
 <a name="UPower-up-device.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">#define             <a class="link" href="UPower-up-device.html#UP-DEVICE-ERROR:CAPS" title="UP_DEVICE_ERROR">UP_DEVICE_ERROR</a>
 #define             <a class="link" href="UPower-up-device.html#UP-DEVICE-TYPE-ERROR:CAPS" title="UP_DEVICE_TYPE_ERROR">UP_DEVICE_TYPE_ERROR</a>
-<span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#changed" title="changed ()">*changed</a>)                          (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
 <span class="returnvalue">void</span>                (<a class="link" href="UPower-up-device.html#up-device-reserved1" title="_up_device_reserved1 ()">*_up_device_reserved1</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
 <span class="returnvalue">void</span>                (<a class="link" href="UPower-up-device.html#up-device-reserved2" title="_up_device_reserved2 ()">*_up_device_reserved2</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
 <span class="returnvalue">void</span>                (<a class="link" href="UPower-up-device.html#up-device-reserved3" title="_up_device_reserved3 ()">*_up_device_reserved3</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
@@ -48,8 +47,19 @@
 <span class="returnvalue">void</span>                (<a class="link" href="UPower-up-device.html#up-device-reserved6" title="_up_device_reserved6 ()">*_up_device_reserved6</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
 <span class="returnvalue">void</span>                (<a class="link" href="UPower-up-device.html#up-device-reserved7" title="_up_device_reserved7 ()">*_up_device_reserved7</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
 <span class="returnvalue">void</span>                (<a class="link" href="UPower-up-device.html#up-device-reserved8" title="_up_device_reserved8 ()">*_up_device_reserved8</a>)             (<em class="parameter"><code><span class="type">void</span></code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="UPower-up-client.html#changed" title="changed ()">*changed</a>)                          (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Pointer-Arrays.html#GPtrArray"><span class="returnvalue">GPtrArray</span></a> *         <a class="link" href="UPower-up-device.html#up-device-get-history-sync" title="up_device_get_history_sync ()">up_device_get_history_sync</a>          (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>,
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *type</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> timespec</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> resolution</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);
+const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="UPower-up-device.html#up-device-get-object-path" title="up_device_get_object_path ()">up_device_get_object_path</a>           (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Pointer-Arrays.html#GPtrArray"><span class="returnvalue">GPtrArray</span></a> *         <a class="link" href="UPower-up-device.html#up-device-get-statistics-sync" title="up_device_get_statistics_sync ()">up_device_get_statistics_sync</a>       (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>,
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *type</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);
 <span class="returnvalue">UpDevice</span> *          <a class="link" href="UPower-up-device.html#up-device-new" title="up_device_new ()">up_device_new</a>                       (<em class="parameter"><code><span class="type">void</span></code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="UPower-up-device.html#up-device-to-text" title="up_device_to_text ()">up_device_to_text</a>                   (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="UPower-up-device.html#up-device-refresh-sync" title="up_device_refresh_sync ()">up_device_refresh_sync</a>              (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);
@@ -57,18 +67,7 @@
                                                          <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *object_path</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Pointer-Arrays.html#GPtrArray"><span class="returnvalue">GPtrArray</span></a> *         <a class="link" href="UPower-up-device.html#up-device-get-history-sync" title="up_device_get_history_sync ()">up_device_get_history_sync</a>          (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *type</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> timespec</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> resolution</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Pointer-Arrays.html#GPtrArray"><span class="returnvalue">GPtrArray</span></a> *         <a class="link" href="UPower-up-device.html#up-device-get-statistics-sync" title="up_device_get_statistics_sync ()">up_device_get_statistics_sync</a>       (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *type</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);
-const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="UPower-up-device.html#up-device-get-object-path" title="up_device_get_object_path ()">up_device_get_object_path</a>           (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);
-                    <a class="link" href="UPower-up-device.html#UpDevicePrivate" title="UpDevicePrivate">UpDevicePrivate</a>;
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="UPower-up-device.html#up-device-to-text" title="up_device_to_text ()">up_device_to_text</a>                   (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);
 </pre>
 </div>
 <div class="refsect1">
@@ -93,11 +92,6 @@ See also: <span class="type">UpClient</span>
 <a name="UP-DEVICE-TYPE-ERROR:CAPS"></a><h3>UP_DEVICE_TYPE_ERROR</h3>
 <pre class="programlisting">#define UP_DEVICE_TYPE_ERROR (up_device_error_get_type ())
 </pre>
-</div>
-<hr>
-<div class="refsect2">
-<a name="changed"></a><h3>changed ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                (*changed)                          (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
 </div>
 <hr>
 <div class="refsect2">
@@ -141,116 +135,8 @@ See also: <span class="type">UpClient</span>
 </div>
 <hr>
 <div class="refsect2">
-<a name="up-device-new"></a><h3>up_device_new ()</h3>
-<pre class="programlisting"><span class="returnvalue">UpDevice</span> *          up_device_new                       (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
-<p>
-Creates a new <span class="type">UpDevice</span> object.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>a new UpDevice object.</td>
-</tr></tbody>
-</table></div>
-<p class="since">Since 0.9.0</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="up-device-to-text"></a><h3>up_device_to_text ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             up_device_to_text                   (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);</pre>
-<p>
-Converts the device to a string description.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>device</code></em> :</span></p></td>
-<td>a <span class="type">UpDevice</span> instance.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>text representation of <span class="type">UpDevice</span>
-</td>
-</tr>
-</tbody>
-</table></div>
-<p class="since">Since 0.9.0</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="up-device-refresh-sync"></a><h3>up_device_refresh_sync ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_device_refresh_sync              (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
-<p>
-Refreshes properties on the device.
-This function is normally not required.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>device</code></em> :</span></p></td>
-<td>a <span class="type">UpDevice</span> instance.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>cancellable</code></em> :</span></p></td>
-<td>a <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><span class="type">TRUE</span></a> for success, else <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><span class="type">FALSE</span></a> and <em class="parameter"><code>error</code></em> is used</td>
-</tr>
-</tbody>
-</table></div>
-<p class="since">Since 0.9.0</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="up-device-set-object-path-sync"></a><h3>up_device_set_object_path_sync ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_device_set_object_path_sync      (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *object_path</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
-<p>
-Sets the object path of the object and fills up initial properties.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>device</code></em> :</span></p></td>
-<td>a <span class="type">UpDevice</span> instance.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>object_path</code></em> :</span></p></td>
-<td>The UPower object path.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>cancellable</code></em> :</span></p></td>
-<td>a <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><span class="type">TRUE</span></a> for success, else <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><span class="type">FALSE</span></a> and <em class="parameter"><code>error</code></em> is used</td>
-</tr>
-</tbody>
-</table></div>
-<p class="since">Since 0.9.0</p>
+<a name="changed"></a><h3>changed ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*changed)                          (<em class="parameter"><code><span class="type">UpClient</span> *client</code></em>);</pre>
 </div>
 <hr>
 <div class="refsect2">
@@ -264,8 +150,11 @@ Sets the object path of the object and fills up initial properties.
 <p>
 Gets the device history.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>device</code></em> :</span></p></td>
@@ -303,6 +192,32 @@ Gets the device history.
 </div>
 <hr>
 <div class="refsect2">
+<a name="up-device-get-object-path"></a><h3>up_device_get_object_path ()</h3>
+<pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       up_device_get_object_path           (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);</pre>
+<p>
+Gets the object path for the device.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>device</code></em> :</span></p></td>
+<td>a <span class="type">UpDevice</span> instance.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>the object path, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2">
 <a name="up-device-get-statistics-sync"></a><h3>up_device_get_statistics_sync ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Pointer-Arrays.html#GPtrArray"><span class="returnvalue">GPtrArray</span></a> *         up_device_get_statistics_sync       (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>,
                                                          <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *type</code></em>,
@@ -311,8 +226,11 @@ Gets the device history.
 <p>
 Gets the device current statistics.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>device</code></em> :</span></p></td>
@@ -342,22 +260,56 @@ Gets the device current statistics.
 </div>
 <hr>
 <div class="refsect2">
-<a name="up-device-get-object-path"></a><h3>up_device_get_object_path ()</h3>
-<pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       up_device_get_object_path           (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);</pre>
+<a name="up-device-new"></a><h3>up_device_new ()</h3>
+<pre class="programlisting"><span class="returnvalue">UpDevice</span> *          up_device_new                       (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 <p>
-Gets the object path for the device.
+Creates a new <span class="type">UpDevice</span> object.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>a new UpDevice object.</td>
+</tr></tbody>
+</table></div>
+<p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="up-device-refresh-sync"></a><h3>up_device_refresh_sync ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_device_refresh_sync              (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
+<p>
+Refreshes properties on the device.
+This function is normally not required.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>device</code></em> :</span></p></td>
 <td>a <span class="type">UpDevice</span> instance.</td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the object path, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+<td><p><span class="term"><em class="parameter"><code>cancellable</code></em> :</span></p></td>
+<td>a <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
 </td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
+<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><span class="type">TRUE</span></a> for success, else <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><span class="type">FALSE</span></a> and <em class="parameter"><code>error</code></em> is used</td>
 </tr>
 </tbody>
 </table></div>
@@ -365,11 +317,71 @@ Gets the object path for the device.
 </div>
 <hr>
 <div class="refsect2">
-<a name="UpDevicePrivate"></a><h3>UpDevicePrivate</h3>
-<pre class="programlisting">typedef struct _UpDevicePrivate UpDevicePrivate;</pre>
+<a name="up-device-set-object-path-sync"></a><h3>up_device_set_object_path_sync ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            up_device_set_object_path_sync      (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>,
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *object_path</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> *cancellable</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
 <p>
-Private <span class="type">PkDevice</span> data
+Sets the object path of the object and fills up initial properties.
 </p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>device</code></em> :</span></p></td>
+<td>a <span class="type">UpDevice</span> instance.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>object_path</code></em> :</span></p></td>
+<td>The UPower object path.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>cancellable</code></em> :</span></p></td>
+<td>a <a href="http://library.gnome.org/devel/gio/unstable/GCancellable.html"><span class="type">GCancellable</span></a> or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
+<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><span class="type">TRUE</span></a> for success, else <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><span class="type">FALSE</span></a> and <em class="parameter"><code>error</code></em> is used</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.9.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="up-device-to-text"></a><h3>up_device_to_text ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             up_device_to_text                   (<em class="parameter"><code><span class="type">UpDevice</span> *device</code></em>);</pre>
+<p>
+Converts the device to a string description.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>device</code></em> :</span></p></td>
+<td>a <span class="type">UpDevice</span> instance.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>text representation of <span class="type">UpDevice</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.9.0</p>
 </div>
 </div>
 </div>

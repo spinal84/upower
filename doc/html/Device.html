@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>org.freedesktop.UPower.Device</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="index.html" title="UPower Reference Manual">
 <link rel="up" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="prev" href="UPower.html" title="org.freedesktop.UPower">
@@ -43,22 +43,22 @@
 </tr></table></div>
 <div class="refsynopsisdiv">
 <h2>Methods</h2>
-<pre class="synopsis"><a class="link" href="Device.html#Device.Refresh">Refresh</a>       ()
-<a class="link" href="Device.html#Device.GetHistory">GetHistory</a>    (in  's'      type,
-               in  'u'      timespan,
-               in  'u'      resolution,
-               out 'a(udu)' data)
-<a class="link" href="Device.html#Device.GetStatistics">GetStatistics</a> (in  's'      type,
-               out 'a(dd)'  data)
+<pre class="synopsis"><a class="link" href="Device.html#Device.Refresh">Refresh</a>()
+<a class="link" href="Device.html#Device.GetHistory">GetHistory</a>(in's'type,
+in'u'timespan,
+in'u'resolution,
+out'a(udu)'data)
+<a class="link" href="Device.html#Device.GetStatistics">GetStatistics</a>(in's'type,
+out'a(dd)'data)
 </pre>
 </div>
 <div class="refsect1">
-<a name="id412995"></a><h2>Signals</h2>
-<pre class="synopsis"><a class="link" href="Device.html#Device::Changed">Changed</a> ()
+<a name="idp6215456"></a><h2>Signals</h2>
+<pre class="synopsis"><a class="link" href="Device.html#Device::Changed">Changed</a>()
 </pre>
 </div>
 <div class="refsect1">
-<a name="id444857"></a><h2>Implemented Interfaces</h2>
+<a name="idp6833424"></a><h2>Implemented Interfaces</h2>
 <p>
     Objects implementing org.freedesktop.UPower.Device also implements
     org.freedesktop.DBus.Introspectable,
@@ -66,38 +66,39 @@
     </p>
 </div>
 <div class="refsect1">
-<a name="id448208"></a><h2>Properties</h2>
-<pre class="synopsis"><a class="link" href="Device.html#Device:NativePath">'NativePath'</a>       read      's'
-<a class="link" href="Device.html#Device:Vendor">'Vendor'</a>           read      's'
-<a class="link" href="Device.html#Device:Model">'Model'</a>            read      's'
-<a class="link" href="Device.html#Device:Serial">'Serial'</a>           read      's'
-<a class="link" href="Device.html#Device:UpdateTime">'UpdateTime'</a>       read      't'
-<a class="link" href="Device.html#Device:Type">'Type'</a>             read      'u'
-<a class="link" href="Device.html#Device:PowerSupply">'PowerSupply'</a>      read      'b'
-<a class="link" href="Device.html#Device:HasHistory">'HasHistory'</a>       read      'b'
-<a class="link" href="Device.html#Device:HasStatistics">'HasStatistics'</a>    read      'b'
-<a class="link" href="Device.html#Device:Online">'Online'</a>           read      'b'
-<a class="link" href="Device.html#Device:Energy">'Energy'</a>           read      'd'
-<a class="link" href="Device.html#Device:EnergyEmpty">'EnergyEmpty'</a>      read      'd'
-<a class="link" href="Device.html#Device:EnergyFull">'EnergyFull'</a>       read      'd'
-<a class="link" href="Device.html#Device:EnergyFullDesign">'EnergyFullDesign'</a> read      'd'
-<a class="link" href="Device.html#Device:EnergyRate">'EnergyRate'</a>       read      'd'
-<a class="link" href="Device.html#Device:Voltage">'Voltage'</a>          read      'd'
-<a class="link" href="Device.html#Device:TimeToEmpty">'TimeToEmpty'</a>      read      'x'
-<a class="link" href="Device.html#Device:TimeToFull">'TimeToFull'</a>       read      'x'
-<a class="link" href="Device.html#Device:Percentage">'Percentage'</a>       read      'd'
-<a class="link" href="Device.html#Device:IsPresent">'IsPresent'</a>        read      'b'
-<a class="link" href="Device.html#Device:State">'State'</a>            read      'u'
-<a class="link" href="Device.html#Device:IsRechargeable">'IsRechargeable'</a>   read      'b'
-<a class="link" href="Device.html#Device:Capacity">'Capacity'</a>         read      'd'
-<a class="link" href="Device.html#Device:Technology">'Technology'</a>       read      'u'
-<a class="link" href="Device.html#Device:RecallNotice">'RecallNotice'</a>     read      'b'
-<a class="link" href="Device.html#Device:RecallVendor">'RecallVendor'</a>     read      's'
-<a class="link" href="Device.html#Device:RecallUrl">'RecallUrl'</a>        read      's'
+<a name="idp7591264"></a><h2>Properties</h2>
+<pre class="synopsis"><a class="link" href="Device.html#Device:NativePath">'NativePath'</a>read's'
+<a class="link" href="Device.html#Device:Vendor">'Vendor'</a>read's'
+<a class="link" href="Device.html#Device:Model">'Model'</a>read's'
+<a class="link" href="Device.html#Device:Serial">'Serial'</a>read's'
+<a class="link" href="Device.html#Device:UpdateTime">'UpdateTime'</a>read't'
+<a class="link" href="Device.html#Device:Type">'Type'</a>read'u'
+<a class="link" href="Device.html#Device:PowerSupply">'PowerSupply'</a>read'b'
+<a class="link" href="Device.html#Device:HasHistory">'HasHistory'</a>read'b'
+<a class="link" href="Device.html#Device:HasStatistics">'HasStatistics'</a>read'b'
+<a class="link" href="Device.html#Device:Online">'Online'</a>read'b'
+<a class="link" href="Device.html#Device:Energy">'Energy'</a>read'd'
+<a class="link" href="Device.html#Device:EnergyEmpty">'EnergyEmpty'</a>read'd'
+<a class="link" href="Device.html#Device:EnergyFull">'EnergyFull'</a>read'd'
+<a class="link" href="Device.html#Device:EnergyFullDesign">'EnergyFullDesign'</a>read'd'
+<a class="link" href="Device.html#Device:EnergyRate">'EnergyRate'</a>read'd'
+<a class="link" href="Device.html#Device:Voltage">'Voltage'</a>read'd'
+<a class="link" href="Device.html#Device:Luminosity">'Luminosity'</a>read'd'
+<a class="link" href="Device.html#Device:TimeToEmpty">'TimeToEmpty'</a>read'x'
+<a class="link" href="Device.html#Device:TimeToFull">'TimeToFull'</a>read'x'
+<a class="link" href="Device.html#Device:Percentage">'Percentage'</a>read'd'
+<a class="link" href="Device.html#Device:IsPresent">'IsPresent'</a>read'b'
+<a class="link" href="Device.html#Device:State">'State'</a>read'u'
+<a class="link" href="Device.html#Device:IsRechargeable">'IsRechargeable'</a>read'b'
+<a class="link" href="Device.html#Device:Capacity">'Capacity'</a>read'd'
+<a class="link" href="Device.html#Device:Technology">'Technology'</a>read'u'
+<a class="link" href="Device.html#Device:RecallNotice">'RecallNotice'</a>read'b'
+<a class="link" href="Device.html#Device:RecallVendor">'RecallVendor'</a>read's'
+<a class="link" href="Device.html#Device:RecallUrl">'RecallUrl'</a>read's'
 </pre>
 </div>
 <div class="refsect1">
-<a name="id428926"></a><h2>Description</h2>
+<a name="idp6317312"></a><h2>Description</h2>
 <p>
       
         </p>
@@ -349,23 +350,29 @@
     </p>
 </div>
 <div class="refsect1">
-<a name="id435996"></a><h2>Details</h2>
+<a name="idp5356800"></a><h2>Details</h2>
 <div class="refsect2">
-<a name="id436004"></a><h3>
+<a name="idp5357760"></a><h3>
 <a name="Device.Refresh"></a>Refresh ()</h3>
 <pre class="programlisting">Refresh ()</pre>
 </div>
 <p>
             Refreshes the data collected from the power source.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <div class="refsect3">
-<a name="id436034"></a><h4>Errors</h4>
-<div class="variablelist"><table border="0">
+<a name="idp5361392"></a><h4>Errors</h4>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><em class="parameter"><code>org.freedesktop.UPower.Device.GeneralError</code></em>:</span></p></td>
 <td>if an error occured while refreshing</td>
@@ -373,23 +380,26 @@
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id436052"></a><h4>Permissions</h4>
+<a name="idp5363584"></a><h4>Permissions</h4>
 <p class="permission">Callers need the org.freedesktop.upower.refresh-power-source authorization</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="id436060"></a><h3>
+<a name="idp5364528"></a><h3>
 <a name="Device.GetHistory"></a>GetHistory ()</h3>
-<pre class="programlisting">GetHistory (in  's'      type,
-            in  'u'      timespan,
-            in  'u'      resolution,
-            out 'a(udu)' data)</pre>
+<pre class="programlisting">GetHistory (in's'type,
+in'u'timespan,
+in'u'resolution,
+out'a(udu)'data)</pre>
 </div>
 <p>
             Gets history for the power device that is persistent across reboots.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>type</code></em>:</span></p></td>
@@ -413,7 +423,7 @@
             The history data for the power device, if the device supports history.
             Data is ordered from the earliest in time, to the newest data point.
             Each element contains the following members:
-            <div class="itemizedlist"><ul class="itemizedlist" type="disc">
+            <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <span class="bold"><strong>time: </strong></span>
                   The time value in seconds from the <code class="literal">gettimeofday()</code> method.
@@ -434,17 +444,20 @@
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id416410"></a><h3>
+<a name="idp9330112"></a><h3>
 <a name="Device.GetStatistics"></a>GetStatistics ()</h3>
-<pre class="programlisting">GetStatistics (in  's'     type,
-               out 'a(dd)' data)</pre>
+<pre class="programlisting">GetStatistics (in's'type,
+out'a(dd)'data)</pre>
 </div>
 <p>
             Gets statistics for the power device that may be interesting
             to show on a graph in the session.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>type</code></em>:</span></p></td>
@@ -456,7 +469,7 @@
 <td>
             The statistics data for the power device.
             Each element contains the following members:
-            <div class="itemizedlist"><ul class="itemizedlist" type="disc">
+            <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <span class="bold"><strong>value: </strong></span>
                   The value of the percentage point, usually in seconds
@@ -472,26 +485,29 @@
 </table></div>
 </div>
 <div class="refsect1">
-<a name="id416496"></a><h2>Signal Details</h2>
+<a name="idp9340480"></a><h2>Signal Details</h2>
 <div class="refsect2">
-<a name="id416504"></a><h3>
+<a name="idp9341440"></a><h3>
 <a name="Device::Changed"></a>The Changed signal</h3>
 <pre class="programlisting">Changed ()</pre>
 </div>
 <p>
             Some value on the power source changed.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 </div>
 <div class="refsect1">
-<a name="id416536"></a><h2>Property Details</h2>
+<a name="idp9345232"></a><h2>Property Details</h2>
 <div class="refsect2">
-<a name="id416544"></a><h3>
+<a name="idp9346192"></a><h3>
 <a name="Device:NativePath"></a>The "NativePath" property</h3>
-<pre class="programlisting">'NativePath'  read      's'
+<pre class="programlisting">'NativePath'read's'
 </pre>
 </div>
 <p>
@@ -501,78 +517,93 @@
             blank if the device is being driven by a user space
             driver.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id416582"></a><h3>
+<a name="idp9350752"></a><h3>
 <a name="Device:Vendor"></a>The "Vendor" property</h3>
-<pre class="programlisting">'Vendor'  read      's'
+<pre class="programlisting">'Vendor'read's'
 </pre>
 </div>
 <p>
             Name of the vendor of the battery.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id416613"></a><h3>
+<a name="idp9354384"></a><h3>
 <a name="Device:Model"></a>The "Model" property</h3>
-<pre class="programlisting">'Model'  read      's'
+<pre class="programlisting">'Model'read's'
 </pre>
 </div>
 <p>
             Name of the model of this battery.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id416643"></a><h3>
+<a name="idp9358016"></a><h3>
 <a name="Device:Serial"></a>The "Serial" property</h3>
-<pre class="programlisting">'Serial'  read      's'
+<pre class="programlisting">'Serial'read's'
 </pre>
 </div>
 <p>
             Unique serial number of the battery.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id416674"></a><h3>
+<a name="idp9361728"></a><h3>
 <a name="Device:UpdateTime"></a>The "UpdateTime" property</h3>
-<pre class="programlisting">'UpdateTime'  read      't'
+<pre class="programlisting">'UpdateTime'read't'
 </pre>
 </div>
 <p>
             The point in time (seconds since the Epoch Jan 1, 1970
             0:00 UTC) that data was read from the power source.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id416706"></a><h3>
+<a name="idp9365536"></a><h3>
 <a name="Device:Type"></a>The "Type" property</h3>
-<pre class="programlisting">'Type'  read      'u'
+<pre class="programlisting">'Type'read'u'
 </pre>
 </div>
 <p>
             Type of power source.
           </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <span class="bold"><strong>0: </strong></span>Unknown</li>
 <li class="listitem">
@@ -592,15 +623,18 @@
 <li class="listitem">
 <span class="bold"><strong>8: </strong></span>Phone</li>
 </ul></div>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id416803"></a><h3>
+<a name="idp9377216"></a><h3>
 <a name="Device:PowerSupply"></a>The "PowerSupply" property</h3>
-<pre class="programlisting">'PowerSupply'  read      'b'
+<pre class="programlisting">'PowerSupply'read'b'
 </pre>
 </div>
 <p>
@@ -608,43 +642,52 @@
             This would be set TRUE for laptop batteries and UPS devices,
             but set FALSE for wireless mice or PDAs.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id416835"></a><h3>
+<a name="idp9381072"></a><h3>
 <a name="Device:HasHistory"></a>The "HasHistory" property</h3>
-<pre class="programlisting">'HasHistory'  read      'b'
+<pre class="programlisting">'HasHistory'read'b'
 </pre>
 </div>
 <p>
             If the power device has history.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id416867"></a><h3>
+<a name="idp9384800"></a><h3>
 <a name="Device:HasStatistics"></a>The "HasStatistics" property</h3>
-<pre class="programlisting">'HasStatistics'  read      'b'
+<pre class="programlisting">'HasStatistics'read'b'
 </pre>
 </div>
 <p>
             If the power device has statistics.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id416898"></a><h3>
+<a name="idp9388528"></a><h3>
 <a name="Device:Online"></a>The "Online" property</h3>
-<pre class="programlisting">'Online'  read      'b'
+<pre class="programlisting">'Online'read'b'
 </pre>
 </div>
 <p>
@@ -653,15 +696,18 @@
             <code class="literal">type</code>
             has the value "line-power".
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id416939"></a><h3>
+<a name="idp9393408"></a><h3>
 <a name="Device:Energy"></a>The "Energy" property</h3>
-<pre class="programlisting">'Energy'  read      'd'
+<pre class="programlisting">'Energy'read'd'
 </pre>
 </div>
 <p>
@@ -673,15 +719,18 @@
             <code class="literal">type</code>
             has the value "battery".
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id416982"></a><h3>
+<a name="idp9398592"></a><h3>
 <a name="Device:EnergyEmpty"></a>The "EnergyEmpty" property</h3>
-<pre class="programlisting">'EnergyEmpty'  read      'd'
+<pre class="programlisting">'EnergyEmpty'read'd'
 </pre>
 </div>
 <p>
@@ -693,15 +742,18 @@
             <code class="literal">type</code>
             has the value "battery".
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417026"></a><h3>
+<a name="idp9403808"></a><h3>
 <a name="Device:EnergyFull"></a>The "EnergyFull" property</h3>
-<pre class="programlisting">'EnergyFull'  read      'd'
+<pre class="programlisting">'EnergyFull'read'd'
 </pre>
 </div>
 <p>
@@ -713,15 +765,18 @@
             <code class="literal">type</code>
             has the value "battery".
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417069"></a><h3>
+<a name="idp9409008"></a><h3>
 <a name="Device:EnergyFullDesign"></a>The "EnergyFullDesign" property</h3>
-<pre class="programlisting">'EnergyFullDesign'  read      'd'
+<pre class="programlisting">'EnergyFullDesign'read'd'
 </pre>
 </div>
 <p>
@@ -733,15 +788,18 @@
             <code class="literal">type</code>
             has the value "battery".
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417113"></a><h3>
+<a name="idp9414240"></a><h3>
 <a name="Device:EnergyRate"></a>The "EnergyRate" property</h3>
-<pre class="programlisting">'EnergyRate'  read      'd'
+<pre class="programlisting">'EnergyRate'read'd'
 </pre>
 </div>
 <p>
@@ -754,29 +812,52 @@
             <code class="literal">type</code>
             has the value "battery".
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417157"></a><h3>
+<a name="idp9419520"></a><h3>
 <a name="Device:Voltage"></a>The "Voltage" property</h3>
-<pre class="programlisting">'Voltage'  read      'd'
+<pre class="programlisting">'Voltage'read'd'
 </pre>
 </div>
 <p>
             Voltage in the Cell or being recorded by the meter.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417187"></a><h3>
+<a name="idp9423152"></a><h3>
+<a name="Device:Luminosity"></a>The "Luminosity" property</h3>
+<pre class="programlisting">'Luminosity'read'd'
+</pre>
+</div>
+<p>
+            Luminosity being recorded by the meter.
+          </p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody></tbody>
+</table></div>
+<hr>
+<div class="refsect2">
+<a name="idp9426880"></a><h3>
 <a name="Device:TimeToEmpty"></a>The "TimeToEmpty" property</h3>
-<pre class="programlisting">'TimeToEmpty'  read      'x'
+<pre class="programlisting">'TimeToEmpty'read'x'
 </pre>
 </div>
 <p>
@@ -788,15 +869,18 @@
             <code class="literal">type</code>
             has the value "battery".
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417231"></a><h3>
+<a name="idp9432096"></a><h3>
 <a name="Device:TimeToFull"></a>The "TimeToFull" property</h3>
-<pre class="programlisting">'TimeToFull'  read      'x'
+<pre class="programlisting">'TimeToFull'read'x'
 </pre>
 </div>
 <p>
@@ -808,15 +892,18 @@
             <code class="literal">type</code>
             has the value "battery".
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417274"></a><h3>
+<a name="idp9437312"></a><h3>
 <a name="Device:Percentage"></a>The "Percentage" property</h3>
-<pre class="programlisting">'Percentage'  read      'd'
+<pre class="programlisting">'Percentage'read'd'
 </pre>
 </div>
 <p>
@@ -835,15 +922,18 @@
             <code class="literal">type</code>
             has the value "battery".
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417357"></a><h3>
+<a name="idp9447232"></a><h3>
 <a name="Device:IsPresent"></a>The "IsPresent" property</h3>
-<pre class="programlisting">'IsPresent'  read      'b'
+<pre class="programlisting">'IsPresent'read'b'
 </pre>
 </div>
 <p>
@@ -856,21 +946,24 @@
             <code class="literal">type</code>
             has the value "battery".
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417401"></a><h3>
+<a name="idp9452528"></a><h3>
 <a name="Device:State"></a>The "State" property</h3>
-<pre class="programlisting">'State'  read      'u'
+<pre class="programlisting">'State'read'u'
 </pre>
 </div>
 <p>
             The battery power state.
           </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <span class="bold"><strong>0: </strong></span>Unknown</li>
 <li class="listitem">
@@ -891,15 +984,18 @@
             <code class="literal">type</code>
             has the value "battery".
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417498"></a><h3>
+<a name="idp9464096"></a><h3>
 <a name="Device:IsRechargeable"></a>The "IsRechargeable" property</h3>
-<pre class="programlisting">'IsRechargeable'  read      'b'
+<pre class="programlisting">'IsRechargeable'read'b'
 </pre>
 </div>
 <p>
@@ -910,15 +1006,18 @@
             <code class="literal">type</code>
             has the value "battery".
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417541"></a><h3>
+<a name="idp9469264"></a><h3>
 <a name="Device:Capacity"></a>The "Capacity" property</h3>
-<pre class="programlisting">'Capacity'  read      'd'
+<pre class="programlisting">'Capacity'read'd'
 </pre>
 </div>
 <p>
@@ -936,21 +1035,24 @@
             <code class="literal">type</code>
             has the value "battery".
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417606"></a><h3>
+<a name="idp9477040"></a><h3>
 <a name="Device:Technology"></a>The "Technology" property</h3>
-<pre class="programlisting">'Technology'  read      'u'
+<pre class="programlisting">'Technology'read'u'
 </pre>
 </div>
 <p>
             Technology used in the battery:
           </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <span class="bold"><strong>0: </strong></span>Unknown</li>
 <li class="listitem">
@@ -971,15 +1073,18 @@
             <code class="literal">type</code>
             has the value "battery".
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417702"></a><h3>
+<a name="idp9488624"></a><h3>
 <a name="Device:RecallNotice"></a>The "RecallNotice" property</h3>
-<pre class="programlisting">'RecallNotice'  read      'b'
+<pre class="programlisting">'RecallNotice'read'b'
 </pre>
 </div>
 <p>
@@ -988,15 +1093,18 @@
             This key does not imply the device is faulty, only that it approximatly
             matches the description from the vendor of units that were recalled.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417735"></a><h3>
+<a name="idp9492560"></a><h3>
 <a name="Device:RecallVendor"></a>The "RecallVendor" property</h3>
-<pre class="programlisting">'RecallVendor'  read      's'
+<pre class="programlisting">'RecallVendor'read's'
 </pre>
 </div>
 <p>
@@ -1005,15 +1113,18 @@
 <p>
             This property is only valid if the property recall-notice is true.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id417770"></a><h3>
+<a name="idp9496736"></a><h3>
 <a name="Device:RecallUrl"></a>The "RecallUrl" property</h3>
-<pre class="programlisting">'RecallUrl'  read      's'
+<pre class="programlisting">'RecallUrl'read's'
 </pre>
 </div>
 <p>
@@ -1022,8 +1133,11 @@
 <p>
             This property is only valid if the property recall-notice is true.
           </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody></tbody>
 </table></div>
 </div>
