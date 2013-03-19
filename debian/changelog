@@ -10,6 +10,9 @@ upower (0.9.20-1) UNRELEASED; urgency=low
     libupower-glib.
   * Drop unnecessary "needs-root" restriction from upstream-system
     autopkgtest.
+  * Add no_deprecation_define.patch: Do not require applications to define
+    UPOWER_ENABLE_DEPRECATED to access suspend/resume functionality. We are
+    not ready to do that yet in Debian.
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 19 Mar 2013 18:40:05 +0100
 
