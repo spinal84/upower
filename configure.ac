@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 m4_define([up_major_version], [0])
 m4_define([up_minor_version], [9])
-m4_define([up_micro_version], [19])
+m4_define([up_micro_version], [20])
 m4_define([up_version],
           [up_major_version.up_minor_version.up_micro_version])
 
@@ -61,16 +61,19 @@ AC_SYS_LARGEFILE
 # Initialize libtool
 LT_INIT
 
-# Taken from dbus
-AC_ARG_ENABLE(ansi,             [  --enable-ansi           enable -ansi -pedantic gcc flags],enable_ansi=$enableval,enable_ansi=no)
-AC_ARG_ENABLE(verbose-mode,     [  --enable-verbose-mode   support verbose debug mode],enable_verbose_mode=$enableval,enable_verbose_mode=$USE_MAINTAINER_MODE)
-AC_ARG_ENABLE(man-pages,        [  --enable-man-pages      build manual pages],enable_man_pages=$enableval,enable_man_pages=yes)
+# Build deprecated functionality
+AC_ARG_ENABLE(deprecated, [  --enable-deprecated      build deprecated functionality],
+	      enable_deprecated=$enableval,
+	      enable_deprecated=no)
+if test "${enable_deprecated}" != no; then
+  AC_DEFINE(ENABLE_DEPRECATED, 1, [Define if we should build deprecated functionalty])
+fi
+AM_CONDITIONAL(ENABLE_DEPRECATED, test x$enable_deprecated = xyes)
 
+# Build man pages?
+AC_ARG_ENABLE(man-pages,        [  --enable-man-pages      build manual pages],enable_man_pages=$enableval,enable_man_pages=yes)
 if test "${enable_man_page}" != no; then
-dnl
-dnl Check for xsltproc
-dnl
-AC_PATH_PROG([XSLTPROC], [xsltproc])
+  AC_PATH_PROG([XSLTPROC], [xsltproc])
   if test -z "$XSLTPROC"; then
     enable_man_pages=no
   fi
@@ -107,24 +110,6 @@ CPPFLAGS="$CPPFLAGS -DG_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_DISABL
 CPPFLAGS="$CPPFLAGS -DGDK_MULTIHEAD_SAFE -DGTK_MULTIHEAD_SAFE"
 CPPFLAGS="$CPPFLAGS -DGSEAL_ENABLE"
 
-dnl ---------------------------------------------------------------------------
-dnl - Use strict options (default enabled for devs, disabled in releases)
-dnl ---------------------------------------------------------------------------
-dnl if .git directory is present, considering we are working in the repository
-if test -d ".git"; then
-	default_strict=yes
-else
-	default_strict=no
-fi
-
-AC_ARG_ENABLE(strict, AS_HELP_STRING([--enable-strict],[Enable strict compilation options]), enable_strict=$enableval,
-		enable_strict=$default_strict)
-if test x$enable_strict != xno; then
-	if test "$GCC" = "yes"; then
-		WARNINGFLAGS_C="$WARNINGFLAGS_C -Werror"
-	fi
-fi
-
 if test "$GCC" = "yes"; then
 	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wall"
 	WARNINGFLAGS_C="$WARNINGFLAGS_C -Wcast-align -Wno-uninitialized"
@@ -160,20 +145,7 @@ AC_SUBST(WARNINGFLAGS_C)
 PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.21.5])
 PKG_CHECK_MODULES(DBUS, [dbus-1 >= 1.0])
 PKG_CHECK_MODULES(DBUS_GLIB, [dbus-glib-1 >= 0.76])
-
-# polkit >= 0.97 uses polkit_authority_get_sync() rather than
-# polkit_authority_get
-PKG_CHECK_MODULES(POLKIT, \
-		  polkit-gobject-1 >= 0.97,
-		  has_new_polkit=yes,
-		  has_new_polkit=no)
-if test x$has_new_polkit = xno; then
-	PKG_CHECK_MODULES(POLKIT, \
-			  polkit-gobject-1 >= 0.91)
-else
-	AC_DEFINE(USE_SECURITY_POLKIT_NEW, 1, [if we should use PolicyKits new API])
-fi
-
+PKG_CHECK_MODULES(POLKIT, polkit-gobject-1 >= 0.97)
 PKG_CHECK_MODULES(GIO, [gio-2.0 >= 2.16.1])
 
 dnl ====================================================================
@@ -328,6 +300,7 @@ echo "
         cppflags:                   ${CPPFLAGS}
         xsltproc:                   ${XSLTPROC}
 
+        Enable deprecated stuff:    ${enable_deprecated}
         Backend:                    ${with_backend}
         libimobiledevice support:   ${have_idevice}
         Maintainer mode:            ${USE_MAINTAINER_MODE}

@@ -461,7 +461,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = dummy freebsd linux openbsd
-INCLUDES = \
+AM_CPPFLAGS = \
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\"		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\"		\
@@ -534,7 +534,6 @@ upowerd_LDADD = -lm $(USB_LIBS) $(GIO_LIBS) $(DBUS_GLIB_LIBS) \
 	$(am__append_3) $(am__append_4)
 @BACKEND_TYPE_LINUX_TRUE@@HAVE_SYSTEMDUTILDIR_TRUE@systemsleepdir = $(systemdutildir)/system-sleep
 @BACKEND_TYPE_LINUX_TRUE@@HAVE_SYSTEMDUTILDIR_TRUE@systemsleep_SCRIPTS = notify-upower.sh
-@BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@DBUS_LAUNCH = $(shell which dbus-launch)
 upowerd_CFLAGS = \
 	$(WARNINGFLAGS_C)					\
 	$(NULL)
@@ -1622,7 +1621,7 @@ up-wakeups-glue.h: org.freedesktop.UPower.Wakeups.xml Makefile.am
 	dbus-binding-tool --prefix=up_wakeups --mode=glib-server --output=up-wakeups-glue.h $(srcdir)/org.freedesktop.UPower.Wakeups.xml
 
 @BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@check-local: upowerd
-@BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@	env top_builddir=$(top_builddir) $(DBUS_LAUNCH) $(srcdir)/linux/integration-test -v
+@BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@	env top_builddir=$(top_builddir) $(srcdir)/linux/integration-test -v
 
 $(dbusservice_DATA): $(dbusservice_in_files) Makefile
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@

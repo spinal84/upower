@@ -36,7 +36,7 @@
 
 #include "up-device-supply.h"
 #include "up-device-csr.h"
-#include "up-device-lg-unifying.h"
+#include "up-device-unifying.h"
 #include "up-device-wup.h"
 #include "up-device-hid.h"
 #include "up-input.h"
@@ -49,12 +49,14 @@
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 
+#ifdef ENABLE_DEPRECATED
 #ifdef HAVE_SYSTEMD
 #include <systemd/sd-daemon.h>
 
 #define SD_HIBERNATE_COMMAND	"gdbus call --system --dest org.freedesktop.login1 --object-path /org/freedesktop/login1 --method org.freedesktop.login1.Manager.Hibernate 'true'"
 #define SD_SUSPEND_COMMAND	"gdbus call --system --dest org.freedesktop.login1 --object-path /org/freedesktop/login1 --method org.freedesktop.login1.Manager.Suspend 'true'"
 
+#endif
 #endif
 
 static void	up_backend_class_init	(UpBackendClass	*klass);
@@ -77,7 +79,9 @@ struct UpBackendPrivate
 enum {
 	SIGNAL_DEVICE_ADDED,
 	SIGNAL_DEVICE_REMOVED,
+#ifdef ENABLE_DEPRECATED
 	SIGNAL_RESUMING,
+#endif
 	SIGNAL_LAST
 };
 
@@ -88,10 +92,12 @@ G_DEFINE_TYPE (UpBackend, up_backend, G_TYPE_OBJECT)
 static gboolean up_backend_device_add (UpBackend *backend, GUdevDevice *native);
 static void up_backend_device_remove (UpBackend *backend, GUdevDevice *native);
 
+#ifdef ENABLE_DEPRECATED
 #define UP_BACKEND_SUSPEND_COMMAND		"/usr/sbin/pm-suspend"
 #define UP_BACKEND_HIBERNATE_COMMAND		"/usr/sbin/pm-hibernate"
 #define UP_BACKEND_POWERSAVE_TRUE_COMMAND	"/usr/sbin/pm-powersave true"
 #define UP_BACKEND_POWERSAVE_FALSE_COMMAND	"/usr/sbin/pm-powersave false"
+#endif
 
 /**
  * up_backend_device_new:
@@ -110,6 +116,18 @@ up_backend_device_new (UpBackend *backend, GUdevDevice *native)
 
 		/* are we a valid power supply */
 		device = UP_DEVICE (up_device_supply_new ());
+		ret = up_device_coldplug (device, backend->priv->daemon, G_OBJECT (native));
+		if (ret)
+			goto out;
+		g_object_unref (device);
+
+		/* no valid power supply object */
+		device = NULL;
+
+	} else if (g_strcmp0 (subsys, "hid") == 0) {
+
+		/* see if this is a Unifying mouse or keyboard */
+		device = UP_DEVICE (up_device_unifying_new ());
 		ret = up_device_coldplug (device, backend->priv->daemon, G_OBJECT (native));
 		if (ret)
 			goto out;
@@ -176,18 +194,8 @@ up_backend_device_new (UpBackend *backend, GUdevDevice *native)
 
 			/* no valid input object */
 			device = NULL;
-		} else {
-			g_object_unref (input);
-
-			/* see if this is a Unifying mouse or keyboard */
-			device = UP_DEVICE (up_device_unifying_new ());
-			ret = up_device_coldplug (device, backend->priv->daemon, G_OBJECT (native));
-			if (!ret) {
-				g_object_unref (device);
-				/* no valid input object */
-				device = NULL;
-			}
 		}
+		g_object_unref (input);
 	} else {
 		native_path = g_udev_device_get_sysfs_path (native);
 		g_warning ("native path %s (%s) ignoring", native_path, subsys);
@@ -328,7 +336,7 @@ up_backend_coldplug (UpBackend *backend, UpDaemon *daemon)
 	GList *l;
 	guint i;
 	gboolean ret;
-	const gchar *subsystems[] = {"power_supply", "usb", "usbmisc", "tty", "input", NULL};
+	const gchar *subsystems[] = {"power_supply", "usb", "usbmisc", "tty", "input", "hid", NULL};
 
 	backend->priv->daemon = g_object_ref (daemon);
 	backend->priv->device_list = up_daemon_get_device_list (daemon);
@@ -360,6 +368,7 @@ up_backend_coldplug (UpBackend *backend, UpDaemon *daemon)
 	return TRUE;
 }
 
+#ifdef ENABLE_DEPRECATED
 /**
  * up_backend_supports_sleep_state:
  *
@@ -617,7 +626,9 @@ up_backend_emits_resuming (UpBackend *backend)
 #endif
 	return FALSE;
 }
+#endif
 
+#ifdef ENABLE_DEPRECATED
 /**
  * up_backend_get_powersave_command:
  **/
@@ -628,6 +639,7 @@ up_backend_get_powersave_command (UpBackend *backend, gboolean powersave)
 		return UP_BACKEND_POWERSAVE_TRUE_COMMAND;
 	return UP_BACKEND_POWERSAVE_FALSE_COMMAND;
 }
+#endif
 
 /**
  * up_backend_class_init:
@@ -651,16 +663,19 @@ up_backend_class_init (UpBackendClass *klass)
 			      G_STRUCT_OFFSET (UpBackendClass, device_removed),
 			      NULL, NULL, up_marshal_VOID__POINTER_POINTER,
 			      G_TYPE_NONE, 2, G_TYPE_POINTER, G_TYPE_POINTER);
+#ifdef ENABLE_DEPRECATED
 	signals [SIGNAL_RESUMING] =
 		g_signal_new ("resuming",
 			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (UpBackendClass, resuming),
 			      NULL, NULL, g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
+#endif
 
 	g_type_class_add_private (klass, sizeof (UpBackendPrivate));
 }
 
+#ifdef ENABLE_DEPRECATED
 static DBusHandlerResult
 message_filter (DBusConnection *connection,
 		DBusMessage *message,
@@ -673,9 +688,9 @@ message_filter (DBusConnection *connection,
 		g_signal_emit (backend, signals[SIGNAL_RESUMING], 0);
 		return DBUS_HANDLER_RESULT_HANDLED;
 	}
-
 	return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
+#endif
 
 /**
  * up_backend_init:
@@ -689,6 +704,7 @@ up_backend_init (UpBackend *backend)
 	backend->priv->device_list = NULL;
 	backend->priv->managed_devices = up_device_list_new ();
 
+#ifdef ENABLE_DEPRECATED
 #ifdef HAVE_SYSTEMD
 	if (sd_booted ()) {
 		DBusGConnection *bus;
@@ -696,6 +712,7 @@ up_backend_init (UpBackend *backend)
 		backend->priv->connection = dbus_g_connection_get_connection (bus);
 		dbus_connection_add_filter (backend->priv->connection, message_filter, backend, NULL);
 	}
+#endif
 #endif
 }
 
@@ -721,8 +738,10 @@ up_backend_finalize (GObject *object)
 
 	g_object_unref (backend->priv->managed_devices);
 
+#ifdef ENABLE_DEPRECATED
 	if (backend->priv->connection)
 		dbus_connection_remove_filter (backend->priv->connection, message_filter, backend);
+#endif
 
 	G_OBJECT_CLASS (up_backend_parent_class)->finalize (object);
 }

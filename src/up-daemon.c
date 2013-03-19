@@ -86,18 +86,24 @@ struct UpDaemonPrivate
 	gboolean		 lid_is_present;
 	gboolean		 lid_force_sleep;
 	gboolean		 is_docked;
+#ifdef ENABLE_DEPRECATED
 	gboolean		 kernel_can_suspend;
 	gboolean		 kernel_can_hibernate;
 	gboolean		 hibernate_has_encrypted_swap;
+#endif
 	gboolean		 during_coldplug;
+#ifdef ENABLE_DEPRECATED
 	gboolean		 sent_sleeping_signal;
+#endif
 	guint			 battery_poll_id;
 	guint			 battery_poll_count;
+#ifdef ENABLE_DEPRECATED
 	GTimer			*about_to_sleep_timer;
 	guint			 about_to_sleep_id;
 	guint			 conf_sleep_timeout;
 	gboolean		 conf_allow_hibernate_encrypted_swap;
 	gboolean		 conf_run_powersave_command;
+#endif
 	const gchar		*sleep_kind;
 };
 
@@ -119,21 +125,6 @@ G_DEFINE_TYPE (UpDaemon, up_daemon, G_TYPE_OBJECT)
 /* refresh all the devices after this much time when on-battery has changed */
 #define UP_DAEMON_ON_BATTERY_REFRESH_DEVICES_DELAY	1 /* seconds */
 #define UP_DAEMON_POLL_BATTERY_NUMBER_TIMES		5
-
-/* D-BUS to connect to. Can be set to session bus for testing */
-static DBusBusType daemon_bus_type = DBUS_BUS_SYSTEM;
-
-DBusBusType
-up_daemon_get_bus_type (void)
-{
-	return daemon_bus_type;
-}
-
-void
-up_daemon_set_bus_type (DBusBusType type)
-{
-	daemon_bus_type = type;
-}
 
 /**
  * up_daemon_get_on_battery_local:
@@ -248,6 +239,7 @@ up_daemon_get_on_ac_local (UpDaemon *daemon)
 	return result;
 }
 
+#ifdef ENABLE_DEPRECATED
 /**
  * up_daemon_set_powersave:
  **/
@@ -274,6 +266,7 @@ up_daemon_set_powersave (UpDaemon *daemon, gboolean powersave)
 out:
 	return ret;
 }
+#endif
 
 /**
  * up_daemon_refresh_battery_devices:
@@ -338,8 +331,9 @@ up_daemon_about_to_sleep (UpDaemon *daemon,
 			  const gchar *sleep_kind,
 			  DBusGMethodInvocation *context)
 {
-	PolkitSubject *subject = NULL;
 	GError *error;
+#ifdef ENABLE_DEPRECATED
+	PolkitSubject *subject = NULL;
 	UpDaemonPrivate *priv = daemon->priv;
 
 	/* already requested */
@@ -373,6 +367,15 @@ out:
 	if (subject != NULL)
 		g_object_unref (subject);
 	return TRUE;
+#else
+	/* just return an error */
+	error = g_error_new_literal (UP_DAEMON_ERROR,
+				     UP_DAEMON_ERROR_GENERAL,
+				     "Method is deprecated, please port to org.freedesktop.login1.Manager.Inhibit");
+	dbus_g_method_return_error (context, error);
+	g_error_free (error);
+	return FALSE;
+#endif
 }
 
 /* temp object for deferred callback */
@@ -383,6 +386,7 @@ typedef struct {
 	gulong			 handler;
 } UpDaemonDeferredSleep;
 
+#ifdef ENABLE_DEPRECATED
 static void
 emit_resuming (UpDaemonDeferredSleep *sleep)
 {
@@ -504,6 +508,7 @@ up_daemon_deferred_sleep (UpDaemon *daemon, const gchar *command, DBusGMethodInv
 #endif
 	}
 }
+#endif
 
 /**
  * up_daemon_suspend:
@@ -512,6 +517,7 @@ gboolean
 up_daemon_suspend (UpDaemon *daemon, DBusGMethodInvocation *context)
 {
 	GError *error;
+#ifdef ENABLE_DEPRECATED
 	PolkitSubject *subject = NULL;
 	const gchar *command;
 	UpDaemonPrivate *priv = daemon->priv;
@@ -551,6 +557,15 @@ out:
 	if (subject != NULL)
 		g_object_unref (subject);
 	return TRUE;
+#else
+	/* just return an error */
+	error = g_error_new_literal (UP_DAEMON_ERROR,
+				     UP_DAEMON_ERROR_GENERAL,
+				     "Method is deprecated, please port to org.freedesktop.login1.Manager.Suspend");
+	dbus_g_method_return_error (context, error);
+	g_error_free (error);
+	return FALSE;
+#endif
 }
 
 /**
@@ -559,10 +574,11 @@ out:
 gboolean
 up_daemon_suspend_allowed (UpDaemon *daemon, DBusGMethodInvocation *context)
 {
+	GError *error;
+#ifdef ENABLE_DEPRECATED
 	gboolean ret;
 	PolkitSubject *subject = NULL;
 	UpDaemonPrivate *priv = daemon->priv;
-	GError *error;
 
 	subject = up_polkit_get_subject (priv->polkit, context);
 	if (subject == NULL)
@@ -582,9 +598,19 @@ out:
 	if (subject != NULL)
 		g_object_unref (subject);
 	return TRUE;
+#else
+	/* just return an error */
+	error = g_error_new_literal (UP_DAEMON_ERROR,
+				     UP_DAEMON_ERROR_GENERAL,
+				     "Method is deprecated, please port to org.freedesktop.login1.Manager.CanSuspend");
+	dbus_g_method_return_error (context, error);
+	g_error_free (error);
+	return FALSE;
+#endif
 }
 
-/** 
+#ifdef ENABLE_DEPRECATED
+/**
  * up_daemon_check_hibernate_swap:
  *
  * Check current memory usage whether we have enough swap space for
@@ -608,6 +634,7 @@ up_daemon_check_hibernate_swap (UpDaemon *daemon)
 
 	return FALSE;
 }
+#endif
 
 /**
  * up_daemon_hibernate:
@@ -616,6 +643,7 @@ gboolean
 up_daemon_hibernate (UpDaemon *daemon, DBusGMethodInvocation *context)
 {
 	GError *error;
+#ifdef ENABLE_DEPRECATED
 	PolkitSubject *subject = NULL;
 	const gchar *command;
 	UpDaemonPrivate *priv = daemon->priv;
@@ -676,6 +704,15 @@ out:
 	if (subject != NULL)
 		g_object_unref (subject);
 	return TRUE;
+#else
+	/* just return an error */
+	error = g_error_new_literal (UP_DAEMON_ERROR,
+				     UP_DAEMON_ERROR_GENERAL,
+				     "Method is deprecated, please port to org.freedesktop.login1.Manager.Hibernate");
+	dbus_g_method_return_error (context, error);
+	g_error_free (error);
+	return FALSE;
+#endif
 }
 
 /**
@@ -684,10 +721,11 @@ out:
 gboolean
 up_daemon_hibernate_allowed (UpDaemon *daemon, DBusGMethodInvocation *context)
 {
+	GError *error;
+#ifdef ENABLE_DEPRECATED
 	gboolean ret;
 	PolkitSubject *subject = NULL;
 	UpDaemonPrivate *priv = daemon->priv;
-	GError *error;
 
 	subject = up_polkit_get_subject (priv->polkit, context);
 	if (subject == NULL)
@@ -707,6 +745,15 @@ out:
 	if (subject != NULL)
 		g_object_unref (subject);
 	return TRUE;
+#else
+	/* just return an error */
+	error = g_error_new_literal (UP_DAEMON_ERROR,
+				     UP_DAEMON_ERROR_GENERAL,
+				     "Method is deprecated, please port to org.freedesktop.login1.Manager.CanHibernate");
+	dbus_g_method_return_error (context, error);
+	g_error_free (error);
+	return FALSE;
+#endif
 }
 
 /**
@@ -719,7 +766,7 @@ up_daemon_register_power_daemon (UpDaemon *daemon)
 	gboolean ret = FALSE;
 	UpDaemonPrivate *priv = daemon->priv;
 
-	priv->connection = dbus_g_bus_get (up_daemon_get_bus_type (), &error);
+	priv->connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (priv->connection == NULL) {
 		if (error != NULL) {
 			g_critical ("error getting system bus: %s", error->message);
@@ -787,9 +834,11 @@ up_daemon_startup (UpDaemon *daemon)
 	priv->during_coldplug = FALSE;
 	g_debug ("daemon now not coldplug");
 
+#ifdef ENABLE_DEPRECATED
 	/* set power policy */
 	if (priv->conf_run_powersave_command)
 		up_daemon_set_powersave (daemon, priv->on_battery);
+#endif
 out:
 	return ret;
 }
@@ -960,9 +1009,11 @@ up_daemon_device_changed_cb (UpDevice *device, UpDaemon *daemon)
 	if (ret != priv->on_battery) {
 		up_daemon_set_on_battery (daemon, ret);
 
+#ifdef ENABLE_DEPRECATED
 		/* set power policy */
 		if (priv->conf_run_powersave_command)
 			up_daemon_set_powersave (daemon, ret);
+#endif
 	}
 	ret = up_daemon_get_on_low_battery_local (daemon);
 	if (ret != priv->on_low_battery)
@@ -1098,20 +1149,16 @@ up_daemon_init (UpDaemon *daemon)
 	daemon->priv->lid_is_present = FALSE;
 	daemon->priv->is_docked = FALSE;
 	daemon->priv->lid_is_closed = FALSE;
-	daemon->priv->kernel_can_suspend = FALSE;
-	daemon->priv->kernel_can_hibernate = FALSE;
-	daemon->priv->hibernate_has_encrypted_swap = FALSE;
 	daemon->priv->power_devices = up_device_list_new ();
 	daemon->priv->on_battery = FALSE;
 	daemon->priv->on_low_battery = FALSE;
 	daemon->priv->during_coldplug = FALSE;
-	daemon->priv->sent_sleeping_signal = FALSE;
 	daemon->priv->battery_poll_id = 0;
 	daemon->priv->battery_poll_count = 0;
-	daemon->priv->about_to_sleep_id = 0;
+#ifdef ENABLE_DEPRECATED
 	daemon->priv->conf_sleep_timeout = 1000;
-	daemon->priv->conf_allow_hibernate_encrypted_swap = FALSE;
 	daemon->priv->conf_run_powersave_command = TRUE;
+#endif
 
 	/* load some values from the config file */
 	file = g_key_file_new ();
@@ -1124,12 +1171,14 @@ up_daemon_init (UpDaemon *daemon)
 	}
 	ret = g_key_file_load_from_file (file, filename, G_KEY_FILE_NONE, &error);
 	if (ret) {
+#ifdef ENABLE_DEPRECATED
 		daemon->priv->conf_sleep_timeout =
 			g_key_file_get_integer (file, "UPower", "SleepTimeout", NULL);
 		daemon->priv->conf_allow_hibernate_encrypted_swap =
 			g_key_file_get_boolean (file, "UPower", "AllowHibernateEncryptedSwap", NULL);
 		daemon->priv->conf_run_powersave_command =
 			g_key_file_get_boolean (file, "UPower", "RunPowersaveCommand", NULL);
+#endif
 	} else {
 		g_warning ("failed to load config file %s: %s", filename, error->message);
 		g_error_free (error);
@@ -1144,8 +1193,10 @@ up_daemon_init (UpDaemon *daemon)
 			  G_CALLBACK (up_daemon_device_removed_cb), daemon);
 
 	/* use a timer for the about-to-sleep logic */
+#ifdef ENABLE_DEPRECATED
 	daemon->priv->about_to_sleep_timer = g_timer_new ();
 	g_timer_stop (daemon->priv->about_to_sleep_timer);
+#endif
 
 	/* watch when these properties change */
 	g_signal_connect (daemon, "notify::lid-is-present",
@@ -1158,12 +1209,14 @@ up_daemon_init (UpDaemon *daemon)
 			  G_CALLBACK (up_daemon_properties_changed_cb), daemon);
 
 	/* check if we have support */
+#ifdef ENABLE_DEPRECATED
 	daemon->priv->kernel_can_suspend = up_backend_kernel_can_suspend (daemon->priv->backend);
 	daemon->priv->kernel_can_hibernate = up_backend_kernel_can_hibernate (daemon->priv->backend);
 
 	/* is the swap usable? */
 	if (daemon->priv->kernel_can_hibernate)
 		daemon->priv->hibernate_has_encrypted_swap = up_backend_has_encrypted_swap (daemon->priv->backend);
+#endif
 }
 
 /**
@@ -1214,13 +1267,21 @@ up_daemon_get_property (GObject *object, guint prop_id, GValue *value, GParamSpe
 		g_value_set_string (value, PACKAGE_VERSION);
 		break;
 	case PROP_CAN_SUSPEND:
+#ifdef ENABLE_DEPRECATED
 		g_value_set_boolean (value, priv->kernel_can_suspend);
+#else
+		g_value_set_boolean (value, FALSE);
+#endif
 		break;
 	case PROP_CAN_HIBERNATE:
+#ifdef ENABLE_DEPRECATED
 		g_value_set_boolean (value, (priv->kernel_can_hibernate &&
 					     up_daemon_check_hibernate_swap (daemon) &&
 					     (!priv->hibernate_has_encrypted_swap ||
 					      priv->conf_allow_hibernate_encrypted_swap)));
+#else
+		g_value_set_boolean (value, FALSE);
+#endif
 		break;
 	case PROP_ON_BATTERY:
 		g_value_set_boolean (value, priv->on_battery);
@@ -1433,7 +1494,9 @@ up_daemon_finalize (GObject *object)
 	g_object_unref (priv->polkit);
 	g_object_unref (priv->config);
 	g_object_unref (priv->backend);
+#ifdef ENABLE_DEPRECATED
 	g_timer_destroy (priv->about_to_sleep_timer);
+#endif
 
 	G_OBJECT_CLASS (up_daemon_parent_class)->finalize (object);
 }
