@@ -14,6 +14,7 @@
 
 @SET_MAKE@
 
+
 VPATH = @srcdir@
 am__make_dryrun = \
   { \
@@ -50,6 +51,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+noinst_PROGRAMS = hidpp-test$(EXEEXT)
 subdir = src/linux
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/build-aux/depcomp
@@ -73,21 +75,21 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libupshared_la_LIBADD =
 am__libupshared_la_SOURCES_DIST = up-device-supply.c \
 	up-device-supply.h up-device-csr.c up-device-csr.h \
-	up-device-lg-unifying.c up-device-lg-unifying.h \
-	up-device-hid.c up-device-hid.h up-device-wup.c \
-	up-device-wup.h up-input.c up-input.h up-dock.c up-dock.h \
-	up-backend.c up-native.c sysfs-utils.c sysfs-utils.h \
+	up-device-unifying.c up-device-unifying.h up-device-hid.c \
+	up-device-hid.h up-device-wup.c up-device-wup.h up-input.c \
+	up-input.h up-dock.c up-dock.h up-backend.c up-native.c \
+	hidpp-device.c hidpp-device.h sysfs-utils.c sysfs-utils.h \
 	up-device-idevice.c up-device-idevice.h
 @HAVE_IDEVICE_TRUE@am__objects_1 =  \
 @HAVE_IDEVICE_TRUE@	libupshared_la-up-device-idevice.lo
 am_libupshared_la_OBJECTS = libupshared_la-up-device-supply.lo \
 	libupshared_la-up-device-csr.lo \
-	libupshared_la-up-device-lg-unifying.lo \
+	libupshared_la-up-device-unifying.lo \
 	libupshared_la-up-device-hid.lo \
 	libupshared_la-up-device-wup.lo libupshared_la-up-input.lo \
 	libupshared_la-up-dock.lo libupshared_la-up-backend.lo \
-	libupshared_la-up-native.lo libupshared_la-sysfs-utils.lo \
-	$(am__objects_1)
+	libupshared_la-up-native.lo libupshared_la-hidpp-device.lo \
+	libupshared_la-sysfs-utils.lo $(am__objects_1)
 libupshared_la_OBJECTS = $(am_libupshared_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -98,6 +100,15 @@ libupshared_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(libupshared_la_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o \
 	$@
 @BACKEND_TYPE_LINUX_TRUE@am_libupshared_la_rpath =
+PROGRAMS = $(noinst_PROGRAMS)
+am_hidpp_test_OBJECTS = hidpp_test-hidpp-device.$(OBJEXT) \
+	hidpp_test-hidpp-test.$(OBJEXT)
+hidpp_test_OBJECTS = $(am_hidpp_test_OBJECTS)
+am__DEPENDENCIES_1 =
+hidpp_test_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+hidpp_test_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(hidpp_test_CFLAGS) \
+	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -132,8 +143,9 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libupshared_la_SOURCES)
-DIST_SOURCES = $(am__libupshared_la_SOURCES_DIST)
+SOURCES = $(libupshared_la_SOURCES) $(hidpp_test_SOURCES)
+DIST_SOURCES = $(am__libupshared_la_SOURCES_DIST) \
+	$(hidpp_test_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -335,7 +347,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-INCLUDES = \
+AM_CPPFLAGS = \
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
 	-DUP_COMPILATION					\
 	-DG_LOG_DOMAIN=\"UPower-Linux\"				\
@@ -358,8 +370,8 @@ libupshared_la_SOURCES = \
 	up-device-supply.h					\
 	up-device-csr.c						\
 	up-device-csr.h						\
-	up-device-lg-unifying.c					\
-	up-device-lg-unifying.h					\
+	up-device-unifying.c					\
+	up-device-unifying.h					\
 	up-device-hid.c						\
 	up-device-hid.h						\
 	up-device-wup.c						\
@@ -370,11 +382,24 @@ libupshared_la_SOURCES = \
 	up-dock.h						\
 	up-backend.c						\
 	up-native.c						\
+	hidpp-device.c						\
+	hidpp-device.h						\
 	sysfs-utils.c						\
 	sysfs-utils.h						\
 	$(idevice_files)					\
 	$(BUILT_SOURCES)
 
+hidpp_test_SOURCES = \
+	hidpp-device.c						\
+	hidpp-device.h						\
+	hidpp-test.c
+
+hidpp_test_LDADD = \
+	-lm							\
+	$(GLIB_LIBS)						\
+	$(GIO_LIBS)
+
+hidpp_test_CFLAGS = $(AM_CFLAGS) $(WARNINGFLAGS_C)
 EXTRA_DIST = $(libupshared_la_SOURCES) 			\
 	     integration-test
 
@@ -429,19 +454,34 @@ clean-noinstLTLIBRARIES:
 libupshared.la: $(libupshared_la_OBJECTS) $(libupshared_la_DEPENDENCIES) $(EXTRA_libupshared_la_DEPENDENCIES) 
 	$(AM_V_CCLD)$(libupshared_la_LINK) $(am_libupshared_la_rpath) $(libupshared_la_OBJECTS) $(libupshared_la_LIBADD) $(LIBS)
 
+clean-noinstPROGRAMS:
+	@list='$(noinst_PROGRAMS)'; test -n "$$list" || exit 0; \
+	echo " rm -f" $$list; \
+	rm -f $$list || exit $$?; \
+	test -n "$(EXEEXT)" || exit 0; \
+	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
+	echo " rm -f" $$list; \
+	rm -f $$list
+hidpp-test$(EXEEXT): $(hidpp_test_OBJECTS) $(hidpp_test_DEPENDENCIES) $(EXTRA_hidpp_test_DEPENDENCIES) 
+	@rm -f hidpp-test$(EXEEXT)
+	$(AM_V_CCLD)$(hidpp_test_LINK) $(hidpp_test_OBJECTS) $(hidpp_test_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hidpp_test-hidpp-device.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hidpp_test-hidpp-test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-hidpp-device.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-sysfs-utils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-backend.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-device-csr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-device-hid.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-device-idevice.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-device-lg-unifying.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-device-supply.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-device-unifying.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-device-wup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-dock.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupshared_la-up-input.Plo@am__quote@
@@ -482,12 +522,12 @@ libupshared_la-up-device-csr.lo: up-device-csr.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -c -o libupshared_la-up-device-csr.lo `test -f 'up-device-csr.c' || echo '$(srcdir)/'`up-device-csr.c
 
-libupshared_la-up-device-lg-unifying.lo: up-device-lg-unifying.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -MT libupshared_la-up-device-lg-unifying.lo -MD -MP -MF $(DEPDIR)/libupshared_la-up-device-lg-unifying.Tpo -c -o libupshared_la-up-device-lg-unifying.lo `test -f 'up-device-lg-unifying.c' || echo '$(srcdir)/'`up-device-lg-unifying.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupshared_la-up-device-lg-unifying.Tpo $(DEPDIR)/libupshared_la-up-device-lg-unifying.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-device-lg-unifying.c' object='libupshared_la-up-device-lg-unifying.lo' libtool=yes @AMDEPBACKSLASH@
+libupshared_la-up-device-unifying.lo: up-device-unifying.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -MT libupshared_la-up-device-unifying.lo -MD -MP -MF $(DEPDIR)/libupshared_la-up-device-unifying.Tpo -c -o libupshared_la-up-device-unifying.lo `test -f 'up-device-unifying.c' || echo '$(srcdir)/'`up-device-unifying.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupshared_la-up-device-unifying.Tpo $(DEPDIR)/libupshared_la-up-device-unifying.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-device-unifying.c' object='libupshared_la-up-device-unifying.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -c -o libupshared_la-up-device-lg-unifying.lo `test -f 'up-device-lg-unifying.c' || echo '$(srcdir)/'`up-device-lg-unifying.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -c -o libupshared_la-up-device-unifying.lo `test -f 'up-device-unifying.c' || echo '$(srcdir)/'`up-device-unifying.c
 
 libupshared_la-up-device-hid.lo: up-device-hid.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -MT libupshared_la-up-device-hid.lo -MD -MP -MF $(DEPDIR)/libupshared_la-up-device-hid.Tpo -c -o libupshared_la-up-device-hid.lo `test -f 'up-device-hid.c' || echo '$(srcdir)/'`up-device-hid.c
@@ -531,6 +571,13 @@ libupshared_la-up-native.lo: up-native.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -c -o libupshared_la-up-native.lo `test -f 'up-native.c' || echo '$(srcdir)/'`up-native.c
 
+libupshared_la-hidpp-device.lo: hidpp-device.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -MT libupshared_la-hidpp-device.lo -MD -MP -MF $(DEPDIR)/libupshared_la-hidpp-device.Tpo -c -o libupshared_la-hidpp-device.lo `test -f 'hidpp-device.c' || echo '$(srcdir)/'`hidpp-device.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupshared_la-hidpp-device.Tpo $(DEPDIR)/libupshared_la-hidpp-device.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='hidpp-device.c' object='libupshared_la-hidpp-device.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -c -o libupshared_la-hidpp-device.lo `test -f 'hidpp-device.c' || echo '$(srcdir)/'`hidpp-device.c
+
 libupshared_la-sysfs-utils.lo: sysfs-utils.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -MT libupshared_la-sysfs-utils.lo -MD -MP -MF $(DEPDIR)/libupshared_la-sysfs-utils.Tpo -c -o libupshared_la-sysfs-utils.lo `test -f 'sysfs-utils.c' || echo '$(srcdir)/'`sysfs-utils.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupshared_la-sysfs-utils.Tpo $(DEPDIR)/libupshared_la-sysfs-utils.Plo
@@ -544,6 +591,34 @@ libupshared_la-up-device-idevice.lo: up-device-idevice.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-device-idevice.c' object='libupshared_la-up-device-idevice.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupshared_la_CFLAGS) $(CFLAGS) -c -o libupshared_la-up-device-idevice.lo `test -f 'up-device-idevice.c' || echo '$(srcdir)/'`up-device-idevice.c
+
+hidpp_test-hidpp-device.o: hidpp-device.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hidpp_test_CFLAGS) $(CFLAGS) -MT hidpp_test-hidpp-device.o -MD -MP -MF $(DEPDIR)/hidpp_test-hidpp-device.Tpo -c -o hidpp_test-hidpp-device.o `test -f 'hidpp-device.c' || echo '$(srcdir)/'`hidpp-device.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/hidpp_test-hidpp-device.Tpo $(DEPDIR)/hidpp_test-hidpp-device.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='hidpp-device.c' object='hidpp_test-hidpp-device.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hidpp_test_CFLAGS) $(CFLAGS) -c -o hidpp_test-hidpp-device.o `test -f 'hidpp-device.c' || echo '$(srcdir)/'`hidpp-device.c
+
+hidpp_test-hidpp-device.obj: hidpp-device.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hidpp_test_CFLAGS) $(CFLAGS) -MT hidpp_test-hidpp-device.obj -MD -MP -MF $(DEPDIR)/hidpp_test-hidpp-device.Tpo -c -o hidpp_test-hidpp-device.obj `if test -f 'hidpp-device.c'; then $(CYGPATH_W) 'hidpp-device.c'; else $(CYGPATH_W) '$(srcdir)/hidpp-device.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/hidpp_test-hidpp-device.Tpo $(DEPDIR)/hidpp_test-hidpp-device.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='hidpp-device.c' object='hidpp_test-hidpp-device.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hidpp_test_CFLAGS) $(CFLAGS) -c -o hidpp_test-hidpp-device.obj `if test -f 'hidpp-device.c'; then $(CYGPATH_W) 'hidpp-device.c'; else $(CYGPATH_W) '$(srcdir)/hidpp-device.c'; fi`
+
+hidpp_test-hidpp-test.o: hidpp-test.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hidpp_test_CFLAGS) $(CFLAGS) -MT hidpp_test-hidpp-test.o -MD -MP -MF $(DEPDIR)/hidpp_test-hidpp-test.Tpo -c -o hidpp_test-hidpp-test.o `test -f 'hidpp-test.c' || echo '$(srcdir)/'`hidpp-test.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/hidpp_test-hidpp-test.Tpo $(DEPDIR)/hidpp_test-hidpp-test.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='hidpp-test.c' object='hidpp_test-hidpp-test.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hidpp_test_CFLAGS) $(CFLAGS) -c -o hidpp_test-hidpp-test.o `test -f 'hidpp-test.c' || echo '$(srcdir)/'`hidpp-test.c
+
+hidpp_test-hidpp-test.obj: hidpp-test.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hidpp_test_CFLAGS) $(CFLAGS) -MT hidpp_test-hidpp-test.obj -MD -MP -MF $(DEPDIR)/hidpp_test-hidpp-test.Tpo -c -o hidpp_test-hidpp-test.obj `if test -f 'hidpp-test.c'; then $(CYGPATH_W) 'hidpp-test.c'; else $(CYGPATH_W) '$(srcdir)/hidpp-test.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/hidpp_test-hidpp-test.Tpo $(DEPDIR)/hidpp_test-hidpp-test.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='hidpp-test.c' object='hidpp_test-hidpp-test.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hidpp_test_CFLAGS) $(CFLAGS) -c -o hidpp_test-hidpp-test.obj `if test -f 'hidpp-test.c'; then $(CYGPATH_W) 'hidpp-test.c'; else $(CYGPATH_W) '$(srcdir)/hidpp-test.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -649,7 +724,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES)
+all-am: Makefile $(LTLIBRARIES) $(PROGRAMS)
 installdirs:
 install: install-am
 install-exec: install-exec-am
@@ -684,7 +759,7 @@ maintainer-clean-generic:
 clean: clean-am
 
 clean-am: clean-generic clean-libtool clean-local \
-	clean-noinstLTLIBRARIES mostlyclean-am
+	clean-noinstLTLIBRARIES clean-noinstPROGRAMS mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -755,18 +830,18 @@ uninstall-am:
 .MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libtool clean-local clean-noinstLTLIBRARIES cscopelist \
-	ctags distclean distclean-compile distclean-generic \
-	distclean-libtool distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-data \
-	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am
+	clean-libtool clean-local clean-noinstLTLIBRARIES \
+	clean-noinstPROGRAMS cscopelist ctags distclean \
+	distclean-compile distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags uninstall uninstall-am
 
 
 clean-local :

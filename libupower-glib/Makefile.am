@@ -1,10 +1,11 @@
-INCLUDES = \
+AM_CPPFLAGS = \
 	$(GLIB_CFLAGS)						\
 	$(DBUS_GLIB_CFLAGS)					\
 	-I$(top_builddir)					\
 	-I$(top_srcdir)						\
 	-I$(top_srcdir)/libupower-glib				\
 	-DUP_COMPILATION					\
+	-DUPOWER_ENABLE_DEPRECATED				\
 	-DG_LOG_DOMAIN=\"libupower-glib\"			\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"			\
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"
@@ -65,7 +66,7 @@ introspection_sources = $(libupower_glib_include_HEADERS) $(libupower_glib_la_SO
 
 UPowerGlib-1.0.gir: libupower-glib.la
 UPowerGlib_1_0_gir_INCLUDES = GObject-2.0 Gio-2.0
-UPowerGlib_1_0_gir_CFLAGS = $(INCLUDES)
+UPowerGlib_1_0_gir_CFLAGS = $(AM_CPPFLAGS)
 UPowerGlib_1_0_gir_SCANNERFLAGS = --identifier-prefix=Up --symbol-prefix=up_ --warn-all --add-include-path=$(srcdir)
 UPowerGlib_1_0_gir_LIBS = libupower-glib.la
 UPowerGlib_1_0_gir_FILES = $(introspection_sources)

@@ -374,7 +374,7 @@ static gdouble
 up_device_supply_get_design_voltage (const gchar *native_path)
 {
 	gdouble voltage;
-	const gchar *device_type;
+	gchar *device_type = NULL;
 
 	/* design maximum */
 	voltage = sysfs_get_double (native_path, "voltage_max_design") / 1000000.0;
@@ -416,6 +416,7 @@ up_device_supply_get_design_voltage (const gchar *native_path)
 	g_warning ("no voltage values, using 10V as approximation");
 	voltage = 10.0f;
 out:
+	g_free (device_type);
 	return voltage;
 }
 
@@ -573,7 +574,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 		energy_full_design = sysfs_get_double (native_path, "energy_full_design") / 1000000.0;
 
 		/* convert charge to energy */
-		if (energy < 0.01) {
+		if (energy_full < 0.01) {
 			energy_full = sysfs_get_double (native_path, "charge_full") / 1000000.0;
 			energy_full_design = sysfs_get_double (native_path, "charge_full_design") / 1000000.0;
 			energy_full *= voltage_design;
@@ -781,9 +782,9 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 
 	/* check the remaining time is under a set limit, to deal with broken
 	   primary batteries rate */
-	if (time_to_empty > (20 * 60 * 60))
+	if (time_to_empty > (240 * 60 * 60)) /* ten days for discharging */
 		time_to_empty = 0;
-	if (time_to_full > (20 * 60 * 60))
+	if (time_to_full > (20 * 60 * 60)) /* 20 hours for charging */
 		time_to_full = 0;
 
 	/* check if the energy value has changed and, if that's the case,

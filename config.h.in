@@ -3,6 +3,9 @@
 /* backend */
 #undef BACKEND
 
+/* Define if we should build deprecated functionalty */
+#undef ENABLE_DEPRECATED
+
 /* Define to 1 if translation of program messages to the user's native
    language is requested. */
 #undef ENABLE_NLS
@@ -94,9 +97,6 @@
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
-
-/* if we should use PolicyKits new API */
-#undef USE_SECURITY_POLKIT_NEW
 
 /* Version number of package */
 #undef VERSION

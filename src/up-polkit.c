@@ -51,11 +51,12 @@ PolkitSubject *
 up_polkit_get_subject (UpPolkit *polkit, DBusGMethodInvocation *context)
 {
 	GError *error;
-	const gchar *sender;
+	gchar *sender;
 	PolkitSubject *subject;
 
 	sender = dbus_g_method_get_sender (context);
 	subject = polkit_system_bus_name_new (sender);
+	g_free (sender);
 
 	if (subject == NULL) {
 		error = g_error_new (UP_DAEMON_ERROR, UP_DAEMON_ERROR_GENERAL, "failed to get PolicyKit subject");
@@ -249,16 +250,12 @@ up_polkit_init (UpPolkit *polkit)
 		goto out;
 	}
 
-#ifdef USE_SECURITY_POLKIT_NEW
 	polkit->priv->authority = polkit_authority_get_sync (NULL, &error);
 	if (polkit->priv->authority == NULL) {
 		g_error ("failed to get pokit authority: %s", error->message);
 		g_error_free (error);
 		goto out;
 	}
-#else
-	polkit->priv->authority = polkit_authority_get ();
-#endif
 out:
 	return;
 }
