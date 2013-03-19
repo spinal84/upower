@@ -5,6 +5,7 @@ upower (0.9.20-1) UNRELEASED; urgency=low
     configure.ac.
   * Build with --enable-deprecated, we are not ready yet to drop
     suspend/hibernate functionality.
+  * Bump Standards-Version to 3.9.4. No changes necessary.
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 19 Mar 2013 18:40:05 +0100
 
