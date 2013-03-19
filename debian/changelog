@@ -3,6 +3,8 @@ upower (0.9.20-1) UNRELEASED; urgency=low
   * New upstream release.
   * Bump libpolkit-gobject-1-dev build dependency as per upstream
     configure.ac.
+  * Build with --enable-deprecated, we are not ready yet to drop
+    suspend/hibernate functionality.
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 19 Mar 2013 18:40:05 +0100
 
