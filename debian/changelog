@@ -1,4 +1,4 @@
-upower (0.9.20-1) UNRELEASED; urgency=low
+upower (0.9.20-1) experimental; urgency=low
 
   * New upstream release.
   * Bump libpolkit-gobject-1-dev build dependency as per upstream
@@ -14,7 +14,7 @@ upower (0.9.20-1) UNRELEASED; urgency=low
     UPOWER_ENABLE_DEPRECATED to access suspend/resume functionality. We are
     not ready to do that yet in Debian.
 
- -- Martin Pitt <mpitt@debian.org>  Tue, 19 Mar 2013 18:40:05 +0100
+ -- Martin Pitt <mpitt@debian.org>  Tue, 19 Mar 2013 19:19:51 +0100
 
 upower (0.9.19-1) experimental; urgency=low
 
