@@ -314,20 +314,14 @@ hidpp_device_cmd (HidppDevice	*device,
 	    buf[2] == HIDPP_ERR_INVALID_SUBID &&
 	    buf[3] == 0x00 &&
 	    buf[4] == HIDPP_FEATURE_ROOT_FN_PING) {
-		/* HID++ 1.0 ping reply, so fake success  */
-		if (buf[5] == HIDPP_ERROR_CODE_UNKNOWN) {
-			buf[0] = 1;
-			goto out;
-		}
-		if (buf[5] == HIDPP_ERROR_CODE_UNSUPPORTED) {
-			/* device offline / unreachable */
-			g_set_error_literal (error, 1, 0,
-					     "device is unreachable");
-			ret = FALSE;
+		/* HID++ 1.0 ping reply, so fake success with version 1  */
+		if (priv->version < 2 && (buf[5] == HIDPP_ERROR_CODE_UNKNOWN
+					|| buf[5] == HIDPP_ERROR_CODE_UNSUPPORTED)) {
+			response_data[0] = 1;
 			goto out;
 		}
 	}
-	if (buf[0] != HIDPP_HEADER_RESPONSE ||
+	if ((buf[0] != HIDPP_HEADER_REQUEST && buf[0] != HIDPP_HEADER_RESPONSE) ||
 	    buf[1] != device_idx ||
 	    buf[2] != feature_idx ||
 	    buf[3] != function_idx) {
@@ -508,31 +502,12 @@ hidpp_device_refresh (HidppDevice *device,
 			ret = FALSE;
 			goto out;
 		}
-
-		/* add features we are going to use */
-//		hidpp_device_map_add (device,
-//				      HIDPP_FEATURE_I_FEATURE_SET,
-//				      "IFeatureSet");
-//		hidpp_device_map_add (device,
-//				      HIDPP_FEATURE_I_FIRMWARE_INFO,
-//				      "IFirmwareInfo");
-		hidpp_device_map_add (device,
-				      HIDPP_FEATURE_GET_DEVICE_NAME_TYPE,
-				      "GetDeviceNameType");
-		hidpp_device_map_add (device,
-				      HIDPP_FEATURE_BATTERY_LEVEL_STATUS,
-				      "BatteryLevelStatus");
-//		hidpp_device_map_add (device,
-//				      HIDPP_FEATURE_WIRELESS_DEVICE_STATUS,
-//				      "WirelessDeviceStatus");
-		hidpp_device_map_add (device,
-				      HIDPP_FEATURE_SOLAR_DASHBOARD,
-				      "SolarDashboard");
-		hidpp_device_map_print (device);
 	}
 
 	/* get version */
 	if ((refresh_flags & HIDPP_REFRESH_FLAGS_VERSION) > 0) {
+		guint version_old = priv->version;
+
 		buf[0] = 0x00;
 		buf[1] = 0x00;
 		buf[2] = HIDPP_PING_DATA;
@@ -545,7 +520,39 @@ hidpp_device_refresh (HidppDevice *device,
 					error);
 		if (!ret)
 			goto out;
+
 		priv->version = buf[0];
+
+		if (version_old != priv->version)
+			g_debug("protocol for hid++ device changed from v%d to v%d",
+					version_old, priv->version);
+
+		if (version_old < 2 && priv->version >= 2)
+			refresh_flags |= HIDPP_REFRESH_FLAGS_FEATURES;
+
+	}
+
+	if ((refresh_flags & HIDPP_REFRESH_FLAGS_FEATURES) > 0) {
+		/* add features we are going to use */
+//		hidpp_device_map_add (device,
+//				      HIDPP_FEATURE_I_FEATURE_SET,
+//				      "IFeatureSet");
+//		hidpp_device_map_add (device,
+//				      HIDPP_FEATURE_I_FIRMWARE_INFO,
+//				      "IFirmwareInfo");
+		hidpp_device_map_add (device,
+				HIDPP_FEATURE_GET_DEVICE_NAME_TYPE,
+				"GetDeviceNameType");
+		hidpp_device_map_add (device,
+				HIDPP_FEATURE_BATTERY_LEVEL_STATUS,
+				"BatteryLevelStatus");
+//		hidpp_device_map_add (device,
+//				      HIDPP_FEATURE_WIRELESS_DEVICE_STATUS,
+//				      "WirelessDeviceStatus");
+		hidpp_device_map_add (device,
+				HIDPP_FEATURE_SOLAR_DASHBOARD,
+				"SolarDashboard");
+		hidpp_device_map_print (device);
 	}
 
 	/* get device kind */
@@ -560,7 +567,7 @@ hidpp_device_refresh (HidppDevice *device,
 						HIDPP_READ_LONG_REGISTER,
 						0xb5,
 						buf, 3,
-						buf, 7,
+						buf, 8,
 						error);
 			if (!ret)
 				goto out;
@@ -624,54 +631,73 @@ hidpp_device_refresh (HidppDevice *device,
 
 	/* get device model string */
 	if ((refresh_flags & HIDPP_REFRESH_FLAGS_MODEL) > 0) {
-		buf[0] = 0x00;
-		buf[1] = 0x00;
-		buf[2] = 0x00;
-		map = hidpp_device_map_get_by_feature (device, HIDPP_FEATURE_GET_DEVICE_NAME_TYPE);
-		if (map != NULL) {
+		if (priv->version == 1) {
+			buf[0] = 0x40 | (priv->device_idx - 1);
+			buf[1] = 0x00;
+			buf[2] = 0x00;
+
 			ret = hidpp_device_cmd (device,
+					HIDPP_RECEIVER_ADDRESS,
+					HIDPP_READ_LONG_REGISTER,
+					0xb5,
+					buf, 3,
+					buf, HIDPP_RESPONSE_LONG_LENGTH,
+					error);
+			if (!ret)
+				goto out;
+
+			len = buf[1];
+			name = g_string_new ("");
+			g_string_append_len (name, (gchar *) buf+2, len);
+			priv->model = g_strdup (name->str);
+		} else if (priv->version == 2) {
+			buf[0] = 0x00;
+			buf[1] = 0x00;
+			buf[2] = 0x00;
+			map = hidpp_device_map_get_by_feature (device, HIDPP_FEATURE_GET_DEVICE_NAME_TYPE);
+			if (map != NULL) {
+				ret = hidpp_device_cmd (device,
 						priv->device_idx,
 						map->idx,
 						HIDPP_FEATURE_GET_DEVICE_NAME_TYPE_FN_GET_COUNT,
 						buf, 3,
 						buf, 1,
 						error);
-			if (!ret)
-				goto out;
-		}
-		len = buf[0];
-		name = g_string_new ("");
-		for (i = 0; i < len; i +=4 ) {
-			buf[0] = i;
-			buf[1] = 0x00;
-			buf[2] = 0x00;
-			ret = hidpp_device_cmd (device,
+				if (!ret)
+					goto out;
+			}
+			len = buf[0];
+			name = g_string_new ("");
+			for (i = 0; i < len; i +=4 ) {
+				buf[0] = i;
+				buf[1] = 0x00;
+				buf[2] = 0x00;
+				ret = hidpp_device_cmd (device,
 						priv->device_idx,
 						map->idx,
 						HIDPP_FEATURE_GET_DEVICE_NAME_TYPE_FN_GET_NAME,
 						buf, 3,
 						buf, 4,
 						error);
-			if (!ret)
-				goto out;
-			g_string_append_len (name, (gchar *) &buf[0], 4);
+				if (!ret)
+					goto out;
+				g_string_append_len (name, (gchar *) &buf[0], 4);
+			}
+			priv->model = g_strdup (name->str);
 		}
-		priv->model = g_strdup (name->str);
 	}
 
 	/* get battery status */
 	if ((refresh_flags & HIDPP_REFRESH_FLAGS_BATTERY) > 0) {
 		if (priv->version == 1) {
-			buf[0] = HIDPP_READ_SHORT_REGISTER;
-			buf[1] = HIDPP_READ_SHORT_REGISTER_BATTERY;
+			buf[0] = 0x00;
+			buf[1] = 0x00;
 			buf[2] = 0x00;
-			buf[3] = 0x00;
-			buf[4] = 0x00;
 			ret = hidpp_device_cmd (device,
 						priv->device_idx,
-						HIDPP_FEATURE_ROOT_INDEX,
-						HIDPP_FEATURE_ROOT_FN_PING,
-						buf, 5,
+						HIDPP_READ_SHORT_REGISTER,
+						HIDPP_READ_SHORT_REGISTER_BATTERY,
+						buf, 3,
 						buf, 1,
 						error);
 			if (!ret)

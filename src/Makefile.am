@@ -3,6 +3,7 @@
 SUBDIRS = dummy freebsd linux openbsd
 
 AM_CPPFLAGS = \
+	$(PIE_CFLAGS)						\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\"		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\"		\
@@ -123,7 +124,11 @@ upowerd_LDADD += 						\
 	$(USB_LIBS)						\
 	$(GUDEV_LIBS)						\
 	$(IDEVICE_LIBS)						\
-	$(SYSTEMD_LIBS)
+	$(NULL)
+
+upowerd_LDFLAGS =						\
+	$(PIE_LDFLAGS)						\
+	$(RELRO_LDFLAGS)
 
 if HAVE_SYSTEMDUTILDIR
 systemsleepdir = $(systemdutildir)/system-sleep
@@ -218,6 +223,7 @@ CLEANFILES = $(BUILT_SOURCES)
 
 MAINTAINERCLEANFILES =						\
 	$(dbusconf_DATA)					\
+	$(systemdservice_DATA)					\
 	$(dbusservice_DATA)
 
 EXTRA_DIST =							\
@@ -232,7 +238,7 @@ EXTRA_DIST =							\
 	$(dbusservice_in_files)					\
 	$(dbusconf_in_files)
 
-if HAVE_SYSTEMD
+if HAVE_SYSTEMDSYSTEMUNITDIR
 EXTRA_DIST += $(systemdservice_in_files)
 endif
 

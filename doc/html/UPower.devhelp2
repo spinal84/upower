@@ -207,5 +207,43 @@
     <keyword type="function" name="up_qos_kind_to_string ()" link="UPower-up-types.html#up-qos-kind-to-string" since="0.9.0"/>
     <keyword type="function" name="up_sleep_kind_from_string ()" link="UPower-up-types.html#up-sleep-kind-from-string" since="0.9.10"/>
     <keyword type="function" name="up_sleep_kind_to_string ()" link="UPower-up-types.html#up-sleep-kind-to-string" since="0.9.10"/>
+    <keyword type="constant" name="UP_DEVICE_KIND_UNKNOWN" link="UPower-up-types.html#UP-DEVICE-KIND-UNKNOWN:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_KIND_LINE_POWER" link="UPower-up-types.html#UP-DEVICE-KIND-LINE-POWER:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_KIND_BATTERY" link="UPower-up-types.html#UP-DEVICE-KIND-BATTERY:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_KIND_UPS" link="UPower-up-types.html#UP-DEVICE-KIND-UPS:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_KIND_MONITOR" link="UPower-up-types.html#UP-DEVICE-KIND-MONITOR:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_KIND_MOUSE" link="UPower-up-types.html#UP-DEVICE-KIND-MOUSE:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_KIND_KEYBOARD" link="UPower-up-types.html#UP-DEVICE-KIND-KEYBOARD:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_KIND_PDA" link="UPower-up-types.html#UP-DEVICE-KIND-PDA:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_KIND_PHONE" link="UPower-up-types.html#UP-DEVICE-KIND-PHONE:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_KIND_MEDIA_PLAYER" link="UPower-up-types.html#UP-DEVICE-KIND-MEDIA-PLAYER:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_KIND_TABLET" link="UPower-up-types.html#UP-DEVICE-KIND-TABLET:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_KIND_COMPUTER" link="UPower-up-types.html#UP-DEVICE-KIND-COMPUTER:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_KIND_LAST" link="UPower-up-types.html#UP-DEVICE-KIND-LAST:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_STATE_UNKNOWN" link="UPower-up-types.html#UP-DEVICE-STATE-UNKNOWN:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_STATE_CHARGING" link="UPower-up-types.html#UP-DEVICE-STATE-CHARGING:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_STATE_DISCHARGING" link="UPower-up-types.html#UP-DEVICE-STATE-DISCHARGING:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_STATE_EMPTY" link="UPower-up-types.html#UP-DEVICE-STATE-EMPTY:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_STATE_FULLY_CHARGED" link="UPower-up-types.html#UP-DEVICE-STATE-FULLY-CHARGED:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_STATE_PENDING_CHARGE" link="UPower-up-types.html#UP-DEVICE-STATE-PENDING-CHARGE:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_STATE_PENDING_DISCHARGE" link="UPower-up-types.html#UP-DEVICE-STATE-PENDING-DISCHARGE:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_STATE_LAST" link="UPower-up-types.html#UP-DEVICE-STATE-LAST:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_TECHNOLOGY_UNKNOWN" link="UPower-up-types.html#UP-DEVICE-TECHNOLOGY-UNKNOWN:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_TECHNOLOGY_LITHIUM_ION" link="UPower-up-types.html#UP-DEVICE-TECHNOLOGY-LITHIUM-ION:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_TECHNOLOGY_LITHIUM_POLYMER" link="UPower-up-types.html#UP-DEVICE-TECHNOLOGY-LITHIUM-POLYMER:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_TECHNOLOGY_LITHIUM_IRON_PHOSPHATE" link="UPower-up-types.html#UP-DEVICE-TECHNOLOGY-LITHIUM-IRON-PHOSPHATE:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_TECHNOLOGY_LEAD_ACID" link="UPower-up-types.html#UP-DEVICE-TECHNOLOGY-LEAD-ACID:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_TECHNOLOGY_NICKEL_CADMIUM" link="UPower-up-types.html#UP-DEVICE-TECHNOLOGY-NICKEL-CADMIUM:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_TECHNOLOGY_NICKEL_METAL_HYDRIDE" link="UPower-up-types.html#UP-DEVICE-TECHNOLOGY-NICKEL-METAL-HYDRIDE:CAPS"/>
+    <keyword type="constant" name="UP_DEVICE_TECHNOLOGY_LAST" link="UPower-up-types.html#UP-DEVICE-TECHNOLOGY-LAST:CAPS"/>
+    <keyword type="constant" name="UP_QOS_KIND_UNKNOWN" link="UPower-up-types.html#UP-QOS-KIND-UNKNOWN:CAPS"/>
+    <keyword type="constant" name="UP_QOS_KIND_NETWORK" link="UPower-up-types.html#UP-QOS-KIND-NETWORK:CAPS"/>
+    <keyword type="constant" name="UP_QOS_KIND_CPU_DMA" link="UPower-up-types.html#UP-QOS-KIND-CPU-DMA:CAPS"/>
+    <keyword type="constant" name="UP_QOS_KIND_LAST" link="UPower-up-types.html#UP-QOS-KIND-LAST:CAPS"/>
+    <keyword type="constant" name="UP_SLEEP_KIND_UNKNOWN" link="UPower-up-types.html#UP-SLEEP-KIND-UNKNOWN:CAPS"/>
+    <keyword type="constant" name="UP_SLEEP_KIND_SUSPEND" link="UPower-up-types.html#UP-SLEEP-KIND-SUSPEND:CAPS"/>
+    <keyword type="constant" name="UP_SLEEP_KIND_HIBERNATE" link="UPower-up-types.html#UP-SLEEP-KIND-HIBERNATE:CAPS"/>
+    <keyword type="constant" name="UP_SLEEP_KIND_HYBRID" link="UPower-up-types.html#UP-SLEEP-KIND-HYBRID:CAPS"/>
+    <keyword type="constant" name="UP_SLEEP_KIND_LAST" link="UPower-up-types.html#UP-SLEEP-KIND-LAST:CAPS"/>
   </functions>
 </book>
