@@ -3,6 +3,9 @@ upower (0.9.21-1) UNRELEASED; urgency=low
   * New upstream release.
   * Add udev build dependency, so that configure can determine the udev
     directory.
+  * Add alternative systemd dependency instead of just hard-depending on
+    pm-utils. With logind, upower defers suspend to logind instead of calling
+    pm-*, this allows us to not install pm-utils with systemd.
 
  -- Martin Pitt <mpitt@debian.org>  Mon, 29 Jul 2013 07:16:30 +0200
 
