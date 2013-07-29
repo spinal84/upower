@@ -52,13 +52,25 @@ up_device_unifying_refresh (UpDevice *device)
 	gboolean ret;
 	GError *error = NULL;
 	GTimeVal timeval;
+	HidppRefreshFlags refresh_flags;
 	UpDeviceState state = UP_DEVICE_STATE_UNKNOWN;
 	UpDeviceUnifying *unifying = UP_DEVICE_UNIFYING (device);
 	UpDeviceUnifyingPrivate *priv = unifying->priv;
 
-	/* refresh just the battery stats */
+	/* refresh the battery stats */
+	refresh_flags = HIDPP_REFRESH_FLAGS_BATTERY;
+
+	/*
+	 * Device hid++ v2 when in unreachable mode seems to be able
+	 * to respond to hid++ v1 queries (but fails to respond to v2
+	 * queries). When it gets waken up it starts responding
+	 * to v2 queries, so always try to upgrade protocol to v2
+	 */
+	if (hidpp_device_get_version (priv->hidpp_device) < 2)
+		refresh_flags |= HIDPP_REFRESH_FLAGS_VERSION;
+
 	ret = hidpp_device_refresh (priv->hidpp_device,
-				    HIDPP_REFRESH_FLAGS_BATTERY,
+				    refresh_flags,
 				    &error);
 	if (!ret) {
 		g_warning ("failed to coldplug unifying device: %s",
@@ -123,6 +135,7 @@ up_device_unifying_coldplug (UpDevice *device)
 	const gchar *bus_address;
 	const gchar *device_file;
 	const gchar *type;
+	const gchar *vendor;
 	gboolean ret = FALSE;
 	gchar *endptr = NULL;
 	gchar *tmp;
@@ -141,7 +154,7 @@ up_device_unifying_coldplug (UpDevice *device)
 	type = g_udev_device_get_property (native, "UPOWER_BATTERY_TYPE");
 	if (type == NULL)
 		goto out;
-	if (g_strcmp0 (type, "unifying") != 0)
+	if ((g_strcmp0 (type, "unifying") != 0) && (g_strcmp0 (type, "lg-wireless") != 0))
 		goto out;
 
 	/* get the device index */
@@ -152,23 +165,58 @@ up_device_unifying_coldplug (UpDevice *device)
 		g_debug ("Could not get physical device index");
 		goto out;
 	}
-	hidpp_device_set_index (unifying->priv->hidpp_device,
+
+	if (g_strcmp0 (type, "lg-wireless") == 0)
+		hidpp_device_set_index (unifying->priv->hidpp_device, 1);
+	else {
+		hidpp_device_set_index (unifying->priv->hidpp_device,
 				g_ascii_strtoull (tmp + 1, &endptr, 10));
-	if (endptr != NULL && endptr[0] != '\0') {
-		g_debug ("HID_PHYS malformed: '%s'", bus_address);
-		goto out;
+		if (endptr != NULL && endptr[0] != '\0') {
+			g_debug ("HID_PHYS malformed: '%s'", bus_address);
+			goto out;
+		}
 	}
 
-	/* find the hidraw device that matches the parent */
+	/* find the hidraw device that matches */
 	parent = g_udev_device_get_parent (native);
 	client = g_udev_client_new (NULL);
 	hidraw_list = g_udev_client_query_by_subsystem (client, "hidraw");
 	for (l = hidraw_list; l != NULL; l = l->next) {
-		if (g_strcmp0 (g_udev_device_get_sysfs_path (parent),
-			       g_udev_device_get_sysfs_attr (l->data, "device")) == 0) {
-			receiver = g_object_ref (l->data);
-			break;
+		if (g_strcmp0 (type, "lg-wireless") == 0) {
+			gboolean receiver_found = FALSE;
+			const gchar *filename;
+			GDir* dir;
+
+			if (g_strcmp0 (g_udev_device_get_sysfs_path (native),
+						g_udev_device_get_sysfs_path(g_udev_device_get_parent(l->data))) != 0)
+				continue;
+
+			/* hidraw device which exposes hiddev interface is our receiver */
+			tmp = g_build_filename(g_udev_device_get_sysfs_path (g_udev_device_get_parent(native)),
+					"usbmisc", NULL);
+			dir = g_dir_open (tmp, 0, &error);
+			g_free(tmp);
+			if (error) {
+				g_clear_error(&error);
+				continue;
+			}
+			while ( (filename = g_dir_read_name(dir)) ) {
+				if (g_ascii_strncasecmp(filename, "hiddev", 6) == 0) {
+					receiver_found = TRUE;
+					break;
+				}
+			}
+			g_dir_close(dir);
+
+			if (!receiver_found)
+				continue;
+		} else {
+			if (g_strcmp0 (g_udev_device_get_sysfs_path (parent),
+						g_udev_device_get_sysfs_path(g_udev_device_get_parent(l->data))) != 0)
+				continue;
 		}
+		receiver = g_object_ref (l->data);
+		break;
 	}
 	if (receiver == NULL) {
 		g_debug ("Unable to find an hidraw device for Unifying receiver");
@@ -198,9 +246,13 @@ up_device_unifying_coldplug (UpDevice *device)
 		goto out;
 	}
 
+	vendor = g_udev_device_get_property (native, "UPOWER_VENDOR");
+	if (vendor == NULL)
+		vendor = g_udev_device_get_property (native, "ID_VENDOR");
+
 	/* set some default values */
 	g_object_set (device,
-		      "vendor", g_udev_device_get_property (native, "ID_VENDOR"),
+		      "vendor", vendor,
 		      "type", up_device_unifying_get_device_kind (unifying),
 		      "model", hidpp_device_get_model (unifying->priv->hidpp_device),
 		      "has-history", TRUE,

@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>up-types</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="UPower Reference Manual">
 <link rel="up" href="libupower-glib-helpers.html" title="libupower-glib helpers">
 <link rel="prev" href="libupower-glib-helpers.html" title="libupower-glib helpers">
 <link rel="next" href="tools-fileformats.html" title="Manual Pages">
-<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.19 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -87,6 +87,66 @@ See also: <span class="type">UpClient</span>, <span class="type">UpDevice</span>
 <p>
 The device type.
 </p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><a name="UP-DEVICE-KIND-UNKNOWN:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_KIND_UNKNOWN</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-KIND-LINE-POWER:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_KIND_LINE_POWER</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-KIND-BATTERY:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_KIND_BATTERY</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-KIND-UPS:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_KIND_UPS</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-KIND-MONITOR:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_KIND_MONITOR</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-KIND-MOUSE:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_KIND_MOUSE</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-KIND-KEYBOARD:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_KIND_KEYBOARD</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-KIND-PDA:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_KIND_PDA</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-KIND-PHONE:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_KIND_PHONE</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-KIND-MEDIA-PLAYER:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_KIND_MEDIA_PLAYER</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-KIND-TABLET:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_KIND_TABLET</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-KIND-COMPUTER:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_KIND_COMPUTER</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-KIND-LAST:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_KIND_LAST</code></span></p></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
 </div>
 <hr>
 <div class="refsect2">
@@ -105,6 +165,46 @@ The device type.
 <p>
 The device state.
 </p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><a name="UP-DEVICE-STATE-UNKNOWN:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_STATE_UNKNOWN</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-STATE-CHARGING:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_STATE_CHARGING</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-STATE-DISCHARGING:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_STATE_DISCHARGING</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-STATE-EMPTY:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_STATE_EMPTY</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-STATE-FULLY-CHARGED:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_STATE_FULLY_CHARGED</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-STATE-PENDING-CHARGE:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_STATE_PENDING_CHARGE</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-STATE-PENDING-DISCHARGE:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_STATE_PENDING_DISCHARGE</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-STATE-LAST:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_STATE_LAST</code></span></p></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
 </div>
 <hr>
 <div class="refsect2">
@@ -123,6 +223,46 @@ The device state.
 <p>
 The device technology.
 </p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><a name="UP-DEVICE-TECHNOLOGY-UNKNOWN:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_TECHNOLOGY_UNKNOWN</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-TECHNOLOGY-LITHIUM-ION:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_TECHNOLOGY_LITHIUM_ION</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-TECHNOLOGY-LITHIUM-POLYMER:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_TECHNOLOGY_LITHIUM_POLYMER</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-TECHNOLOGY-LITHIUM-IRON-PHOSPHATE:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_TECHNOLOGY_LITHIUM_IRON_PHOSPHATE</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-TECHNOLOGY-LEAD-ACID:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_TECHNOLOGY_LEAD_ACID</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-TECHNOLOGY-NICKEL-CADMIUM:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_TECHNOLOGY_NICKEL_CADMIUM</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-TECHNOLOGY-NICKEL-METAL-HYDRIDE:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_TECHNOLOGY_NICKEL_METAL_HYDRIDE</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-DEVICE-TECHNOLOGY-LAST:CAPS"></a><span class="term"><code class="literal">UP_DEVICE_TECHNOLOGY_LAST</code></span></p></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
 </div>
 <hr>
 <div class="refsect2">
@@ -137,6 +277,30 @@ The device technology.
 <p>
 The type of QOS request.
 </p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><a name="UP-QOS-KIND-UNKNOWN:CAPS"></a><span class="term"><code class="literal">UP_QOS_KIND_UNKNOWN</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-QOS-KIND-NETWORK:CAPS"></a><span class="term"><code class="literal">UP_QOS_KIND_NETWORK</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-QOS-KIND-CPU-DMA:CAPS"></a><span class="term"><code class="literal">UP_QOS_KIND_CPU_DMA</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-QOS-KIND-LAST:CAPS"></a><span class="term"><code class="literal">UP_QOS_KIND_LAST</code></span></p></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
 </div>
 <hr>
 <div class="refsect2">
@@ -152,6 +316,34 @@ The type of QOS request.
 <p>
 The type of QOS request.
 </p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><a name="UP-SLEEP-KIND-UNKNOWN:CAPS"></a><span class="term"><code class="literal">UP_SLEEP_KIND_UNKNOWN</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-SLEEP-KIND-SUSPEND:CAPS"></a><span class="term"><code class="literal">UP_SLEEP_KIND_SUSPEND</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-SLEEP-KIND-HIBERNATE:CAPS"></a><span class="term"><code class="literal">UP_SLEEP_KIND_HIBERNATE</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-SLEEP-KIND-HYBRID:CAPS"></a><span class="term"><code class="literal">UP_SLEEP_KIND_HYBRID</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="UP-SLEEP-KIND-LAST:CAPS"></a><span class="term"><code class="literal">UP_SLEEP_KIND_LAST</code></span></p></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
 </div>
 <hr>
 <div class="refsect2">
@@ -347,6 +539,6 @@ Converts a <a class="link" href="UPower-up-types.html#UpSleepKind" title="enum U
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18</div>
+          Generated by GTK-Doc V1.19</div>
 </body>
 </html>
