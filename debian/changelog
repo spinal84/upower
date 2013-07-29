@@ -1,6 +1,8 @@
 upower (0.9.21-1) UNRELEASED; urgency=low
 
   * New upstream release.
+  * Add udev build dependency, so that configure can determine the udev
+    directory.
 
  -- Martin Pitt <mpitt@debian.org>  Mon, 29 Jul 2013 07:16:30 +0200
 
