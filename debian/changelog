@@ -1,4 +1,4 @@
-upower (0.9.21-1) UNRELEASED; urgency=low
+upower (0.9.21-1) unstable; urgency=low
 
   * New upstream release.
   * Add udev build dependency, so that configure can determine the udev
@@ -7,7 +7,7 @@ upower (0.9.21-1) UNRELEASED; urgency=low
     pm-utils. With logind, upower defers suspend to logind instead of calling
     pm-*, this allows us to not install pm-utils with systemd.
 
- -- Martin Pitt <mpitt@debian.org>  Mon, 29 Jul 2013 07:16:30 +0200
+ -- Martin Pitt <mpitt@debian.org>  Mon, 29 Jul 2013 07:37:19 +0200
 
 upower (0.9.20-2) unstable; urgency=low
 
