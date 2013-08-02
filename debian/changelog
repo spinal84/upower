@@ -4,6 +4,7 @@ upower (0.9.21-2) UNRELEASED; urgency=low
     some scripts.
   * debian/rules: Explicitly set systemd util dir, to avoid build-depending on
     systemd.
+  * debian/upower.install: Install notify-upower.sh.
 
  -- Martin Pitt <mpitt@debian.org>  Fri, 02 Aug 2013 12:11:26 +0200
 
