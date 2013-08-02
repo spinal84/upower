@@ -1,3 +1,10 @@
+upower (0.9.21-2) UNRELEASED; urgency=low
+
+  * debian/rules: Run dh_install with --fail-missing to avoid forgetting about
+    some scripts.
+
+ -- Martin Pitt <mpitt@debian.org>  Fri, 02 Aug 2013 12:11:26 +0200
+
 upower (0.9.21-1) unstable; urgency=low
 
   * New upstream release.
