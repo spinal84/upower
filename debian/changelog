@@ -1,4 +1,4 @@
-upower (0.9.21-2) UNRELEASED; urgency=low
+upower (0.9.21-2) unstable; urgency=low
 
   [ Martin Pitt ]
   * debian/rules: Run dh_install with --fail-missing to avoid forgetting about
@@ -13,7 +13,7 @@ upower (0.9.21-2) UNRELEASED; urgency=low
     necessarily imply, that systemd is running (in a recent enough version),
     which is required for a successful suspend/hibernate.
 
- -- Michael Biebl <biebl@debian.org>  Sat, 03 Aug 2013 00:46:02 +0200
+ -- Michael Biebl <biebl@debian.org>  Sat, 03 Aug 2013 00:56:44 +0200
 
 upower (0.9.21-1) unstable; urgency=low
 
