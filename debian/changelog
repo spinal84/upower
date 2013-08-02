@@ -2,6 +2,8 @@ upower (0.9.21-2) UNRELEASED; urgency=low
 
   * debian/rules: Run dh_install with --fail-missing to avoid forgetting about
     some scripts.
+  * debian/rules: Explicitly set systemd util dir, to avoid build-depending on
+    systemd.
 
  -- Martin Pitt <mpitt@debian.org>  Fri, 02 Aug 2013 12:11:26 +0200
 
