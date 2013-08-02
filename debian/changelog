@@ -1,12 +1,19 @@
 upower (0.9.21-2) UNRELEASED; urgency=low
 
+  [ Martin Pitt ]
   * debian/rules: Run dh_install with --fail-missing to avoid forgetting about
     some scripts.
   * debian/rules: Explicitly set systemd util dir, to avoid build-depending on
     systemd.
   * debian/upower.install: Install notify-upower.sh. (LP: #1196752)
 
- -- Martin Pitt <mpitt@debian.org>  Fri, 02 Aug 2013 12:11:26 +0200
+  [ Michael Biebl ]
+  * debian/patches/always_use_pm-utils_backend.patch: Always use the pm-utils
+    backend, even if logind is running. The availability of logind does not
+    necessarily imply, that systemd is running (in a recent enough version),
+    which is required for a successful suspend/hibernate.
+
+ -- Michael Biebl <biebl@debian.org>  Sat, 03 Aug 2013 00:46:02 +0200
 
 upower (0.9.21-1) unstable; urgency=low
 
