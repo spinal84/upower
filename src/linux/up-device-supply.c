@@ -134,6 +134,7 @@ up_device_supply_reset_values (UpDeviceSupply *supply)
 		      "time-to-empty", (gint64) 0,
 		      "time-to-full", (gint64) 0,
 		      "percentage", (gdouble) 0.0,
+		      "temperature", (gdouble) 0.0,
 		      "technology", UP_DEVICE_TECHNOLOGY_UNKNOWN,
 		      NULL);
 }
@@ -406,14 +407,14 @@ up_device_supply_get_design_voltage (const gchar *native_path)
 
 	/* is this a USB device? */
 	device_type = up_device_supply_get_string (native_path, "type");
-	if (g_ascii_strcasecmp (device_type, "USB") == 0) {
+	if (device_type != NULL && g_ascii_strcasecmp (device_type, "USB") == 0) {
 		g_debug ("USB device, so assuming 5v");
 		voltage = 5.0f;
 		goto out;
 	}
 
 	/* completely guess, to avoid getting zero values */
-	g_warning ("no voltage values, using 10V as approximation");
+	g_warning ("no voltage values for device %s, using 10V as approximation", native_path);
 	voltage = 10.0f;
 out:
 	g_free (device_type);
@@ -490,6 +491,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 	gdouble voltage;
 	gint64 time_to_empty;
 	gint64 time_to_full;
+	gdouble temp;
 	gchar *manufacturer = NULL;
 	gchar *model_name = NULL;
 	gchar *serial_number = NULL;
@@ -693,19 +695,17 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 		energy_rate = up_device_supply_calculate_rate (supply, energy);
 
 	/* get a precise percentage */
-	if (energy_full > 0.0f) {
+        if (sysfs_file_exists (native_path, "capacity")) {
+		percentage = sysfs_get_double (native_path, "capacity");
+                /* for devices which provide capacity, but not {energy,charge}_now */
+                if (energy < 0.1f && energy_full > 0.0f)
+                    energy = energy_full * percentage / 100;
+        } else if (energy_full > 0.0f) {
 		percentage = 100.0 * energy / energy_full;
 		if (percentage < 0.0f)
 			percentage = 0.0f;
 		if (percentage > 100.0f)
 			percentage = 100.0f;
-	}
-
-	/* device is a peripheral and not providing power to the computer */
-	if (energy < 0.01f &&
-	    energy_rate < 0.01f &&
-	    energy_full < 0.01f) {
-		percentage = sysfs_get_double (native_path, "capacity");
 	}
 
 	/* the battery isn't charging or discharging, it's just
@@ -787,6 +787,9 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 	if (time_to_full > (20 * 60 * 60)) /* 20 hours for charging */
 		time_to_full = 0;
 
+	/* get temperature */
+	temp = sysfs_get_double(native_path, "temp") / 10.0;
+
 	/* check if the energy value has changed and, if that's the case,
 	 * store the new values in the buffer. */
 	if (up_device_supply_push_new_energy (supply, energy))
@@ -813,6 +816,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 		      "voltage", voltage,
 		      "time-to-empty", time_to_empty,
 		      "time-to-full", time_to_full,
+		      "temperature", temp,
 		      NULL);
 
 out:
