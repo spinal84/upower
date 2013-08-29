@@ -12,6 +12,7 @@ upower (0.9.21-2) unstable; urgency=low
     backend, even if logind is running. The availability of logind does not
     necessarily imply, that systemd is running (in a recent enough version),
     which is required for a successful suspend/hibernate.
+    (Closes: #718458, LP: #1196752)
 
  -- Michael Biebl <biebl@debian.org>  Sat, 03 Aug 2013 00:56:44 +0200
 
