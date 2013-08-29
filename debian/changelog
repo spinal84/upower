@@ -1,3 +1,13 @@
+upower (0.9.21-3) UNRELEASED; urgency=low
+
+  * Add 00git_updates.patch to update to today's upstream git:
+    - Fix batteries which report capacity, but not energy/charge
+    - Add temperature property for batteries
+    - Fix warning in up_device_supply_get_design_voltage
+    - Make GetHistory() array order consistent
+
+ -- Martin Pitt <mpitt@debian.org>  Thu, 29 Aug 2013 11:22:49 +0200
+
 upower (0.9.21-2) unstable; urgency=low
 
   [ Martin Pitt ]
