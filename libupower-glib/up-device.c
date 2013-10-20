@@ -592,7 +592,7 @@ out:
  *
  * Gets the device history.
  *
- * Return value: (transfer full): an array of #UpHistoryItem's, with the most
+ * Return value: (element-type UpHistoryItem) (transfer full): an array of #UpHistoryItem's, with the most
  *               recent one being first; %NULL if @error is set or @device is
  *               invalid
  *
@@ -679,7 +679,7 @@ out:
  *
  * Gets the device current statistics.
  *
- * Return value: (transfer full): an array of #UpStatsItem's, else #NULL and @error is used
+ * Return value: (element-type UpStatsItem) (transfer full): an array of #UpStatsItem's, else #NULL and @error is used
  *
  * Since: 0.9.0
  **/
@@ -1419,8 +1419,6 @@ up_device_finalize (GObject *object)
 UpDevice *
 up_device_new (void)
 {
-	UpDevice *device;
-	device = g_object_new (UP_TYPE_DEVICE, NULL);
-	return UP_DEVICE (device);
+	return UP_DEVICE (g_object_new (UP_TYPE_DEVICE, NULL));
 }
 
