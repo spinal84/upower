@@ -12,7 +12,7 @@ Build-Depends: debhelper (>= 9),
  intltool (>= 0.40.0),
  libdbus-glib-1-dev (>= 0.76),
  libdbus-1-dev (>= 1.0),
- libglib2.0-dev (>= 2.21.5),
+ libglib2.0-dev (>= 2.36),
  libgudev-1.0-dev (>= 147) [linux-any],
  udev [linux-any],
  libkvm-dev [kfreebsd-any],
@@ -31,7 +31,12 @@ Package: upower
 Architecture: any
 Multi-Arch: foreign
 Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends}, ${misc:Depends}, udev [linux-any], dbus, pm-utils [linux-any] | systemd [linux-any] | systemd-services [linux-any]
+Depends: ${shlibs:Depends},
+ ${misc:Depends},
+ libglib2.0-0 (>= 2.36),
+ udev [linux-any],
+ dbus,
+ pm-utils [linux-any] | systemd [linux-any] | systemd-services [linux-any]
 Recommends: policykit-1
 Description: abstraction for power management
  upower provides an interface to enumerate power sources on the system

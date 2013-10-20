@@ -1,3 +1,10 @@
+upower (0.9.22-2) UNRELEASED; urgency=low
+
+  * Force libglib2.0-0 to be at least 2.36 to avoid running against earlier
+    glib versions which still required g_type_init(). (Closes: #722612)
+
+ -- Martin Pitt <mpitt@debian.org>  Sun, 20 Oct 2013 17:01:23 +0200
+
 upower (0.9.22-1) unstable; urgency=low
 
   * New upstream release.
