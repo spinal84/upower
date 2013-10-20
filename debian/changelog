@@ -1,10 +1,10 @@
-upower (0.9.23-1) UNRELEASED; urgency=low
+upower (0.9.23-1) unstable; urgency=low
 
   * New upstream bug fix release.
   * Force libglib2.0-0 to be at least 2.36 to avoid running against earlier
     glib versions which still required g_type_init(). (Closes: #722612)
 
- -- Martin Pitt <mpitt@debian.org>  Sun, 20 Oct 2013 17:01:23 +0200
+ -- Martin Pitt <mpitt@debian.org>  Sun, 20 Oct 2013 17:11:30 +0200
 
 upower (0.9.22-1) unstable; urgency=low
 
