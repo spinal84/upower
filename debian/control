@@ -33,7 +33,6 @@ Multi-Arch: foreign
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends},
  ${misc:Depends},
- libglib2.0-0 (>= 2.36),
  udev [linux-any],
  dbus,
  pm-utils [linux-any] | systemd [linux-any] | systemd-services [linux-any]
