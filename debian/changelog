@@ -2,6 +2,9 @@ upower (0.9.23-2) UNRELEASED; urgency=low
 
   * Drop hardcoded binary glib dependency, it's already being generated
     automatically from the versioned build depends.
+  * Add 00git_clamp_percentage.patch: Clamp percentage for overfull batteries,
+    to avoid showing 0% on some fully charged battery models. Fixes regression
+    from 0.9.22. (LP: #1240673)
 
  -- Martin Pitt <mpitt@debian.org>  Mon, 21 Oct 2013 06:45:28 +0200
 
