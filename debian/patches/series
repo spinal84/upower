@@ -1,3 +1,2 @@
 # Debian patches for upower
-no_deprecation_define.patch
 always_use_pm-utils_backend.patch
