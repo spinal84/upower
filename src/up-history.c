@@ -652,9 +652,7 @@ up_history_schedule_save (UpHistory *history)
 	g_debug ("saving in %i seconds", UP_HISTORY_SAVE_INTERVAL);
 	history->priv->save_id = g_timeout_add_seconds (UP_HISTORY_SAVE_INTERVAL,
 							(GSourceFunc) up_history_schedule_save_cb, history);
-#if GLIB_CHECK_VERSION(2,25,8)
-	g_source_set_name_by_id (history->priv->save_id, "[UpHistory] save");
-#endif
+	g_source_set_name_by_id (history->priv->save_id, "[upower] up_history_schedule_save_cb");
 	return TRUE;
 }
 
@@ -884,15 +882,10 @@ static void
 up_history_init (UpHistory *history)
 {
 	history->priv = UP_HISTORY_GET_PRIVATE (history);
-	history->priv->id = NULL;
-	history->priv->rate_last = 0;
-	history->priv->percentage_last = 0;
-	history->priv->state = UP_DEVICE_STATE_UNKNOWN;
 	history->priv->data_rate = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 	history->priv->data_charge = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 	history->priv->data_time_full = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 	history->priv->data_time_empty = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
-	history->priv->save_id = 0;
 	history->priv->max_data_age = UP_HISTORY_DEFAULT_MAX_DATA_AGE;
 	history->priv->dir = g_build_filename (HISTORY_DIR, NULL);
 }

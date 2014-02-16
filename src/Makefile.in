@@ -15,7 +15,6 @@
 @SET_MAKE@
 
 
-
 VPATH = @srcdir@
 am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'
 am__make_running_with_option = \
@@ -122,17 +121,16 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__installdirs = "$(DESTDIR)$(libexecdir)" \
-	"$(DESTDIR)$(systemsleepdir)" "$(DESTDIR)$(dbusconfdir)" \
+am__installdirs = "$(DESTDIR)$(libexecdir)" "$(DESTDIR)$(dbusconfdir)" \
 	"$(DESTDIR)$(dbusifdir)" "$(DESTDIR)$(dbusservicedir)" \
 	"$(DESTDIR)$(systemdservicedir)"
 PROGRAMS = $(libexec_PROGRAMS)
 am__up_self_test_SOURCES_DIST = up-self-test.c up-polkit.h up-polkit.c \
 	up-config.h up-config.c up-daemon.h up-daemon.c up-device.h \
-	up-device.c up-device-list.h up-device-list.c up-qos.h \
-	up-qos.c up-kbd-backlight.h up-kbd-backlight.c up-wakeups.h \
+	up-device.c up-device-list.h up-device-list.c \
+	up-kbd-backlight.h up-kbd-backlight.c up-wakeups.h \
 	up-wakeups.c up-history.h up-history.c up-backend.h \
-	up-native.h up-daemon-glue.h up-device-glue.h up-qos-glue.h \
+	up-native.h up-daemon-glue.h up-device-glue.h \
 	up-kbd-backlight-glue.h up-wakeups-glue.h up-marshal.h \
 	up-marshal.c
 am__objects_1 = up_self_test-up-marshal.$(OBJEXT)
@@ -143,7 +141,6 @@ am__objects_1 = up_self_test-up-marshal.$(OBJEXT)
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-daemon.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-device.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-device-list.$(OBJEXT) \
-@UP_BUILD_TESTS_TRUE@	up_self_test-up-qos.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-kbd-backlight.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-wakeups.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-history.$(OBJEXT) \
@@ -165,8 +162,8 @@ up_self_test_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 am__objects_2 = upowerd-up-marshal.$(OBJEXT)
 am_upowerd_OBJECTS = upowerd-up-polkit.$(OBJEXT) \
 	upowerd-up-daemon.$(OBJEXT) upowerd-up-device.$(OBJEXT) \
-	upowerd-up-device-list.$(OBJEXT) upowerd-up-qos.$(OBJEXT) \
-	upowerd-up-config.$(OBJEXT) upowerd-up-kbd-backlight.$(OBJEXT) \
+	upowerd-up-device-list.$(OBJEXT) upowerd-up-config.$(OBJEXT) \
+	upowerd-up-kbd-backlight.$(OBJEXT) \
 	upowerd-up-wakeups.$(OBJEXT) upowerd-up-history.$(OBJEXT) \
 	upowerd-up-main.$(OBJEXT) $(am__objects_2)
 upowerd_OBJECTS = $(am_upowerd_OBJECTS)
@@ -181,34 +178,6 @@ upowerd_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 upowerd_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(upowerd_CFLAGS) \
 	$(CFLAGS) $(upowerd_LDFLAGS) $(LDFLAGS) -o $@
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
-am__install_max = 40
-am__nobase_strip_setup = \
-  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
-am__nobase_strip = \
-  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
-am__nobase_list = $(am__nobase_strip_setup); \
-  for p in $$list; do echo "$$p $$p"; done | \
-  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
-  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
-    if (++n[$$2] == $(am__install_max)) \
-      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
-    END { for (dir in files) print dir, files[dir] }'
-am__base_list = \
-  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
-  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__uninstall_files_from_dir = { \
-  test -z "$$files" \
-    || { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
-    || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
-         $(am__cd) "$$dir" && rm -f $$files; }; \
-  }
-SCRIPTS = $(systemsleep_SCRIPTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -258,6 +227,33 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
+am__install_max = 40
+am__nobase_strip_setup = \
+  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
+am__nobase_strip = \
+  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
+am__nobase_list = $(am__nobase_strip_setup); \
+  for p in $$list; do echo "$$p $$p"; done | \
+  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
+  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
+    if (++n[$$2] == $(am__install_max)) \
+      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
+    END { for (dir in files) print dir, files[dir] }'
+am__base_list = \
+  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
+  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+am__uninstall_files_from_dir = { \
+  test -z "$$files" \
+    || { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
+    || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
+         $(am__cd) "$$dir" && rm -f $$files; }; \
+  }
 DATA = $(dbusconf_DATA) $(dbusif_DATA) $(dbusservice_DATA) \
 	$(systemdservice_DATA)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
@@ -526,6 +522,8 @@ GETTEXT_MACRO_VERSION = @GETTEXT_MACRO_VERSION@
 GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 GIO_CFLAGS = @GIO_CFLAGS@
 GIO_LIBS = @GIO_LIBS@
+GIO_UNIX_CFLAGS = @GIO_UNIX_CFLAGS@
+GIO_UNIX_LIBS = @GIO_UNIX_LIBS@
 GLIB_CFLAGS = @GLIB_CFLAGS@
 GLIB_LIBS = @GLIB_LIBS@
 GMSGFMT = @GMSGFMT@
@@ -698,7 +696,6 @@ AM_CPPFLAGS = \
 	-DHISTORY_DIR=\""$(historydir)"\"			\
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
 	-DUP_COMPILATION					\
-	-DUP_DISABLE_DEPRECATED					\
 	-DG_LOG_DOMAIN=\"UPower\"				\
 	-I$(top_srcdir)/libupower-glib				\
 	-I$(top_srcdir)						\
@@ -712,7 +709,6 @@ UPOWER_LIBS = $(top_builddir)/libupower-glib/libupower-glib.la
 BUILT_SOURCES = \
 	up-daemon-glue.h					\
 	up-device-glue.h					\
-	up-qos-glue.h						\
 	up-kbd-backlight-glue.h					\
 	up-wakeups-glue.h					\
 	up-marshal.h						\
@@ -722,7 +718,6 @@ dbusifdir = $(datadir)/dbus-1/interfaces
 dbusif_DATA = \
 	org.freedesktop.UPower.xml				\
 	org.freedesktop.UPower.Device.xml			\
-	org.freedesktop.UPower.QoS.xml				\
 	org.freedesktop.UPower.KbdBacklight.xml			\
 	org.freedesktop.UPower.Wakeups.xml
 
@@ -735,8 +730,6 @@ upowerd_SOURCES = \
 	up-device.c						\
 	up-device-list.h					\
 	up-device-list.c					\
-	up-qos.h						\
-	up-qos.c						\
 	up-config.h						\
 	up-config.c						\
 	up-kbd-backlight.h					\
@@ -761,8 +754,6 @@ upowerd_LDADD = -lm $(USB_LIBS) $(GIO_LIBS) $(DBUS_GLIB_LIBS) \
 @BACKEND_TYPE_LINUX_TRUE@	$(PIE_LDFLAGS)						\
 @BACKEND_TYPE_LINUX_TRUE@	$(RELRO_LDFLAGS)
 
-@BACKEND_TYPE_LINUX_TRUE@@HAVE_SYSTEMDUTILDIR_TRUE@systemsleepdir = $(systemdutildir)/system-sleep
-@BACKEND_TYPE_LINUX_TRUE@@HAVE_SYSTEMDUTILDIR_TRUE@systemsleep_SCRIPTS = notify-upower.sh
 upowerd_CFLAGS = \
 	$(WARNINGFLAGS_C)					\
 	$(NULL)
@@ -779,8 +770,6 @@ upowerd_CFLAGS = \
 @UP_BUILD_TESTS_TRUE@	up-device.c						\
 @UP_BUILD_TESTS_TRUE@	up-device-list.h					\
 @UP_BUILD_TESTS_TRUE@	up-device-list.c					\
-@UP_BUILD_TESTS_TRUE@	up-qos.h						\
-@UP_BUILD_TESTS_TRUE@	up-qos.c						\
 @UP_BUILD_TESTS_TRUE@	up-kbd-backlight.h					\
 @UP_BUILD_TESTS_TRUE@	up-kbd-backlight.c					\
 @UP_BUILD_TESTS_TRUE@	up-wakeups.h						\
@@ -819,11 +808,10 @@ MAINTAINERCLEANFILES = \
 
 EXTRA_DIST = org.freedesktop.UPower.xml \
 	org.freedesktop.UPower.Device.xml \
-	org.freedesktop.UPower.QoS.xml \
 	org.freedesktop.UPower.KbdBacklight.xml \
 	org.freedesktop.UPower.Wakeups.xml up-marshal.list \
-	$(systemsleep_SCRIPTS) $(systemdservice_in_files) \
-	$(dbusservice_in_files) $(dbusconf_in_files) $(am__append_5)
+	$(systemdservice_in_files) $(dbusservice_in_files) \
+	$(dbusconf_in_files) $(am__append_5)
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
@@ -925,41 +913,6 @@ up-self-test$(EXEEXT): $(up_self_test_OBJECTS) $(up_self_test_DEPENDENCIES) $(EX
 upowerd$(EXEEXT): $(upowerd_OBJECTS) $(upowerd_DEPENDENCIES) $(EXTRA_upowerd_DEPENDENCIES) 
 	@rm -f upowerd$(EXEEXT)
 	$(AM_V_CCLD)$(upowerd_LINK) $(upowerd_OBJECTS) $(upowerd_LDADD) $(LIBS)
-install-systemsleepSCRIPTS: $(systemsleep_SCRIPTS)
-	@$(NORMAL_INSTALL)
-	@list='$(systemsleep_SCRIPTS)'; test -n "$(systemsleepdir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(systemsleepdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(systemsleepdir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  if test -f "$$d$$p"; then echo "$$d$$p"; echo "$$p"; else :; fi; \
-	done | \
-	sed -e 'p;s,.*/,,;n' \
-	    -e 'h;s|.*|.|' \
-	    -e 'p;x;s,.*/,,;$(transform)' | sed 'N;N;N;s,\n, ,g' | \
-	$(AWK) 'BEGIN { files["."] = ""; dirs["."] = 1; } \
-	  { d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
-	    if ($$2 == $$4) { files[d] = files[d] " " $$1; \
-	      if (++n[d] == $(am__install_max)) { \
-		print "f", d, files[d]; n[d] = 0; files[d] = "" } } \
-	    else { print "f", d "/" $$4, $$1 } } \
-	  END { for (d in files) print "f", d, files[d] }' | \
-	while read type dir files; do \
-	     if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
-	     test -z "$$files" || { \
-	       echo " $(INSTALL_SCRIPT) $$files '$(DESTDIR)$(systemsleepdir)$$dir'"; \
-	       $(INSTALL_SCRIPT) $$files "$(DESTDIR)$(systemsleepdir)$$dir" || exit $$?; \
-	     } \
-	; done
-
-uninstall-systemsleepSCRIPTS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(systemsleep_SCRIPTS)'; test -n "$(systemsleepdir)" || exit 0; \
-	files=`for p in $$list; do echo "$$p"; done | \
-	       sed -e 's,.*/,,;$(transform)'`; \
-	dir='$(DESTDIR)$(systemsleepdir)'; $(am__uninstall_files_from_dir)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -975,7 +928,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-kbd-backlight.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-marshal.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-polkit.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-qos.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-self-test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-wakeups.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-config.Po@am__quote@
@@ -987,7 +939,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-marshal.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-polkit.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-qos.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-wakeups.Po@am__quote@
 
 .c.o:
@@ -1094,20 +1045,6 @@ up_self_test-up-device-list.obj: up-device-list.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-device-list.c' object='up_self_test-up-device-list.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-device-list.obj `if test -f 'up-device-list.c'; then $(CYGPATH_W) 'up-device-list.c'; else $(CYGPATH_W) '$(srcdir)/up-device-list.c'; fi`
-
-up_self_test-up-qos.o: up-qos.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-qos.o -MD -MP -MF $(DEPDIR)/up_self_test-up-qos.Tpo -c -o up_self_test-up-qos.o `test -f 'up-qos.c' || echo '$(srcdir)/'`up-qos.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-qos.Tpo $(DEPDIR)/up_self_test-up-qos.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-qos.c' object='up_self_test-up-qos.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-qos.o `test -f 'up-qos.c' || echo '$(srcdir)/'`up-qos.c
-
-up_self_test-up-qos.obj: up-qos.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-qos.obj -MD -MP -MF $(DEPDIR)/up_self_test-up-qos.Tpo -c -o up_self_test-up-qos.obj `if test -f 'up-qos.c'; then $(CYGPATH_W) 'up-qos.c'; else $(CYGPATH_W) '$(srcdir)/up-qos.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-qos.Tpo $(DEPDIR)/up_self_test-up-qos.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-qos.c' object='up_self_test-up-qos.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-qos.obj `if test -f 'up-qos.c'; then $(CYGPATH_W) 'up-qos.c'; else $(CYGPATH_W) '$(srcdir)/up-qos.c'; fi`
 
 up_self_test-up-kbd-backlight.o: up-kbd-backlight.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-kbd-backlight.o -MD -MP -MF $(DEPDIR)/up_self_test-up-kbd-backlight.Tpo -c -o up_self_test-up-kbd-backlight.o `test -f 'up-kbd-backlight.c' || echo '$(srcdir)/'`up-kbd-backlight.c
@@ -1220,20 +1157,6 @@ upowerd-up-device-list.obj: up-device-list.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-device-list.c' object='upowerd-up-device-list.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-device-list.obj `if test -f 'up-device-list.c'; then $(CYGPATH_W) 'up-device-list.c'; else $(CYGPATH_W) '$(srcdir)/up-device-list.c'; fi`
-
-upowerd-up-qos.o: up-qos.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-qos.o -MD -MP -MF $(DEPDIR)/upowerd-up-qos.Tpo -c -o upowerd-up-qos.o `test -f 'up-qos.c' || echo '$(srcdir)/'`up-qos.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-qos.Tpo $(DEPDIR)/upowerd-up-qos.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-qos.c' object='upowerd-up-qos.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-qos.o `test -f 'up-qos.c' || echo '$(srcdir)/'`up-qos.c
-
-upowerd-up-qos.obj: up-qos.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-qos.obj -MD -MP -MF $(DEPDIR)/upowerd-up-qos.Tpo -c -o upowerd-up-qos.obj `if test -f 'up-qos.c'; then $(CYGPATH_W) 'up-qos.c'; else $(CYGPATH_W) '$(srcdir)/up-qos.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-qos.Tpo $(DEPDIR)/upowerd-up-qos.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-qos.c' object='upowerd-up-qos.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-qos.obj `if test -f 'up-qos.c'; then $(CYGPATH_W) 'up-qos.c'; else $(CYGPATH_W) '$(srcdir)/up-qos.c'; fi`
 
 upowerd-up-config.o: up-config.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-config.o -MD -MP -MF $(DEPDIR)/upowerd-up-config.Tpo -c -o upowerd-up-config.o `test -f 'up-config.c' || echo '$(srcdir)/'`up-config.c
@@ -1733,10 +1656,10 @@ check-am: all-am
 	$(MAKE) $(AM_MAKEFLAGS) check-TESTS check-local
 check: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) check-recursive
-all-am: Makefile $(PROGRAMS) $(SCRIPTS) $(DATA)
+all-am: Makefile $(PROGRAMS) $(DATA)
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(libexecdir)" "$(DESTDIR)$(systemsleepdir)" "$(DESTDIR)$(dbusconfdir)" "$(DESTDIR)$(dbusifdir)" "$(DESTDIR)$(dbusservicedir)" "$(DESTDIR)$(systemdservicedir)"; do \
+	for dir in "$(DESTDIR)$(libexecdir)" "$(DESTDIR)$(dbusconfdir)" "$(DESTDIR)$(dbusifdir)" "$(DESTDIR)$(dbusservicedir)" "$(DESTDIR)$(systemdservicedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: $(BUILT_SOURCES)
@@ -1800,8 +1723,7 @@ info: info-recursive
 info-am:
 
 install-data-am: install-dbusconfDATA install-dbusifDATA \
-	install-dbusserviceDATA install-systemdserviceDATA \
-	install-systemsleepSCRIPTS
+	install-dbusserviceDATA install-systemdserviceDATA
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-recursive
@@ -1850,7 +1772,7 @@ ps-am:
 
 uninstall-am: uninstall-dbusconfDATA uninstall-dbusifDATA \
 	uninstall-dbusserviceDATA uninstall-libexecPROGRAMS \
-	uninstall-systemdserviceDATA uninstall-systemsleepSCRIPTS
+	uninstall-systemdserviceDATA
 
 .MAKE: $(am__recursive_targets) all check check-am install install-am \
 	install-data-am install-strip
@@ -1868,14 +1790,13 @@ uninstall-am: uninstall-dbusconfDATA uninstall-dbusifDATA \
 	install-info install-info-am install-libexecPROGRAMS \
 	install-man install-pdf install-pdf-am install-ps \
 	install-ps-am install-strip install-systemdserviceDATA \
-	install-systemsleepSCRIPTS installcheck installcheck-am \
-	installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	recheck tags tags-am uninstall uninstall-am \
-	uninstall-dbusconfDATA uninstall-dbusifDATA \
+	installcheck installcheck-am installdirs installdirs-am \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am recheck tags tags-am uninstall \
+	uninstall-am uninstall-dbusconfDATA uninstall-dbusifDATA \
 	uninstall-dbusserviceDATA uninstall-libexecPROGRAMS \
-	uninstall-systemdserviceDATA uninstall-systemsleepSCRIPTS
+	uninstall-systemdserviceDATA
 
 
 up-marshal.h: up-marshal.list
@@ -1890,9 +1811,6 @@ up-daemon-glue.h: org.freedesktop.UPower.xml Makefile.am
 up-device-glue.h: org.freedesktop.UPower.Device.xml Makefile.am
 	dbus-binding-tool --prefix=up_device --mode=glib-server --output=up-device-glue.h $(srcdir)/org.freedesktop.UPower.Device.xml
 
-up-qos-glue.h: org.freedesktop.UPower.QoS.xml Makefile.am
-	dbus-binding-tool --prefix=up_qos --mode=glib-server --output=up-qos-glue.h $(srcdir)/org.freedesktop.UPower.QoS.xml
-
 up-kbd-backlight-glue.h: org.freedesktop.UPower.KbdBacklight.xml Makefile.am
 	dbus-binding-tool --prefix=up_kbd_backlight --mode=glib-server --output=up-kbd-backlight-glue.h $(srcdir)/org.freedesktop.UPower.KbdBacklight.xml
 
@@ -1900,7 +1818,7 @@ up-wakeups-glue.h: org.freedesktop.UPower.Wakeups.xml Makefile.am
 	dbus-binding-tool --prefix=up_wakeups --mode=glib-server --output=up-wakeups-glue.h $(srcdir)/org.freedesktop.UPower.Wakeups.xml
 
 @BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@check-local: upowerd
-@BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@	env GI_TYPELIB_PATH=$(top_builddir)/libupower-glib:$(GI_REPOSITORY_PATH) LD_LIBRARY_PATH=$(top_builddir)/libupower-glib/.libs:$(LD_LIBRARY_PATH) top_builddir=$(top_builddir) $(srcdir)/linux/integration-test -v
+@BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@	env GI_TYPELIB_PATH=$(top_builddir)/libupower-glib:$(GI_TYPELIB_PATH) LD_LIBRARY_PATH=$(top_builddir)/libupower-glib/.libs:$(LD_LIBRARY_PATH) top_builddir=$(top_builddir) $(srcdir)/linux/integration-test -v
 
 $(dbusservice_DATA): $(dbusservice_in_files) Makefile
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@

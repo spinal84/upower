@@ -27,10 +27,6 @@
 #include "up-device.h"
 #include <string.h> /* strcmp() */
 
-#define UP_BACKEND_SUSPEND_COMMAND	"/usr/sbin/zzz"
-#define UP_BACKEND_POWERSAVE_TRUE_COMMAND	"/usr/sbin/apm -C"
-#define UP_BACKEND_POWERSAVE_FALSE_COMMAND	"/usr/sbin/apm -A"
-
 static void	up_backend_class_init	(UpBackendClass	*klass);
 static void	up_backend_init	(UpBackend		*backend);
 static void	up_backend_finalize	(GObject		*object);
@@ -40,7 +36,6 @@ UpDeviceState up_backend_apm_get_battery_state_value(u_char battery_state);
 static void	up_backend_update_acpibat_state(UpDevice*, struct sensordev);
 
 static gboolean		up_apm_device_get_on_battery	(UpDevice *device, gboolean *on_battery);
-static gboolean		up_apm_device_get_low_battery	(UpDevice *device, gboolean *low_battery);
 static gboolean		up_apm_device_get_online		(UpDevice *device, gboolean *online);
 static gboolean		up_apm_device_refresh		(UpDevice *device);
 
@@ -94,28 +89,6 @@ up_apm_device_get_on_battery (UpDevice *device, gboolean * on_battery)
 		return FALSE;
 
 	*on_battery = (state == UP_DEVICE_STATE_DISCHARGING);
-	return TRUE;
-}
-gboolean
-up_apm_device_get_low_battery (UpDevice *device, gboolean * low_battery)
-{
-	gboolean ret;
-	gboolean on_battery;
-	gdouble percentage;
-
-	g_return_val_if_fail (low_battery != NULL, FALSE);
-
-	ret = up_apm_device_get_on_battery (device, &on_battery);
-	if (!ret)
-		return FALSE;
-
-	if (!on_battery) {
-		*low_battery = FALSE;
-		return TRUE;
-	}
-
-	g_object_get (device, "percentage", &percentage, (void*) NULL);
-	*low_battery = (percentage < 10.0f);
 	return TRUE;
 }
 
@@ -175,71 +148,29 @@ up_backend_coldplug (UpBackend *backend, UpDaemon *daemon)
 	return TRUE;
 }
 
-
 /**
- * up_backend_get_powersave_command:
+ * up_backend_get_critical_action:
+ * @backend: The %UpBackend class instance
+ *
+ * Which action will be taken when %UP_DEVICE_LEVEL_ACTION
+ * warning-level occurs.
  **/
-const gchar *
-up_backend_get_powersave_command (UpBackend *backend, gboolean powersave)
+const char *
+up_backend_get_critical_action (UpBackend *backend)
 {
-	if (powersave)
-		return UP_BACKEND_POWERSAVE_TRUE_COMMAND;
-	return UP_BACKEND_POWERSAVE_FALSE_COMMAND;
-}
-
-/**
- * up_backend_get_suspend_command:
- **/
-const gchar *
-up_backend_get_suspend_command (UpBackend *backend)
-{
-	return UP_BACKEND_SUSPEND_COMMAND;
+	return "PowerOff";
 }
 
 /**
- * up_backend_get_hibernate_command:
+ * up_backend_take_action:
+ * @backend: The %UpBackend class instance
+ *
+ * Act upon the %UP_DEVICE_LEVEL_ACTION warning-level.
  **/
-const gchar *
-up_backend_get_hibernate_command (UpBackend *backend)
+void
+up_backend_take_action (UpBackend *backend)
 {
-	return NULL;
-}
-
-gboolean
-up_backend_emits_resuming (UpBackend *backend)
-{
-	return FALSE;
-}
-
-/**
- * up_backend_kernel_can_suspend:
- **/
-gboolean
-up_backend_kernel_can_suspend (UpBackend *backend)
-{
-	return TRUE;
-}
-
-/**
- * up_backend_kernel_can_hibernate:
- **/
-gboolean
-up_backend_kernel_can_hibernate (UpBackend *backend)
-{
-	return FALSE;
-}
-
-gboolean
-up_backend_has_encrypted_swap (UpBackend *backend)
-{
-	return FALSE;
-}
-
-/* Return value: a percentage value */
-gfloat
-up_backend_get_used_swap (UpBackend *backend)
-{
-	return 0;
+	/* FIXME: Implement */
 }
 
 /**
@@ -571,7 +502,6 @@ up_backend_init (UpBackend *backend)
 	UpDeviceClass *device_class;
 
 	backend->priv = UP_BACKEND_GET_PRIVATE (backend);
-	backend->priv->daemon = NULL;
 	backend->priv->is_laptop = up_native_is_laptop();
 	g_debug("is_laptop:%d",backend->priv->is_laptop);
 	if (backend->priv->is_laptop)
@@ -580,12 +510,10 @@ up_backend_init (UpBackend *backend)
 		backend->priv->battery = UP_DEVICE(up_device_new ());
 		device_class = UP_DEVICE_GET_CLASS (backend->priv->battery);
 		device_class->get_on_battery = up_apm_device_get_on_battery;
-		device_class->get_low_battery = up_apm_device_get_low_battery;
 		device_class->get_online = up_apm_device_get_online;
 		device_class->refresh = up_apm_device_refresh;
 		device_class = UP_DEVICE_GET_CLASS (backend->priv->ac);
 		device_class->get_on_battery = up_apm_device_get_on_battery;
-		device_class->get_low_battery = up_apm_device_get_low_battery;
 		device_class->get_online = up_apm_device_get_online;
 		device_class->refresh = up_apm_device_refresh;
 		/* creates thread */
@@ -614,9 +542,6 @@ up_backend_init (UpBackend *backend)
 			      "power-supply", TRUE,
 			      "update-time", (guint64) timeval.tv_sec,
 			      (void*) NULL);
-	} else {
-		backend->priv->ac = NULL;
-		backend->priv->battery = NULL;
 	}
 }
 /**

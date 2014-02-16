@@ -34,12 +34,13 @@
 #include <gudev/gudev.h>
 
 #include "sysfs-utils.h"
+#include "up-config.h"
 #include "up-types.h"
 #include "up-device-supply.h"
 
 #define UP_DEVICE_SUPPLY_REFRESH_TIMEOUT	30	/* seconds */
-#define UP_DEVICE_SUPPLY_UNKNOWN_TIMEOUT	2	/* seconds */
-#define UP_DEVICE_SUPPLY_UNKNOWN_RETRIES	30
+#define UP_DEVICE_SUPPLY_UNKNOWN_TIMEOUT	1	/* seconds */
+#define UP_DEVICE_SUPPLY_UNKNOWN_RETRIES	5
 #define UP_DEVICE_SUPPLY_CHARGED_THRESHOLD	90.0f	/* % */
 
 #define UP_DEVICE_SUPPLY_COLDPLUG_UNITS_CHARGE		TRUE
@@ -58,7 +59,7 @@ struct UpDeviceSupplyPrivate
 	guint			 energy_old_first;
 	gdouble			 rate_old;
 	guint			 unknown_retries;
-	gboolean		 enable_poll;
+	gboolean		 disable_battery_poll; /* from configuration */
 	gboolean		 is_power_supply;
 	gboolean		 shown_invalid_voltage_warning;
 };
@@ -172,36 +173,6 @@ up_device_supply_get_on_battery (UpDevice *device, gboolean *on_battery)
 		return FALSE;
 
 	*on_battery = (state == UP_DEVICE_STATE_DISCHARGING);
-	return TRUE;
-}
-
-/**
- * up_device_supply_get_low_battery:
- **/
-static gboolean
-up_device_supply_get_low_battery (UpDevice *device, gboolean *low_battery)
-{
-	gboolean ret;
-	gboolean on_battery;
-	UpDeviceSupply *supply = UP_DEVICE_SUPPLY (device);
-	gdouble percentage;
-
-	g_return_val_if_fail (UP_IS_DEVICE_SUPPLY (supply), FALSE);
-	g_return_val_if_fail (low_battery != NULL, FALSE);
-
-	/* reuse the common checks */
-	ret = up_device_supply_get_on_battery (device, &on_battery);
-	if (!ret)
-		return FALSE;
-
-	/* shortcut */
-	if (!on_battery) {
-		*low_battery = FALSE;
-		return TRUE;
-	}
-
-	g_object_get (device, "percentage", &percentage, NULL);
-	*low_battery = (percentage < 10.0f);
 	return TRUE;
 }
 
@@ -474,15 +445,46 @@ up_device_supply_units_changed (UpDeviceSupply *supply, const gchar *native_path
 	return TRUE;
 }
 
+static UpDeviceState
+up_device_supply_get_state (const gchar *native_path)
+{
+	UpDeviceState state;
+	gchar *status;
+
+	status = up_device_supply_get_string (native_path, "status");
+	if (status == NULL ||
+	    g_ascii_strcasecmp (status, "unknown") == 0 ||
+	    *status == '\0') {
+		state = UP_DEVICE_STATE_UNKNOWN;
+	} else if (g_ascii_strcasecmp (status, "charging") == 0)
+		state = UP_DEVICE_STATE_CHARGING;
+	else if (g_ascii_strcasecmp (status, "discharging") == 0)
+		state = UP_DEVICE_STATE_DISCHARGING;
+	else if (g_ascii_strcasecmp (status, "full") == 0)
+		state = UP_DEVICE_STATE_FULLY_CHARGED;
+	else if (g_ascii_strcasecmp (status, "empty") == 0)
+		state = UP_DEVICE_STATE_EMPTY;
+	else if (g_ascii_strcasecmp (status, "not charging") == 0)
+		state = UP_DEVICE_STATE_PENDING_CHARGE;
+	else {
+		g_warning ("unknown status string: %s", status);
+		state = UP_DEVICE_STATE_UNKNOWN;
+	}
+
+	g_free (status);
+
+	return state;
+}
+
 /**
  * up_device_supply_refresh_battery:
  *
  * Return %TRUE on success, %FALSE if we failed to refresh or no data
  **/
 static gboolean
-up_device_supply_refresh_battery (UpDeviceSupply *supply)
+up_device_supply_refresh_battery (UpDeviceSupply *supply,
+				  UpDeviceState  *out_state)
 {
-	gchar *status = NULL;
 	gchar *technology_native = NULL;
 	gboolean ret = TRUE;
 	gdouble voltage_design;
@@ -505,9 +507,6 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 	gchar *manufacturer = NULL;
 	gchar *model_name = NULL;
 	gchar *serial_number = NULL;
-	gboolean recall_notice;
-	const gchar *recall_vendor = NULL;
-	const gchar *recall_url = NULL;
 	UpDaemon *daemon;
 	gboolean ac_online = FALSE;
 	gboolean has_ac = FALSE;
@@ -528,10 +527,11 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 	g_object_set (device, "is-present", is_present, NULL);
 	if (!is_present) {
 		up_device_supply_reset_values (supply);
+		g_object_get (device, "state", out_state, NULL);
 		goto out;
 	}
 
-	/* get the currect charge */
+	/* get the current charge */
 	energy = sysfs_get_double (native_path, "energy_now") / 1000000.0;
 	if (energy < 0.01)
 		energy = sysfs_get_double (native_path, "energy_avg") / 1000000.0;
@@ -543,7 +543,6 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 	if (!supply->priv->has_coldplug_values ||
 	    up_device_supply_units_changed (supply, native_path)) {
 
-		/* when we add via sysfs power_supply class then we know this is true */
 		g_object_set (device,
 			      "power-supply", supply->priv->is_power_supply,
 			      NULL);
@@ -562,13 +561,6 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 		up_device_supply_make_safe_string (model_name);
 		up_device_supply_make_safe_string (serial_number);
 
-		/* are we possibly recalled by the vendor? */
-		recall_notice = g_udev_device_has_property (native, "UPOWER_RECALL_NOTICE");
-		if (recall_notice) {
-			recall_vendor = g_udev_device_get_property (native, "UPOWER_RECALL_VENDOR");
-			recall_url = g_udev_device_get_property (native, "UPOWER_RECALL_URL");
-		}
-
 		g_object_set (device,
 			      "vendor", manufacturer,
 			      "model", model_name,
@@ -576,9 +568,6 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 			      "is-rechargeable", TRUE, /* assume true for laptops */
 			      "has-history", TRUE,
 			      "has-statistics", TRUE,
-			      "recall-notice", recall_notice,
-			      "recall-vendor", recall_vendor,
-			      "recall-url", recall_url,
 			      NULL);
 
 		/* these don't change at runtime */
@@ -626,28 +615,8 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 			      NULL);
 	}
 
-	status = g_strstrip (sysfs_get_string (native_path, "status"));
-	if (g_ascii_strcasecmp (status, "charging") == 0)
-		state = UP_DEVICE_STATE_CHARGING;
-	else if (g_ascii_strcasecmp (status, "discharging") == 0)
-		state = UP_DEVICE_STATE_DISCHARGING;
-	else if (g_ascii_strcasecmp (status, "full") == 0)
-		state = UP_DEVICE_STATE_FULLY_CHARGED;
-	else if (g_ascii_strcasecmp (status, "empty") == 0)
-		state = UP_DEVICE_STATE_EMPTY;
-	else if (g_ascii_strcasecmp (status, "unknown") == 0 ||
-		 *status == '\0')
-		state = UP_DEVICE_STATE_UNKNOWN;
-	else if (g_ascii_strcasecmp (status, "not charging") == 0)
-		state = UP_DEVICE_STATE_PENDING_CHARGE;
-	else {
-		g_warning ("unknown status string: %s", status);
-		state = UP_DEVICE_STATE_UNKNOWN;
-	}
-
-	/* only disable the polling if the kernel tells us we're fully charged,
-	   not if we've guessed the state to be fully charged */
-	supply->priv->enable_poll = (state != UP_DEVICE_STATE_FULLY_CHARGED);
+	state = up_device_supply_get_state (native_path);
+	*out_state = state;
 
 	/* reset unknown counter */
 	if (state != UP_DEVICE_STATE_UNKNOWN) {
@@ -708,6 +677,10 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply)
 	/* get a precise percentage */
         if (sysfs_file_exists (native_path, "capacity")) {
 		percentage = sysfs_get_double (native_path, "capacity");
+		if (percentage < 0.0f)
+			percentage = 0.0f;
+		if (percentage > 100.0f)
+			percentage = 100.0f;
                 /* for devices which provide capacity, but not {energy,charge}_now */
                 if (energy < 0.1f && energy_full > 0.0f)
                     energy = energy_full * percentage / 100;
@@ -835,23 +808,97 @@ out:
 	g_free (manufacturer);
 	g_free (model_name);
 	g_free (serial_number);
-	g_free (status);
 	return ret;
 }
 
 /**
- * up_device_supply_poll_battery:
+ * up_device_supply_refresh_device:
+ *
+ * Return %TRUE on success, %FALSE if we failed to refresh or no data
  **/
 static gboolean
-up_device_supply_poll_battery (UpDeviceSupply *supply)
+up_device_supply_refresh_device (UpDeviceSupply *supply,
+				 UpDeviceState  *out_state)
 {
+	gboolean ret = TRUE;
+	UpDeviceState state;
 	UpDevice *device = UP_DEVICE (supply);
+	const gchar *native_path;
+	GUdevDevice *native;
+	gdouble percentage = 0.0f;
 
-	g_debug ("No updates on supply %s for %i seconds; forcing update", up_device_get_object_path (device), UP_DEVICE_SUPPLY_REFRESH_TIMEOUT);
+	native = G_UDEV_DEVICE (up_device_get_native (device));
+	native_path = g_udev_device_get_sysfs_path (native);
+
+	/* initial values */
+	if (!supply->priv->has_coldplug_values) {
+		gchar *model_name;
+
+		/* get values which may be blank */
+		model_name = up_device_supply_get_string (native_path, "model_name");
+
+		/* some vendors fill this with binary garbage */
+		up_device_supply_make_safe_string (model_name);
+
+		g_object_set (device,
+			      "is-present", TRUE,
+			      "model", model_name,
+			      "is-rechargeable", TRUE,
+			      "has-history", TRUE,
+			      "has-statistics", TRUE,
+			      "power-supply", supply->priv->is_power_supply, /* always FALSE */
+			      NULL);
+
+		/* we only coldplug once, as these values will never change */
+		supply->priv->has_coldplug_values = TRUE;
+
+		g_free (model_name);
+	}
+
+	/* get a precise percentage */
+	percentage = sysfs_get_double_with_error (native_path, "capacity");
+	if (percentage < 0.0) {
+		/* Probably talking to the device over Bluetooth */
+		state = UP_DEVICE_STATE_UNKNOWN;
+		g_object_set (device, "state", state, NULL);
+		*out_state = state;
+		return FALSE;
+	}
+
+	state = up_device_supply_get_state (native_path);
+
+	/* Override whatever the device might have told us
+	 * because a number of them are always discharging */
+	if (percentage == 100.0)
+		state = UP_DEVICE_STATE_FULLY_CHARGED;
+
+	/* reset unknown counter */
+	if (state != UP_DEVICE_STATE_UNKNOWN) {
+		g_debug ("resetting unknown timeout after %i retries", supply->priv->unknown_retries);
+		supply->priv->unknown_retries = 0;
+	}
+
+	g_object_set (device,
+		      "percentage", percentage,
+		      "state", state,
+		      NULL);
+
+	*out_state = state;
+
+	return ret;
+}
+
+static gboolean
+up_device_supply_poll_unknown_battery (UpDevice *device)
+{
+	UpDeviceSupply *supply = UP_DEVICE_SUPPLY (device);
+
+	g_debug ("Unknown state on supply %s; forcing update after %i seconds",
+		 up_device_get_object_path (device), UP_DEVICE_SUPPLY_UNKNOWN_TIMEOUT);
+
 	supply->priv->poll_timer_id = 0;
 	up_device_supply_refresh (device);
 
-	/* never repeat */
 	return FALSE;
 }
 
@@ -896,6 +943,13 @@ up_device_supply_coldplug (UpDevice *device)
 	} else {
 		g_debug ("taking a guess for power supply scope");
 		supply->priv->is_power_supply = TRUE;
+	}
+
+	/* we don't use separate ACs for devices */
+	if (supply->priv->is_power_supply == FALSE &&
+	    !sysfs_file_exists (native_path, "capacity")) {
+		g_debug ("Ignoring device AC, we'll monitor the device battery");
+		goto out;
 	}
 
 	/* try to detect using the device type */
@@ -975,6 +1029,13 @@ up_device_supply_coldplug (UpDevice *device)
 	/* set the value */
 	g_object_set (device, "type", type, NULL);
 
+	if (type != UP_DEVICE_KIND_LINE_POWER &&
+	    type != UP_DEVICE_KIND_BATTERY)
+		up_daemon_start_poll (G_OBJECT (device), (GSourceFunc) up_device_supply_refresh);
+	else if (type == UP_DEVICE_KIND_BATTERY &&
+		 !supply->priv->disable_battery_poll)
+		up_daemon_start_poll (G_OBJECT (device), (GSourceFunc) up_device_supply_refresh);
+
 	/* coldplug values */
 	ret = up_device_supply_refresh (device);
 out:
@@ -983,43 +1044,39 @@ out:
 }
 
 /**
- * up_device_supply_setup_poll:
+ * up_device_supply_setup_unknown_poll:
  **/
-static gboolean
-up_device_supply_setup_poll (UpDevice *device)
+static void
+up_device_supply_setup_unknown_poll (UpDevice      *device,
+				     UpDeviceState  state)
 {
-	UpDeviceState state;
 	UpDeviceSupply *supply = UP_DEVICE_SUPPLY (device);
 
-	g_object_get (device, "state", &state, NULL);
-
-	/* don't setup the poll only if we're sure */
-	if (!supply->priv->enable_poll)
-		goto out;
+	if (supply->priv->disable_battery_poll)
+		return;
 
 	/* if it's unknown, poll faster than we would normally */
 	if (state == UP_DEVICE_STATE_UNKNOWN &&
 	    supply->priv->unknown_retries < UP_DEVICE_SUPPLY_UNKNOWN_RETRIES) {
 		supply->priv->poll_timer_id =
 			g_timeout_add_seconds (UP_DEVICE_SUPPLY_UNKNOWN_TIMEOUT,
-					       (GSourceFunc) up_device_supply_poll_battery, supply);
-#if GLIB_CHECK_VERSION(2,25,8)
-		g_source_set_name_by_id (supply->priv->poll_timer_id, "[UpDeviceSupply] unknown poll");
-#endif
+					       (GSourceFunc) up_device_supply_poll_unknown_battery, supply);
+		g_source_set_name_by_id (supply->priv->poll_timer_id, "[upower] up_device_supply_poll_unknown_battery (linux)");
+
 		/* increase count, we don't want to poll at 0.5Hz forever */
 		supply->priv->unknown_retries++;
-		goto out;
 	}
+}
 
-	/* any other state just fall back */
-	supply->priv->poll_timer_id =
-		g_timeout_add_seconds (UP_DEVICE_SUPPLY_REFRESH_TIMEOUT,
-				       (GSourceFunc) up_device_supply_poll_battery, supply);
-#if GLIB_CHECK_VERSION(2,25,8)
-	g_source_set_name_by_id (supply->priv->poll_timer_id, "[UpDeviceSupply] normal poll");
-#endif
-out:
-	return (supply->priv->poll_timer_id != 0);
+static void
+up_device_supply_disable_unknown_poll (UpDevice *device)
+{
+	UpDeviceSupply *supply = UP_DEVICE_SUPPLY (device);
+
+	if (supply->priv->poll_timer_id > 0) {
+		g_source_remove (supply->priv->poll_timer_id);
+		supply->priv->poll_timer_id = 0;
+	}
 }
 
 /**
@@ -1034,23 +1091,20 @@ up_device_supply_refresh (UpDevice *device)
 	GTimeVal timeval;
 	UpDeviceSupply *supply = UP_DEVICE_SUPPLY (device);
 	UpDeviceKind type;
-
-	if (supply->priv->poll_timer_id > 0) {
-		g_source_remove (supply->priv->poll_timer_id);
-		supply->priv->poll_timer_id = 0;
-	}
+	UpDeviceState state;
 
 	g_object_get (device, "type", &type, NULL);
 	switch (type) {
 	case UP_DEVICE_KIND_LINE_POWER:
 		ret = up_device_supply_refresh_line_power (supply);
 		break;
+	case UP_DEVICE_KIND_BATTERY:
+		up_device_supply_disable_unknown_poll (device);
+		ret = up_device_supply_refresh_battery (supply, &state);
+		up_device_supply_setup_unknown_poll (device, state);
+		break;
 	default:
-		ret = up_device_supply_refresh_battery (supply);
-
-		/* Seems that we don't get change uevents from the
-		 * kernel on some BIOS types */
-		up_device_supply_setup_poll (device);
+		ret = up_device_supply_refresh_device (supply, &state);
 		break;
 	}
 
@@ -1069,17 +1123,22 @@ up_device_supply_refresh (UpDevice *device)
 static void
 up_device_supply_init (UpDeviceSupply *supply)
 {
+	UpConfig *config;
+
 	supply->priv = UP_DEVICE_SUPPLY_GET_PRIVATE (supply);
-	supply->priv->unknown_retries = 0;
-	supply->priv->poll_timer_id = 0;
-	supply->priv->enable_poll = TRUE;
 
 	/* allocate the stats for the battery charging & discharging */
 	supply->priv->energy_old = g_new (gdouble, UP_DEVICE_SUPPLY_ENERGY_OLD_LENGTH);
 	supply->priv->energy_old_timespec = g_new (GTimeVal, UP_DEVICE_SUPPLY_ENERGY_OLD_LENGTH);
-	supply->priv->energy_old_first = 0;
 
 	supply->priv->shown_invalid_voltage_warning = FALSE;
+
+	config = up_config_new ();
+	/* Seems that we don't get change uevents from the
+	 * kernel on some BIOS types, but if polling
+	 * is disabled in the configuration, do nothing */
+	supply->priv->disable_battery_poll = up_config_get_boolean (config, "NoPollBatteries");
+	g_object_unref (config);
 }
 
 /**
@@ -1095,6 +1154,8 @@ up_device_supply_finalize (GObject *object)
 
 	supply = UP_DEVICE_SUPPLY (object);
 	g_return_if_fail (supply->priv != NULL);
+
+	up_daemon_stop_poll (object);
 
 	if (supply->priv->poll_timer_id > 0)
 		g_source_remove (supply->priv->poll_timer_id);
@@ -1116,7 +1177,6 @@ up_device_supply_class_init (UpDeviceSupplyClass *klass)
 
 	object_class->finalize = up_device_supply_finalize;
 	device_class->get_on_battery = up_device_supply_get_on_battery;
-	device_class->get_low_battery = up_device_supply_get_low_battery;
 	device_class->get_online = up_device_supply_get_online;
 	device_class->coldplug = up_device_supply_coldplug;
 	device_class->refresh = up_device_supply_refresh;

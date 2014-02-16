@@ -1,8 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 
 m4_define([up_major_version], [0])
-m4_define([up_minor_version], [9])
-m4_define([up_micro_version], [23])
+m4_define([up_minor_version], [99])
+m4_define([up_micro_version], [0])
 m4_define([up_version],
           [up_major_version.up_minor_version.up_micro_version])
 
@@ -43,8 +43,8 @@ AC_SUBST(UP_MICRO_VERSION)
 # CURRENT	If the API or ABI interface has changed (reset REVISION to 0)
 # REVISION	If the API and ABI remains the same, but bugs are fixed.
 # AGE		Don't use.
-LT_CURRENT=1
-LT_REVISION=4
+LT_CURRENT=2
+LT_REVISION=0
 LT_AGE=0
 AC_SUBST(LT_CURRENT)
 AC_SUBST(LT_REVISION)
@@ -152,11 +152,12 @@ AX_CHECK_LINK_FLAG([-Wl,-z,relro,-z,now],
 		   [RELRO_LDFLAGS="-Wl,-z,relro,-z,now"])
 AC_SUBST([RELRO_LDFLAGS])
 
-PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.21.5])
+PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.29.19])
 PKG_CHECK_MODULES(DBUS, [dbus-1 >= 1.0])
 PKG_CHECK_MODULES(DBUS_GLIB, [dbus-glib-1 >= 0.76])
 PKG_CHECK_MODULES(POLKIT, polkit-gobject-1 >= 0.97)
 PKG_CHECK_MODULES(GIO, [gio-2.0 >= 2.16.1])
+PKG_CHECK_MODULES(GIO_UNIX, [gio-unix-2.0])
 
 dnl ====================================================================
 dnl Check for systemd
@@ -165,15 +166,19 @@ AC_ARG_WITH([systemdutildir],
             AS_HELP_STRING([--with-systemdutildir=DIR], [Directory for systemd utilities]),
             [],
             [with_systemdutildir=$($PKG_CONFIG --variable=systemdutildir systemd)])
-AC_SUBST([systemdutildir], [$with_systemdutildir])
-AM_CONDITIONAL(HAVE_SYSTEMDUTILDIR, [test -n "$with_systemdutildir"])
+if test x$with_systemdutildir != xno; then
+        AC_SUBST([systemdutildir], [$with_systemdutildir])
+fi
+AM_CONDITIONAL(HAVE_SYSTEMDUTILDIR, [test -n "$systemdutildir"])
 
 AC_ARG_WITH([systemdsystemunitdir],
             AS_HELP_STRING([--with-systemdsystemunitdir=DIR], [Directory for systemd service files]),
             [],
             [with_systemdsystemunitdir=$($PKG_CONFIG --variable=systemdsystemunitdir systemd)])
-AC_SUBST([systemdsystemunitdir], [$with_systemdsystemunitdir])
-AM_CONDITIONAL(HAVE_SYSTEMDSYSTEMUNITDIR, [test -n "$with_systemdsystemunitdir"])
+if test x$with_systemdsystemunitdir != xno; then
+        AC_SUBST([systemdsystemunitdir], [$with_systemdsystemunitdir])
+fi
+AM_CONDITIONAL(HAVE_SYSTEMDSYSTEMUNITDIR, [test -n "$systemdsystemunitdir"])
 
 dnl ---------------------------------------------------------------------------
 dnl - Compile time default choice of backend
@@ -250,7 +255,6 @@ doc/Makefile
 doc/version.xml
 doc/man/Makefile
 doc/dbus/Makefile
-policy/Makefile
 rules/Makefile
 libupower-glib/Makefile
 libupower-glib/up-version.h
