@@ -1,3 +1,18 @@
+upower (0.99.0-1) experimental; urgency=medium
+
+  * Team upload.
+  * Imported Upstream version 0.99.0
+  * Rename package for new SONAME (1->2)
+  * Update symbols
+  * Drop debian/patches/00git_clamp_percentage.patch, merged upstream.
+  * Drop debian/patches/no_deprecation_define.patch
+    - deprecated features no longer exists at all.
+  * Drop debian/patches/always_use_pm-utils_backend.patch
+    - new upstream now requires logind support
+  * upower no longer install polkit files
+
+ -- Andreas Henriksson <andreas@fatal.se>  Sun, 16 Feb 2014 21:19:45 +0100
+
 upower (0.9.23-2) unstable; urgency=low
 
   * Drop hardcoded binary glib dependency, it's already being generated
