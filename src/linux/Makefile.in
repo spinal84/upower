@@ -102,7 +102,8 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libupshared_la_LIBADD =
+am__DEPENDENCIES_1 =
+libupshared_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am__libupshared_la_SOURCES_DIST = up-device-supply.c \
 	up-device-supply.h up-device-csr.c up-device-csr.h \
 	up-device-unifying.c up-device-unifying.h up-device-hid.c \
@@ -134,7 +135,6 @@ PROGRAMS = $(noinst_PROGRAMS)
 am_hidpp_test_OBJECTS = hidpp_test-hidpp-device.$(OBJEXT) \
 	hidpp_test-hidpp-test.$(OBJEXT)
 hidpp_test_OBJECTS = $(am_hidpp_test_OBJECTS)
-am__DEPENDENCIES_1 =
 hidpp_test_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 hidpp_test_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(hidpp_test_CFLAGS) \
@@ -237,6 +237,8 @@ GETTEXT_MACRO_VERSION = @GETTEXT_MACRO_VERSION@
 GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 GIO_CFLAGS = @GIO_CFLAGS@
 GIO_LIBS = @GIO_LIBS@
+GIO_UNIX_CFLAGS = @GIO_UNIX_CFLAGS@
+GIO_UNIX_LIBS = @GIO_UNIX_LIBS@
 GLIB_CFLAGS = @GLIB_CFLAGS@
 GLIB_LIBS = @GLIB_LIBS@
 GMSGFMT = @GMSGFMT@
@@ -454,6 +456,7 @@ EXTRA_DIST = $(libupshared_la_SOURCES) 			\
 libupshared_la_CFLAGS = \
 	$(WARNINGFLAGS_C)
 
+libupshared_la_LIBADD = $(GIO_LIBS)
 all: all-am
 
 .SUFFIXES:

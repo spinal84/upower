@@ -2,36 +2,31 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>org.freedesktop.UPower.Device</title>
+<title>UPower Reference Manual: org.freedesktop.UPower.Device</title>
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="UPower Reference Manual">
 <link rel="up" href="ref-dbus.html" title="D-Bus API Reference">
 <link rel="prev" href="UPower.html" title="org.freedesktop.UPower">
-<link rel="next" href="QoS.html" title="org.freedesktop.UPower.QoS">
-<meta name="generator" content="GTK-Doc V1.19 (XML mode)">
+<link rel="next" href="KbdBacklight.html" title="org.freedesktop.UPower.KbdBacklight">
+<meta name="generator" content="GTK-Doc V1.19.1 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
-<tr valign="middle">
-<td><a accesskey="p" href="UPower.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="ref-dbus.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
-<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
-<th width="100%" align="center">UPower Reference Manual</th>
-<td><a accesskey="n" href="QoS.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
-</tr>
-<tr><td colspan="5" class="shortcuts">
-<a href="#Device.synopsis" class="shortcut">Top</a>
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="10"><tr valign="middle">
+<td width="100%" align="left">
+<a href="#" class="shortcut">Top</a>
                    | 
                   <a href="#Device.description" class="shortcut">Description</a>
                    | 
                   <a href="#Device.implemented-interfaces" class="shortcut">Implemented Interfaces</a>
                    | 
                   <a href="#Device.properties" class="shortcut">Properties</a>
-                   | 
-                  <a href="#Device.signals" class="shortcut">Signals</a>
-</td></tr>
-</table>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="ref-dbus.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="UPower.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="KbdBacklight.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
 <div class="refentry">
 <a name="Device"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
@@ -53,12 +48,7 @@ out'a(dd)'data)
 </pre>
 </div>
 <div class="refsect1">
-<a name="id-1.2.4.4"></a><h2>Signals</h2>
-<pre class="synopsis"><a class="link" href="Device.html#Device::Changed">Changed</a>()
-</pre>
-</div>
-<div class="refsect1">
-<a name="id-1.2.4.5"></a><h2>Implemented Interfaces</h2>
+<a name="id-1.2.4.4"></a><h2>Implemented Interfaces</h2>
 <p>
     Objects implementing org.freedesktop.UPower.Device also implements
     org.freedesktop.DBus.Introspectable,
@@ -66,7 +56,7 @@ out'a(dd)'data)
     </p>
 </div>
 <div class="refsect1">
-<a name="id-1.2.4.6"></a><h2>Properties</h2>
+<a name="id-1.2.4.5"></a><h2>Properties</h2>
 <pre class="synopsis"><a class="link" href="Device.html#Device:NativePath">'NativePath'</a>read's'
 <a class="link" href="Device.html#Device:Vendor">'Vendor'</a>read's'
 <a class="link" href="Device.html#Device:Model">'Model'</a>read's'
@@ -93,13 +83,12 @@ out'a(dd)'data)
 <a class="link" href="Device.html#Device:IsRechargeable">'IsRechargeable'</a>read'b'
 <a class="link" href="Device.html#Device:Capacity">'Capacity'</a>read'd'
 <a class="link" href="Device.html#Device:Technology">'Technology'</a>read'u'
-<a class="link" href="Device.html#Device:RecallNotice">'RecallNotice'</a>read'b'
-<a class="link" href="Device.html#Device:RecallVendor">'RecallVendor'</a>read's'
-<a class="link" href="Device.html#Device:RecallUrl">'RecallUrl'</a>read's'
+<a class="link" href="Device.html#Device:WarningLevel">'WarningLevel'</a>read'u'
+<a class="link" href="Device.html#Device:IconName">'IconName'</a>read's'
 </pre>
 </div>
 <div class="refsect1">
-<a name="id-1.2.4.7"></a><h2>Description</h2>
+<a name="id-1.2.4.6"></a><h2>Description</h2>
 <p>
       
         </p>
@@ -351,9 +340,9 @@ out'a(dd)'data)
     </p>
 </div>
 <div class="refsect1">
-<a name="id-1.2.4.8"></a><h2>Details</h2>
+<a name="id-1.2.4.7"></a><h2>Details</h2>
 <div class="refsect2">
-<a name="id-1.2.4.8.2"></a><h3>
+<a name="id-1.2.4.7.2"></a><h3>
 <a name="Device.Refresh"></a>Refresh ()</h3>
 <pre class="programlisting">Refresh ()</pre>
 </div>
@@ -368,7 +357,7 @@ out'a(dd)'data)
 <tbody></tbody>
 </table></div>
 <div class="refsect3">
-<a name="id-1.2.4.8.5"></a><h4>Errors</h4>
+<a name="id-1.2.4.7.5"></a><h4>Errors</h4>
 <div class="variablelist"><table border="0" class="variablelist">
 <colgroup>
 <col align="left" valign="top">
@@ -381,12 +370,12 @@ out'a(dd)'data)
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id-1.2.4.8.6"></a><h4>Permissions</h4>
+<a name="id-1.2.4.7.6"></a><h4>Permissions</h4>
 <p class="permission">Callers need the org.freedesktop.upower.refresh-power-source authorization</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.8.7"></a><h3>
+<a name="id-1.2.4.7.7"></a><h3>
 <a name="Device.GetHistory"></a>GetHistory ()</h3>
 <pre class="programlisting">GetHistory (in's'type,
 in'u'timespan,
@@ -445,7 +434,7 @@ out'a(udu)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.8.10"></a><h3>
+<a name="id-1.2.4.7.10"></a><h3>
 <a name="Device.GetStatistics"></a>GetStatistics ()</h3>
 <pre class="programlisting">GetStatistics (in's'type,
 out'a(dd)'data)</pre>
@@ -486,27 +475,9 @@ out'a(dd)'data)</pre>
 </table></div>
 </div>
 <div class="refsect1">
-<a name="id-1.2.4.9"></a><h2>Signal Details</h2>
+<a name="id-1.2.4.8"></a><h2>Property Details</h2>
 <div class="refsect2">
-<a name="id-1.2.4.9.2"></a><h3>
-<a name="Device::Changed"></a>The Changed signal</h3>
-<pre class="programlisting">Changed ()</pre>
-</div>
-<p>
-            Some value on the power source changed.
-          </p>
-<div class="variablelist"><table border="0" class="variablelist">
-<colgroup>
-<col align="left" valign="top">
-<col>
-</colgroup>
-<tbody></tbody>
-</table></div>
-</div>
-<div class="refsect1">
-<a name="id-1.2.4.10"></a><h2>Property Details</h2>
-<div class="refsect2">
-<a name="id-1.2.4.10.2"></a><h3>
+<a name="id-1.2.4.8.2"></a><h3>
 <a name="Device:NativePath"></a>The "NativePath" property</h3>
 <pre class="programlisting">'NativePath'read's'
 </pre>
@@ -527,7 +498,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.5"></a><h3>
+<a name="id-1.2.4.8.5"></a><h3>
 <a name="Device:Vendor"></a>The "Vendor" property</h3>
 <pre class="programlisting">'Vendor'read's'
 </pre>
@@ -544,7 +515,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.8"></a><h3>
+<a name="id-1.2.4.8.8"></a><h3>
 <a name="Device:Model"></a>The "Model" property</h3>
 <pre class="programlisting">'Model'read's'
 </pre>
@@ -561,7 +532,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.11"></a><h3>
+<a name="id-1.2.4.8.11"></a><h3>
 <a name="Device:Serial"></a>The "Serial" property</h3>
 <pre class="programlisting">'Serial'read's'
 </pre>
@@ -578,7 +549,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.14"></a><h3>
+<a name="id-1.2.4.8.14"></a><h3>
 <a name="Device:UpdateTime"></a>The "UpdateTime" property</h3>
 <pre class="programlisting">'UpdateTime'read't'
 </pre>
@@ -596,7 +567,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.17"></a><h3>
+<a name="id-1.2.4.8.17"></a><h3>
 <a name="Device:Type"></a>The "Type" property</h3>
 <pre class="programlisting">'Type'read'u'
 </pre>
@@ -633,7 +604,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.21"></a><h3>
+<a name="id-1.2.4.8.21"></a><h3>
 <a name="Device:PowerSupply"></a>The "PowerSupply" property</h3>
 <pre class="programlisting">'PowerSupply'read'b'
 </pre>
@@ -652,7 +623,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.24"></a><h3>
+<a name="id-1.2.4.8.24"></a><h3>
 <a name="Device:HasHistory"></a>The "HasHistory" property</h3>
 <pre class="programlisting">'HasHistory'read'b'
 </pre>
@@ -669,7 +640,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.27"></a><h3>
+<a name="id-1.2.4.8.27"></a><h3>
 <a name="Device:HasStatistics"></a>The "HasStatistics" property</h3>
 <pre class="programlisting">'HasStatistics'read'b'
 </pre>
@@ -686,7 +657,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.30"></a><h3>
+<a name="id-1.2.4.8.30"></a><h3>
 <a name="Device:Online"></a>The "Online" property</h3>
 <pre class="programlisting">'Online'read'b'
 </pre>
@@ -706,7 +677,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.33"></a><h3>
+<a name="id-1.2.4.8.33"></a><h3>
 <a name="Device:Energy"></a>The "Energy" property</h3>
 <pre class="programlisting">'Energy'read'd'
 </pre>
@@ -729,7 +700,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.37"></a><h3>
+<a name="id-1.2.4.8.37"></a><h3>
 <a name="Device:EnergyEmpty"></a>The "EnergyEmpty" property</h3>
 <pre class="programlisting">'EnergyEmpty'read'd'
 </pre>
@@ -752,7 +723,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.41"></a><h3>
+<a name="id-1.2.4.8.41"></a><h3>
 <a name="Device:EnergyFull"></a>The "EnergyFull" property</h3>
 <pre class="programlisting">'EnergyFull'read'd'
 </pre>
@@ -775,7 +746,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.45"></a><h3>
+<a name="id-1.2.4.8.45"></a><h3>
 <a name="Device:EnergyFullDesign"></a>The "EnergyFullDesign" property</h3>
 <pre class="programlisting">'EnergyFullDesign'read'd'
 </pre>
@@ -798,7 +769,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.49"></a><h3>
+<a name="id-1.2.4.8.49"></a><h3>
 <a name="Device:EnergyRate"></a>The "EnergyRate" property</h3>
 <pre class="programlisting">'EnergyRate'read'd'
 </pre>
@@ -822,7 +793,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.53"></a><h3>
+<a name="id-1.2.4.8.53"></a><h3>
 <a name="Device:Voltage"></a>The "Voltage" property</h3>
 <pre class="programlisting">'Voltage'read'd'
 </pre>
@@ -839,7 +810,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.56"></a><h3>
+<a name="id-1.2.4.8.56"></a><h3>
 <a name="Device:Luminosity"></a>The "Luminosity" property</h3>
 <pre class="programlisting">'Luminosity'read'd'
 </pre>
@@ -856,7 +827,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.59"></a><h3>
+<a name="id-1.2.4.8.59"></a><h3>
 <a name="Device:TimeToEmpty"></a>The "TimeToEmpty" property</h3>
 <pre class="programlisting">'TimeToEmpty'read'x'
 </pre>
@@ -879,7 +850,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.63"></a><h3>
+<a name="id-1.2.4.8.63"></a><h3>
 <a name="Device:TimeToFull"></a>The "TimeToFull" property</h3>
 <pre class="programlisting">'TimeToFull'read'x'
 </pre>
@@ -902,7 +873,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.67"></a><h3>
+<a name="id-1.2.4.8.67"></a><h3>
 <a name="Device:Percentage"></a>The "Percentage" property</h3>
 <pre class="programlisting">'Percentage'read'd'
 </pre>
@@ -932,7 +903,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.71"></a><h3>
+<a name="id-1.2.4.8.71"></a><h3>
 <a name="Device:Temperature"></a>The "Temperature" property</h3>
 <pre class="programlisting">'Temperature'read'd'
 </pre>
@@ -952,7 +923,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.74"></a><h3>
+<a name="id-1.2.4.8.74"></a><h3>
 <a name="Device:IsPresent"></a>The "IsPresent" property</h3>
 <pre class="programlisting">'IsPresent'read'b'
 </pre>
@@ -976,7 +947,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.78"></a><h3>
+<a name="id-1.2.4.8.78"></a><h3>
 <a name="Device:State"></a>The "State" property</h3>
 <pre class="programlisting">'State'read'u'
 </pre>
@@ -1014,7 +985,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.83"></a><h3>
+<a name="id-1.2.4.8.83"></a><h3>
 <a name="Device:IsRechargeable"></a>The "IsRechargeable" property</h3>
 <pre class="programlisting">'IsRechargeable'read'b'
 </pre>
@@ -1036,7 +1007,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.87"></a><h3>
+<a name="id-1.2.4.8.87"></a><h3>
 <a name="Device:Capacity"></a>The "Capacity" property</h3>
 <pre class="programlisting">'Capacity'read'd'
 </pre>
@@ -1065,7 +1036,7 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.91"></a><h3>
+<a name="id-1.2.4.8.91"></a><h3>
 <a name="Device:Technology"></a>The "Technology" property</h3>
 <pre class="programlisting">'Technology'read'u'
 </pre>
@@ -1103,17 +1074,28 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.96"></a><h3>
-<a name="Device:RecallNotice"></a>The "RecallNotice" property</h3>
-<pre class="programlisting">'RecallNotice'read'b'
+<a name="id-1.2.4.8.96"></a><h3>
+<a name="Device:WarningLevel"></a>The "WarningLevel" property</h3>
+<pre class="programlisting">'WarningLevel'read'u'
 </pre>
 </div>
 <p>
-            If the device may have been recalled by the vendor due to a suspected
-            fault.
-            This key does not imply the device is faulty, only that it approximatly
-            matches the description from the vendor of units that were recalled.
+            Warning level of the battery:
           </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<span class="bold"><strong>0: </strong></span>Unknown</li>
+<li class="listitem">
+<span class="bold"><strong>1: </strong></span>None</li>
+<li class="listitem">
+<span class="bold"><strong>2: </strong></span>Discharging (only for UPSes)</li>
+<li class="listitem">
+<span class="bold"><strong>3: </strong></span>Low</li>
+<li class="listitem">
+<span class="bold"><strong>4: </strong></span>Critical</li>
+<li class="listitem">
+<span class="bold"><strong>5: </strong></span>Action</li>
+</ul></div>
 <div class="variablelist"><table border="0" class="variablelist">
 <colgroup>
 <col align="left" valign="top">
@@ -1123,36 +1105,13 @@ out'a(dd)'data)</pre>
 </table></div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.4.10.99"></a><h3>
-<a name="Device:RecallVendor"></a>The "RecallVendor" property</h3>
-<pre class="programlisting">'RecallVendor'read's'
+<a name="id-1.2.4.8.100"></a><h3>
+<a name="Device:IconName"></a>The "IconName" property</h3>
+<pre class="programlisting">'IconName'read's'
 </pre>
 </div>
 <p>
-            The vendor that is handling the hardware recall.
-          </p>
-<p>
-            This property is only valid if the property recall-notice is true.
-          </p>
-<div class="variablelist"><table border="0" class="variablelist">
-<colgroup>
-<col align="left" valign="top">
-<col>
-</colgroup>
-<tbody></tbody>
-</table></div>
-<hr>
-<div class="refsect2">
-<a name="id-1.2.4.10.103"></a><h3>
-<a name="Device:RecallUrl"></a>The "RecallUrl" property</h3>
-<pre class="programlisting">'RecallUrl'read's'
-</pre>
-</div>
-<p>
-            The URL to visit about the hardware recall.
-          </p>
-<p>
-            This property is only valid if the property recall-notice is true.
+            An icon name, following the Icon Naming Specification
           </p>
 <div class="variablelist"><table border="0" class="variablelist">
 <colgroup>
@@ -1165,6 +1124,6 @@ out'a(dd)'data)</pre>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.19</div>
+          Generated by GTK-Doc V1.19.1</div>
 </body>
 </html>

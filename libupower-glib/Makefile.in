@@ -138,13 +138,16 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 libupower_glib_la_DEPENDENCIES = $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+am__objects_1 = libupower_glib_la-up-client-glue.lo
+am__objects_2 = libupower_glib_la-up-device-glue.lo
+am__objects_3 = libupower_glib_la-up-wakeups-glue.lo
 am_libupower_glib_la_OBJECTS = libupower_glib_la-up-types.lo \
 	libupower_glib_la-up-client.lo libupower_glib_la-up-wakeups.lo \
-	libupower_glib_la-up-qos-item.lo \
 	libupower_glib_la-up-wakeup-item.lo \
 	libupower_glib_la-up-stats-item.lo \
 	libupower_glib_la-up-history-item.lo \
-	libupower_glib_la-up-device.lo
+	libupower_glib_la-up-device.lo $(am__objects_1) \
+	$(am__objects_2) $(am__objects_3)
 libupower_glib_la_OBJECTS = $(am_libupower_glib_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -253,6 +256,8 @@ GETTEXT_MACRO_VERSION = @GETTEXT_MACRO_VERSION@
 GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 GIO_CFLAGS = @GIO_CFLAGS@
 GIO_LIBS = @GIO_LIBS@
+GIO_UNIX_CFLAGS = @GIO_UNIX_CFLAGS@
+GIO_UNIX_LIBS = @GIO_UNIX_LIBS@
 GLIB_CFLAGS = @GLIB_CFLAGS@
 GLIB_LIBS = @GLIB_LIBS@
 GMSGFMT = @GMSGFMT@
@@ -413,12 +418,11 @@ top_srcdir = @top_srcdir@
 udevrulesdir = @udevrulesdir@
 AM_CPPFLAGS = \
 	$(GLIB_CFLAGS)						\
-	$(DBUS_GLIB_CFLAGS)					\
+	$(GIO_UNIX_CFLAGS)					\
 	-I$(top_builddir)					\
 	-I$(top_srcdir)						\
 	-I$(top_srcdir)/libupower-glib				\
 	-DUP_COMPILATION					\
-	-DUPOWER_ENABLE_DEPRECATED				\
 	-DG_LOG_DOMAIN=\"libupower-glib\"			\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"			\
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"
@@ -426,6 +430,12 @@ AM_CPPFLAGS = \
 INTROSPECTION_GIRS = $(am__append_1)
 INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir)
 INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
+BUILT_SOURCES = $(NULL) $(up_client_dbus_built_sources) \
+	$(up_device_dbus_built_sources) \
+	$(up_wakeups_dbus_built_sources)
+up_client_dbus_built_sources = up-client-glue.c up-client-glue.h
+up_device_dbus_built_sources = up-device-glue.c up-device-glue.h
+up_wakeups_dbus_built_sources = up-wakeups-glue.c up-wakeups-glue.h
 lib_LTLIBRARIES = \
 	libupower-glib.la
 
@@ -435,7 +445,6 @@ libupower_glib_include_HEADERS = \
 	up-version.h						\
 	up-types.h						\
 	up-device.h						\
-	up-qos-item.h						\
 	up-wakeup-item.h					\
 	up-stats-item.h						\
 	up-history-item.h					\
@@ -446,16 +455,18 @@ libupower_glib_la_SOURCES = \
 	up-types.c						\
 	up-client.c						\
 	up-wakeups.c						\
-	up-qos-item.c						\
 	up-wakeup-item.c					\
 	up-stats-item.c						\
 	up-history-item.c					\
-	up-device.c
+	up-device.c						\
+	$(up_client_dbus_built_sources)				\
+	$(up_device_dbus_built_sources)				\
+	$(up_wakeups_dbus_built_sources)
 
 libupower_glib_la_LIBADD = \
 	$(INTLLIBS)						\
 	$(GLIB_LIBS)						\
-	$(DBUS_GLIB_LIBS)
+	$(GIO_UNIX_LIBS)
 
 libupower_glib_la_LDFLAGS = \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)	\
@@ -482,7 +493,8 @@ CLEANFILES = $(BUILT_SOURCES) $(am__append_2)
 @HAVE_INTROSPECTION_TRUE@gir_DATA = $(INTROSPECTION_GIRS)
 @HAVE_INTROSPECTION_TRUE@typelibdir = $(libdir)/girepository-1.0
 @HAVE_INTROSPECTION_TRUE@typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
-all: all-am
+all: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
@@ -563,13 +575,15 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupower_glib_la-up-client-glue.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupower_glib_la-up-client.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupower_glib_la-up-device-glue.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupower_glib_la-up-device.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupower_glib_la-up-history-item.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupower_glib_la-up-qos-item.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupower_glib_la-up-stats-item.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupower_glib_la-up-types.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupower_glib_la-up-wakeup-item.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupower_glib_la-up-wakeups-glue.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libupower_glib_la-up-wakeups.Plo@am__quote@
 
 .c.o:
@@ -614,13 +628,6 @@ libupower_glib_la-up-wakeups.lo: up-wakeups.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupower_glib_la_CFLAGS) $(CFLAGS) -c -o libupower_glib_la-up-wakeups.lo `test -f 'up-wakeups.c' || echo '$(srcdir)/'`up-wakeups.c
 
-libupower_glib_la-up-qos-item.lo: up-qos-item.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupower_glib_la_CFLAGS) $(CFLAGS) -MT libupower_glib_la-up-qos-item.lo -MD -MP -MF $(DEPDIR)/libupower_glib_la-up-qos-item.Tpo -c -o libupower_glib_la-up-qos-item.lo `test -f 'up-qos-item.c' || echo '$(srcdir)/'`up-qos-item.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupower_glib_la-up-qos-item.Tpo $(DEPDIR)/libupower_glib_la-up-qos-item.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-qos-item.c' object='libupower_glib_la-up-qos-item.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupower_glib_la_CFLAGS) $(CFLAGS) -c -o libupower_glib_la-up-qos-item.lo `test -f 'up-qos-item.c' || echo '$(srcdir)/'`up-qos-item.c
-
 libupower_glib_la-up-wakeup-item.lo: up-wakeup-item.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupower_glib_la_CFLAGS) $(CFLAGS) -MT libupower_glib_la-up-wakeup-item.lo -MD -MP -MF $(DEPDIR)/libupower_glib_la-up-wakeup-item.Tpo -c -o libupower_glib_la-up-wakeup-item.lo `test -f 'up-wakeup-item.c' || echo '$(srcdir)/'`up-wakeup-item.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupower_glib_la-up-wakeup-item.Tpo $(DEPDIR)/libupower_glib_la-up-wakeup-item.Plo
@@ -648,6 +655,27 @@ libupower_glib_la-up-device.lo: up-device.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-device.c' object='libupower_glib_la-up-device.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupower_glib_la_CFLAGS) $(CFLAGS) -c -o libupower_glib_la-up-device.lo `test -f 'up-device.c' || echo '$(srcdir)/'`up-device.c
+
+libupower_glib_la-up-client-glue.lo: up-client-glue.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupower_glib_la_CFLAGS) $(CFLAGS) -MT libupower_glib_la-up-client-glue.lo -MD -MP -MF $(DEPDIR)/libupower_glib_la-up-client-glue.Tpo -c -o libupower_glib_la-up-client-glue.lo `test -f 'up-client-glue.c' || echo '$(srcdir)/'`up-client-glue.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupower_glib_la-up-client-glue.Tpo $(DEPDIR)/libupower_glib_la-up-client-glue.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-client-glue.c' object='libupower_glib_la-up-client-glue.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupower_glib_la_CFLAGS) $(CFLAGS) -c -o libupower_glib_la-up-client-glue.lo `test -f 'up-client-glue.c' || echo '$(srcdir)/'`up-client-glue.c
+
+libupower_glib_la-up-device-glue.lo: up-device-glue.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupower_glib_la_CFLAGS) $(CFLAGS) -MT libupower_glib_la-up-device-glue.lo -MD -MP -MF $(DEPDIR)/libupower_glib_la-up-device-glue.Tpo -c -o libupower_glib_la-up-device-glue.lo `test -f 'up-device-glue.c' || echo '$(srcdir)/'`up-device-glue.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupower_glib_la-up-device-glue.Tpo $(DEPDIR)/libupower_glib_la-up-device-glue.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-device-glue.c' object='libupower_glib_la-up-device-glue.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupower_glib_la_CFLAGS) $(CFLAGS) -c -o libupower_glib_la-up-device-glue.lo `test -f 'up-device-glue.c' || echo '$(srcdir)/'`up-device-glue.c
+
+libupower_glib_la-up-wakeups-glue.lo: up-wakeups-glue.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupower_glib_la_CFLAGS) $(CFLAGS) -MT libupower_glib_la-up-wakeups-glue.lo -MD -MP -MF $(DEPDIR)/libupower_glib_la-up-wakeups-glue.Tpo -c -o libupower_glib_la-up-wakeups-glue.lo `test -f 'up-wakeups-glue.c' || echo '$(srcdir)/'`up-wakeups-glue.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libupower_glib_la-up-wakeups-glue.Tpo $(DEPDIR)/libupower_glib_la-up-wakeups-glue.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-wakeups-glue.c' object='libupower_glib_la-up-wakeups-glue.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libupower_glib_la_CFLAGS) $(CFLAGS) -c -o libupower_glib_la-up-wakeups-glue.lo `test -f 'up-wakeups-glue.c' || echo '$(srcdir)/'`up-wakeups-glue.c
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -801,13 +829,15 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: check-am
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-am
 all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
 installdirs:
 	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(girdir)" "$(DESTDIR)$(typelibdir)" "$(DESTDIR)$(libupower_glib_includedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -838,6 +868,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
 clean-am: clean-generic clean-libLTLIBRARIES clean-libtool clean-local \
@@ -911,7 +942,7 @@ ps-am:
 uninstall-am: uninstall-girDATA uninstall-libLTLIBRARIES \
 	uninstall-libupower_glib_includeHEADERS uninstall-typelibDATA
 
-.MAKE: install-am install-strip
+.MAKE: all check install install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am check check-am clean clean-generic \
 	clean-libLTLIBRARIES clean-libtool clean-local cscopelist-am \
@@ -932,6 +963,33 @@ uninstall-am: uninstall-girDATA uninstall-libLTLIBRARIES \
 
 
 -include $(INTROSPECTION_MAKEFILE)
+
+$(up_client_dbus_built_sources) : Makefile.am $(top_srcdir)/src/org.freedesktop.UPower.xml
+	$(AM_V_GEN) gdbus-codegen                                       \
+		--interface-prefix org.freedesktop.UPower.              \
+		--generate-c-code up-client-glue                        \
+		--c-namespace Up                                        \
+		--annotate "org.freedesktop.UPower"                     \
+		"org.gtk.GDBus.C.Name" ClientGlue                       \
+		$(top_srcdir)/src/org.freedesktop.UPower.xml
+
+$(up_device_dbus_built_sources) : Makefile.am $(top_srcdir)/src/org.freedesktop.UPower.Device.xml
+	$(AM_V_GEN) gdbus-codegen                                       \
+		--interface-prefix org.freedesktop.UPower.Device.       \
+		--generate-c-code up-device-glue                        \
+		--c-namespace Up                                        \
+		--annotate "org.freedesktop.UPower.Device"              \
+		"org.gtk.GDBus.C.Name" DeviceGlue                       \
+		$(top_srcdir)/src/org.freedesktop.UPower.Device.xml
+
+$(up_wakeups_dbus_built_sources) : Makefile.am $(top_srcdir)/src/org.freedesktop.UPower.Wakeups.xml
+	$(AM_V_GEN) gdbus-codegen                                       \
+		--interface-prefix org.freedesktop.UPower.Wakeups.      \
+		--generate-c-code up-wakeups-glue                       \
+		--c-namespace Up                                        \
+		--annotate "org.freedesktop.UPower.Wakeups"             \
+		"org.gtk.GDBus.C.Name" WakeupsGlue                      \
+		$(top_srcdir)/src/org.freedesktop.UPower.Wakeups.xml
 
 @HAVE_INTROSPECTION_TRUE@UPowerGlib-1.0.gir: libupower-glib.la
 

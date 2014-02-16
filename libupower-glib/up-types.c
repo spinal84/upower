@@ -234,92 +234,61 @@ up_device_technology_from_string (const gchar *technology)
 }
 
 /**
- * up_qos_kind_to_string:
+ * up_device_level_to_string:
  *
- * Converts a #UpQosKind to a string.
- *
- * Return value: identifier string
- *
- * Since: 0.9.0
- **/
-const gchar *
-up_qos_kind_to_string (UpQosKind type)
-{
-	if (type == UP_QOS_KIND_NETWORK)
-		return "network";
-	if (type == UP_QOS_KIND_CPU_DMA)
-		return "cpu_dma";
-	return NULL;
-}
-
-/**
- * up_qos_kind_from_string:
- *
- * Converts a string to a #UpQosKind.
- *
- * Return value: enumerated value
- *
- * Since: 0.9.0
- **/
-UpQosKind
-up_qos_kind_from_string (const gchar *type)
-{
-	if (g_strcmp0 (type, "network") == 0)
-		return UP_QOS_KIND_NETWORK;
-	if (g_strcmp0 (type, "cpu_dma") == 0)
-		return UP_QOS_KIND_CPU_DMA;
-	return UP_QOS_KIND_UNKNOWN;
-}
-
-/**
- * up_sleep_kind_to_string:
- *
- * Converts a #UpSleepKind to a string.
+ * Converts a #UpDeviceLevel to a string.
  *
  * Return value: identifier string
  *
- * Since: 0.9.10
+ * Since: 1.0
  **/
 const gchar *
-up_sleep_kind_to_string (UpSleepKind sleep_kind_enum)
+up_device_level_to_string (UpDeviceLevel level_enum)
 {
-	const gchar *sleep_kind = NULL;
-	switch (sleep_kind_enum) {
-	case UP_SLEEP_KIND_SUSPEND:
-		sleep_kind = "suspend";
-		break;
-	case UP_SLEEP_KIND_HIBERNATE:
-		sleep_kind = "hibernate";
-		break;
-	case UP_SLEEP_KIND_HYBRID:
-		sleep_kind = "hybrid";
-		break;
+	switch (level_enum) {
+	case UP_DEVICE_LEVEL_UNKNOWN:
+		return "unknown";
+	case UP_DEVICE_LEVEL_NONE:
+		return "none";
+	case UP_DEVICE_LEVEL_DISCHARGING:
+		return "discharging";
+	case UP_DEVICE_LEVEL_LOW:
+		return "low";
+	case UP_DEVICE_LEVEL_CRITICAL:
+		return "critical";
+	case UP_DEVICE_LEVEL_ACTION:
+		return "action";
 	default:
-		sleep_kind = "unknown";
-		break;
+		return "unknown";
 	}
-	return sleep_kind;
+	g_assert_not_reached ();
 }
 
 /**
- * up_sleep_kind_from_string:
+ * up_device_level_from_string:
  *
- * Converts a string to a #UpSleepKind.
+ * Converts a string to a #UpDeviceLevel.
  *
  * Return value: enumerated value
  *
- * Since: 0.9.10
+ * Since: 1.0
  **/
-UpSleepKind
-up_sleep_kind_from_string (const gchar *sleep_kind)
+UpDeviceLevel
+up_device_level_from_string (const gchar *level)
 {
-	if (sleep_kind == NULL)
-		return UP_SLEEP_KIND_UNKNOWN;
-	if (g_strcmp0 (sleep_kind, "suspend") == 0)
-		return UP_SLEEP_KIND_SUSPEND;
-	if (g_strcmp0 (sleep_kind, "hibernate") == 0)
-		return UP_SLEEP_KIND_HIBERNATE;
-	if (g_strcmp0 (sleep_kind, "hybrid") == 0)
-		return UP_SLEEP_KIND_HYBRID;
-	return UP_SLEEP_KIND_UNKNOWN;
+	if (level == NULL)
+		return UP_DEVICE_LEVEL_UNKNOWN;
+	if (g_strcmp0 (level, "unknown") == 0)
+		return UP_DEVICE_LEVEL_UNKNOWN;
+	if (g_strcmp0 (level, "none") == 0)
+		return UP_DEVICE_LEVEL_NONE;
+	if (g_strcmp0 (level, "discharging") == 0)
+		return UP_DEVICE_LEVEL_DISCHARGING;
+	if (g_strcmp0 (level, "low") == 0)
+		return UP_DEVICE_LEVEL_LOW;
+	if (g_strcmp0 (level, "critical") == 0)
+		return UP_DEVICE_LEVEL_CRITICAL;
+	if (g_strcmp0 (level, "action") == 0)
+		return UP_DEVICE_LEVEL_ACTION;
+	return UP_DEVICE_LEVEL_UNKNOWN;
 }

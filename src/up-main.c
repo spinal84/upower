@@ -30,6 +30,7 @@
 #include <unistd.h>
 
 #include <glib.h>
+#include <glib-unix.h>
 #include <glib/gi18n-lib.h>
 #include <glib-object.h>
 #include <locale.h>
@@ -38,13 +39,8 @@
 #include <dbus/dbus-glib-lowlevel.h>
 
 #include "up-daemon.h"
-#include "up-qos.h"
 #include "up-kbd-backlight.h"
 #include "up-wakeups.h"
-
-#if GLIB_CHECK_VERSION(2,29,19)
- #include <glib-unix.h>
-#endif
 
 #define DEVKIT_POWER_SERVICE_NAME "org.freedesktop.UPower"
 static GMainLoop *loop = NULL;
@@ -93,8 +89,6 @@ out:
 	return ret;
 }
 
-#if GLIB_CHECK_VERSION(2,29,19)
-
 /**
  * up_main_sigint_cb:
  **/
@@ -105,25 +99,6 @@ up_main_sigint_cb (gpointer user_data)
 	g_main_loop_quit (loop);
 	return FALSE;
 }
-
-#else
-
-/**
- * up_main_sigint_handler:
- **/
-static void
-up_main_sigint_handler (gint sig)
-{
-	g_debug ("Handling SIGINT");
-
-	/* restore default */
-	signal (SIGINT, SIG_DFL);
-
-	/* cleanup */
-	g_main_loop_quit (loop);
-}
-
-#endif
 
 /**
  * up_main_timed_exit_cb:
@@ -180,7 +155,6 @@ main (gint argc, gchar **argv)
 {
 	GError *error = NULL;
 	UpDaemon *daemon = NULL;
-	UpQos *qos = NULL;
 	UpKbdBacklight *kbd_backlight = NULL;
 	UpWakeups *wakeups = NULL;
 	GOptionContext *context;
@@ -271,20 +245,15 @@ main (gint argc, gchar **argv)
 		goto out;
 	}
 
-#if GLIB_CHECK_VERSION(2,29,19)
 	/* do stuff on ctrl-c */
 	g_unix_signal_add_full (G_PRIORITY_DEFAULT,
 				SIGINT,
 				up_main_sigint_cb,
 				loop,
 				NULL);
-#else
-	signal (SIGINT, up_main_sigint_handler);
-#endif
 
 	g_debug ("Starting upowerd version %s", PACKAGE_VERSION);
 
-	qos = up_qos_new ();
 	kbd_backlight = up_kbd_backlight_new ();
 	wakeups = up_wakeups_new ();
 	daemon = up_daemon_new ();
@@ -298,21 +267,19 @@ main (gint argc, gchar **argv)
 	/* only timeout and close the mainloop if we have specified it on the command line */
 	if (timed_exit) {
 		timer_id = g_timeout_add_seconds (30, (GSourceFunc) up_main_timed_exit_cb, loop);
-#if GLIB_CHECK_VERSION(2,25,8)
-		g_source_set_name_by_id (timer_id, "[UpMain] idle");
-#endif
+		g_source_set_name_by_id (timer_id, "[upower] up_main_timed_exit_cb");
 	}
 
 	/* immediatly exit */
-	if (immediate_exit)
+	if (immediate_exit) {
 		g_timeout_add (50, (GSourceFunc) up_main_timed_exit_cb, loop);
+		g_source_set_name_by_id (timer_id, "[upower] up_main_timed_exit_cb");
+	}
 
 	/* wait for input or timeout */
 	g_main_loop_run (loop);
 	retval = 0;
 out:
-	if (qos != NULL)
-		g_object_unref (qos);
 	if (kbd_backlight != NULL)
 		g_object_unref (kbd_backlight);
 	if (wakeups != NULL)
