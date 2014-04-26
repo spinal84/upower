@@ -1,8 +1,8 @@
-upower (0.99.0-2) UNRELEASED; urgency=medium
+upower (0.99.0-2) experimental; urgency=medium
 
-  * debian/control: Let libupower-glib2 recommend Upower
+  * debian/control: Let libupower-glib2 recommend upower
 
- -- Sjoerd Simons <sjoerd@debian.org>  Sat, 26 Apr 2014 10:23:58 +0200
+ -- Sjoerd Simons <sjoerd@debian.org>  Sat, 26 Apr 2014 10:25:28 +0200
 
 upower (0.99.0-1) experimental; urgency=medium
 
