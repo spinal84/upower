@@ -60,6 +60,7 @@ Multi-Arch: same
 Section: libs
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: upower (>> 0.99)
 Description: abstraction for power management - shared library
  upower provides an interface to enumerate power sources on the system
  and control system-wide power management. Any application can access the
