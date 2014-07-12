@@ -1,3 +1,11 @@
+upower (0.99.0-3) unstable; urgency=medium
+
+  * Team upload.
+  * Bump Standards-Version to 3.9.5
+  * Upload to unstable.
+
+ -- Andreas Henriksson <andreas@fatal.se>  Sat, 12 Jul 2014 20:45:10 +0200
+
 upower (0.99.0-2) experimental; urgency=medium
 
   * debian/control: Let libupower-glib2 recommend upower
