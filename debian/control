@@ -35,7 +35,6 @@ Depends: ${shlibs:Depends},
  ${misc:Depends},
  udev [linux-any],
  dbus,
- pm-utils [linux-any] | systemd [linux-any] | systemd-services [linux-any]
 Recommends: policykit-1
 Description: abstraction for power management
  upower provides an interface to enumerate power sources on the system
