@@ -414,6 +414,7 @@ up_history_set_directory (UpHistory *history, const gchar *dir)
 {
 	g_free (history->priv->dir);
 	history->priv->dir = g_strdup (dir);
+	g_mkdir_with_parents (dir, 0755);
 }
 
 /**
@@ -531,6 +532,8 @@ up_history_array_from_file (GPtrArray *list, const gchar *filename)
 		ret = up_history_item_set_from_string (item, parts[i]);
 		if (ret)
 			g_ptr_array_add (list, item);
+		else
+			g_object_unref (item);
 	}
 
 out:
@@ -887,7 +890,8 @@ up_history_init (UpHistory *history)
 	history->priv->data_time_full = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 	history->priv->data_time_empty = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 	history->priv->max_data_age = UP_HISTORY_DEFAULT_MAX_DATA_AGE;
-	history->priv->dir = g_build_filename (HISTORY_DIR, NULL);
+
+	up_history_set_directory (history, HISTORY_DIR);
 }
 
 /**

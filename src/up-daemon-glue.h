@@ -75,6 +75,6 @@ const DBusGObjectInfo dbus_glib_up_daemon_object_info = {  1,
   3,
 "org.freedesktop.UPower\0EnumerateDevices\0A\0devices\0O\0F\0N\0ao\0\0org.freedesktop.UPower\0GetDisplayDevice\0A\0device\0O\0F\0N\0o\0\0org.freedesktop.UPower\0GetCriticalAction\0A\0action\0O\0F\0N\0s\0\0\0",
 "org.freedesktop.UPower\0DeviceAdded\0org.freedesktop.UPower\0DeviceRemoved\0\0",
-"org.freedesktop.UPower\0DaemonVersion\0daemon_version\0read\0org.freedesktop.UPower\0OnBattery\0on_battery\0read\0org.freedesktop.UPower\0LidIsClosed\0lid_is_closed\0read\0org.freedesktop.UPower\0LidIsPresent\0lid_is_present\0read\0org.freedesktop.UPower\0IsDocked\0is_docked\0read\0\0"
+"org.freedesktop.UPower\0DaemonVersion\0daemon_version\0read\0org.freedesktop.UPower\0OnBattery\0on_battery\0read\0org.freedesktop.UPower\0LidIsClosed\0lid_is_closed\0read\0org.freedesktop.UPower\0LidIsPresent\0lid_is_present\0read\0\0"
 };
 

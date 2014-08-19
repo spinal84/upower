@@ -33,7 +33,6 @@
 #include <dbus/dbus-glib-lowlevel.h>
 
 #include "up-config.h"
-#include "up-polkit.h"
 #include "up-device-list.h"
 #include "up-device.h"
 #include "up-backend.h"
@@ -49,7 +48,6 @@ enum
 	PROP_ON_BATTERY,
 	PROP_LID_IS_CLOSED,
 	PROP_LID_IS_PRESENT,
-	PROP_IS_DOCKED,
 	PROP_LAST
 };
 
@@ -67,7 +65,6 @@ struct UpDaemonPrivate
 	DBusGConnection		*connection;
 	DBusGProxy		*proxy;
 	UpConfig		*config;
-	UpPolkit		*polkit;
 	UpBackend		*backend;
 	UpDeviceList		*power_devices;
 	guint			 action_timeout_id;
@@ -78,7 +75,6 @@ struct UpDaemonPrivate
 	UpDeviceLevel		 warning_level;
 	gboolean		 lid_is_closed;
 	gboolean		 lid_is_present;
-	gboolean		 is_docked;
 
 	/* PropertiesChanged to be emitted */
 	GHashTable		*changed_props;
@@ -208,6 +204,7 @@ up_daemon_update_display_battery (UpDaemon *daemon)
 		gdouble energy_rate = 0.0;
 		gint64 time_to_empty = 0;
 		gint64 time_to_full = 0;
+		gboolean power_supply = FALSE;
 
 		device = g_ptr_array_index (array, i);
 		g_object_get (device,
@@ -219,6 +216,7 @@ up_daemon_update_display_battery (UpDaemon *daemon)
 			      "energy-rate", &energy_rate,
 			      "time-to-empty", &time_to_empty,
 			      "time-to-full", &time_to_full,
+			      "power-supply", &power_supply,
 			      NULL);
 
 		/* When we have a UPS, it's either a desktop, and
@@ -236,7 +234,8 @@ up_daemon_update_display_battery (UpDaemon *daemon)
 			is_present_total = TRUE;
 			break;
 		}
-		if (kind != UP_DEVICE_KIND_BATTERY)
+		if (kind != UP_DEVICE_KIND_BATTERY ||
+		    power_supply == FALSE)
 			continue;
 
 		/* If one battery is charging, then the composite is charging
@@ -284,6 +283,8 @@ up_daemon_update_display_battery (UpDaemon *daemon)
 	}
 
 out:
+	g_ptr_array_unref (array);
+
 	/* Did anything change? */
 	if (daemon->priv->kind == kind_total &&
 	    daemon->priv->state == state_total &&
@@ -389,17 +390,21 @@ up_daemon_refresh_battery_devices (UpDaemon *daemon)
 	guint i;
 	GPtrArray *array;
 	UpDevice *device;
-	UpDeviceKind type;
 
 	/* refresh all devices in array */
 	array = up_device_list_get_array (daemon->priv->power_devices);
 	for (i=0; i<array->len; i++) {
+		UpDeviceKind type;
+		gboolean power_supply;
+
 		device = (UpDevice *) g_ptr_array_index (array, i);
 		/* only refresh battery devices */
 		g_object_get (device,
 			      "type", &type,
+			      "power-supply", &power_supply,
 			      NULL);
-		if (type == UP_DEVICE_KIND_BATTERY)
+		if (type == UP_DEVICE_KIND_BATTERY &&
+		    power_supply)
 			up_device_refresh_internal (device);
 	}
 	g_ptr_array_unref (array);
@@ -712,20 +717,6 @@ up_daemon_set_lid_is_present (UpDaemon *daemon, gboolean lid_is_present)
 	g_object_notify (G_OBJECT (daemon), "lid-is-present");
 
 	up_daemon_queue_changed_property (daemon, "LidIsPresent", g_variant_new_boolean (lid_is_present));
-}
-
-/**
- * up_daemon_set_is_docked:
- **/
-void
-up_daemon_set_is_docked (UpDaemon *daemon, gboolean is_docked)
-{
-	UpDaemonPrivate *priv = daemon->priv;
-	g_debug ("is_docked = %s", is_docked ? "yes" : "no");
-	priv->is_docked = is_docked;
-	g_object_notify (G_OBJECT (daemon), "is-docked");
-
-	up_daemon_queue_changed_property (daemon, "IsDocked", g_variant_new_boolean (is_docked));
 }
 
 /**
@@ -1112,7 +1103,6 @@ static void
 up_daemon_init (UpDaemon *daemon)
 {
 	daemon->priv = UP_DAEMON_GET_PRIVATE (daemon);
-	daemon->priv->polkit = up_polkit_new ();
 	daemon->priv->config = up_config_new ();
 	daemon->priv->power_devices = up_device_list_new ();
 	daemon->priv->display_device = up_device_new ();
@@ -1188,9 +1178,6 @@ up_daemon_get_property (GObject *object, guint prop_id, GValue *value, GParamSpe
 	case PROP_LID_IS_PRESENT:
 		g_value_set_boolean (value, priv->lid_is_present);
 		break;
-	case PROP_IS_DOCKED:
-		g_value_set_boolean (value, priv->is_docked);
-		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -1242,14 +1229,6 @@ up_daemon_class_init (UpDaemonClass *klass)
 							       G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
-					 PROP_IS_DOCKED,
-					 g_param_spec_boolean ("is-docked",
-							       "Is docked",
-							       "If this computer is docked",
-							       FALSE,
-							       G_PARAM_READABLE));
-
-	g_object_class_install_property (object_class,
 					 PROP_ON_BATTERY,
 					 g_param_spec_boolean ("on-battery",
 							       "On Battery",
@@ -1292,7 +1271,6 @@ up_daemon_finalize (GObject *object)
 	if (priv->connection != NULL)
 		dbus_g_connection_unref (priv->connection);
 	g_object_unref (priv->power_devices);
-	g_object_unref (priv->polkit);
 	g_object_unref (priv->config);
 	g_object_unref (priv->backend);
 
