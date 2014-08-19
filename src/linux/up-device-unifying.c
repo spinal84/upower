@@ -207,8 +207,8 @@ up_device_unifying_coldplug (UpDevice *device)
 				continue;
 
 			/* hidraw device which exposes hiddev interface is our receiver */
-			tmp = g_build_filename(g_udev_device_get_sysfs_path (g_udev_device_get_parent(native)),
-					"usbmisc", NULL);
+			tmp = g_build_filename (g_udev_device_get_sysfs_path (parent),
+					        "usbmisc", NULL);
 			dir = g_dir_open (tmp, 0, &error);
 			g_free(tmp);
 			if (error) {
@@ -289,8 +289,7 @@ up_device_unifying_coldplug (UpDevice *device)
 	up_daemon_start_poll (G_OBJECT (device), (GSourceFunc) up_device_unifying_refresh);
 	ret = TRUE;
 out:
-	g_list_foreach (hidraw_list, (GFunc) g_object_unref, NULL);
-	g_list_free (hidraw_list);
+	g_list_free_full (hidraw_list, (GDestroyNotify) g_object_unref);
 	if (parent != NULL)
 		g_object_unref (parent);
 	if (receiver != NULL)

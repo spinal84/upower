@@ -67,7 +67,6 @@ enum {
 	PROP_ON_BATTERY,
 	PROP_LID_IS_CLOSED,
 	PROP_LID_IS_PRESENT,
-	PROP_IS_DOCKED,
 	PROP_LAST
 };
 
@@ -131,7 +130,7 @@ up_client_get_devices (UpClient *client)
  * @client: a #UpClient instance.
  *
  * Get the composite display device.
- * Return value: (transfer full) a #UpClient object, or %NULL on error.
+ * Return value: (transfer full): a #UpClient object, or %NULL on error.
  *
  * Since: 1.0
  **/
@@ -227,29 +226,12 @@ up_client_get_lid_is_present (UpClient *client)
 }
 
 /**
- * up_client_get_is_docked:
- * @client: a #UpClient instance.
- *
- * Get whether the machine is docked into a docking station.
- *
- * Return value: %TRUE if the machine is docked
- *
- * Since: 0.9.2
- */
-gboolean
-up_client_get_is_docked (UpClient *client)
-{
-	g_return_val_if_fail (UP_IS_CLIENT (client), FALSE);
-	return up_client_glue_get_is_docked (client->priv->proxy);
-}
-
-/**
  * up_client_get_on_battery:
  * @client: a #UpClient instance.
  *
  * Get whether the system is running on battery power.
  *
- * Return value: TRUE if the system is currently running on battery, FALSE other wise.
+ * Return value: %TRUE if the system is currently running on battery, %FALSE otherwise.
  *
  * Since: 0.9.0
  **/
@@ -322,6 +304,9 @@ up_client_get_property (GObject *object,
 	UpClient *client;
 	client = UP_CLIENT (object);
 
+	if (client->priv->proxy == NULL)
+                return;
+
 	switch (prop_id) {
 	case PROP_DAEMON_VERSION:
 		g_value_set_string (value, up_client_glue_get_daemon_version (client->priv->proxy));
@@ -334,9 +319,6 @@ up_client_get_property (GObject *object,
 		break;
 	case PROP_LID_IS_PRESENT:
 		g_value_set_boolean (value, up_client_glue_get_lid_is_present (client->priv->proxy));
-		break;
-	case PROP_IS_DOCKED:
-		g_value_set_boolean (value, up_client_glue_get_is_docked (client->priv->proxy));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -409,21 +391,6 @@ up_client_class_init (UpClientClass *klass)
 					 PROP_LID_IS_PRESENT,
 					 g_param_spec_boolean ("lid-is-present",
 							       "If a laptop lid is present",
-							       NULL,
-							       FALSE,
-							       G_PARAM_READABLE));
-
-	/**
-	 * UpClient:is-docked:
-	 *
-	 * If the laptop is docked
-	 *
-	 * Since: 0.9.8
-	 */
-	g_object_class_install_property (object_class,
-					 PROP_IS_DOCKED,
-					 g_param_spec_boolean ("is-docked",
-							       "If a laptop is docked",
 							       NULL,
 							       FALSE,
 							       G_PARAM_READABLE));
