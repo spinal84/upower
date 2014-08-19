@@ -3,7 +3,6 @@ libupower-glib.so.3 libupower-glib3 #MINVER#
  up_client_get_daemon_version@Base 0.99.0
  up_client_get_devices@Base 0.99.0
  up_client_get_display_device@Base 0.99.0
- up_client_get_is_docked@Base 0.99.0
  up_client_get_lid_is_closed@Base 0.99.0
  up_client_get_lid_is_present@Base 0.99.0
  up_client_get_on_battery@Base 0.99.0
@@ -24,7 +23,6 @@ libupower-glib.so.3 libupower-glib3 #MINVER#
  up_client_glue_emit_device_added@Base 0.99.0
  up_client_glue_emit_device_removed@Base 0.99.0
  up_client_glue_get_daemon_version@Base 0.99.0
- up_client_glue_get_is_docked@Base 0.99.0
  up_client_glue_get_lid_is_closed@Base 0.99.0
  up_client_glue_get_lid_is_present@Base 0.99.0
  up_client_glue_get_on_battery@Base 0.99.0
@@ -39,7 +37,6 @@ libupower-glib.so.3 libupower-glib3 #MINVER#
  up_client_glue_proxy_new_for_bus_sync@Base 0.99.0
  up_client_glue_proxy_new_sync@Base 0.99.0
  up_client_glue_set_daemon_version@Base 0.99.0
- up_client_glue_set_is_docked@Base 0.99.0
  up_client_glue_set_lid_is_closed@Base 0.99.0
  up_client_glue_set_lid_is_present@Base 0.99.0
  up_client_glue_set_on_battery@Base 0.99.0
