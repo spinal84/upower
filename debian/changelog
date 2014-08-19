@@ -1,7 +1,11 @@
-upower (0.99.0-4) UNRELEASED; urgency=medium
+upower (0.99.1-1) UNRELEASED; urgency=medium
 
+  [ Martin Pitt ]
   * Drop pm-utils | systemd dependency, now unnecessary as suspend/hibernate
     functionality was dropped.
+
+  [ Michael Biebl ]
+  * New upstream release.
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 16 Jul 2014 12:21:51 +0200
 
