@@ -7,6 +7,7 @@ upower (0.99.1-1) UNRELEASED; urgency=medium
   [ Michael Biebl ]
   * New upstream release.
   * Drop Build-Depends on libpolkit-gobject-1-dev, no longer necessary.
+  * Rename libupower-glib2 → libupower-glib3 for the soname bump.
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 16 Jul 2014 12:21:51 +0200
 
