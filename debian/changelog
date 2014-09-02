@@ -5,6 +5,8 @@ upower (0.99.1-3) UNRELEASED; urgency=medium
   * Add upstream patch to fix test suite crash if there is no session bus.
   * Add upstream patch to fix test suite for Python 3.4.
   * Add upstream patch to split test suite into smaller independent tests.
+  * Add missing umockdev test dependencies so that the upstream test suite
+    actually runs.
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 02 Sep 2014 15:45:03 +0200
 
