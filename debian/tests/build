@@ -17,8 +17,6 @@ int main()
 {
     UpClient *client = up_client_new ();
     g_assert_cmpint (strlen (up_client_get_daemon_version (client)), >, 4);
-    /* note, this is marked as deprecated upstream */
-    up_client_get_can_suspend (client);
     return 0;
 }
 EOF
