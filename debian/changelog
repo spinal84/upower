@@ -3,6 +3,7 @@ upower (0.99.1-3) UNRELEASED; urgency=medium
   * debian/tests/build: Drop up_client_get_can_suspend() call, this got
     dropped in this upstream version.
   * Add upstream patch to fix test suite crash if there is no session bus.
+  * Add upstream patch to fix test suite for Python 3.4.
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 02 Sep 2014 15:45:03 +0200
 
