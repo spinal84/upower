@@ -1,0 +1,30 @@
+From e5bd3e80f3239d4d52b52b91e73007f12f60d312 Mon Sep 17 00:00:00 2001
+From: Martin Pitt <martin.pitt@ubuntu.com>
+Date: Tue, 2 Sep 2014 15:57:09 +0200
+Subject: [PATCH] Linux integration tests: Fix crash if there is no session
+ D-BUS
+
+This can happen in CI environments without a desktop session.
+---
+ src/linux/integration-test | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/linux/integration-test b/src/linux/integration-test
+index ba7e702..f99fe1f 100755
+--- a/src/linux/integration-test
++++ b/src/linux/integration-test
+@@ -81,7 +81,10 @@ class Tests(unittest.TestCase):
+         # set up a fake system D-BUS
+         cls.test_bus = Gio.TestDBus.new(Gio.TestDBusFlags.NONE)
+         cls.test_bus.up()
+-        del os.environ['DBUS_SESSION_BUS_ADDRESS']
++        try:
++            del os.environ['DBUS_SESSION_BUS_ADDRESS']
++        except KeyError:
++            pass
+         os.environ['DBUS_SYSTEM_BUS_ADDRESS'] = cls.test_bus.get_bus_address()
+ 
+         cls.dbus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+-- 
+2.1.0
+
