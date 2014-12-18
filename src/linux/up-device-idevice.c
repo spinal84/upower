@@ -138,10 +138,14 @@ up_device_idevice_coldplug (UpDevice *device)
 	return TRUE;
 
 out:
-	if (client != NULL)
+	if (client != NULL) {
 		lockdownd_client_free (client);
-	if (dev != NULL)
+		idevice->priv->client = NULL;
+	}
+	if (dev != NULL) {
 		idevice_free (dev);
+		idevice->priv->dev = NULL;
+	}
 	return FALSE;
 }
 
@@ -153,7 +157,6 @@ out:
 static gboolean
 up_device_idevice_refresh (UpDevice *device)
 {
-	GTimeVal timeval;
 	UpDeviceIdevice *idevice = UP_DEVICE_IDEVICE (device);
 	lockdownd_client_t client = NULL;
 	plist_t dict, node;
@@ -201,8 +204,7 @@ up_device_idevice_refresh (UpDevice *device)
 	plist_free (dict);
 
 	/* reset time */
-	g_get_current_time (&timeval);
-	g_object_set (device, "update-time", (guint64) timeval.tv_sec, NULL);
+	g_object_set (device, "update-time", (guint64) g_get_real_time () / G_USEC_PER_SEC, NULL);
 
 	retval = TRUE;
 
@@ -240,7 +242,8 @@ up_device_idevice_finalize (GObject *object)
 	up_daemon_stop_poll (object);
 	if (idevice->priv->client != NULL)
 		lockdownd_client_free (idevice->priv->client);
-	idevice_free (idevice->priv->dev);
+	if (idevice->priv->dev != NULL)
+		idevice_free (idevice->priv->dev);
 
 	G_OBJECT_CLASS (up_device_idevice_parent_class)->finalize (object);
 }

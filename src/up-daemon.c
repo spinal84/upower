@@ -69,6 +69,7 @@ struct UpDaemonPrivate
 	UpDeviceList		*power_devices;
 	guint			 action_timeout_id;
 	GHashTable		*poll_timeouts;
+	GHashTable		*idle_signals;
 
 	/* Properties */
 	gboolean		 on_battery;
@@ -317,6 +318,7 @@ out:
 		      "percentage", percentage_total,
 		      "is-present", is_present_total,
 		      "power-supply", TRUE,
+		      "update-time", (guint64) g_get_real_time () / G_USEC_PER_SEC,
 		      NULL);
 
 	return TRUE;
@@ -545,6 +547,24 @@ out:
 }
 
 /**
+ * up_daemon_shutdown:
+ *
+ * Stop the daemon, release all devices and resources.
+ **/
+void
+up_daemon_shutdown (UpDaemon *daemon)
+{
+	/* stop accepting new devices and clear backend state */
+	up_backend_unplug (daemon->priv->backend);
+
+	/* forget about discovered devices and release UpDaemon reference */
+	up_device_list_clear (daemon->priv->power_devices, TRUE);
+
+	/* release UpDaemon reference */
+	up_device_unplug (daemon->priv->display_device);
+}
+
+/**
  * up_daemon_get_device_list:
  **/
 UpDeviceList *
@@ -661,8 +681,10 @@ up_daemon_queue_changed_property (UpDaemon    *daemon,
 {
 	g_return_if_fail (UP_IS_DAEMON (daemon));
 
-	if (daemon->priv->connection == NULL)
+	if (daemon->priv->connection == NULL) {
+		g_variant_unref (value);
 		return;
+	}
 
 	if (!daemon->priv->changed_props) {
 		daemon->priv->changed_props = g_hash_table_new_full (g_str_hash, g_str_equal,
@@ -754,7 +776,10 @@ up_daemon_set_warning_level (UpDaemon *daemon, UpDeviceLevel warning_level)
 	g_debug ("warning_level = %s", up_device_level_to_string (warning_level));
 	priv->warning_level = warning_level;
 
-	g_object_set (G_OBJECT (daemon->priv->display_device), "warning-level", warning_level, NULL);
+	g_object_set (G_OBJECT (daemon->priv->display_device),
+		      "warning-level", warning_level,
+		      "update-time", (guint64) g_get_real_time () / G_USEC_PER_SEC,
+		      NULL);
 
 	if (daemon->priv->warning_level == UP_DEVICE_LEVEL_ACTION) {
 		if (daemon->priv->action_timeout_id == 0) {
@@ -828,6 +853,23 @@ up_daemon_compute_warning_level (UpDaemon      *daemon,
 	g_assert_not_reached ();
 }
 
+static void
+up_daemon_update_warning_level (UpDaemon *daemon)
+{
+	gboolean ret;
+	UpDaemonPrivate *priv = daemon->priv;
+	UpDeviceLevel warning_level;
+
+	/* Check if the on_battery and warning_level state has changed */
+	ret = (up_daemon_get_on_battery_local (daemon) && !up_daemon_get_on_ac_local (daemon));
+	if (ret != priv->on_battery) {
+		up_daemon_set_on_battery (daemon, ret);
+	}
+	warning_level = up_daemon_get_warning_level_local (daemon);
+	if (warning_level != priv->warning_level)
+		up_daemon_set_warning_level (daemon, warning_level);
+}
+
 /**
  * up_daemon_device_changed_cb:
  **/
@@ -835,9 +877,6 @@ static void
 up_daemon_device_changed_cb (UpDevice *device, GParamSpec *pspec, UpDaemon *daemon)
 {
 	UpDeviceKind type;
-	gboolean ret;
-	UpDaemonPrivate *priv = daemon->priv;
-	UpDeviceLevel warning_level;
 
 	g_return_if_fail (UP_IS_DAEMON (daemon));
 	g_return_if_fail (UP_IS_DEVICE (device));
@@ -851,14 +890,7 @@ up_daemon_device_changed_cb (UpDevice *device, GParamSpec *pspec, UpDaemon *daem
 		up_daemon_refresh_battery_devices (daemon);
 	}
 
-	/* second, check if the on_battery and warning_level state has changed */
-	ret = (up_daemon_get_on_battery_local (daemon) && !up_daemon_get_on_ac_local (daemon));
-	if (ret != priv->on_battery) {
-		up_daemon_set_on_battery (daemon, ret);
-	}
-	warning_level = up_daemon_get_warning_level_local (daemon);
-	if (warning_level != priv->warning_level)
-		up_daemon_set_warning_level (daemon, warning_level);
+	up_daemon_update_warning_level (daemon);
 }
 
 typedef struct {
@@ -883,6 +915,7 @@ change_idle_timeout (UpDevice   *device,
 
 	up_daemon_stop_poll (G_OBJECT (device));
 	up_daemon_start_poll (G_OBJECT (device), callback);
+	g_object_unref (daemon);
 }
 
 static void
@@ -916,6 +949,7 @@ fire_timeout_callback (gpointer user_data)
 
 	/* Fire the actual callback */
 	(data->callback) (device);
+	g_object_unref (daemon);
 
 	return G_SOURCE_CONTINUE;
 }
@@ -939,6 +973,7 @@ up_daemon_start_poll (GObject     *object,
 	UpDevice *device;
 	TimeoutData *data;
 	guint timeout;
+	gulong handler_id;
 	char *name;
 
 	device = UP_DEVICE (object);
@@ -947,7 +982,7 @@ up_daemon_start_poll (GObject     *object,
 	if (g_hash_table_lookup (daemon->priv->poll_timeouts, device) != NULL) {
 		g_warning ("Poll already started for device '%s'",
 			   up_device_get_object_path (device));
-		return;
+		goto out;
 	}
 
 	data = g_new0 (TimeoutData, 1);
@@ -956,8 +991,10 @@ up_daemon_start_poll (GObject     *object,
 	timeout = calculate_timeout (device);
 	data->timeout = timeout;
 
-	g_signal_connect (device, "notify::warning-level",
-			  G_CALLBACK (change_idle_timeout), NULL);
+	handler_id = g_signal_connect (device, "notify::warning-level",
+				       G_CALLBACK (change_idle_timeout), NULL);
+	g_hash_table_insert (daemon->priv->idle_signals, device,
+			     GUINT_TO_POINTER (handler_id));
 	g_object_weak_ref (object, device_destroyed, daemon);
 
 	data->id = g_timeout_add_seconds (timeout, fire_timeout_callback, device);
@@ -970,6 +1007,8 @@ up_daemon_start_poll (GObject     *object,
 
 	g_debug ("Setup poll for '%s' every %u seconds",
 		 up_device_get_object_path (device), timeout);
+out:
+	g_object_unref (daemon);
 }
 
 void
@@ -978,17 +1017,29 @@ up_daemon_stop_poll (GObject *object)
 	UpDevice *device;
 	TimeoutData *data;
 	UpDaemon *daemon;
+	gpointer value;
+	gulong handle_id;
 
 	device = UP_DEVICE (object);
 	daemon = up_device_get_daemon (device);
 
+	value = g_hash_table_lookup (daemon->priv->idle_signals, device);
+	if (value != NULL) {
+		handle_id = GPOINTER_TO_UINT (value);
+		if (g_signal_handler_is_connected (device, handle_id))
+			g_signal_handler_disconnect (device, handle_id);
+		g_hash_table_remove (daemon->priv->idle_signals, device);
+	}
+
 	data = g_hash_table_lookup (daemon->priv->poll_timeouts, device);
 	if (data == NULL)
-		return;
+		goto out;
 
 	g_source_remove (data->id);
 	g_object_weak_unref (object, device_destroyed, daemon);
 	g_hash_table_remove (daemon->priv->poll_timeouts, device);
+out:
+	g_object_unref (daemon);
 }
 
 /**
@@ -1052,6 +1103,10 @@ up_daemon_device_removed_cb (UpBackend *backend, GObject *native, UpDevice *devi
 
 	/* finalise the object */
 	g_object_unref (device);
+
+	/* In case a battery was removed */
+	up_daemon_refresh_battery_devices (daemon);
+	up_daemon_update_warning_level (daemon);
 }
 
 #define LOAD_OR_DEFAULT(val, str, def) val = (load_default ? def : up_config_get_uint (daemon->priv->config, str))
@@ -1120,6 +1175,7 @@ up_daemon_init (UpDaemon *daemon)
 
 	daemon->priv->poll_timeouts = g_hash_table_new_full (g_direct_hash, g_direct_equal,
 							     NULL, g_free);
+	daemon->priv->idle_signals = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
 /**
@@ -1264,6 +1320,7 @@ up_daemon_finalize (GObject *object)
 		g_source_remove (priv->props_idle_id);
 
 	g_clear_pointer (&priv->poll_timeouts, g_hash_table_destroy);
+	g_clear_pointer (&priv->idle_signals, g_hash_table_destroy);
 
 	g_clear_pointer (&daemon->priv->changed_props, g_hash_table_unref);
 	if (priv->proxy != NULL)
@@ -1271,6 +1328,7 @@ up_daemon_finalize (GObject *object)
 	if (priv->connection != NULL)
 		dbus_g_connection_unref (priv->connection);
 	g_object_unref (priv->power_devices);
+	g_object_unref (priv->display_device);
 	g_object_unref (priv->config);
 	g_object_unref (priv->backend);
 
