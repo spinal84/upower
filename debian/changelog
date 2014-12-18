@@ -3,6 +3,7 @@ upower (0.99.2-1) UNRELEASED; urgency=medium
   * New upstream bug fix release:
     - Fix memory leaks with Logitech receivers. (LP: #757551)
     - Drop all debian/patches/*, included upstream.
+  * Bump Standards-Version to 3.9.6 (no changes necessary).
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 18 Dec 2014 14:25:11 +0100
 
