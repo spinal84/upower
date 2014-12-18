@@ -511,6 +511,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 	gboolean ac_online = FALSE;
 	gboolean has_ac = FALSE;
 	gboolean online;
+	UpDeviceList *devices_list;
 	GPtrArray *devices;
 	guint i;
 
@@ -699,7 +700,8 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 
 		/* If we have any online AC, assume charging, otherwise
 		 * discharging */
-		devices = up_device_list_get_array (up_daemon_get_device_list (daemon));
+		devices_list = up_daemon_get_device_list (daemon);
+		devices = up_device_list_get_array (devices_list);
 		for (i=0; i < devices->len; i++) {
 			if (up_device_get_online ((UpDevice *) g_ptr_array_index (devices, i), &online)) {
 			       has_ac = TRUE;
@@ -710,6 +712,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 			}
 		}
 		g_ptr_array_unref (devices);
+		g_object_unref (devices_list);
 
 		if (has_ac) {
 			if (ac_online) {
@@ -1088,7 +1091,6 @@ static gboolean
 up_device_supply_refresh (UpDevice *device)
 {
 	gboolean ret;
-	GTimeVal timeval;
 	UpDeviceSupply *supply = UP_DEVICE_SUPPLY (device);
 	UpDeviceKind type;
 	UpDeviceState state;
@@ -1109,10 +1111,8 @@ up_device_supply_refresh (UpDevice *device)
 	}
 
 	/* reset time if we got new data */
-	if (ret) {
-		g_get_current_time (&timeval);
-		g_object_set (device, "update-time", (guint64) timeval.tv_sec, NULL);
-	}
+	if (ret)
+		g_object_set (device, "update-time", (guint64) g_get_real_time () / G_USEC_PER_SEC, NULL);
 
 	return ret;
 }

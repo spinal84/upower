@@ -818,7 +818,7 @@ hidpp_device_refresh (HidppDevice *device,
 
 	/* get serial number, this can be queried from the receiver */
 	if ((refresh_flags & HIDPP_REFRESH_FLAGS_SERIAL) > 0) {
-		guint32 *serialp;
+		guint32 serial;
 
 		msg.type = HIDPP_MSG_TYPE_SHORT;
 		msg.device_idx = HIDPP_RECEIVER_ADDRESS;
@@ -834,8 +834,8 @@ hidpp_device_refresh (HidppDevice *device,
 		if (!ret)
 			goto out;
 
-		serialp = (guint32 *) &msg.l.params[1];
-		priv->serial = g_strdup_printf ("%08X", g_ntohl(*serialp));
+		memcpy (&serial, msg.l.params + 1, sizeof(serial));
+		priv->serial = g_strdup_printf ("%08X", g_ntohl(serial));
 	}
 
 	/* get battery status */
@@ -1015,6 +1015,17 @@ out:
 }
 
 /**
+ * hidpp_device_free_feature:
+ **/
+static void
+hidpp_device_free_feature (gpointer data)
+{
+	HidppDeviceMap *map = data;
+	g_free (map->name);
+	g_free (map);
+}
+
+/**
  * hidpp_device_init:
  **/
 static void
@@ -1024,7 +1035,7 @@ hidpp_device_init (HidppDevice *device)
 
 	device->priv = HIDPP_DEVICE_GET_PRIVATE (device);
 	device->priv->fd = -1;
-	device->priv->feature_index = g_ptr_array_new_with_free_func (g_free);
+	device->priv->feature_index = g_ptr_array_new_with_free_func (hidpp_device_free_feature);
 	device->priv->batt_status = HIDPP_DEVICE_BATT_STATUS_UNKNOWN;
 	device->priv->kind = HIDPP_DEVICE_KIND_UNKNOWN;
 	device->priv->lux = -1;

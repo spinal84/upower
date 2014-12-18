@@ -340,13 +340,40 @@ up_backend_coldplug (UpBackend *backend, UpDaemon *daemon)
 	return TRUE;
 }
 
+/**
+ * up_backend_unplug:
+ * @backend: The %UpBackend class instance
+ *
+ * Forget about all learned devices, effectively undoing up_backend_coldplug.
+ * Resources are released without emitting signals.
+ */
+void
+up_backend_unplug (UpBackend *backend)
+{
+	if (backend->priv->gudev_client != NULL) {
+		g_object_unref (backend->priv->gudev_client);
+		backend->priv->gudev_client = NULL;
+	}
+	if (backend->priv->device_list != NULL) {
+		g_object_unref (backend->priv->device_list);
+		backend->priv->device_list = NULL;
+	}
+	/* set in init, clear the list to remove reference to UpDaemon */
+	if (backend->priv->managed_devices != NULL)
+		up_device_list_clear (backend->priv->managed_devices, FALSE);
+	if (backend->priv->daemon != NULL) {
+		g_object_unref (backend->priv->daemon);
+		backend->priv->daemon = NULL;
+	}
+}
+
 static gboolean
 check_action_result (GVariant *result)
 {
 	if (result) {
 		const char *s;
 
-		g_variant_get (result, "(s)", &s);
+		g_variant_get (result, "(&s)", &s);
 		if (g_strcmp0 (s, "yes") == 0)
 			return TRUE;
 	}
@@ -371,11 +398,23 @@ up_backend_get_critical_action (UpBackend *backend)
 		{ "Hibernate", "CanHibernate" },
 		{ "PowerOff", NULL },
 	};
-	guint i;
+	guint i = 0;
+	char *action;
 
 	g_return_val_if_fail (backend->priv->logind_proxy != NULL, NULL);
 
-	for (i = 0; i < G_N_ELEMENTS (actions); i++) {
+	/* Find the configured action first */
+	action = up_config_get_string (backend->priv->config, "CriticalPowerAction");
+	if (action != NULL) {
+		for (i = 0; i < G_N_ELEMENTS (actions); i++)
+			if (g_str_equal (actions[i].method, action))
+				break;
+		if (i >= G_N_ELEMENTS (actions))
+			i = 0;
+		g_free (action);
+	}
+
+	for (; i < G_N_ELEMENTS (actions); i++) {
 		GVariant *result;
 
 		if (actions[i].can_method) {

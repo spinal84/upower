@@ -68,14 +68,12 @@ static gboolean
 up_backend_changed_time_cb (UpBackend *backend)
 {
 	UpDevice *device;
-	GTimeVal timeval;
 
 	//FIXME!
 	device = NULL;
 
 	/* reset time */
-	g_get_current_time (&timeval);
-	g_object_set (device, "update-time", (guint64) timeval.tv_sec, NULL);
+	g_object_set (device, "update-time", (guint64) g_get_real_time () / G_USEC_PER_SEC, NULL);
 	return TRUE;
 }
 
@@ -128,6 +126,26 @@ up_backend_coldplug (UpBackend *backend, UpDaemon *daemon)
 #endif
 
 	return TRUE;
+}
+
+/**
+ * up_backend_unplug:
+ * @backend: The %UpBackend class instance
+ *
+ * Forget about all learned devices, effectively undoing up_backend_coldplug.
+ * Resources are released without emitting signals.
+ */
+void
+up_backend_unplug (UpBackend *backend)
+{
+	if (backend->priv->device_list != NULL) {
+		g_object_unref (backend->priv->device_list);
+		backend->priv->device_list = NULL;
+	}
+	if (backend->priv->daemon != NULL) {
+		g_object_unref (backend->priv->daemon);
+		backend->priv->daemon = NULL;
+	}
 }
 
 /**
