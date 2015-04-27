@@ -21,8 +21,8 @@ Build-Depends: debhelper (>= 9),
  libgirepository1.0-dev (>= 0.10.7-1~),
  gobject-introspection (>= 0.9.12-4~),
 Standards-Version: 3.9.6
-Vcs-Git: git://git.debian.org/git/pkg-utopia/upower.git
-Vcs-Browser: http://git.debian.org/?p=pkg-utopia/upower.git;a=summary
+Vcs-Git: git://anonscm.debian.org/pkg-utopia/upower.git
+Vcs-Browser: http://anonscm.debian.org/cgit/pkg-utopia/upower.git
 Homepage: http://upower.freedesktop.org/
 XS-Testsuite: autopkgtest
 
