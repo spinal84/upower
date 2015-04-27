@@ -1,6 +1,8 @@
 upower (0.99.2-3) UNRELEASED; urgency=medium
 
   * Update Vcs-* fields for anonscm.d.o.
+  * debian/control: Drop obsolete XS-Testsuite: field, dpkg adds this
+    automatically now.
 
  -- Martin Pitt <mpitt@debian.org>  Mon, 27 Apr 2015 08:54:55 +0200
 

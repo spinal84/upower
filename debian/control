@@ -24,7 +24,6 @@ Standards-Version: 3.9.6
 Vcs-Git: git://anonscm.debian.org/pkg-utopia/upower.git
 Vcs-Browser: http://anonscm.debian.org/cgit/pkg-utopia/upower.git
 Homepage: http://upower.freedesktop.org/
-XS-Testsuite: autopkgtest
 
 Package: upower
 Architecture: any
