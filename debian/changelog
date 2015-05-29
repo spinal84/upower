@@ -1,4 +1,4 @@
-upower (0.99.3-1) UNRELEASED; urgency=medium
+upower (0.99.3-1) unstable; urgency=medium
 
   * New upstream release:
     - Support Logitech Unifying in Linux 3.19+ (Closes: #785725, LP: #1448834)
@@ -6,7 +6,7 @@ upower (0.99.3-1) UNRELEASED; urgency=medium
       LP: #772095)
   * Drop git_init_variants.patch, included in this release.
 
- -- Martin Pitt <mpitt@debian.org>  Fri, 29 May 2015 10:14:35 +0200
+ -- Martin Pitt <mpitt@debian.org>  Fri, 29 May 2015 10:19:59 +0200
 
 upower (0.99.2-3) unstable; urgency=medium
 
