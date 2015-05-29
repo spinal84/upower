@@ -43,6 +43,7 @@
 
 struct UpDeviceIdevicePrivate
 {
+	guint			 start_id;
 	idevice_t		 dev;
 	lockdownd_client_t	 client;
 };
@@ -67,6 +68,53 @@ up_device_idevice_poll_cb (UpDeviceIdevice *idevice)
 	return TRUE;
 }
 
+static gboolean
+start_poll_cb (UpDeviceIdevice *idevice)
+{
+	UpDevice *device = UP_DEVICE (idevice);
+	idevice_t dev = NULL;
+	lockdownd_client_t client = NULL;
+	char *uuid;
+
+	g_object_get (G_OBJECT (idevice), "serial", &uuid, NULL);
+	g_assert (uuid);
+
+	/* Connect to the device */
+	if (idevice_new (&dev, uuid) != IDEVICE_E_SUCCESS)
+		goto out;
+
+	g_free (uuid);
+
+	if (LOCKDOWN_E_SUCCESS != lockdownd_client_new_with_handshake (dev, &client, "upower"))
+		goto out;
+
+	/* coldplug */
+	idevice->priv->client = client;
+	if (up_device_idevice_refresh (device) == FALSE) {
+		idevice->priv->client = NULL;
+		goto out;
+	}
+	idevice->priv->dev = dev;
+
+	/* _refresh will reopen a new lockdownd client */
+	idevice->priv->client = NULL;
+	g_clear_pointer (&client, lockdownd_client_free);
+
+	g_object_set (G_OBJECT (idevice), "is-present", TRUE, NULL);
+
+	/* set up a poll */
+	up_daemon_start_poll (G_OBJECT (idevice), (GSourceFunc) up_device_idevice_poll_cb);
+
+	idevice->priv->start_id = 0;
+	return G_SOURCE_REMOVE;
+
+out:
+	g_clear_pointer (&client, lockdownd_client_free);
+	g_clear_pointer (&dev, idevice_free);
+	g_free (uuid);
+	return G_SOURCE_CONTINUE;
+}
+
 /**
  * up_device_idevice_coldplug:
  *
@@ -79,30 +127,17 @@ up_device_idevice_coldplug (UpDevice *device)
 	GUdevDevice *native;
 	const gchar *uuid;
 	const gchar *model;
-	idevice_t dev = NULL;
-	lockdownd_client_t client = NULL;
 	UpDeviceKind kind;
 
 	/* Is it an iDevice? */
 	native = G_UDEV_DEVICE (up_device_get_native (device));
 	if (g_udev_device_get_property_as_boolean (native, "USBMUX_SUPPORTED") == FALSE)
-		goto out;
+		return FALSE;
 
 	/* Get the UUID */
 	uuid = g_udev_device_get_property (native, "ID_SERIAL_SHORT");
 	if (uuid == NULL)
-		goto out;
-
-	/* Connect to the device */
-	if (idevice_new (&dev, uuid) != IDEVICE_E_SUCCESS)
-		goto out;
-
-	if (LOCKDOWN_E_SUCCESS != lockdownd_client_new_with_handshake (dev, &client, "upower"))
-		goto out;
-
-	/* Set up struct */
-	idevice->priv->dev = dev;
-	idevice->priv->client = client;
+		return FALSE;
 
 	/* find the kind of device */
 	model = g_udev_device_get_property (native, "ID_MODEL");
@@ -120,33 +155,14 @@ up_device_idevice_coldplug (UpDevice *device)
 		      "vendor", g_udev_device_get_property (native, "ID_VENDOR"),
 		      "model", g_udev_device_get_property (native, "ID_MODEL"),
 		      "power-supply", FALSE,
-		      "is-present", TRUE,
+		      "is-present", FALSE,
 		      "is-rechargeable", TRUE,
 		      "has-history", TRUE,
 		      NULL);
 
-	/* coldplug */
-	if (up_device_idevice_refresh (device) == FALSE)
-		goto out;
+	idevice->priv->start_id = g_timeout_add_seconds (1, (GSourceFunc) start_poll_cb, idevice);
 
-	/* disconnect */
-	lockdownd_client_free (idevice->priv->client);
-	idevice->priv->client = NULL;
-
-	/* set up a poll */
-	up_daemon_start_poll (G_OBJECT (idevice), (GSourceFunc) up_device_idevice_poll_cb);
 	return TRUE;
-
-out:
-	if (client != NULL) {
-		lockdownd_client_free (client);
-		idevice->priv->client = NULL;
-	}
-	if (dev != NULL) {
-		idevice_free (dev);
-		idevice->priv->dev = NULL;
-	}
-	return FALSE;
 }
 
 /**
@@ -178,6 +194,10 @@ up_device_idevice_refresh (UpDevice *device)
 
 	/* get battery status */
 	node = plist_dict_get_item (dict, "BatteryCurrentCapacity");
+	if (!node) {
+		plist_free (dict);
+		goto out;
+	}
 	plist_get_uint_val (node, &percentage);
 
 	g_object_set (device, "percentage", (double) percentage, NULL);
@@ -238,6 +258,11 @@ up_device_idevice_finalize (GObject *object)
 
 	idevice = UP_DEVICE_IDEVICE (object);
 	g_return_if_fail (idevice->priv != NULL);
+
+	if (idevice->priv->start_id > 0) {
+		g_source_remove (idevice->priv->start_id);
+		idevice->priv->start_id = 0;
+	}
 
 	up_daemon_stop_poll (object);
 	if (idevice->priv->client != NULL)

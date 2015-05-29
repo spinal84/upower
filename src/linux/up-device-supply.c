@@ -584,6 +584,16 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 			supply->priv->coldplug_units = UP_DEVICE_SUPPLY_COLDPLUG_UNITS_CHARGE;
 		}
 
+		/* Fix broken batteries without energy-full information */
+		if (energy_full < 0.01 && energy_full_design < 0.01) {
+			gdouble old_energy_full_design;
+
+			g_object_get (device, "energy-full-design", &old_energy_full_design, NULL);
+			energy_full_design = MAX(old_energy_full_design, energy);
+			/* Make following warning quiet */
+			energy_full = energy_full_design;
+		}
+
 		/* the last full should not be bigger than the design */
 		if (energy_full > energy_full_design)
 			g_warning ("energy_full (%f) is greater than energy_full_design (%f)",
@@ -678,19 +688,18 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 	/* get a precise percentage */
         if (sysfs_file_exists (native_path, "capacity")) {
 		percentage = sysfs_get_double (native_path, "capacity");
-		if (percentage < 0.0f)
-			percentage = 0.0f;
-		if (percentage > 100.0f)
-			percentage = 100.0f;
-                /* for devices which provide capacity, but not {energy,charge}_now */
-                if (energy < 0.1f && energy_full > 0.0f)
-                    energy = energy_full * percentage / 100;
+		percentage = CLAMP(percentage, 0.0f, 100.0f);
+		/* for devices which provide capacity, but not {energy,charge}_now */
+		if (energy < 0.1f && energy_full > 0.0f) {
+			energy = energy_full * percentage / 100;
+		} else if (energy > 0.0f && percentage < 0.01) {
+			/* capacity isn't set but present */
+			percentage = 100.0 * energy / energy_full;
+			percentage = CLAMP(percentage, 0.0f, 100.0f);
+		}
         } else if (energy_full > 0.0f) {
 		percentage = 100.0 * energy / energy_full;
-		if (percentage < 0.0f)
-			percentage = 0.0f;
-		if (percentage > 100.0f)
-			percentage = 100.0f;
+		percentage = CLAMP(percentage, 0.0f, 100.0f);
 	}
 
 	/* the battery isn't charging or discharging, it's just
@@ -923,9 +932,12 @@ up_device_supply_coldplug (UpDevice *device)
 	const gchar *scope;
 	gchar *device_type = NULL;
 	gchar *input_path = NULL;
+	gchar *subdir = NULL;
 	GDir *dir = NULL;
 	GError *error = NULL;
 	UpDeviceKind type = UP_DEVICE_KIND_UNKNOWN;
+	guint i;
+	const char *class[] = { "hid", "bluetooth" };
 
 	up_device_supply_reset_values (supply);
 
@@ -961,28 +973,39 @@ up_device_supply_coldplug (UpDevice *device)
 		if (g_ascii_strcasecmp (device_type, "mains") == 0) {
 			type = UP_DEVICE_KIND_LINE_POWER;
 		} else if (g_ascii_strcasecmp (device_type, "battery") == 0) {
+			for (i = 0; i < G_N_ELEMENTS(class) && type == UP_DEVICE_KIND_UNKNOWN; i++) {
+				/* Detect if the battery comes from bluetooth keyboard or mouse. */
+				bluetooth = g_udev_device_get_parent_with_subsystem (native, class[i], NULL);
+				if (bluetooth != NULL) {
+					device_path = g_udev_device_get_sysfs_path (bluetooth);
 
-			/* Detect if the battery comes from bluetooth keyboard or mouse. */
-			bluetooth = g_udev_device_get_parent_with_subsystem (native, "bluetooth", NULL);
-			if (bluetooth != NULL) {
-				device_path = g_udev_device_get_sysfs_path (bluetooth);
-				if ((dir = g_dir_open (device_path, 0, &error))) {
-					while ((file = g_dir_read_name (dir))) {
-						/* Check if it is an input device. */
-						if (g_str_has_prefix (file, "input")) {
-							input_path = g_build_filename (device_path, file, NULL);
-							break;
-						}
+					/* There may be an extra subdirectory here */
+					subdir = g_build_filename (device_path, "input", NULL);
+					if (!g_file_test (subdir, G_FILE_TEST_IS_DIR)) {
+						g_free(subdir);
+						subdir = g_strdup (device_path);
 					}
-					g_dir_close (dir);
-				} else {
-					g_warning ("Can not open folder %s: %s", device_path, error->message);
-					g_error_free (error);
-				}
-				g_object_unref (bluetooth);
-			}
 
-			if (input_path != NULL) {
+					if ((dir = g_dir_open (subdir, 0, &error))) {
+						while ((file = g_dir_read_name (dir))) {
+							/* Check if it is an input device. */
+							if (g_str_has_prefix (file, "input")) {
+								input_path = g_build_filename (subdir, file, NULL);
+								break;
+							}
+						}
+						g_dir_close (dir);
+					} else {
+						g_warning ("Can not open folder %s: %s", device_path, error->message);
+						g_error_free (error);
+					}
+					g_free (subdir);
+					g_object_unref (bluetooth);
+				}
+
+				if (input_path == NULL)
+					continue;
+
 				if ((dir = g_dir_open (input_path, 0, &error))) {
 					while ((file = g_dir_read_name (dir))) {
 						/* Check if it is a mouse device. */
