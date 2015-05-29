@@ -1,3 +1,13 @@
+upower (0.99.3-1) UNRELEASED; urgency=medium
+
+  * New upstream release:
+    - Support Logitech Unifying in Linux 3.19+ (Closes: #785725, LP: #1448834)
+    - Fix Bluetooth HID batteries with recent kernels (Closes: #772095,
+      LP: #772095)
+  * Drop git_init_variants.patch, included in this release.
+
+ -- Martin Pitt <mpitt@debian.org>  Fri, 29 May 2015 10:14:35 +0200
+
 upower (0.99.2-3) unstable; urgency=medium
 
   * Update Vcs-* fields for anonscm.d.o.
