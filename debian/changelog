@@ -4,6 +4,9 @@ upower (0.99.4-1) UNRELEASED; urgency=medium
   * Run wrap-and-sort -at.
   * Drop (Build-)Depends on libdbus-1-dev and libdbus-glib-1-dev. UPower has
     been ported to use GDBus.
+  * Update symbols file for libupower-glib3. A couple of private symbols were
+    dropped (up_*_glue_*) and new private symbols were added (up_exported_*).
+    Mark those as optional.
 
  -- Michael Biebl <biebl@debian.org>  Tue, 16 Feb 2016 23:42:24 +0100
 
