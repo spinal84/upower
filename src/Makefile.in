@@ -89,17 +89,21 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@BACKEND_TYPE_FREEBSD_TRUE@am__append_1 = bsd
+@BACKEND_TYPE_OPENBSD_TRUE@am__append_2 = bsd
 libexec_PROGRAMS = upowerd$(EXEEXT)
-@BACKEND_TYPE_DUMMY_TRUE@am__append_1 = \
+@BACKEND_TYPE_DUMMY_TRUE@am__append_3 = \
 @BACKEND_TYPE_DUMMY_TRUE@	dummy/libupshared.la
 
-@BACKEND_TYPE_FREEBSD_TRUE@am__append_2 = \
-@BACKEND_TYPE_FREEBSD_TRUE@	freebsd/libupshared.la
+@BACKEND_TYPE_FREEBSD_TRUE@am__append_4 = \
+@BACKEND_TYPE_FREEBSD_TRUE@	freebsd/libupshared.la				\
+@BACKEND_TYPE_FREEBSD_TRUE@	bsd/libupsharedcommon.la
 
-@BACKEND_TYPE_OPENBSD_TRUE@am__append_3 = \
-@BACKEND_TYPE_OPENBSD_TRUE@	openbsd/libupshared.la
+@BACKEND_TYPE_OPENBSD_TRUE@am__append_5 = \
+@BACKEND_TYPE_OPENBSD_TRUE@	openbsd/libupshared.la				\
+@BACKEND_TYPE_OPENBSD_TRUE@	bsd/libupsharedcommon.la
 
-@BACKEND_TYPE_LINUX_TRUE@am__append_4 = \
+@BACKEND_TYPE_LINUX_TRUE@am__append_6 = \
 @BACKEND_TYPE_LINUX_TRUE@	linux/libupshared.la					\
 @BACKEND_TYPE_LINUX_TRUE@	$(USB_LIBS)						\
 @BACKEND_TYPE_LINUX_TRUE@	$(GUDEV_LIBS)						\
@@ -108,7 +112,7 @@ libexec_PROGRAMS = upowerd$(EXEEXT)
 
 @UP_BUILD_TESTS_TRUE@check_PROGRAMS = up-self-test$(EXEEXT)
 @UP_BUILD_TESTS_TRUE@TESTS = up-self-test$(EXEEXT)
-@HAVE_SYSTEMDSYSTEMUNITDIR_TRUE@am__append_5 = $(systemdservice_in_files)
+@HAVE_SYSTEMDSYSTEMUNITDIR_TRUE@am__append_7 = $(systemdservice_in_files)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_check_compile_flag.m4 \
@@ -130,17 +134,13 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(libexecdir)" "$(DESTDIR)$(dbusconfdir)" \
-	"$(DESTDIR)$(dbusifdir)" "$(DESTDIR)$(dbusservicedir)" \
-	"$(DESTDIR)$(systemdservicedir)"
+	"$(DESTDIR)$(dbusservicedir)" "$(DESTDIR)$(systemdservicedir)"
 PROGRAMS = $(libexec_PROGRAMS)
 am__up_self_test_SOURCES_DIST = up-self-test.c up-config.h up-config.c \
 	up-daemon.h up-daemon.c up-device.h up-device.c \
 	up-device-list.h up-device-list.c up-kbd-backlight.h \
 	up-kbd-backlight.c up-wakeups.h up-wakeups.c up-history.h \
-	up-history.c up-backend.h up-native.h up-daemon-glue.h \
-	up-device-glue.h up-kbd-backlight-glue.h up-wakeups-glue.h \
-	up-marshal.h up-marshal.c
-am__objects_1 = up_self_test-up-marshal.$(OBJEXT)
+	up-history.c up-backend.h up-native.h
 @UP_BUILD_TESTS_TRUE@am_up_self_test_OBJECTS =  \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-self-test.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-config.$(OBJEXT) \
@@ -149,12 +149,10 @@ am__objects_1 = up_self_test-up-marshal.$(OBJEXT)
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-device-list.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-kbd-backlight.$(OBJEXT) \
 @UP_BUILD_TESTS_TRUE@	up_self_test-up-wakeups.$(OBJEXT) \
-@UP_BUILD_TESTS_TRUE@	up_self_test-up-history.$(OBJEXT) \
-@UP_BUILD_TESTS_TRUE@	$(am__objects_1)
+@UP_BUILD_TESTS_TRUE@	up_self_test-up-history.$(OBJEXT)
 up_self_test_OBJECTS = $(am_up_self_test_OBJECTS)
 am__DEPENDENCIES_1 =
 @UP_BUILD_TESTS_TRUE@up_self_test_DEPENDENCIES = dummy/libuptest.la \
-@UP_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
 @UP_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
 @UP_BUILD_TESTS_TRUE@	$(am__DEPENDENCIES_1) $(UPOWER_LIBS)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -164,20 +162,19 @@ am__v_lt_1 =
 up_self_test_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(up_self_test_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-am__objects_2 = upowerd-up-marshal.$(OBJEXT)
 am_upowerd_OBJECTS = upowerd-up-daemon.$(OBJEXT) \
 	upowerd-up-device.$(OBJEXT) upowerd-up-device-list.$(OBJEXT) \
 	upowerd-up-config.$(OBJEXT) upowerd-up-kbd-backlight.$(OBJEXT) \
 	upowerd-up-wakeups.$(OBJEXT) upowerd-up-history.$(OBJEXT) \
-	upowerd-up-main.$(OBJEXT) $(am__objects_2)
+	upowerd-up-main.$(OBJEXT)
 upowerd_OBJECTS = $(am_upowerd_OBJECTS)
 @BACKEND_TYPE_LINUX_TRUE@am__DEPENDENCIES_2 = linux/libupshared.la \
 @BACKEND_TYPE_LINUX_TRUE@	$(am__DEPENDENCIES_1) \
 @BACKEND_TYPE_LINUX_TRUE@	$(am__DEPENDENCIES_1) \
 @BACKEND_TYPE_LINUX_TRUE@	$(am__DEPENDENCIES_1)
 upowerd_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(UPOWER_LIBS) $(am__append_1) \
-	$(am__append_2) $(am__append_3) $(am__DEPENDENCIES_2)
+	$(am__DEPENDENCIES_1) $(UPOWER_LIBS) $(am__append_3) \
+	$(am__append_4) $(am__append_5) $(am__DEPENDENCIES_2)
 upowerd_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(upowerd_CFLAGS) \
 	$(CFLAGS) $(upowerd_LDFLAGS) $(LDFLAGS) -o $@
@@ -257,8 +254,7 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-DATA = $(dbusconf_DATA) $(dbusif_DATA) $(dbusservice_DATA) \
-	$(systemdservice_DATA)
+DATA = $(dbusconf_DATA) $(dbusservice_DATA) $(systemdservice_DATA)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 am__recursive_targets = \
@@ -462,7 +458,6 @@ TEST_LOGS = $(am__test_logs2:.test.log=.log)
 TEST_LOG_DRIVER = $(SHELL) $(top_srcdir)/build-aux/test-driver
 TEST_LOG_COMPILE = $(TEST_LOG_COMPILER) $(AM_TEST_LOG_FLAGS) \
 	$(TEST_LOG_FLAGS)
-DIST_SUBDIRS = $(SUBDIRS)
 am__DIST_COMMON = $(srcdir)/Makefile.in \
 	$(top_srcdir)/build-aux/depcomp \
 	$(top_srcdir)/build-aux/test-driver
@@ -508,10 +503,6 @@ CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
-DBUS_CFLAGS = @DBUS_CFLAGS@
-DBUS_GLIB_CFLAGS = @DBUS_GLIB_CFLAGS@
-DBUS_GLIB_LIBS = @DBUS_GLIB_LIBS@
-DBUS_LIBS = @DBUS_LIBS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
@@ -686,10 +677,12 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 udevrulesdir = @udevrulesdir@
-SUBDIRS = dummy freebsd linux openbsd
+DIST_SUBDIRS = dummy freebsd linux openbsd bsd
+SUBDIRS = dummy freebsd linux openbsd $(am__append_1) $(am__append_2)
 AM_CPPFLAGS = \
 	$(PIE_CFLAGS)						\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
+	-I$(top_builddir)/ -I$(top_srcdir)/			\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\"		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\"		\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"			\
@@ -701,28 +694,17 @@ AM_CPPFLAGS = \
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
 	-DUP_COMPILATION					\
 	-DG_LOG_DOMAIN=\"UPower\"				\
+	-I$(top_srcdir)/dbus					\
 	-I$(top_srcdir)/libupower-glib				\
 	-I$(top_srcdir)						\
 	$(GIO_CFLAGS)						\
-	$(DBUS_GLIB_CFLAGS)					\
+	$(GIO_UNIX_CFLAGS)					\
 	$(GUDEV_CFLAGS)						\
 	$(GLIB_CFLAGS)
 
-UPOWER_LIBS = $(top_builddir)/libupower-glib/libupower-glib.la
-BUILT_SOURCES = \
-	up-daemon-glue.h					\
-	up-device-glue.h					\
-	up-kbd-backlight-glue.h					\
-	up-wakeups-glue.h					\
-	up-marshal.h						\
-	up-marshal.c
-
-dbusifdir = $(datadir)/dbus-1/interfaces
-dbusif_DATA = \
-	org.freedesktop.UPower.xml				\
-	org.freedesktop.UPower.Device.xml			\
-	org.freedesktop.UPower.KbdBacklight.xml			\
-	org.freedesktop.UPower.Wakeups.xml
+UPOWER_LIBS = \
+	$(top_builddir)/dbus/libupower-dbus.la			\
+	$(top_builddir)/libupower-glib/libupower-glib.la
 
 upowerd_SOURCES = \
 	up-daemon.h						\
@@ -742,15 +724,16 @@ upowerd_SOURCES = \
 	up-backend.h						\
 	up-native.h						\
 	up-main.c						\
+	up-backend-bsd-private.h			\
 	$(BUILT_SOURCES)
 
 upowerd_CPPFLAGS = \
 	-I$(top_srcdir)/src					\
 	$(AM_CPPFLAGS)
 
-upowerd_LDADD = -lm $(USB_LIBS) $(GIO_LIBS) $(DBUS_GLIB_LIBS) \
-	$(UPOWER_LIBS) $(am__append_1) $(am__append_2) $(am__append_3) \
-	$(am__append_4)
+upowerd_LDADD = -lm $(USB_LIBS) $(GIO_LIBS) $(GIO_UNIX_LIBS) \
+	$(UPOWER_LIBS) $(am__append_3) $(am__append_4) $(am__append_5) \
+	$(am__append_6)
 @BACKEND_TYPE_LINUX_TRUE@upowerd_LDFLAGS = \
 @BACKEND_TYPE_LINUX_TRUE@	$(PIE_LDFLAGS)						\
 @BACKEND_TYPE_LINUX_TRUE@	$(RELRO_LDFLAGS)
@@ -784,7 +767,6 @@ upowerd_CFLAGS = \
 @UP_BUILD_TESTS_TRUE@	dummy/libuptest.la					\
 @UP_BUILD_TESTS_TRUE@	$(GLIB_LIBS)						\
 @UP_BUILD_TESTS_TRUE@	$(GIO_CFLAGS)						\
-@UP_BUILD_TESTS_TRUE@	$(DBUS_GLIB_LIBS)					\
 @UP_BUILD_TESTS_TRUE@	$(POLKIT_LIBS)						\
 @UP_BUILD_TESTS_TRUE@	$(UPOWER_LIBS)
 
@@ -796,8 +778,8 @@ dbusservice_DATA = $(dbusservice_in_files:.service.in=.service)
 dbusconfdir = $(sysconfdir)/dbus-1/system.d
 dbusconf_in_files = org.freedesktop.UPower.conf.in
 dbusconf_DATA = $(dbusconf_in_files:.conf.in=.conf)
+systemdservice_in_files = upower.service.in
 @HAVE_SYSTEMDSYSTEMUNITDIR_TRUE@systemdservicedir = $(systemdsystemunitdir)
-@HAVE_SYSTEMDSYSTEMUNITDIR_TRUE@systemdservice_in_files = upower.service.in
 @HAVE_SYSTEMDSYSTEMUNITDIR_TRUE@systemdservice_DATA = $(systemdservice_in_files:.service.in=.service)
 CLEANFILES = $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = \
@@ -805,14 +787,9 @@ MAINTAINERCLEANFILES = \
 	$(systemdservice_DATA)					\
 	$(dbusservice_DATA)
 
-EXTRA_DIST = org.freedesktop.UPower.xml \
-	org.freedesktop.UPower.Device.xml \
-	org.freedesktop.UPower.KbdBacklight.xml \
-	org.freedesktop.UPower.Wakeups.xml up-marshal.list \
-	$(systemdservice_in_files) $(dbusservice_in_files) \
-	$(dbusconf_in_files) $(am__append_5)
-all: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) all-recursive
+EXTRA_DIST = $(systemdservice_in_files) $(dbusservice_in_files) \
+	$(dbusconf_in_files) $(am__append_7)
+all: all-recursive
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .log .o .obj .test .test$(EXEEXT) .trs
@@ -924,7 +901,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-device.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-history.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-kbd-backlight.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-marshal.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-self-test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/up_self_test-up-wakeups.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-config.Po@am__quote@
@@ -934,7 +910,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-history.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-kbd-backlight.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-marshal.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/upowerd-up-wakeups.Po@am__quote@
 
 .c.o:
@@ -1070,20 +1045,6 @@ up_self_test-up-history.obj: up-history.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-history.obj `if test -f 'up-history.c'; then $(CYGPATH_W) 'up-history.c'; else $(CYGPATH_W) '$(srcdir)/up-history.c'; fi`
 
-up_self_test-up-marshal.o: up-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-marshal.o -MD -MP -MF $(DEPDIR)/up_self_test-up-marshal.Tpo -c -o up_self_test-up-marshal.o `test -f 'up-marshal.c' || echo '$(srcdir)/'`up-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-marshal.Tpo $(DEPDIR)/up_self_test-up-marshal.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-marshal.c' object='up_self_test-up-marshal.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-marshal.o `test -f 'up-marshal.c' || echo '$(srcdir)/'`up-marshal.c
-
-up_self_test-up-marshal.obj: up-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -MT up_self_test-up-marshal.obj -MD -MP -MF $(DEPDIR)/up_self_test-up-marshal.Tpo -c -o up_self_test-up-marshal.obj `if test -f 'up-marshal.c'; then $(CYGPATH_W) 'up-marshal.c'; else $(CYGPATH_W) '$(srcdir)/up-marshal.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/up_self_test-up-marshal.Tpo $(DEPDIR)/up_self_test-up-marshal.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-marshal.c' object='up_self_test-up-marshal.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(up_self_test_CFLAGS) $(CFLAGS) -c -o up_self_test-up-marshal.obj `if test -f 'up-marshal.c'; then $(CYGPATH_W) 'up-marshal.c'; else $(CYGPATH_W) '$(srcdir)/up-marshal.c'; fi`
-
 upowerd-up-daemon.o: up-daemon.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-daemon.o -MD -MP -MF $(DEPDIR)/upowerd-up-daemon.Tpo -c -o upowerd-up-daemon.o `test -f 'up-daemon.c' || echo '$(srcdir)/'`up-daemon.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-daemon.Tpo $(DEPDIR)/upowerd-up-daemon.Po
@@ -1196,20 +1157,6 @@ upowerd-up-main.obj: up-main.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-main.obj `if test -f 'up-main.c'; then $(CYGPATH_W) 'up-main.c'; else $(CYGPATH_W) '$(srcdir)/up-main.c'; fi`
 
-upowerd-up-marshal.o: up-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-marshal.o -MD -MP -MF $(DEPDIR)/upowerd-up-marshal.Tpo -c -o upowerd-up-marshal.o `test -f 'up-marshal.c' || echo '$(srcdir)/'`up-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-marshal.Tpo $(DEPDIR)/upowerd-up-marshal.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-marshal.c' object='upowerd-up-marshal.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-marshal.o `test -f 'up-marshal.c' || echo '$(srcdir)/'`up-marshal.c
-
-upowerd-up-marshal.obj: up-marshal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -MT upowerd-up-marshal.obj -MD -MP -MF $(DEPDIR)/upowerd-up-marshal.Tpo -c -o upowerd-up-marshal.obj `if test -f 'up-marshal.c'; then $(CYGPATH_W) 'up-marshal.c'; else $(CYGPATH_W) '$(srcdir)/up-marshal.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/upowerd-up-marshal.Tpo $(DEPDIR)/upowerd-up-marshal.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='up-marshal.c' object='upowerd-up-marshal.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(upowerd_CPPFLAGS) $(CPPFLAGS) $(upowerd_CFLAGS) $(CFLAGS) -c -o upowerd-up-marshal.obj `if test -f 'up-marshal.c'; then $(CYGPATH_W) 'up-marshal.c'; else $(CYGPATH_W) '$(srcdir)/up-marshal.c'; fi`
-
 mostlyclean-libtool:
 	-rm -f *.lo
 
@@ -1236,27 +1183,6 @@ uninstall-dbusconfDATA:
 	@list='$(dbusconf_DATA)'; test -n "$(dbusconfdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(dbusconfdir)'; $(am__uninstall_files_from_dir)
-install-dbusifDATA: $(dbusif_DATA)
-	@$(NORMAL_INSTALL)
-	@list='$(dbusif_DATA)'; test -n "$(dbusifdir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(dbusifdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(dbusifdir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(dbusifdir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(dbusifdir)" || exit $$?; \
-	done
-
-uninstall-dbusifDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(dbusif_DATA)'; test -n "$(dbusifdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(dbusifdir)'; $(am__uninstall_files_from_dir)
 install-dbusserviceDATA: $(dbusservice_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(dbusservice_DATA)'; test -n "$(dbusservicedir)" || list=; \
@@ -1622,16 +1548,14 @@ distdir: $(DISTFILES)
 check-am: all-am
 	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
 	$(MAKE) $(AM_MAKEFLAGS) check-TESTS check-local
-check: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) check-recursive
+check: check-recursive
 all-am: Makefile $(PROGRAMS) $(DATA)
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(libexecdir)" "$(DESTDIR)$(dbusconfdir)" "$(DESTDIR)$(dbusifdir)" "$(DESTDIR)$(dbusservicedir)" "$(DESTDIR)$(systemdservicedir)"; do \
+	for dir in "$(DESTDIR)$(libexecdir)" "$(DESTDIR)$(dbusconfdir)" "$(DESTDIR)$(dbusservicedir)" "$(DESTDIR)$(systemdservicedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) install-recursive
+install: install-recursive
 install-exec: install-exec-recursive
 install-data: install-data-recursive
 uninstall: uninstall-recursive
@@ -1665,7 +1589,6 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 clean: clean-recursive
 
@@ -1690,8 +1613,8 @@ info: info-recursive
 
 info-am:
 
-install-data-am: install-dbusconfDATA install-dbusifDATA \
-	install-dbusserviceDATA install-systemdserviceDATA
+install-data-am: install-dbusconfDATA install-dbusserviceDATA \
+	install-systemdserviceDATA
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-recursive
@@ -1738,12 +1661,11 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-dbusconfDATA uninstall-dbusifDATA \
-	uninstall-dbusserviceDATA uninstall-libexecPROGRAMS \
-	uninstall-systemdserviceDATA
+uninstall-am: uninstall-dbusconfDATA uninstall-dbusserviceDATA \
+	uninstall-libexecPROGRAMS uninstall-systemdserviceDATA
 
-.MAKE: $(am__recursive_targets) all check check-am install install-am \
-	install-data-am install-strip
+.MAKE: $(am__recursive_targets) check-am install-am install-data-am \
+	install-strip
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am check \
 	check-TESTS check-am check-local clean clean-checkPROGRAMS \
@@ -1752,40 +1674,21 @@ uninstall-am: uninstall-dbusconfDATA uninstall-dbusifDATA \
 	distclean-generic distclean-libtool distclean-tags distdir dvi \
 	dvi-am html html-am info info-am install install-am \
 	install-data install-data-am install-data-hook \
-	install-dbusconfDATA install-dbusifDATA \
-	install-dbusserviceDATA install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-libexecPROGRAMS \
-	install-man install-pdf install-pdf-am install-ps \
-	install-ps-am install-strip install-systemdserviceDATA \
-	installcheck installcheck-am installdirs installdirs-am \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am recheck tags tags-am uninstall \
-	uninstall-am uninstall-dbusconfDATA uninstall-dbusifDATA \
-	uninstall-dbusserviceDATA uninstall-libexecPROGRAMS \
-	uninstall-systemdserviceDATA
+	install-dbusconfDATA install-dbusserviceDATA install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am \
+	install-libexecPROGRAMS install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip \
+	install-systemdserviceDATA installcheck installcheck-am \
+	installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	recheck tags tags-am uninstall uninstall-am \
+	uninstall-dbusconfDATA uninstall-dbusserviceDATA \
+	uninstall-libexecPROGRAMS uninstall-systemdserviceDATA
 
 .PRECIOUS: Makefile
 
-
-up-marshal.h: up-marshal.list
-	glib-genmarshal $< --prefix=up_marshal --header > $@
-
-up-marshal.c: up-marshal.list
-	echo "#include \"up-marshal.h\"" > $@ && glib-genmarshal $< --prefix=up_marshal --body >> $@
-
-up-daemon-glue.h: org.freedesktop.UPower.xml Makefile.am
-	dbus-binding-tool --prefix=up_daemon --mode=glib-server --output=up-daemon-glue.h $(srcdir)/org.freedesktop.UPower.xml
-
-up-device-glue.h: org.freedesktop.UPower.Device.xml Makefile.am
-	dbus-binding-tool --prefix=up_device --mode=glib-server --output=up-device-glue.h $(srcdir)/org.freedesktop.UPower.Device.xml
-
-up-kbd-backlight-glue.h: org.freedesktop.UPower.KbdBacklight.xml Makefile.am
-	dbus-binding-tool --prefix=up_kbd_backlight --mode=glib-server --output=up-kbd-backlight-glue.h $(srcdir)/org.freedesktop.UPower.KbdBacklight.xml
-
-up-wakeups-glue.h: org.freedesktop.UPower.Wakeups.xml Makefile.am
-	dbus-binding-tool --prefix=up_wakeups --mode=glib-server --output=up-wakeups-glue.h $(srcdir)/org.freedesktop.UPower.Wakeups.xml
 
 @BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@check-local: upowerd
 @BACKEND_TYPE_LINUX_TRUE@@UP_BUILD_TESTS_TRUE@	env GI_TYPELIB_PATH=$(top_builddir)/libupower-glib:$(GI_TYPELIB_PATH) LD_LIBRARY_PATH=$(top_builddir)/libupower-glib/.libs:$(LD_LIBRARY_PATH) top_builddir=$(top_builddir) $(srcdir)/linux/integration-test -v

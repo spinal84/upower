@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 m4_define([up_major_version], [0])
 m4_define([up_minor_version], [99])
-m4_define([up_micro_version], [3])
+m4_define([up_micro_version], [4])
 m4_define([up_version],
           [up_major_version.up_minor_version.up_micro_version])
 
@@ -152,9 +152,7 @@ AX_CHECK_LINK_FLAG([-Wl,-z,relro,-z,now],
 		   [RELRO_LDFLAGS="-Wl,-z,relro,-z,now"])
 AC_SUBST([RELRO_LDFLAGS])
 
-PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.34.0])
-PKG_CHECK_MODULES(DBUS, [dbus-1 >= 1.0])
-PKG_CHECK_MODULES(DBUS_GLIB, [dbus-glib-1 >= 0.76])
+PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.34.0 gobject-2.0])
 PKG_CHECK_MODULES(GIO, [gio-2.0 >= 2.16.1])
 PKG_CHECK_MODULES(GIO_UNIX, [gio-unix-2.0])
 
@@ -244,11 +242,13 @@ AC_CONFIG_FILES([
 Makefile
 upower-glib.pc
 etc/Makefile
+dbus/Makefile
 src/Makefile
 src/dummy/Makefile
 src/freebsd/Makefile
 src/openbsd/Makefile
 src/linux/Makefile
+src/bsd/Makefile
 tools/Makefile
 doc/Makefile
 doc/version.xml
