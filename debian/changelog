@@ -1,4 +1,4 @@
-upower (0.99.4-1) UNRELEASED; urgency=medium
+upower (0.99.4-1) unstable; urgency=medium
 
   * New upstream release.
   * Run wrap-and-sort -at.
@@ -10,7 +10,7 @@ upower (0.99.4-1) UNRELEASED; urgency=medium
   * Use https:// for Vcs-Browser.
   * Bump Standards-Version to 3.9.7.
 
- -- Michael Biebl <biebl@debian.org>  Tue, 16 Feb 2016 23:42:24 +0100
+ -- Michael Biebl <biebl@debian.org>  Wed, 17 Feb 2016 00:19:34 +0100
 
 upower (0.99.3-1) unstable; urgency=medium
 
