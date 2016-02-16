@@ -1,3 +1,9 @@
+upower (0.99.4-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- Michael Biebl <biebl@debian.org>  Tue, 16 Feb 2016 23:42:24 +0100
+
 upower (0.99.3-1) unstable; urgency=medium
 
   * New upstream release:
