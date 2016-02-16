@@ -197,7 +197,7 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 CSCOPE = cscope
-DIST_SUBDIRS = etc libupower-glib src doc tools po rules
+DIST_SUBDIRS = etc dbus libupower-glib src doc tools po rules
 am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
 	$(srcdir)/upower-glib.pc.in $(top_srcdir)/build-aux/compile \
 	$(top_srcdir)/build-aux/config.guess \
@@ -208,8 +208,8 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
 	$(top_srcdir)/build-aux/missing ABOUT-NLS AUTHORS COPYING \
 	ChangeLog INSTALL NEWS README build-aux/compile \
 	build-aux/config.guess build-aux/config.rpath \
-	build-aux/config.sub build-aux/install-sh build-aux/ltmain.sh \
-	build-aux/missing
+	build-aux/config.sub build-aux/depcomp build-aux/install-sh \
+	build-aux/ltmain.sh build-aux/missing
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -268,10 +268,6 @@ CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
-DBUS_CFLAGS = @DBUS_CFLAGS@
-DBUS_GLIB_CFLAGS = @DBUS_GLIB_CFLAGS@
-DBUS_GLIB_LIBS = @DBUS_GLIB_LIBS@
-DBUS_LIBS = @DBUS_LIBS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
@@ -447,7 +443,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 udevrulesdir = @udevrulesdir@
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
-SUBDIRS = etc libupower-glib src doc tools po $(am__append_1)
+SUBDIRS = etc dbus libupower-glib src doc tools po $(am__append_1)
 EXTRA_DIST = \
 	HACKING 			\
 	ChangeLog
@@ -472,8 +468,9 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = upower-glib.pc
 
 # xsltproc barfs on 'make distcheck'; disable for now
-DISTCHECK_CONFIGURE_FLAGS = --disable-man-pages --enable-gtk-doc \
-	--with-systemdsystemunitdir=$$dc_install_base/$(systemdsystemunitdir)
+DISTCHECK_CONFIGURE_FLAGS = --disable-man-pages --enable-gtk-doc			\
+	--with-systemdsystemunitdir=$$dc_install_base/$(systemdsystemunitdir)	\
+	--with-udevrulesdir='$${libdir}/udev/rules.d-distcheck'
 
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive

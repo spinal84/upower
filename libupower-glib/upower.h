@@ -43,6 +43,8 @@
 #include <libupower-glib/up-wakeup-item.h>
 #include <libupower-glib/up-wakeups.h>
 
+#include <libupower-glib/up-autocleanups.h>
+
 #undef __UPOWER_H_INSIDE__
 
 #endif /* __UPOWER_H__ */

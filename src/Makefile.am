@@ -1,10 +1,20 @@
 ## Process this file with automake to produce Makefile.in
 
+DIST_SUBDIRS = dummy freebsd linux openbsd bsd
 SUBDIRS = dummy freebsd linux openbsd
+
+if BACKEND_TYPE_FREEBSD
+SUBDIRS += bsd
+endif
+
+if BACKEND_TYPE_OPENBSD
+SUBDIRS += bsd
+endif
 
 AM_CPPFLAGS = \
 	$(PIE_CFLAGS)						\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
+	-I$(top_builddir)/ -I$(top_srcdir)/			\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\"		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\"		\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"			\
@@ -16,49 +26,19 @@ AM_CPPFLAGS = \
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
 	-DUP_COMPILATION					\
 	-DG_LOG_DOMAIN=\"UPower\"				\
+	-I$(top_srcdir)/dbus					\
 	-I$(top_srcdir)/libupower-glib				\
 	-I$(top_srcdir)						\
 	$(GIO_CFLAGS)						\
-	$(DBUS_GLIB_CFLAGS)					\
+	$(GIO_UNIX_CFLAGS)					\
 	$(GUDEV_CFLAGS)						\
 	$(GLIB_CFLAGS)
 
-UPOWER_LIBS = $(top_builddir)/libupower-glib/libupower-glib.la
-
-BUILT_SOURCES =							\
-	up-daemon-glue.h					\
-	up-device-glue.h					\
-	up-kbd-backlight-glue.h					\
-	up-wakeups-glue.h					\
-	up-marshal.h						\
-	up-marshal.c
-
-up-marshal.h: up-marshal.list
-	glib-genmarshal $< --prefix=up_marshal --header > $@
-
-up-marshal.c: up-marshal.list
-	echo "#include \"up-marshal.h\"" > $@ && glib-genmarshal $< --prefix=up_marshal --body >> $@
-
-up-daemon-glue.h: org.freedesktop.UPower.xml Makefile.am
-	dbus-binding-tool --prefix=up_daemon --mode=glib-server --output=up-daemon-glue.h $(srcdir)/org.freedesktop.UPower.xml
-
-up-device-glue.h: org.freedesktop.UPower.Device.xml Makefile.am
-	dbus-binding-tool --prefix=up_device --mode=glib-server --output=up-device-glue.h $(srcdir)/org.freedesktop.UPower.Device.xml
-
-up-kbd-backlight-glue.h: org.freedesktop.UPower.KbdBacklight.xml Makefile.am
-	dbus-binding-tool --prefix=up_kbd_backlight --mode=glib-server --output=up-kbd-backlight-glue.h $(srcdir)/org.freedesktop.UPower.KbdBacklight.xml
-
-up-wakeups-glue.h: org.freedesktop.UPower.Wakeups.xml Makefile.am
-	dbus-binding-tool --prefix=up_wakeups --mode=glib-server --output=up-wakeups-glue.h $(srcdir)/org.freedesktop.UPower.Wakeups.xml
+UPOWER_LIBS = \
+	$(top_builddir)/dbus/libupower-dbus.la			\
+	$(top_builddir)/libupower-glib/libupower-glib.la
 
 libexec_PROGRAMS = upowerd
-
-dbusifdir = $(datadir)/dbus-1/interfaces
-dbusif_DATA =							\
-	org.freedesktop.UPower.xml				\
-	org.freedesktop.UPower.Device.xml			\
-	org.freedesktop.UPower.KbdBacklight.xml			\
-	org.freedesktop.UPower.Wakeups.xml
 
 upowerd_SOURCES =						\
 	up-daemon.h						\
@@ -78,6 +58,7 @@ upowerd_SOURCES =						\
 	up-backend.h						\
 	up-native.h						\
 	up-main.c						\
+	up-backend-bsd-private.h			\
 	$(BUILT_SOURCES)
 
 upowerd_CPPFLAGS =						\
@@ -88,7 +69,7 @@ upowerd_LDADD =							\
 	-lm							\
 	$(USB_LIBS)						\
 	$(GIO_LIBS)						\
-	$(DBUS_GLIB_LIBS)					\
+	$(GIO_UNIX_LIBS)					\
 	$(UPOWER_LIBS)
 
 if BACKEND_TYPE_DUMMY
@@ -98,12 +79,14 @@ endif
 
 if BACKEND_TYPE_FREEBSD
 upowerd_LDADD +=						\
-	freebsd/libupshared.la
+	freebsd/libupshared.la				\
+	bsd/libupsharedcommon.la
 endif
 
 if BACKEND_TYPE_OPENBSD
 upowerd_LDADD +=						\
-	openbsd/libupshared.la
+	openbsd/libupshared.la				\
+	bsd/libupsharedcommon.la
 endif
 
 if BACKEND_TYPE_LINUX
@@ -159,7 +142,6 @@ up_self_test_LDADD =						\
 	dummy/libuptest.la					\
 	$(GLIB_LIBS)						\
 	$(GIO_CFLAGS)						\
-	$(DBUS_GLIB_LIBS)					\
 	$(POLKIT_LIBS)						\
 	$(UPOWER_LIBS)
 
@@ -184,9 +166,10 @@ dbusconf_DATA = $(dbusconf_in_files:.conf.in=.conf)
 $(dbusconf_DATA): $(dbusconf_in_files) Makefile
 	cp $< $@
 
+systemdservice_in_files = upower.service.in
+
 if HAVE_SYSTEMDSYSTEMUNITDIR
 systemdservicedir       = $(systemdsystemunitdir)
-systemdservice_in_files = upower.service.in
 systemdservice_DATA     = $(systemdservice_in_files:.service.in=.service)
 
 $(systemdservice_DATA): $(systemdservice_in_files) Makefile
@@ -206,11 +189,6 @@ MAINTAINERCLEANFILES =						\
 	$(dbusservice_DATA)
 
 EXTRA_DIST =							\
-	org.freedesktop.UPower.xml				\
-	org.freedesktop.UPower.Device.xml			\
-	org.freedesktop.UPower.KbdBacklight.xml			\
-	org.freedesktop.UPower.Wakeups.xml			\
-	up-marshal.list						\
 	$(systemdservice_in_files)				\
 	$(dbusservice_in_files)					\
 	$(dbusconf_in_files)

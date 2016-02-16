@@ -25,14 +25,17 @@ import unittest
 import time
 
 try:
+    import gi
     from gi.repository import GLib
     from gi.repository import Gio
+    gi.require_version('UPowerGlib', '1.0')
     from gi.repository import UPowerGlib
 except ImportError as e:
     sys.stderr.write('Skipping tests, PyGobject not available for Python 3, or missing GI typelibs: %s\n' % str(e))
     sys.exit(0)
 
 try:
+    gi.require_version('UMockdev', '1.0')
     from gi.repository import UMockdev
 except ImportError:
     sys.stderr.write('Skipping tests, umockdev not available (https://launchpad.net/umockdev/)\n')
@@ -184,7 +187,7 @@ class Tests(unittest.TestCase):
         proxy = Gio.DBusProxy.new_sync(
             self.dbus, Gio.DBusProxyFlags.DO_NOT_AUTO_START, None, UP,
             UP_DISPLAY_OBJECT_PATH, 'org.freedesktop.DBus.Properties', None)
-        return proxy.Get('(ss)', UP, name)
+        return proxy.Get('(ss)', UP + '.Device', name)
 
     def get_dbus_dev_property(self, device, name):
         '''Get property value from an upower device D-Bus path.'''
@@ -841,33 +844,6 @@ class Tests(unittest.TestCase):
         self.assertEqual(self.get_dbus_dev_property(kbdbat0_up, 'Type'), 6)
         self.assertEqual(self.get_dbus_property('OnBattery'), False)
         self.assertEqual(self.get_dbus_display_property('WarningLevel'), UP_DEVICE_LEVEL_NONE)
-        self.stop_daemon()
-
-    def test_broken_onda_battery(self):
-        '''Onda v975w battery: https://bugzilla.kernel.org/show_bug.cgi?id=83941'''
-
-        batc = self.testbed.add_device('power_supply', 'BATC', None,
-                                       ['type', 'Battery',
-                                        'capacity', '0',
-                                        'capacity_level', 'Normal',
-                                        'present', '1',
-                                        'energy_full', '0',
-                                        'energy_full_design', '0',
-                                        'energy_now', '5549000',
-                                        'power_now', '97000',
-                                        'voltage_now', '3970000'], [])
-
-        self.start_daemon()
-        devs = self.proxy.EnumerateDevices()
-        self.assertEqual(len(devs), 1)
-        batc_up = devs[0]
-
-        self.assertEqual(self.get_dbus_dev_property(batc_up, 'Percentage'), 100.0)
-
-        self.testbed.set_attribute(batc, 'energy_now', '2774500')
-        time.sleep(5)
-        self.assertEqual(int(self.get_dbus_dev_property(batc_up, 'Percentage')), 50)
-
         self.stop_daemon()
 
     #

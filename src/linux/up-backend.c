@@ -31,7 +31,6 @@
 
 #include "up-backend.h"
 #include "up-daemon.h"
-#include "up-marshal.h"
 #include "up-device.h"
 
 #include "up-device-supply.h"
@@ -44,9 +43,6 @@
 #ifdef HAVE_IDEVICE
 #include "up-device-idevice.h"
 #endif /* HAVE_IDEVICE */
-
-#include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-lowlevel.h>
 
 static void	up_backend_class_init	(UpBackendClass	*klass);
 static void	up_backend_init	(UpBackend		*backend);
@@ -65,7 +61,6 @@ struct UpBackendPrivate
 	GUdevClient		*gudev_client;
 	UpDeviceList		*managed_devices;
 	UpConfig		*config;
-	DBusConnection		*connection;
 	GDBusProxy		*logind_proxy;
 };
 
@@ -478,13 +473,13 @@ up_backend_class_init (UpBackendClass *klass)
 		g_signal_new ("device-added",
 			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (UpBackendClass, device_added),
-			      NULL, NULL, up_marshal_VOID__POINTER_POINTER,
+			      NULL, NULL, NULL,
 			      G_TYPE_NONE, 2, G_TYPE_POINTER, G_TYPE_POINTER);
 	signals [SIGNAL_DEVICE_REMOVED] =
 		g_signal_new ("device-removed",
 			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (UpBackendClass, device_removed),
-			      NULL, NULL, up_marshal_VOID__POINTER_POINTER,
+			      NULL, NULL, NULL,
 			      G_TYPE_NONE, 2, G_TYPE_POINTER, G_TYPE_POINTER);
 
 	g_type_class_add_private (klass, sizeof (UpBackendPrivate));
