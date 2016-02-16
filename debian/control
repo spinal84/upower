@@ -2,24 +2,25 @@ Source: upower
 Section: admin
 Priority: optional
 Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
-Uploaders: Michael Biebl <biebl@debian.org>, Martin Pitt <mpitt@debian.org>
-Build-Depends: debhelper (>= 9),
- autotools-dev,
- pkg-config,
- xsltproc,
- gtk-doc-tools,
- libglib2.0-doc,
- intltool (>= 0.40.0),
- libdbus-glib-1-dev (>= 0.76),
- libdbus-1-dev (>= 1.0),
- libglib2.0-dev (>= 2.36),
- libgudev-1.0-dev (>= 147) [linux-any],
- udev [linux-any],
- libkvm-dev [kfreebsd-any],
- libusb-1.0-0-dev (>= 1.0.0) [linux-any],
- libimobiledevice-dev (>= 0.9.7) [linux-any],
- libgirepository1.0-dev (>= 0.10.7-1~),
- gobject-introspection (>= 0.9.12-4~),
+Uploaders: Michael Biebl <biebl@debian.org>,
+           Martin Pitt <mpitt@debian.org>,
+Build-Depends: autotools-dev,
+               debhelper (>= 9),
+               gobject-introspection (>= 0.9.12-4~),
+               gtk-doc-tools,
+               intltool (>= 0.40.0),
+               libdbus-1-dev (>= 1.0),
+               libdbus-glib-1-dev (>= 0.76),
+               libgirepository1.0-dev (>= 0.10.7-1~),
+               libglib2.0-dev (>= 2.36),
+               libglib2.0-doc,
+               libgudev-1.0-dev (>= 147) [linux-any],
+               libimobiledevice-dev (>= 0.9.7) [linux-any],
+               libkvm-dev [kfreebsd-any],
+               libusb-1.0-0-dev (>= 1.0.0) [linux-any],
+               pkg-config,
+               udev [linux-any],
+               xsltproc,
 Standards-Version: 3.9.6
 Vcs-Git: git://anonscm.debian.org/pkg-utopia/upower.git
 Vcs-Browser: http://anonscm.debian.org/cgit/pkg-utopia/upower.git
@@ -28,12 +29,12 @@ Homepage: http://upower.freedesktop.org/
 Package: upower
 Architecture: any
 Multi-Arch: foreign
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends},
- ${misc:Depends},
- udev [linux-any],
- dbus,
-Recommends: policykit-1
+Pre-Depends: ${misc:Pre-Depends},
+Depends: dbus,
+         udev [linux-any],
+         ${misc:Depends},
+         ${shlibs:Depends},
+Recommends: policykit-1,
 Description: abstraction for power management
  upower provides an interface to enumerate power sources on the system
  and control system-wide power management. Any application can access the
@@ -43,8 +44,8 @@ Description: abstraction for power management
 Package: upower-doc
 Architecture: all
 Section: doc
-Depends: ${misc:Depends}
-Suggests: devhelp
+Depends: ${misc:Depends},
+Suggests: devhelp,
 Description: abstraction for power management - documentation
  upower provides an interface to enumerate power sources on the system
  and control system-wide power management. Any application can access the
@@ -55,9 +56,10 @@ Package: libupower-glib3
 Architecture: any
 Multi-Arch: same
 Section: libs
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: upower (>> 0.99)
+Pre-Depends: ${misc:Pre-Depends},
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+Recommends: upower (>> 0.99),
 Description: abstraction for power management - shared library
  upower provides an interface to enumerate power sources on the system
  and control system-wide power management. Any application can access the
@@ -69,12 +71,12 @@ Description: abstraction for power management - shared library
 Package: libupower-glib-dev
 Architecture: any
 Section: libdevel
-Depends: ${shlibs:Depends},
- ${misc:Depends},
- libglib2.0-dev,
- libdbus-glib-1-dev (>= 0.76),
- libupower-glib3 (= ${binary:Version}),
- gir1.2-upowerglib-1.0 (= ${binary:Version})
+Depends: gir1.2-upowerglib-1.0 (= ${binary:Version}),
+         libupower-glib3 (= ${binary:Version}),
+         libdbus-glib-1-dev (>= 0.76),
+         libglib2.0-dev,
+         ${misc:Depends},
+         ${shlibs:Depends},
 Description: abstraction for power management - development files
  upower provides an interface to enumerate power sources on the system
  and control system-wide power management. Any application can access the
@@ -86,7 +88,9 @@ Description: abstraction for power management - development files
 Package: gir1.2-upowerglib-1.0
 Section: introspection
 Architecture: any
-Depends: ${gir:Depends}, ${shlibs:Depends}, ${misc:Depends}
+Depends: ${gir:Depends},
+         ${misc:Depends},
+         ${shlibs:Depends},
 Description: GObject introspection data for upower
  upower provides an interface to enumerate power sources on the system
  and control system-wide power management. Any application can access the
@@ -97,4 +101,3 @@ Description: GObject introspection data for upower
  .
  It can be used by packages using the GIRepository format to generate
  dynamic bindings.
-
