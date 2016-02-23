@@ -1,4 +1,4 @@
-upower (0.99.4-2) xenial; urgency=high
+upower (0.99.4-2) unstable; urgency=high
 
   * Urgency high as this is a targetted fix for RC bug in testing.
   * Fix copy&paste error that called the wrong _complete_ function
