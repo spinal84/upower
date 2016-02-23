@@ -1,10 +1,11 @@
-upower (0.99.4-2) UNRELEASED; urgency=medium
+upower (0.99.4-2) xenial; urgency=high
 
+  * Urgency high as this is a targetted fix for RC bug in testing.
   * Fix copy&paste error that called the wrong _complete_ function
     for up_daemon_get_critical_action(), causing a segfault.
     (Closes: #815590, LP: #1547793)
 
- -- Martin Pitt <mpitt@debian.org>  Tue, 23 Feb 2016 09:55:04 +0100
+ -- Martin Pitt <mpitt@debian.org>  Tue, 23 Feb 2016 09:58:09 +0100
 
 upower (0.99.4-1) unstable; urgency=medium
 
