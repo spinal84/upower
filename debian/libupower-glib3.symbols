@@ -8,6 +8,7 @@ libupower-glib.so.3 libupower-glib3 #MINVER#
  up_client_get_on_battery@Base 0.99.0
  up_client_get_type@Base 0.99.0
  up_client_new@Base 0.99.0
+ up_client_new_full@Base 0.99.4-3~
  up_device_get_history_sync@Base 0.99.0
  up_device_get_object_path@Base 0.99.0
  up_device_get_statistics_sync@Base 0.99.0
