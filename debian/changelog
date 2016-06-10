@@ -2,6 +2,8 @@ upower (0.99.4-3) UNRELEASED; urgency=medium
 
   * UpKbdBacklight: Don't cache the brightness level, always read
     it from sysfs. (LP: #1583861)
+  * Fix up_client_new() returning an invalid object (that causes crashes on
+    any operation) when upowerd is not (yet) started. (LP: #1546641)
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 24 May 2016 14:53:01 +0200
 
