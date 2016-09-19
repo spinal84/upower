@@ -20,12 +20,7 @@ override_dh_auto_test:
 	# test suite needs system D-BUS and thus does not work on buildds
 
 override_dh_install:
-	dh_install --fail-missing -Xrules.d -X.la
-	# Only install udev rules on Linux architectures. The
-	# directory doesn't even exist on e.g. GNU/kFreeBSD
-ifeq ($(DEB_HOST_ARCH_OS),linux)
-	dh_install -pupower debian/tmp/lib/udev/rules.d/
-endif
+	dh_install --fail-missing -X.la
 
 override_dh_makeshlibs:
 	dh_makeshlibs -- -c4

@@ -3,6 +3,7 @@ upower (0.99.4-4) UNRELEASED; urgency=medium
   * Install typelib files into multiarch paths.
   * Mark gir1.2-upowerglib-1.0 and libupower-glib-dev as Multi-Arch: same and
     upower-doc as Multi-Arch: foreign.
+  * Use dh-exec to install architecture specific files.
 
  -- Michael Biebl <biebl@debian.org>  Mon, 19 Sep 2016 15:35:54 +0200
 
