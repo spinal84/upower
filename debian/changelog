@@ -1,3 +1,9 @@
+upower (0.99.4-5) UNRELEASED; urgency=medium
+
+  * Drop migration code from pre-wheezy.
+
+ -- Michael Biebl <biebl@debian.org>  Thu, 20 Oct 2016 16:54:05 +0200
+
 upower (0.99.4-4) unstable; urgency=medium
 
   * Install typelib files into multiarch paths.
