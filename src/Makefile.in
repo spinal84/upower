@@ -707,6 +707,7 @@ UPOWER_LIBS = \
 	$(top_builddir)/libupower-glib/libupower-glib.la
 
 upowerd_SOURCES = \
+	up-constants.h						\
 	up-daemon.h						\
 	up-daemon.c						\
 	up-device.h						\
