@@ -1,4 +1,4 @@
-upower (0.99.5-1) UNRELEASED; urgency=medium
+upower (0.99.5-1) unstable; urgency=medium
 
   [ Martin Pitt ]
   * New upstream bug fix release. Drop all patches, included upstream.
@@ -9,7 +9,7 @@ upower (0.99.5-1) UNRELEASED; urgency=medium
   [ Michael Biebl ]
   * Drop migration code from pre-wheezy.
 
- -- Michael Biebl <biebl@debian.org>  Thu, 20 Oct 2016 16:54:05 +0200
+ -- Martin Pitt <mpitt@debian.org>  Tue, 25 Jul 2017 12:04:58 +0200
 
 upower (0.99.4-4) unstable; urgency=medium
 
