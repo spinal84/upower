@@ -144,7 +144,8 @@ PROGRAMS = $(noinst_PROGRAMS)
 am_hidpp_test_OBJECTS = hidpp_test-hidpp-device.$(OBJEXT) \
 	hidpp_test-hidpp-test.$(OBJEXT)
 hidpp_test_OBJECTS = $(am_hidpp_test_OBJECTS)
-hidpp_test_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+hidpp_test_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
 hidpp_test_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(hidpp_test_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
@@ -411,6 +412,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/libupower-glib				\
 	$(USB_CFLAGS)						\
 	$(GIO_CFLAGS)						\
+	$(GIO_UNIX_CFLAGS)					\
 	$(GUDEV_CFLAGS)						\
 	$(POLKIT_CFLAGS)					\
 	$(GLIB_CFLAGS)						\
@@ -450,7 +452,8 @@ hidpp_test_SOURCES = \
 hidpp_test_LDADD = \
 	-lm							\
 	$(GLIB_LIBS)						\
-	$(GIO_LIBS)
+	$(GIO_LIBS)						\
+	$(GIO_UNIX_LIBS)
 
 hidpp_test_CFLAGS = $(AM_CFLAGS) $(WARNINGFLAGS_C)
 EXTRA_DIST = $(libupshared_la_SOURCES) 			\
