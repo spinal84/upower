@@ -1,5 +1,0 @@
-0001-daemon-fix-get_critical_action.patch
-UpKbdBacklight-don-t-cache-the-brightness-level-alwa.patch
-lib-Add-proper-error-and-cancellable-handling-to-UpC.patch
-lib-Remove-hidden-singleton-instance.patch
-up-tool-Exit-early-when-connecting-to-upower-fails.patch
