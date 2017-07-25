@@ -2,6 +2,7 @@ upower (0.99.5-1) UNRELEASED; urgency=medium
 
   [ Martin Pitt ]
   * New upstream bug fix release. Drop all patches, included upstream.
+  * Update config.{guess,sub} during build, as per Policy 4.0.0 §4.3.
 
   [ Michael Biebl ]
   * Drop migration code from pre-wheezy.
