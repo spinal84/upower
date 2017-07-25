@@ -4,6 +4,7 @@ upower (0.99.5-1) UNRELEASED; urgency=medium
   * New upstream bug fix release. Drop all patches, included upstream.
   * Update config.{guess,sub} during build, as per Policy 4.0.0 §4.3.
   * Bump Standards-Version to 4.0.0.
+  * Drop --enable-deprecated configure option, it has been a no-op since 0.99.
 
   [ Michael Biebl ]
   * Drop migration code from pre-wheezy.
