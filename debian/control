@@ -20,7 +20,7 @@ Build-Depends: autotools-dev,
                pkg-config,
                udev [linux-any],
                xsltproc,
-Standards-Version: 3.9.8
+Standards-Version: 4.0.0
 Vcs-Git: git://anonscm.debian.org/pkg-utopia/upower.git
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-utopia/upower.git
 Homepage: http://upower.freedesktop.org/
