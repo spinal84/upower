@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 %:
-	dh $@ --with gir,autoreconf
+	dh $@ --with gir
 
 autoreconf:
 	gtkdocize --copy
