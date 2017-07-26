@@ -1,3 +1,12 @@
+upower (0.99.5-2) unstable; urgency=medium
+
+  * Use autoreconf to update the build system
+  * Bump debhelper compat level to 10 for automatic dh-autoreconf
+  * Drop custom prerm/postinst code to restart upower on upgrades
+  * Don't enable upower.service in graphical.target by default
+
+ -- Michael Biebl <biebl@debian.org>  Wed, 26 Jul 2017 23:56:50 +0200
+
 upower (0.99.5-1) unstable; urgency=medium
 
   [ Martin Pitt ]
