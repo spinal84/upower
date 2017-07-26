@@ -1,7 +1,15 @@
 #!/usr/bin/make -f
 
 %:
-	dh $@ --with gir,autotools_dev
+	dh $@ --with gir,autoreconf
+
+autoreconf:
+	gtkdocize --copy
+	autopoint --force
+	AUTOPOINT='intltoolize --automake --copy' autoreconf --force --install --verbose
+
+override_dh_autoreconf:
+	dh_autoreconf debian/rules -- autoreconf
 
 override_dh_auto_configure:
 	dh_auto_configure -- \
