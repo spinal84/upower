@@ -1,3 +1,9 @@
+upower (0.99.5-3) unstable; urgency=medium
+
+  * Correctly close inhibitor FD
+
+ -- Michael Biebl <biebl@debian.org>  Fri, 04 Aug 2017 09:24:18 +0200
+
 upower (0.99.5-2) unstable; urgency=medium
 
   * Use autoreconf to update the build system
