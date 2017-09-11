@@ -1,3 +1,9 @@
+upower (0.99.6-1) UNRELEASED; urgency=medium
+
+  * New upstream release. Drop patches, included upstream.
+
+ -- Martin Pitt <mpitt@debian.org>  Mon, 11 Sep 2017 22:31:48 +0200
+
 upower (0.99.5-3) unstable; urgency=medium
 
   * Correctly close inhibitor FD
