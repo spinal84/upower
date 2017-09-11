@@ -1,8 +1,9 @@
-upower (0.99.6-1) UNRELEASED; urgency=medium
+upower (0.99.6-1) unstable; urgency=medium
 
   * New upstream release. Drop patches, included upstream.
+  * Bump Standards-Version to 4.0.1. No changes necessary.
 
- -- Martin Pitt <mpitt@debian.org>  Mon, 11 Sep 2017 22:31:48 +0200
+ -- Martin Pitt <mpitt@debian.org>  Mon, 11 Sep 2017 22:35:38 +0200
 
 upower (0.99.5-3) unstable; urgency=medium
 
