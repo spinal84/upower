@@ -620,6 +620,22 @@ class Tests(dbusmock.DBusTestCase):
         self.assertEqual(self.get_dbus_display_property('WarningLevel'), UP_DEVICE_LEVEL_CRITICAL)
         self.stop_daemon()
 
+    def test_battery_broken_name(self):
+        '''Battery with funky kernel name'''
+
+        self.testbed.add_device('power_supply', 'bq24735@5-0009', None,
+                                ['type', 'Battery',
+                                 'present', '1',
+                                 'status', 'unknown',
+                                 'energy_full', '60000000',
+                                 'energy_full_design', '80000000',
+                                 'energy_now', '48000000',
+                                 'voltage_now', '12000000'], [])
+
+        self.start_daemon()
+        self.assertEqual(self.get_dbus_display_property('IsPresent'), True)
+        self.stop_daemon()
+
     def test_ups_no_ac(self):
         '''UPS properties without AC'''
 
@@ -957,6 +973,48 @@ class Tests(dbusmock.DBusTestCase):
         self.assertEqual(self.get_dbus_property('OnBattery'), False)
         self.assertEqual(self.get_dbus_display_property('WarningLevel'), UP_DEVICE_LEVEL_NONE)
         self.stop_daemon()
+
+    def test_usb_joypad(self):
+        '''DualShock 4 joypad connected via USB'''
+
+        dev = self.testbed.add_device('usb',
+                                      '/devices/pci0000:00/0000:00:14.0/usb3/3-9',
+                                      None,
+                                      [], [])
+
+        parent = dev
+        self.testbed.add_device(
+            'input',
+            '/devices/pci0000:00/0000:00:14.0/usb3/3-9/3-9:1.3/0003:054C:09CC.0007/input/input51',
+            parent,
+            ['name', 'Sony Interactive Entertainment Wireless Controller',
+             'uniq', 'ff:ff:ff:ff:ff:ff'],
+            ['ID_INPUT', '1',
+             'ID_INPUT_JOYSTICK', '1'])
+
+        dev = self.testbed.add_device(
+            'power_supply',
+            '/devices/pci0000:00/0000:00:14.0/usb3/3-9/3-9:1.3/0003:054C:09CC.0007/power_supply/sony_controller_battery_ff:ff:ff:ff:ff:ff',
+            parent,
+            ['type', 'Battery',
+             'scope', 'Device',
+             'present', '1',
+             'status', 'Charging',
+             'capacity', '20',],
+            [])
+
+        self.start_daemon()
+        devs = self.proxy.EnumerateDevices()
+        self.assertEqual(len(devs), 1)
+        joypadbat0_up = devs[0]
+
+        self.assertEqual(self.get_dbus_dev_property(joypadbat0_up, 'Model'), 'Sony Interactive Entertainment Wireless Controller')
+        self.assertEqual(self.get_dbus_dev_property(joypadbat0_up, 'Serial'), 'ff:ff:ff:ff:ff:ff')
+        self.assertEqual(self.get_dbus_dev_property(joypadbat0_up, 'PowerSupply'), False)
+        # 12 == gaming input
+        self.assertEqual(self.get_dbus_dev_property(joypadbat0_up, 'Type'), 12)
+        self.assertEqual(self.get_dbus_property('OnBattery'), False)
+        self.assertEqual(self.get_dbus_display_property('WarningLevel'), UP_DEVICE_LEVEL_NONE)
 
     def test_hidpp_touchpad(self):
         '''HID++ touchpad battery with 5 capacity levels'''

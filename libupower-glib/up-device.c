@@ -307,7 +307,8 @@ up_device_to_text (UpDevice *device)
 	if ((kind == UP_DEVICE_KIND_PHONE ||
 	     kind == UP_DEVICE_KIND_BATTERY ||
 	     kind == UP_DEVICE_KIND_MOUSE ||
-	     kind == UP_DEVICE_KIND_KEYBOARD) &&
+	     kind == UP_DEVICE_KIND_KEYBOARD ||
+	     kind == UP_DEVICE_KIND_GAMING_INPUT) &&
 	    !is_display)
 		g_string_append_printf (string, "    rechargeable:        %s\n", up_device_bool_to_string (up_exported_device_get_is_rechargeable (priv->proxy_device)));
 	if (kind == UP_DEVICE_KIND_BATTERY ||
@@ -359,7 +360,8 @@ up_device_to_text (UpDevice *device)
 	    kind == UP_DEVICE_KIND_TABLET ||
 	    kind == UP_DEVICE_KIND_COMPUTER ||
 	    kind == UP_DEVICE_KIND_MEDIA_PLAYER ||
-	    kind == UP_DEVICE_KIND_UPS)
+	    kind == UP_DEVICE_KIND_UPS ||
+	    kind == UP_DEVICE_KIND_GAMING_INPUT)
 		g_string_append_printf (string, "    percentage:          %g%%\n", up_exported_device_get_percentage (priv->proxy_device));
 	if (kind == UP_DEVICE_KIND_BATTERY) {
 		if (up_exported_device_get_temperature (priv->proxy_device) > 0)
@@ -1145,7 +1147,7 @@ up_device_class_init (UpDeviceClass *klass)
 	/**
 	 * UpDevice:warning-level:
 	 *
-	 * The warning level e.g. %UP_DEVICE_LEVEL_WARNING.
+	 * The warning level e.g. %UP_DEVICE_LEVEL_CRITICAL.
 	 *
 	 * Since: 1.0
 	 **/
@@ -1161,7 +1163,7 @@ up_device_class_init (UpDeviceClass *klass)
 	/**
 	 * UpDevice:battery-level:
 	 *
-	 * The battery level.
+	 * The battery level, e.g. %UP_DEVICE_LEVEL_CRITICAL.
 	 *
 	 * Since: 1.0
 	 **/
