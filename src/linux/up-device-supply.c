@@ -47,6 +47,12 @@
 /* number of old energy values to keep cached */
 #define UP_DEVICE_SUPPLY_ENERGY_OLD_LENGTH		4
 
+typedef enum {
+	REFRESH_RESULT_FAILURE = 0,
+	REFRESH_RESULT_SUCCESS = 1,
+	REFRESH_RESULT_NO_DATA
+} RefreshResult;
+
 struct UpDeviceSupplyPrivate
 {
 	guint			 poll_timer_id;
@@ -67,12 +73,7 @@ G_DEFINE_TYPE (UpDeviceSupply, up_device_supply, UP_TYPE_DEVICE)
 
 static gboolean		 up_device_supply_refresh	 	(UpDevice *device);
 
-/**
- * up_device_supply_refresh_line_power:
- *
- * Return %TRUE on success, %FALSE if we failed to refresh or no data
- **/
-static gboolean
+static RefreshResult
 up_device_supply_refresh_line_power (UpDeviceSupply *supply)
 {
 	UpDevice *device = UP_DEVICE (supply);
@@ -89,7 +90,7 @@ up_device_supply_refresh_line_power (UpDeviceSupply *supply)
 	native_path = g_udev_device_get_sysfs_path (native);
 	g_object_set (device, "online", sysfs_get_int (native_path, "online"), NULL);
 
-	return TRUE;
+	return REFRESH_RESULT_SUCCESS;
 }
 
 /**
@@ -494,39 +495,45 @@ sysfs_get_capacity_level (const char    *native_path,
 		{ "Critical",   5.0, UP_DEVICE_LEVEL_CRITICAL },
 		{ "Full",     100.0, UP_DEVICE_LEVEL_FULL }
 	};
+	guint len;
 
 	g_return_val_if_fail (level != NULL, -1.0);
 
 	if (!sysfs_file_exists (native_path, "capacity_level")) {
+		g_debug ("capacity_level doesn't exist, skipping");
 		*level = UP_DEVICE_LEVEL_NONE;
 		return -1.0;
 	}
 
 	*level = UP_DEVICE_LEVEL_UNKNOWN;
 	str = sysfs_get_string (native_path, "capacity_level");
+	if (!str) {
+		g_debug ("Failed to read capacity_level!");
+		return ret;
+	}
+
+	len = strlen(str);
+	str[len -1] = '\0';
 	for (i = 0; i < G_N_ELEMENTS(levels); i++) {
-		if (g_ascii_strncasecmp (levels[i].str, str, strlen (levels[i].str)) == 0) {
+		if (strcmp (levels[i].str, str) == 0) {
 			ret = levels[i].percentage;
 			*level = levels[i].level;
 			break;
 		}
 	}
 
+	if (ret < 0.0)
+		g_debug ("Could not find a percentage for capacity level '%s'", str);
+
 	g_free (str);
 	return ret;
 }
 
-/**
- * up_device_supply_refresh_battery:
- *
- * Return %TRUE on success, %FALSE if we failed to refresh or no data
- **/
-static gboolean
+static RefreshResult
 up_device_supply_refresh_battery (UpDeviceSupply *supply,
 				  UpDeviceState  *out_state)
 {
 	gchar *technology_native = NULL;
-	gboolean ret = TRUE;
 	gdouble voltage_design;
 	UpDeviceState old_state;
 	UpDeviceState state;
@@ -845,107 +852,7 @@ out:
 	g_free (manufacturer);
 	g_free (model_name);
 	g_free (serial_number);
-	return ret;
-}
-
-/**
- * up_device_supply_refresh_device:
- *
- * Return %TRUE on success, %FALSE if we failed to refresh or no data
- **/
-static gboolean
-up_device_supply_refresh_device (UpDeviceSupply *supply,
-				 UpDeviceState  *out_state)
-{
-	gboolean ret = TRUE;
-	UpDeviceState state;
-	UpDevice *device = UP_DEVICE (supply);
-	const gchar *native_path;
-	GUdevDevice *native;
-	gdouble percentage = 0.0f;
-	UpDeviceLevel level = UP_DEVICE_LEVEL_NONE;
-
-	native = G_UDEV_DEVICE (up_device_get_native (device));
-	native_path = g_udev_device_get_sysfs_path (native);
-
-	/* initial values */
-	if (!supply->priv->has_coldplug_values) {
-		gchar *model_name;
-		gchar *serial_number;
-
-		/* get values which may be blank */
-		model_name = up_device_supply_get_string (native_path, "model_name");
-		serial_number = up_device_supply_get_string (native_path, "serial_number");
-
-		/* some vendors fill this with binary garbage */
-		up_device_supply_make_safe_string (model_name);
-		up_device_supply_make_safe_string (serial_number);
-
-		g_object_set (device,
-			      "is-present", TRUE,
-			      "model", model_name,
-			      "serial", serial_number,
-			      "is-rechargeable", TRUE,
-			      "has-history", TRUE,
-			      "has-statistics", TRUE,
-			      "power-supply", supply->priv->is_power_supply, /* always FALSE */
-			      NULL);
-
-		/* we only coldplug once, as these values will never change */
-		supply->priv->has_coldplug_values = TRUE;
-
-		g_free (model_name);
-	}
-
-	/* get a precise percentage */
-	percentage = sysfs_get_double_with_error (native_path, "capacity");
-	if (percentage < 0.0)
-		percentage = sysfs_get_capacity_level (native_path, &level);
-
-	if (percentage < 0.0) {
-		/* Probably talking to the device over Bluetooth */
-		state = UP_DEVICE_STATE_UNKNOWN;
-		g_object_set (device, "state", state, NULL);
-		*out_state = state;
-		return FALSE;
-	}
-
-	state = up_device_supply_get_state (native_path);
-
-	/* Override whatever the device might have told us
-	 * because a number of them are always discharging */
-	if (percentage == 100.0)
-		state = UP_DEVICE_STATE_FULLY_CHARGED;
-
-	/* reset unknown counter */
-	if (state != UP_DEVICE_STATE_UNKNOWN) {
-		g_debug ("resetting unknown timeout after %i retries", supply->priv->unknown_retries);
-		supply->priv->unknown_retries = 0;
-	}
-
-	g_object_set (device,
-		      "percentage", percentage,
-		      "battery-level", level,
-		      "state", state,
-		      NULL);
-
-	*out_state = state;
-
-	return ret;
-}
-
-static gboolean
-up_device_supply_poll_unknown_battery (UpDevice *device)
-{
-	UpDeviceSupply *supply = UP_DEVICE_SUPPLY (device);
-
-	g_debug ("Unknown state on supply %s; forcing update after %i seconds",
-		 up_device_get_object_path (device), UP_DAEMON_UNKNOWN_TIMEOUT);
-
-	supply->priv->poll_timer_id = 0;
-	up_device_supply_refresh (device);
-
-	return FALSE;
+	return REFRESH_RESULT_SUCCESS;
 }
 
 static GUdevDevice *
@@ -993,6 +900,114 @@ up_device_supply_get_sibling_with_subsystem (GUdevDevice *device,
 	return sibling;
 }
 
+static RefreshResult
+up_device_supply_refresh_device (UpDeviceSupply *supply,
+				 UpDeviceState  *out_state)
+{
+	UpDeviceState state;
+	UpDevice *device = UP_DEVICE (supply);
+	const gchar *native_path;
+	GUdevDevice *native;
+	gdouble percentage = 0.0f;
+	UpDeviceLevel level = UP_DEVICE_LEVEL_NONE;
+
+	native = G_UDEV_DEVICE (up_device_get_native (device));
+	native_path = g_udev_device_get_sysfs_path (native);
+
+	/* initial values */
+	if (!supply->priv->has_coldplug_values) {
+		gchar *model_name;
+		gchar *serial_number;
+
+		/* get values which may be blank */
+		model_name = up_device_supply_get_string (native_path, "model_name");
+		serial_number = up_device_supply_get_string (native_path, "serial_number");
+		if (model_name == NULL && serial_number == NULL) {
+			GUdevDevice *sibling;
+
+			sibling = up_device_supply_get_sibling_with_subsystem (native, "input");
+			if (sibling != NULL) {
+				const char *path;
+				path = g_udev_device_get_sysfs_path (sibling);
+
+				model_name = up_device_supply_get_string (path, "name");
+				serial_number = up_device_supply_get_string (path, "uniq");
+
+				g_object_unref (sibling);
+			}
+		}
+
+		/* some vendors fill this with binary garbage */
+		up_device_supply_make_safe_string (model_name);
+		up_device_supply_make_safe_string (serial_number);
+
+		g_object_set (device,
+			      "is-present", TRUE,
+			      "model", model_name,
+			      "serial", serial_number,
+			      "is-rechargeable", TRUE,
+			      "has-history", TRUE,
+			      "has-statistics", TRUE,
+			      "power-supply", supply->priv->is_power_supply, /* always FALSE */
+			      NULL);
+
+		/* we only coldplug once, as these values will never change */
+		supply->priv->has_coldplug_values = TRUE;
+
+		g_free (model_name);
+	}
+
+	/* get a precise percentage */
+	percentage = sysfs_get_double_with_error (native_path, "capacity");
+	if (percentage < 0.0)
+		percentage = sysfs_get_capacity_level (native_path, &level);
+
+	if (percentage < 0.0) {
+		/* Probably talking to the device over Bluetooth */
+		state = UP_DEVICE_STATE_UNKNOWN;
+		g_object_set (device, "state", state, NULL);
+		*out_state = state;
+		return REFRESH_RESULT_NO_DATA;
+	}
+
+	state = up_device_supply_get_state (native_path);
+
+	/* Override whatever the device might have told us
+	 * because a number of them are always discharging */
+	if (percentage == 100.0)
+		state = UP_DEVICE_STATE_FULLY_CHARGED;
+
+	/* reset unknown counter */
+	if (state != UP_DEVICE_STATE_UNKNOWN) {
+		g_debug ("resetting unknown timeout after %i retries", supply->priv->unknown_retries);
+		supply->priv->unknown_retries = 0;
+	}
+
+	g_object_set (device,
+		      "percentage", percentage,
+		      "battery-level", level,
+		      "state", state,
+		      NULL);
+
+	*out_state = state;
+
+	return REFRESH_RESULT_SUCCESS;
+}
+
+static gboolean
+up_device_supply_poll_unknown_battery (UpDevice *device)
+{
+	UpDeviceSupply *supply = UP_DEVICE_SUPPLY (device);
+
+	g_debug ("Unknown state on supply %s; forcing update after %i seconds",
+		 up_device_get_object_path (device), UP_DAEMON_UNKNOWN_TIMEOUT);
+
+	supply->priv->poll_timer_id = 0;
+	up_device_supply_refresh (device);
+
+	return FALSE;
+}
+
 static UpDeviceKind
 up_device_supply_guess_type (GUdevDevice *native,
 			     const char *native_path)
@@ -1017,6 +1032,8 @@ up_device_supply_guess_type (GUdevDevice *native,
 			if (g_udev_device_get_property_as_boolean (sibling, "ID_INPUT_MOUSE") ||
 			    g_udev_device_get_property_as_boolean (sibling, "ID_INPUT_TOUCHPAD")) {
 				type = UP_DEVICE_KIND_MOUSE;
+			} else if (g_udev_device_get_property_as_boolean (sibling, "ID_INPUT_JOYSTICK")) {
+				type = UP_DEVICE_KIND_GAMING_INPUT;
 			} else {
 				type = UP_DEVICE_KIND_KEYBOARD;
 			}
@@ -1057,6 +1074,7 @@ up_device_supply_coldplug (UpDevice *device)
 	const gchar *native_path;
 	const gchar *scope;
 	UpDeviceKind type;
+	RefreshResult ret;
 
 	up_device_supply_reset_values (supply);
 
@@ -1111,7 +1129,8 @@ up_device_supply_coldplug (UpDevice *device)
 		up_daemon_start_poll (G_OBJECT (device), (GSourceFunc) up_device_supply_refresh);
 
 	/* coldplug values */
-	return up_device_supply_refresh (device);
+	ret = up_device_supply_refresh (device);
+	return (ret != REFRESH_RESULT_FAILURE);
 }
 
 /**
@@ -1150,15 +1169,10 @@ up_device_supply_disable_unknown_poll (UpDevice *device)
 	}
 }
 
-/**
- * up_device_supply_refresh:
- *
- * Return %TRUE on success, %FALSE if we failed to refresh or no data
- **/
 static gboolean
 up_device_supply_refresh (UpDevice *device)
 {
-	gboolean ret;
+	RefreshResult ret;
 	UpDeviceSupply *supply = UP_DEVICE_SUPPLY (device);
 	UpDeviceKind type;
 	UpDeviceState state;
@@ -1179,10 +1193,10 @@ up_device_supply_refresh (UpDevice *device)
 	}
 
 	/* reset time if we got new data */
-	if (ret)
+	if (ret == REFRESH_RESULT_SUCCESS)
 		g_object_set (device, "update-time", (guint64) g_get_real_time () / G_USEC_PER_SEC, NULL);
 
-	return ret;
+	return (ret != REFRESH_RESULT_FAILURE);
 }
 
 /**
