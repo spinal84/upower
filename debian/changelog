@@ -1,4 +1,4 @@
-upower (0.99.7-1) UNRELEASED; urgency=medium
+upower (0.99.7-1) unstable; urgency=medium
 
   [ Michael Biebl ]
   * Use https for Vcs-Git and Homepage
@@ -7,8 +7,11 @@ upower (0.99.7-1) UNRELEASED; urgency=medium
   [ Martin Pitt ]
   * New upstream version 0.99.7
   * Bump Standards-Version to 4.1.2. No changes necessary.
+  * Add lintian override for udev-rule-missing-subsystem.
+    The file does have a SUBSYSTEM check, just in a separate rule with a
+    GOTO jump.
 
- -- Martin Pitt <mpitt@debian.org>  Wed, 06 Dec 2017 22:54:49 +0100
+ -- Martin Pitt <mpitt@debian.org>  Wed, 06 Dec 2017 23:02:00 +0100
 
 upower (0.99.6-1) unstable; urgency=medium
 
