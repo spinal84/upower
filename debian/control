@@ -19,7 +19,7 @@ Build-Depends: debhelper (>= 10),
                pkg-config,
                udev [linux-any],
                xsltproc,
-Standards-Version: 4.0.1
+Standards-Version: 4.1.2
 Vcs-Git: https://anonscm.debian.org/git/pkg-utopia/upower.git
 Vcs-Browser: https://anonscm.debian.org/git/pkg-utopia/upower.git
 Homepage: https://upower.freedesktop.org/
