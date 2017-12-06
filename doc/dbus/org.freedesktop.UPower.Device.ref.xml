@@ -394,6 +394,10 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
             <link linkend="Source:Type"><literal>type</literal></link>
             has the value "battery".
           </para>
+          <para>
+            The percentage will be an approximation if the <link linkend="BatteryLevel"><literal>battery level</literal></link>
+            is set to something other than None. The percentage is kept for compatibility reasons.
+          </para>
         <variablelist role="params"/><refsect2><title><anchor role="function" id="Device:Temperature"/>The "Temperature" property</title><indexterm><primary>Temperature</primary><secondary>Device</secondary></indexterm><programlisting>'Temperature'  read      'd'
 </programlisting></refsect2>
           <para>
@@ -469,7 +473,8 @@ method return sender=:1.386 -&gt; dest=:1.477 reply_serial=2
         <variablelist role="params"/><refsect2><title><anchor role="function" id="Device:BatteryLevel"/>The "BatteryLevel" property</title><indexterm><primary>BatteryLevel</primary><secondary>Device</secondary></indexterm><programlisting>'BatteryLevel'  read      'u'
 </programlisting></refsect2>
           <para>
-            Level of the battery:
+            The level of the battery for devices which do not report a percentage but rather a coarse battery level. If the value
+            is None, then the device does not support coarse battery reporting, and the percentage should be used instead.
           </para>
           <para><itemizedlist><listitem><emphasis role="bold">0: </emphasis>Unknown</listitem><listitem><emphasis role="bold">1: </emphasis>None (the battery does not use a coarse level of battery reporting)</listitem><listitem><emphasis role="bold">3: </emphasis>Low</listitem><listitem><emphasis role="bold">4: </emphasis>Critical</listitem><listitem><emphasis role="bold">6: </emphasis>Normal</listitem><listitem><emphasis role="bold">7: </emphasis>High</listitem><listitem><emphasis role="bold">8: </emphasis>Full</listitem></itemizedlist></para>
         <variablelist role="params"/><refsect2><title><anchor role="function" id="Device:IconName"/>The "IconName" property</title><indexterm><primary>IconName</primary><secondary>Device</secondary></indexterm><programlisting>'IconName'  read      's'
