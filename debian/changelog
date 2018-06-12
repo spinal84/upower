@@ -1,3 +1,13 @@
+upower (0.99.7.1-1) unstable; urgency=medium
+
+  [Merlijn Wajer]
+  * linux/up-device-supply: add capacity_level reading for batteries
+
+  [Ivan J.]
+  * Disable systemd rules and .install
+
+ -- Ivan J. <parazyd@dyne.org>  Tue, 12 Jun 2018 10:00:00 +0200
+
 upower (0.99.7-2) unstable; urgency=medium
 
   * debian/tests/control: Add a test-dep on python3-dbus, needed for
