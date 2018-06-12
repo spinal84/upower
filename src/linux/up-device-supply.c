@@ -547,6 +547,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 	gdouble energy_rate;
 	gdouble capacity = 100.0f;
 	gdouble percentage = 0.0f;
+	UpDeviceLevel level = UP_DEVICE_LEVEL_NONE;
 	gdouble voltage;
 	gint64 time_to_empty;
 	gint64 time_to_full;
@@ -729,6 +730,8 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
                 /* for devices which provide capacity, but not {energy,charge}_now */
                 if (energy < 0.1f && energy_full > 0.0f)
                     energy = energy_full * percentage / 100;
+		} else if (sysfs_file_exists(native_path, "capacity_level")) {
+			percentage = sysfs_get_capacity_level (native_path, &level);
         } else if (energy_full > 0.0f) {
 		percentage = 100.0 * energy / energy_full;
 		percentage = CLAMP(percentage, 0.0f, 100.0f);
