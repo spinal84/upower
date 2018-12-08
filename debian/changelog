@@ -1,3 +1,10 @@
+upower (1:0.99.7.2-1) unstable; urgency=medium
+
+  * Add delay on battery properties refresh
+  * Update epoch to override Devuan upgrades over Maemo Leste
+
+ -- Arthur D. <spinal.by@gmail.com>  Sat, 08 Dec 2018 12:49:37 +0300
+
 upower (0.99.7.1-1) unstable; urgency=medium
 
   * Disable systemd rules and .install
