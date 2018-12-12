@@ -1,3 +1,10 @@
+upower (1:0.99.7.4-1) unstable; urgency=medium
+
+  * Add design voltage properties to battery devices
+  * Coldplug values shouldn't be updated every time
+
+ -- Arthur D. <spinal.by@gmail.com>  Wed, 12 Dec 2018 17:45:29 +0300
+
 upower (1:0.99.7.3-3) unstable; urgency=medium
 
   * Force D-Bus interface files to be regenerated
