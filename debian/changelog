@@ -1,3 +1,11 @@
+upower (1:0.99.7.5-1) unstable; urgency=medium
+
+  * Remove design voltage properties from battery devices
+  * Estimate battery percentage using voltage when battery is not calibrated
+  * Fix glib warning
+
+ -- Arthur D. <spinal.by@gmail.com>  Fri, 14 Dec 2018 03:34:15 +0300
+
 upower (1:0.99.7.4-1) unstable; urgency=medium
 
   * Add design voltage properties to battery devices
