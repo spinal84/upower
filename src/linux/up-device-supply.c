@@ -58,6 +58,9 @@ struct UpDeviceSupplyPrivate
 	guint			 poll_timer_id;
 	gboolean		 has_coldplug_values;
 	gboolean		 coldplug_units;
+	gdouble			 voltage_design;
+	gdouble			 voltage_min_design;
+	gdouble			 voltage_max_design;
 	gdouble			*energy_old;
 	GTimeVal		*energy_old_timespec;
 	guint			 energy_old_first;
@@ -104,6 +107,9 @@ up_device_supply_reset_values (UpDeviceSupply *supply)
 
 	supply->priv->has_coldplug_values = FALSE;
 	supply->priv->coldplug_units = UP_DEVICE_SUPPLY_COLDPLUG_UNITS_ENERGY;
+	supply->priv->voltage_min_design = 0;
+	supply->priv->voltage_max_design = 0;
+	supply->priv->voltage_design = 0;
 	supply->priv->rate_old = 0;
 
 	for (i = 0; i < UP_DEVICE_SUPPLY_ENERGY_OLD_LENGTH; ++i) {
@@ -537,7 +543,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 				  UpDeviceState  *out_state)
 {
 	gchar *technology_native = NULL;
-	gdouble voltage_design;
+	UpDeviceTechnology technology;
 	UpDeviceState old_state;
 	UpDeviceState state;
 	UpDevice *device = UP_DEVICE (supply);
@@ -590,9 +596,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 	energy = sysfs_get_double (native_path, "energy_now") / 1000000.0;
 	if (energy < 0.01)
 		energy = sysfs_get_double (native_path, "energy_avg") / 1000000.0;
-
-	/* used to convert A to W later */
-	voltage_design = up_device_supply_get_design_voltage (supply, native_path);
+	charge_full = sysfs_get_double (native_path, "charge_full") / 1000000.0;
 
 	/* initial values */
 	if (!supply->priv->has_coldplug_values ||
@@ -602,9 +606,13 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 			      "power-supply", supply->priv->is_power_supply,
 			      NULL);
 
+		/* used to convert A to W later */
+		supply->priv->voltage_design = up_device_supply_get_design_voltage (supply, native_path);
+
 		/* the ACPI spec is bad at defining battery type constants */
 		technology_native = up_device_supply_get_string (native_path, "technology");
-		g_object_set (device, "technology", up_device_supply_convert_device_technology (technology_native), NULL);
+		technology = up_device_supply_convert_device_technology (technology_native);
+		g_object_set (device, "technology", technology, NULL);
 
 		/* get values which may be blank */
 		manufacturer = up_device_supply_get_string (native_path, "manufacturer");
@@ -626,15 +634,24 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 			      NULL);
 
 		/* these don't change at runtime */
-		charge_full = sysfs_get_double (native_path, "charge_full") / 1000000.0;
 		energy_full = sysfs_get_double (native_path, "energy_full") / 1000000.0;
 		charge_full_design = sysfs_get_double (native_path, "charge_full_design") / 1000000.0;
 		energy_full_design = sysfs_get_double (native_path, "energy_full_design") / 1000000.0;
+		supply->priv->voltage_min_design = sysfs_get_double (native_path, "voltage_min_design") / 1000000.0;
+		supply->priv->voltage_max_design = sysfs_get_double (native_path, "voltage_max_design") / 1000000.0;
+
+		if ((!supply->priv->voltage_min_design || !supply->priv->voltage_max_design) &&
+		    technology == UP_DEVICE_TECHNOLOGY_LITHIUM_ION && supply->priv->voltage_design < 4.25) {
+			if (!supply->priv->voltage_min_design)
+				supply->priv->voltage_min_design = 3.0;
+			if (!supply->priv->voltage_max_design)
+				supply->priv->voltage_max_design = 4.2;
+		}
 
 		/* convert charge to energy */
 		if (energy_full < 0.01) {
-			energy_full = charge_full * voltage_design;
-			energy_full_design = charge_full_design * voltage_design;
+			energy_full = charge_full * supply->priv->voltage_design;
+			energy_full_design = charge_full_design * supply->priv->voltage_design;
 			supply->priv->coldplug_units = UP_DEVICE_SUPPLY_COLDPLUG_UNITS_CHARGE;
 		}
 
@@ -658,17 +675,25 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 			if (capacity > 100.0)
 				capacity = 100.0;
 		}
-		g_object_set (device, "capacity", capacity, NULL);
+
+		voltage = sysfs_get_double (native_path, "voltage_now") / 1000000.0;
+		if (voltage < 0.01)
+			voltage = sysfs_get_double (native_path, "voltage_avg") / 1000000.0;
+
+		g_object_set (device,
+			      "capacity", capacity,
+			      "charge-full-design", charge_full_design,
+			      "energy-full-design", energy_full_design,
+			      "voltage", voltage,
+			      NULL);
 
 		/* we only coldplug once, as these values will never change */
 		supply->priv->has_coldplug_values = TRUE;
 	} else {
 		/* get the old full */
 		g_object_get (device,
-			      "charge-full", &charge_full,
 			      "energy-full", &energy_full,
 			      "charge-full-design", &charge_full_design,
-			      "energy-full-design", &energy_full_design,
 			      NULL);
 	}
 
@@ -688,7 +713,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 		if (energy < 0.01) {
 			if ((energy = charge) < 0.01)
 				energy = sysfs_get_double (native_path, "charge_avg") / 1000000.0;
-			energy *= voltage_design;
+			energy *= supply->priv->voltage_design;
 		}
 
 		/* If charge_full exists, then current_now is always reported in uA.
@@ -696,7 +721,7 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 		 * current_now is power in uW. */
 		energy_rate = fabs (sysfs_get_double (native_path, "current_now") / 1000000.0);
 		if (charge_full != 0 || charge_full_design != 0)
-			energy_rate *= voltage_design;
+			energy_rate *= supply->priv->voltage_design;
 	}
 
 	/* some batteries don't update last_full attribute */
@@ -727,6 +752,50 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 	/* get a precise percentage */
         if (sysfs_file_exists (native_path, "capacity")) {
 		percentage = sysfs_get_double (native_path, "capacity");
+
+		/* If battery is not calibrated, estimate percentage using voltage  */
+		if (charge_full == 0 && percentage == 0 &&
+		    supply->priv->voltage_min_design != 0 &&
+		    supply->priv->voltage_max_design != 0)
+		{
+			if (state == UP_DEVICE_STATE_EMPTY ||
+			    state == UP_DEVICE_STATE_FULLY_CHARGED)
+			{
+				percentage = state == UP_DEVICE_STATE_EMPTY ? 0 : 100;
+			}
+			else
+			{
+				gdouble voltage_empty = supply->priv->voltage_min_design;
+				gdouble voltage_full  = supply->priv->voltage_max_design;
+				gdouble percentage_prev;
+				gdouble voltage_prev;
+				gdouble voltage_avg;
+
+				g_object_get (device,
+					      "percentage", &percentage_prev,
+					      "voltage", &voltage_prev,
+					      NULL);
+
+				voltage_avg = (voltage_prev + voltage) / 2;
+
+				if (state == UP_DEVICE_STATE_CHARGING)
+					voltage_empty += 0.4;
+				else
+					voltage_empty += 0.1;
+
+				percentage = (voltage_avg - voltage_empty) / (voltage_full - voltage_empty) * 100;
+				percentage = round (percentage);
+
+				if (percentage_prev != 0)
+				{
+					if (state == UP_DEVICE_STATE_CHARGING)
+						percentage = fmax (percentage_prev, percentage);
+					else
+						percentage = fmin (percentage_prev, percentage);
+				}
+			}
+		}
+
 		percentage = CLAMP(percentage, 0.0f, 100.0f);
                 /* for devices which provide capacity, but not {energy,charge}_now */
                 if (energy < 0.1f && energy_full > 0.0f)
@@ -848,10 +917,8 @@ up_device_supply_refresh_battery (UpDeviceSupply *supply,
 	g_object_set (device,
 		      "charge", charge,
 		      "charge-full", charge_full,
-		      "charge-full-design", charge_full_design,
 		      "energy", energy,
 		      "energy-full", energy_full,
-		      "energy-full-design", energy_full_design,
 		      "energy-rate", energy_rate,
 		      "percentage", percentage,
 		      "state", state,
