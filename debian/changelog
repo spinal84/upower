@@ -1,3 +1,9 @@
+upower (2:0.99.7.5-1) unstable; urgency=medium
+
+  * Increase epoch to prefer this package
+
+ -- Arthur D. <spinal.by@gmail.com>  Thu, 28 Mar 2019 09:06:11 +0300
+
 upower (1:0.99.7.5-1) unstable; urgency=medium
 
   * Remove design voltage properties from battery devices
